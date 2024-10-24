@@ -28,7 +28,16 @@ export const port: number = toInt(Deno.env.get("PORT") || 3000)
 
 export const logLevel: LogLevel = <LogLevel> (Deno.env.get("LOG_LEVEL") || "info")
 
-export const logTimestamp: boolean =
-    (Deno.env.get("LOG_TIMESTAMP") || true.toString()) === "true"
+export const logTimestamp: boolean = (Deno.env.get("LOG_TIMESTAMP") || "true") === "true"
 
 export const tz = Deno.env.get("TZ") || "Europe/Paris"
+
+export const db = {
+    host: Deno.env.get("DB_HOST") || "localhost",
+    port: toInt(Deno.env.get("DB_PORT") || 5432),
+    ssl: (Deno.env.get("DB_SSL") || "false") === "true",
+    name: Deno.env.get("DB_NAME") || "carpool",
+    user: Deno.env.get("DB_USER") ||
+        (production ? "carpool" : "carpool_dev"),
+    password: Deno.env.get("DB_PASS") || "carpool",
+}
