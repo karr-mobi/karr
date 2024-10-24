@@ -1,0 +1,46 @@
+{
+    "tasks": {
+        "dev": "LOG_LEVEL=trace deno run --watch --allow-env --allow-net --allow-sys ./src/main.ts"
+    },
+    "imports": {
+        "@std/assert": "jsr:@std/assert@1",
+        "@types/node": "npm:@types/node@^22.7.8",
+        "chalk": "npm:chalk@^5.3.0",
+        "fastify": "npm:fastify@^5.0.0",
+        "fastify-cookie": "npm:fastify-cookie@^5.7.0"
+    },
+    "lint": {
+        "include": ["src/"],
+        "exclude": ["tests/testdata/", "src/fixtures/**/*.ts"],
+        "rules": {
+            "tags": ["recommended"],
+            "include": [
+                "ban-untagged-todo",
+                "verbatim-module-syntax",
+                "no-undef",
+                "no-throw-literal",
+                "no-sync-fn-in-async-fn",
+                "no-sparse-arrays",
+                "no-self-compare",
+                "no-non-null-assertion",
+                "no-external-import",
+                "no-eval",
+                "no-const-assign",
+                "no-await-in-loop",
+                "eqeqeq",
+                "default-param-last",
+                "camelcase",
+                "no-console"
+            ]
+        }
+    },
+    "fmt": {
+        "useTabs": false,
+        "lineWidth": 90,
+        "indentWidth": 4,
+        "semiColons": false,
+        "singleQuote": false,
+        "proseWrap": "preserve",
+        "include": ["src/"]
+    }
+}
