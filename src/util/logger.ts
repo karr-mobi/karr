@@ -16,6 +16,13 @@ const prefix = () => {
     return logTimestamp ? `[${now}] ` : ""
 }
 
+const formatArg = (arg: unknown): string => {
+    if (typeof arg === "object" && arg !== null) {
+        return JSON.stringify(arg, null, 2) // Pretty-print objects
+    }
+    return String(arg) // Convert other types to string
+}
+
 /**
  * A simple logger that logs messages to the console.
  *
@@ -57,12 +64,17 @@ export default {
      * logger.error("Major error", error, 123)
      * ```
      */
-    error: (...args: unknown[]) => {
+    error: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug", "info", "warn", "error"].includes(logLevel)) {
             console.error(
                 chalk.red(`${prefix()}⚠️`, chalk.underline("ERROR"), ">"),
-                ...args,
+                title,
             )
+            args.forEach((arg) => {
+                formatArg(arg).split("\n").forEach((line) => {
+                    console.error("   ", line)
+                })
+            })
         }
     },
     /**
@@ -75,12 +87,17 @@ export default {
      * logger.log("Warning, this happened", unimportantError, 123)
      * ```
      */
-    warn: (...args: unknown[]) => {
+    warn: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug", "info", "warn"].includes(logLevel)) {
             console.warn(
                 chalk.yellow(`${prefix()}⚠`, chalk.underline("WARN"), ">"),
-                ...args,
+                title,
             )
+            args.forEach((arg) => {
+                formatArg(arg).split("\n").forEach((line) => {
+                    console.warn("   ", line)
+                })
+            })
         }
     },
     /**
@@ -93,12 +110,17 @@ export default {
      * logger.log("FYI", variable, 123)
      * ```
      */
-    info: (...args: unknown[]) => {
+    info: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug", "info"].includes(logLevel)) {
             console.info(
                 chalk.blue(`${prefix()}ℹ`, chalk.underline("INFO"), ">"),
-                ...args,
+                title,
             )
+            args.forEach((arg) => {
+                formatArg(arg).split("\n").forEach((line) => {
+                    console.info("   ", line)
+                })
+            })
         }
     },
     /**
@@ -111,12 +133,17 @@ export default {
      * logger.log("This is what's happening", variable, 123)
      * ```
      */
-    debug: (...args: unknown[]) => {
+    debug: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug"].includes(logLevel)) {
             console.debug(
                 chalk.magenta(`${prefix()}🐞`, chalk.underline("DEBUG"), ">"),
-                ...args,
+                title,
             )
+            args.forEach((arg) => {
+                formatArg(arg).split("\n").forEach((line) => {
+                    console.debug("   ", line)
+                })
+            })
         }
     },
     /**
