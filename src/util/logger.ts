@@ -1,11 +1,11 @@
 // deno-lint-ignore-file no-console -- all logging behaviour is defined here
 
-import chalk from "chalk"
-import { logLevel, logTimestamp, tz } from "./config.ts"
+import { blue, cyan, gray, green, magenta, red, underline, yellow } from "@std/fmt/colors"
+import { LOG_LEVEL, LOG_TIMESTAMP, TZ } from "./config.ts"
 
 const prefix = () => {
     const now = new Date().toLocaleString("en-GB", {
-        timeZone: tz,
+        timeZone: TZ,
         hour: "numeric",
         minute: "numeric",
         second: "numeric",
@@ -13,7 +13,7 @@ const prefix = () => {
         month: "2-digit",
         year: "numeric",
     })
-    return logTimestamp ? `[${now}] ` : ""
+    return LOG_TIMESTAMP ? `[${now}] ` : ""
 }
 
 const formatArg = (arg: unknown): string => {
@@ -50,8 +50,8 @@ export default {
      * ```
      */
     log: (...args: unknown[]) => {
-        if (["trace", "debug", "info"].includes(logLevel)) {
-            console.log(chalk.cyan(`${prefix()}>`), ...args)
+        if (["trace", "debug", "info"].includes(LOG_LEVEL)) {
+            console.log(cyan(`${prefix()}>`), ...args)
         }
     },
     /**
@@ -65,9 +65,9 @@ export default {
      * ```
      */
     error: (title: unknown, ...args: unknown[]) => {
-        if (["trace", "debug", "info", "warn", "error"].includes(logLevel)) {
+        if (["trace", "debug", "info", "warn", "error"].includes(LOG_LEVEL)) {
             console.error(
-                chalk.red(`${prefix()}⚠️`, chalk.underline("ERROR"), ">"),
+                red(`${prefix()}⚠️ ${underline("ERROR")} >`),
                 title,
             )
             args.forEach((arg) => {
@@ -88,9 +88,9 @@ export default {
      * ```
      */
     warn: (title: unknown, ...args: unknown[]) => {
-        if (["trace", "debug", "info", "warn"].includes(logLevel)) {
+        if (["trace", "debug", "info", "warn"].includes(LOG_LEVEL)) {
             console.warn(
-                chalk.yellow(`${prefix()}⚠`, chalk.underline("WARN"), ">"),
+                yellow(`${prefix()}⚠ ${underline("WARN")} >`),
                 title,
             )
             args.forEach((arg) => {
@@ -111,9 +111,9 @@ export default {
      * ```
      */
     info: (title: unknown, ...args: unknown[]) => {
-        if (["trace", "debug", "info"].includes(logLevel)) {
+        if (["trace", "debug", "info"].includes(LOG_LEVEL)) {
             console.info(
-                chalk.blue(`${prefix()}ℹ`, chalk.underline("INFO"), ">"),
+                blue(`${prefix()}ℹ ${underline("INFO")} >`),
                 title,
             )
             args.forEach((arg) => {
@@ -134,9 +134,9 @@ export default {
      * ```
      */
     debug: (title: unknown, ...args: unknown[]) => {
-        if (["trace", "debug"].includes(logLevel)) {
+        if (["trace", "debug"].includes(LOG_LEVEL)) {
             console.debug(
-                chalk.magenta(`${prefix()}🐞`, chalk.underline("DEBUG"), ">"),
+                magenta(`${prefix()}🐞 ${underline("DEBUG")} >`),
                 title,
             )
             args.forEach((arg) => {
@@ -157,11 +157,11 @@ export default {
      * ```
      */
     trace: (...args: unknown[]) => {
-        if (["trace"].includes(logLevel)) {
-            console.trace(chalk.green(`${prefix()}>`), ...args)
-        } else if (logLevel === "debug") {
+        if (["trace"].includes(LOG_LEVEL)) {
+            console.trace(green(`${prefix()}>`), ...args)
+        } else if (LOG_LEVEL === "debug") {
             console.trace(
-                chalk.gray(
+                gray(
                     "[TRACE log level not enabled, remember to remove this trace call before production!]",
                 ),
             )
