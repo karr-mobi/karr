@@ -1,9 +1,8 @@
 import Fastify, { type FastifyInstance } from "fastify"
-import cookie from "fastify-cookie"
+import cookie from "@fastify/cookie"
 import helmet from "@fastify/helmet"
 
 import logger from "./util/logger.ts"
-import sql from "./util/db.ts"
 
 import { system } from "./routes/system.ts"
 import { user } from "./routes/user.ts"
@@ -21,6 +20,7 @@ export const build = (opts = {}) => {
     app.register(cookie)
     app.register(helmet, {
         global: true,
+        dnsPrefetchControl: true,
     })
 
     app.register(system)
@@ -29,7 +29,6 @@ export const build = (opts = {}) => {
     app.register(trip, { prefix: "/v1/trip" })
 
     app.addHook("preClose", () => {
-        sql.end()
         logger.info("Shutting down")
     })
 
