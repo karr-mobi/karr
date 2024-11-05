@@ -3,13 +3,15 @@
         "dev": "LOG_LEVEL=trace deno run --watch --allow-env --allow-net --allow-sys ./src/main.ts"
     },
     "imports": {
+        "@fastify/cookie": "npm:@fastify/cookie@^11.0.1",
         "@fastify/helmet": "npm:@fastify/helmet@^12.0.1",
         "@std/assert": "jsr:@std/assert@1",
+        "@std/fmt": "jsr:@std/fmt@^1.0.3",
         "@types/node": "npm:@types/node@^22.7.8",
-        "chalk": "npm:chalk@^5.3.0",
+        "drizzle-kit": "npm:drizzle-kit@^0.27.1",
+        "drizzle-orm": "npm:drizzle-orm@^0.36.0",
         "fastify": "npm:fastify@^5.0.0",
-        "fastify-cookie": "npm:fastify-cookie@^5.7.0",
-        "postgres": "npm:postgres@^3.4.4"
+        "postgres": "npm:postgres@^3.4.5"
     },
     "lint": {
         "include": ["src/"],
