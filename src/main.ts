@@ -11,8 +11,12 @@ const app = build({
 
 // Run the server!
 try {
-    app.listen({ PORT })
-    logger.info(`Server listening on ${PORT}`)
+    const host = "localhost"
+    app.listen({
+        host,
+        port: PORT,
+    })
+    logger.info(`Server listening on ${host}:${PORT}`)
 } catch (err) {
     logger.error(err)
     Deno.exit(1)
