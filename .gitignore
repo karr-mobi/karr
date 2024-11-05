@@ -33,10 +33,10 @@ pids
 # macOS files
 .DS_Store
 
-# lock files
-deno.lock
-
 # editor files
 .vscode
 .idea
 .zed
+
+# Drizzle migration files
+drizzle
