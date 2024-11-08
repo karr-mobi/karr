@@ -4,8 +4,11 @@ import type {
     FastifyRequest,
     FastifyServerOptions,
 } from "fastify"
-import type { DataResponse } from "../lib/types.d.ts"
+import type { DataResponse, Response } from "../lib/types.d.ts"
 import logger from "../util/logger.ts"
+import { v4 as uuidv4 } from "@std/uuid"
+import { handleRequest } from "../util/helpers.ts"
+import { selectUserById } from "../db/users.ts"
 
 export const user = (
     fastify: FastifyInstance,
@@ -23,15 +26,30 @@ export const user = (
 
 /**
  * Get logged in user's info
+ * @returns Object containing user info
  */
-const getUser = (_req: FastifyRequest, _res: FastifyReply) => {
-    logger.debug("Getting user")
-    return {
-        data: {
-            name: "John Doe",
-            email: "johndoe@example.com",
-        },
+const getUser = async (
+    req: FastifyRequest,
+    res: FastifyReply,
+): Promise<Response<object>> => {
+    logger.debug("Headers", req.headers)
+
+    // get the user ID from the headers
+    const id = req.headers.Authorization || "e0b74fb1-b931-4c95-ad46-70856cbba367" // default to local test user ID
+    logger.debug(`Getting user ${id}`)
+
+    // check the id is a valid UUID
+    if (!uuidv4.validate(id)) {
+        res.status(400)
+        return {
+            error: {
+                message: "Invalid user ID",
+            },
+        }
     }
+
+    // get the user from the database and send it back
+    return await handleRequest<object>(res, () => selectUserById(id))
 }
 
 /**
