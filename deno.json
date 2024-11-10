@@ -2,6 +2,7 @@
     "tasks": {
         "dev": "LOG_LEVEL=trace deno run --watch --allow-env --allow-net --allow-sys ./src/main.ts"
     },
+    "unstable": ["temporal"],
     "imports": {
         "@fastify/cookie": "npm:@fastify/cookie@^11.0.1",
         "@fastify/helmet": "npm:@fastify/helmet@^12.0.1",
@@ -18,6 +19,9 @@
         "include": ["src/"],
         "exclude": ["tests/testdata/", "src/fixtures/**/*.ts"],
         "rules": {
+            "globals": {
+                "Temporal": true
+            },
             "tags": ["recommended"],
             "include": [
                 "ban-untagged-todo",

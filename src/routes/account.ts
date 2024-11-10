@@ -36,7 +36,7 @@ const getVerified = (
 ): DataResponse<{ verified: boolean }> => {
     logger.debug("Getting user verification status")
     return {
-        timestamp: new Date().getTime(),
+        timestamp: Temporal.Now.instant().epochMilliseconds,
         data: {
             verified: true,
         },

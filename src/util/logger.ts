@@ -37,8 +37,7 @@ const getCallerFileAndLine = (): string | null => {
  * @returns The prefix for the log message
  */
 const prefix = () => {
-    const now = new Date().toLocaleString("en-GB", {
-        timeZone: TZ,
+    const now = Temporal.Now.instant().toLocaleString("en-GB", {
         hour: "numeric",
         minute: "numeric",
         second: "numeric",
