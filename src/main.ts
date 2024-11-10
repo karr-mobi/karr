@@ -2,7 +2,7 @@ import { build } from "./server.ts"
 import logger from "./util/logger.ts"
 import { LOG_LEVEL, logLevels, PORT, PRODUCTION } from "./util/config.ts"
 
-if (!PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
+if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
     logger.warn(
         `Log level is set to '${LOG_LEVEL}' in a production environment.`,
         "This may result in an excessive amount of logs.",
