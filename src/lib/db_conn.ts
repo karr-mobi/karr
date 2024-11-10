@@ -29,7 +29,7 @@ try {
     const result = await conn.execute(
         "SELECT * FROM information_schema.tables WHERE table_name = 'Users';",
     )
-    logger.debug("Database connection test result", result)
+    logger.debug("Database connection test result (Users table schema)", result)
 } catch (error) {
     logger.error("Failed to connect to database", error)
     Deno.exit(1)
