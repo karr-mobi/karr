@@ -4,10 +4,10 @@ import type {
     FastifyRequest,
     FastifyServerOptions,
 } from "fastify"
-import type { DataResponse, Response } from "../lib/types.d.ts"
+import type { DataResponse, Response, UserWithPrefsAndStatus } from "../lib/types.d.ts"
 import logger from "../util/logger.ts"
 import { v4 as uuidv4 } from "@std/uuid"
-import { handleRequest } from "../util/helpers.ts"
+import { handleRequest, tmpResponse } from "../util/helpers.ts"
 import { selectUserById } from "../db/users.ts"
 
 export const user = (
@@ -15,13 +15,13 @@ export const user = (
     _opts: FastifyServerOptions,
 ) => {
     fastify.get("/", getUser)
-    fastify.get("/:id", () => {}) // TODO(@finxol)
-    fastify.put("/nickname", () => {}) // TODO(@finxol)
-    fastify.put("/preferences", () => {}) // TODO(@finxol)
+    fastify.put("/nickname", tmpResponse) // TODO(@finxol)
+    fastify.put("/preferences", tmpResponse) // TODO(@finxol)
     fastify.get("/trips", getUserTrips)
-    fastify.get("/bookings", () => {}) // TODO(@finxol)
-    fastify.get("/bookings/:id", () => {}) // TODO(@finxol)
-    fastify.delete("/bookings/:id", () => {}) // TODO(@finxol)
+    fastify.get("/bookings", tmpResponse) // TODO(@finxol)
+    fastify.get("/bookings/:id", tmpResponse) // TODO(@finxol)
+    fastify.delete("/bookings/:id", tmpResponse) // TODO(@finxol)
+    fastify.get("/:id", tmpResponse) // TODO(@finxol)
 }
 
 /**
@@ -32,10 +32,8 @@ const getUser = async (
     req: FastifyRequest,
     res: FastifyReply,
 ): Promise<Response<object>> => {
-    logger.debug("Headers", req.headers)
-
     // get the user ID from the headers
-    const id = req.headers.Authorization || "e0b74fb1-b931-4c95-ad46-70856cbba367" // default to local test user ID
+    const id: string = req.headers.Authorization || "c5976035-d774-49a0-ad03-81246ccbd00a" // default to local test user ID
     logger.debug(`Getting user ${id}`)
 
     // check the id is a valid UUID
@@ -49,7 +47,7 @@ const getUser = async (
     }
 
     // get the user from the database and send it back
-    return await handleRequest<object>(res, () => selectUserById(id))
+    return await handleRequest<UserWithPrefsAndStatus>(res, () => selectUserById(id))
 }
 
 /**
