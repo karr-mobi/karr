@@ -3,6 +3,39 @@
 import { blue, cyan, gray, green, magenta, red, underline, yellow } from "@std/fmt/colors"
 import { LOG_LEVEL, LOG_TIMESTAMP, TZ } from "./config.ts"
 
+/**
+ * Get the file and line number of the calling function
+ * @returns The file and line number of the calling function
+ */
+const getCallerFileAndLine = (): string | null => {
+    const stack = new Error().stack
+    if (stack) {
+        const stackLines = stack.split("\n")
+        // Skip the first two lines (Error message and this function)
+        for (let i = 2; i < stackLines.length; i++) {
+            const line = stackLines[i]
+            if (!line.includes("logger.ts")) {
+                // Extract file, line, and column
+                const regex = /\s+at\s+(?:.*\s+)?\(?(.+):(\d+):(\d+)\)?/
+                const match = line.match(regex)
+                if (match) {
+                    const filepath = match[1]
+                    const file = filepath.split("/").pop()
+                    const lineNumber = match[2]
+                    const columnNumber = match[3]
+                    return `${file}:${lineNumber}:${columnNumber}`
+                }
+            }
+        }
+    }
+    return null
+}
+
+/**
+ * Create the prefix for the log message
+ * Can include the timestamp and the file and line number of the calling function
+ * @returns The prefix for the log message
+ */
 const prefix = () => {
     const now = new Date().toLocaleString("en-GB", {
         timeZone: TZ,
@@ -13,7 +46,10 @@ const prefix = () => {
         month: "2-digit",
         year: "numeric",
     })
-    return LOG_TIMESTAMP ? `[${now}] ` : ""
+    const c = getCallerFileAndLine()
+    const caller = c ? gray(`(${c}) `) : ""
+    const timestamp = LOG_TIMESTAMP ? `[${now}] ` : ""
+    return `${timestamp}${caller}`
 }
 
 const formatArg = (arg: unknown): string => {
@@ -30,7 +66,6 @@ const formatArg = (arg: unknown): string => {
  * The log level can be set using the LOG_LEVEL environment variable.
  *
  * The logger also logs timestamps, which can be disabled using the LOG_TIMESTAMP environment variable.
- * @param args - The arguments to log
  * @example
  * ```ts
  * import logger from "./util/logger.ts"
