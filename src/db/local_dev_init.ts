@@ -8,7 +8,7 @@ import logger from "../util/logger.ts"
 const initUsersTable = async () => {
     // check if test user already exists
     const existingUser = await db.select().from(usersTable).where(
-        eq(usersTable.name, "Test User"),
+        eq(usersTable.firstName, "Test"),
     )
     if (existingUser.length > 0) {
         logger.info("Test user already exists", { id: existingUser[0].id })
@@ -22,7 +22,8 @@ const initUsersTable = async () => {
 
     // create a test user in the users table
     const user = await db.insert(usersTable).values({
-        name: "Test User",
+        firstName: "Test",
+        lastName: "User",
         prefs: prefs[0].insertedId,
     }).returning({ insertedId: usersTable.id })
 
