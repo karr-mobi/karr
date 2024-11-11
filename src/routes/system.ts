@@ -1,4 +1,3 @@
-import logger from "../util/logger.ts"
 import { Hono } from "hono"
 
 const hono = new Hono()
@@ -7,7 +6,6 @@ const hono = new Hono()
  * Get system information
  */
 hono.get("/", (c) => {
-    logger.info("Getting system info")
     return c.json({
         name: "Fedicarpool",
         version: "0.1.0",
@@ -19,7 +17,6 @@ hono.get("/", (c) => {
  * Disallow all bots from accessing the API
  */
 hono.get("/robots.txt", (c) => {
-    logger.info("Getting system info")
     return c.text("User-agent: *\nDisallow: /")
 })
 
@@ -36,7 +33,6 @@ hono.get("/robots.txt", (c) => {
  * ```
  */
 hono.get("/versions", (c) => {
-    logger.info("Getting versions")
     return c.json({
         bestVersion: "v1",
         availableVersions: ["v1"],
@@ -55,7 +51,6 @@ hono.get("/versions", (c) => {
  * }
  */
 hono.get("/health", (c) => {
-    logger.info("Checking health")
     const dbInitialised = true
     return c.json({
         dbInitialised,
