@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-console -- all logging behaviour is defined here
 
 import { blue, cyan, gray, green, magenta, red, underline, yellow } from "@std/fmt/colors"
-import { LOG_LEVEL, LOG_TIMESTAMP, TZ } from "./config.ts"
+import { LOG_LEVEL, LOG_TIMESTAMP } from "./config.ts"
 
 /**
  * Get the file and line number of the calling function
