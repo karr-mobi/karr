@@ -1,5 +1,7 @@
 import { Hono } from "hono"
 
+import { API_VERSION } from "./util/config.ts"
+
 import system from "./routes/system.ts"
 import user from "./routes/user.ts"
 import account from "./routes/account.ts"
@@ -11,9 +13,7 @@ import trip from "./routes/trip.ts"
  * @returns Hono app
  */
 export const build = (): Hono => {
-    const API_VERSION = "v1"
-
-    const hono: Hono = new Hono().basePath(API_VERSION)
+    const hono: Hono = new Hono()
 
     // TODO(@finxol): Add security headers
     // app.register(helmet, {
@@ -21,10 +21,10 @@ export const build = (): Hono => {
     //     dnsPrefetchControl: true,
     // })
 
+    hono.route(`/${API_VERSION}/user`, user)
+    hono.route(`/${API_VERSION}/account`, account)
+    hono.route(`/${API_VERSION}/trip`, trip)
     hono.route("/", system)
-    hono.route("/user", user)
-    hono.route("/account", account)
-    hono.route("/trip", trip)
 
     return hono
 }
