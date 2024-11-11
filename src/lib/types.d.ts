@@ -11,8 +11,10 @@ export interface DataResponse<T> {
 
 export interface ErrorResponse {
     timestamp?: number
+    contact?: string
     error: {
         message: string
+        details?: unknown[]
     }
 }
 
@@ -38,5 +40,16 @@ export type UserWithPrefsAndStatus = {
     SpecialStatus: SpecialStatus
 }
 
+export type UserPublicProfile = {
+    firstName: string
+    nickname?: string
+    bio?: string
+    specialStatus?: string
+}
+
 export type Account = InferSelectModel<typeof accountsTable>
 export type AccountInsert = Omit<InferInsertModel<typeof accountsTable>, "id">
+
+export type AccountVerified = {
+    verified: boolean
+}
