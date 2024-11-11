@@ -1,4 +1,5 @@
-type LogLevel = "trace" | "debug" | "info" | "warn" | "error"
+export const logLevels = ["trace", "debug", "info", "warn", "error"] as const
+type LogLevel = typeof logLevels[number]
 
 /**
  * Convert a string or number to an integer
@@ -22,7 +23,9 @@ const toInt = (value: number | string): number => {
 // ====================
 // Configuration values
 // ====================
-export const PRODUCTION = Deno.env.get("ENV") === "production"
+export const API_VERSION: string = "v1"
+
+export const PRODUCTION: boolean = Deno.env.get("ENV") === "production"
 
 export const PORT: number = toInt(Deno.env.get("PORT") || 3000)
 
@@ -30,7 +33,7 @@ export const LOG_LEVEL: LogLevel = <LogLevel> (Deno.env.get("LOG_LEVEL") || "inf
 
 export const LOG_TIMESTAMP: boolean = (Deno.env.get("LOG_TIMESTAMP") || "true") === "true"
 
-export const TZ = Deno.env.get("TZ") || "Europe/Paris"
+export const TZ: string = Deno.env.get("TZ") || "Europe/Paris"
 
 export const DB_CONFIG = Object.freeze({
     host: Deno.env.get("DB_HOST") || "localhost",
@@ -46,3 +49,8 @@ export const DB_CONFIG = Object.freeze({
         return `postgres://${this.user}:${this.password}@${this.host}:${this.port}/${this.name}`
     },
 })
+
+// ====================
+// Instance parameters
+// ====================
+export const ADMIN_EMAIL: string = Deno.env.get("ADMIN_EMAIL") || ""
