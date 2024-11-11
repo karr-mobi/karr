@@ -105,20 +105,24 @@ hono.delete("/bookings/:id", async (c) => { // TODO(@finxol): Implement this
 
 /**
  * Get the public profile of a user. Only limited information is available.
+ * @param {string} id - The user ID. Must be a valid UUID v4
  * @returns {Response} DataResponse if fetch was successful, ErrorResponse if not
  */
-hono.get("/profile/:id", async (c) => {
-    // get the user ID from the route params
-    const id: string = c.req.param("id")
+hono.get(
+    "/profile/:id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}",
+    async (c) => {
+        // get the user ID from the route params
+        const id: string = c.req.param("id")
 
-    // check the id is a valid UUID
-    if (!uuidv4.validate(id)) {
-        c.status(400)
-        return responseErrorObject(c, "Invalid user ID")
-    }
+        // check the id is a valid UUID
+        if (!uuidv4.validate(id)) {
+            c.status(400)
+            return responseErrorObject(c, "Invalid user ID")
+        }
 
-    // get the user from the database and send it back
-    return await handleRequest<UserPublicProfile>(c, () => selectUserProfileById(id))
-})
+        // get the user from the database and send it back
+        return await handleRequest<UserPublicProfile>(c, () => selectUserProfileById(id))
+    },
+)
 
 export default hono
