@@ -1,7 +1,6 @@
-import type { DataResponse, ErrorResponse, Response } from "../lib/types.d.ts"
-import type { FastifyReply, FastifyRequest } from "fastify"
 import logger from "../util/logger.ts"
 import { ADMIN_EMAIL } from "./config.ts"
+import type { Context } from "hono"
 
 /**
  * Template for a function that returns a response object
@@ -10,17 +9,16 @@ import { ADMIN_EMAIL } from "./config.ts"
  * @returns The response object
  */
 export function tmpResponse(
-    _req: FastifyRequest,
-    res: FastifyReply,
-): Response<object> {
-    res.status(418)
-    return {
+    c: Context,
+) {
+    c.status(418)
+    return c.json({
         timestamp: Temporal.Now.instant().epochMilliseconds,
         data: {
             message: "I'm a teapot",
             img: "https://http.cat/images/418.jpg",
         },
-    }
+    })
 }
 
 /**
@@ -30,17 +28,18 @@ export function tmpResponse(
  * @returns The error response object
  */
 export function responseErrorObject(
+    c: Context,
     message: string,
     ...args: unknown[]
-): ErrorResponse {
-    return {
+) {
+    return c.json({
         timestamp: Temporal.Now.instant().epochMilliseconds,
         contact: ADMIN_EMAIL,
         error: {
             message: message,
             details: args,
         },
-    }
+    })
 }
 
 /**
@@ -52,23 +51,23 @@ export function responseErrorObject(
  * @returns The result of the function or an error object
  */
 export async function handleRequest<T>(
-    res: FastifyReply,
+    c: Context,
     fn: () => Promise<T>,
-): Promise<Response<T>> {
+) {
     try {
         const out: T = await fn()
         if (!out) {
-            res.status(404)
-            return <ErrorResponse> responseErrorObject("Resource not found")
+            c.status(404)
+            return responseErrorObject(c, "Resource not found")
         }
-        return <DataResponse<T>> {
+        return c.json({
             timestamp: Temporal.Now.instant().epochMilliseconds,
             data: out,
-        }
+        })
     } catch (err) {
         logger.error(err)
-        res.status(500)
-        return <ErrorResponse> responseErrorObject("Internal server error", err)
+        c.status(500)
+        return responseErrorObject(c, "Internal server error", err)
     }
 }
 
@@ -80,13 +79,12 @@ export async function handleRequest<T>(
  * @param done The callback to continue the request
  */
 export function checkContentType(
-    req: FastifyRequest,
-    res: FastifyReply,
+    c: Context,
     done: () => void,
-): void {
-    if (req.headers["content-type"] !== "application/json") {
-        res.status(400)
-            .send(responseErrorObject("Invalid content type. Must be application/json"))
+) {
+    if (c.req.header("content-type") !== "application/json") {
+        c.status(400)
+        return responseErrorObject(c, "Invalid content type. Must be application/json")
     } else {
         done()
     }

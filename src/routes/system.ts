@@ -1,22 +1,23 @@
-import type {
-    FastifyInstance,
-    FastifyReply,
-    FastifyRequest,
-    FastifyServerOptions,
-} from "fastify"
 import logger from "../util/logger.ts"
+import { Hono } from "hono"
 
-export const system = (
-    fastify: FastifyInstance,
-    _opts: FastifyServerOptions,
-) => {
-    fastify.get("/versions", getVersions)
-}
+const hono = new Hono()
 
-const getVersions = (_req: FastifyRequest, _res: FastifyReply) => {
+hono.get("/versions", (c) => {
     logger.info("Getting versions")
-    return {
+    return c.json({
         bestVersion: "v1",
         availableVersions: ["v1"],
-    }
-}
+    })
+})
+
+hono.get("/health", (c) => {
+    logger.info("Checking health")
+    const dbInitialised = true
+    return c.json({
+        dbInitialised,
+        status: dbInitialised ? "ok" : "error",
+    })
+})
+
+export default hono

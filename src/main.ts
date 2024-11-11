@@ -1,6 +1,7 @@
 import { build } from "./server.ts"
 import logger from "./util/logger.ts"
 import { LOG_LEVEL, logLevels, PORT, PRODUCTION } from "./util/config.ts"
+import type { Hono } from "hono"
 
 if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
     logger.warn(
@@ -14,17 +15,16 @@ if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
 logger.info("Starting server...")
 logger.info(`Timezone: ${Temporal.Now.timeZoneId()}`)
 
-const app = build({
-    logger: false,
-})
-
 // Run the server!
 try {
+    const app: Hono = build()
+
     const host = "localhost"
-    app.listen({
-        host,
+    Deno.serve({
+        hostname: host,
         port: PORT,
-    })
+    }, app.fetch)
+
     logger.info(`Server listening on ${host}:${PORT}`)
 } catch (err) {
     logger.error(err)
