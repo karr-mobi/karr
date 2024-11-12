@@ -1,12 +1,5 @@
 import type { UserPublicProfile, UserWithPrefsAndStatus } from "../lib/types.d.ts"
-import logger from "../util/logger.ts"
-import { v4 as uuidv4 } from "@std/uuid"
-import {
-    checkContentType,
-    handleRequest,
-    responseErrorObject,
-    tmpResponse,
-} from "../util/helpers.ts"
+import { handleRequest, responseErrorObject, tmpResponse } from "../util/helpers.ts"
 import { selectUserById, selectUserProfileById, updateNickname } from "../db/users.ts"
 import { Hono } from "hono"
 
@@ -21,14 +14,8 @@ const hono = new Hono()
  * @returns Object containing user info
  */
 hono.get("/", async (c) => {
-    // get the user ID from the headers
-    const id: string = c.req.header("Authorization") || ""
-
-    // check the id is a valid UUID
-    if (!uuidv4.validate(id)) {
-        c.status(400)
-        return responseErrorObject(c, "Invalid user ID")
-    }
+    // get the user ID from the validated headers
+    const { id } = c.req.valid("header")
 
     // get the user from the database and send it back
     return await handleRequest<UserWithPrefsAndStatus>(c, () => selectUserById(id))
@@ -39,14 +26,9 @@ hono.get("/", async (c) => {
  * @returns {Response} Data response if update was successful, ErrorResponse if not
  */
 hono.put("/nickname", async (c) => { // TODO(@finxol): Add validation for nickname
-    const id: string = c.req.header("Authorization") || ""
+    // get the user ID from the validated headers
+    const { id } = c.req.valid("header")
     const { nickname } = await c.req.json()
-
-    // check the id is a valid UUID
-    if (!uuidv4.validate(id)) {
-        c.status(400)
-        return responseErrorObject(c, "Invalid user ID")
-    }
 
     // check the nickname is a valid string
     if (typeof nickname !== "string" || nickname.length < 1) {
@@ -111,14 +93,8 @@ hono.delete("/bookings/:id", async (c) => { // TODO(@finxol): Implement this
 hono.get(
     "/profile/:id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}",
     async (c) => {
-        // get the user ID from the route params
-        const id: string = c.req.param("id")
-
-        // check the id is a valid UUID
-        if (!uuidv4.validate(id)) {
-            c.status(400)
-            return responseErrorObject(c, "Invalid user ID")
-        }
+        // get the user ID from the validated headers
+        const { id } = c.req.valid("header")
 
         // get the user from the database and send it back
         return await handleRequest<UserPublicProfile>(c, () => selectUserProfileById(id))

@@ -4,8 +4,7 @@ import type { Context } from "hono"
 
 /**
  * Template for a function that returns a response object
- * @param _req The FastifyRequest object
- * @param res The FastifyReply object
+ * @param c The Hono context object
  * @returns The response object
  */
 export function tmpResponse(
@@ -46,7 +45,7 @@ export function responseErrorObject(
  * Helper function which accepts any function
  * and wraps it in a try-catch block
  * Appropriately handles the response object and status code
- * @param res The FastifyReply object
+ * @param c The Hono context object
  * @param fn The function to wrap
  * @returns The result of the function or an error object
  */
@@ -74,8 +73,7 @@ export async function handleRequest<T>(
 /**
  * Middleware to check the content type of a request
  * The content type must be application/json
- * @param req The FastifyRequest object
- * @param res The FastifyReply object
+ * @param c The Hono context object
  * @param done The callback to continue the request
  */
 export function checkContentType(
