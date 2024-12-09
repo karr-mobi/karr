@@ -6,11 +6,10 @@
 
 ```json
 {
-  bestVersion: 'v1',
-  availableVersions: ['v1']
+    "bestVersion": "v1",
+    "availableVersions": ["v1"]
 }
 ```
-
 
 ## User routes
 

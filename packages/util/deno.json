@@ -1,0 +1,5 @@
+{
+    "imports": {
+        "@std/fmt": "jsr:@std/fmt@^1.0.3"
+    }
+}

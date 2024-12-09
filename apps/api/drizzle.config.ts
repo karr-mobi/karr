@@ -1,5 +1,5 @@
 import { defineConfig } from "drizzle-kit"
-import { DB_CONFIG } from "./src/util/config.ts"
+import { DB_CONFIG } from "@config"
 
 export default defineConfig({
     out: "./drizzle",

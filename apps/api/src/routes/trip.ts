@@ -1,5 +1,5 @@
 import type { DataResponse } from "../lib/types.d.ts"
-import logger from "../util/logger.ts"
+import logger from "@util/logger.ts"
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 
@@ -14,9 +14,9 @@ const hono = new Hono()
  */
 hono.get("/search", (c) => {
     return streamSSE(c, async (stream) => {
-        const from = c.req.query("from")
-        const to = c.req.query("to")
-        const date = c.req.query("date")
+        const _from = c.req.query("from")
+        const _to = c.req.query("to")
+        const _date = c.req.query("date")
 
         const tripsToSend: Promise<void>[] = []
 
@@ -41,6 +41,7 @@ hono.get("/search", (c) => {
             await Promise.all([...tripsToSend, immediatePromise, ...slowerPromises])
             logger.debug("All data sent")
         } catch (error) {
+            stream.close()
             logger.error("Error sending SSE data:", error)
         }
     })

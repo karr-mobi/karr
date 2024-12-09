@@ -1,5 +1,5 @@
 import type { UserPublicProfile, UserWithPrefsAndStatus } from "../lib/types.d.ts"
-import { handleRequest, responseErrorObject, tmpResponse } from "../util/helpers.ts"
+import { handleRequest, responseErrorObject, tmpResponse } from "../lib/helpers.ts"
 import { selectUserById, selectUserProfileById, updateNickname } from "../db/users.ts"
 import { Hono } from "hono"
 
@@ -45,7 +45,7 @@ hono.put("/nickname", async (c) => { // TODO(@finxol): Add validation for nickna
  * __Not implemented yet__
  * @returns {Response} DataResponse if update was successful, ErrorResponse if not
  */
-hono.put("/preferences", async (c) => { // TODO(@finxol): Implement this
+hono.put("/preferences", (c) => { // TODO(@finxol): Implement this
     return tmpResponse(c)
 })
 
@@ -54,7 +54,7 @@ hono.put("/preferences", async (c) => { // TODO(@finxol): Implement this
  * __Not implemented yet__
  * @returns {object} - Object containing list of trips
  */
-hono.get("/trips", async (c) => { // TODO(@finxol): Implement this
+hono.get("/trips", (c) => { // TODO(@finxol): Implement this
     return tmpResponse(c)
 })
 
@@ -63,7 +63,7 @@ hono.get("/trips", async (c) => { // TODO(@finxol): Implement this
  * __Not implemented yet__
  * @returns {Response} DataResponse if fetch was successful, ErrorResponse if not
  */
-hono.get("/bookings", async (c) => { // TODO(@finxol): Implement this
+hono.get("/bookings", (c) => { // TODO(@finxol): Implement this
     return tmpResponse(c)
 })
 
@@ -72,7 +72,7 @@ hono.get("/bookings", async (c) => { // TODO(@finxol): Implement this
  * __Not implemented yet__
  * @returns {Response} DataResponse if fetch was successful, ErrorResponse if not
  */
-hono.get("/bookings/:id", async (c) => { // TODO(@finxol): Implement this
+hono.get("/bookings/:id", (c) => { // TODO(@finxol): Implement this
     return tmpResponse(c)
 })
 
@@ -81,7 +81,7 @@ hono.get("/bookings/:id", async (c) => { // TODO(@finxol): Implement this
  * __Not implemented yet__
  * @returns {Response} DataResponse if deletion was successful, ErrorResponse if not
  */
-hono.delete("/bookings/:id", async (c) => { // TODO(@finxol): Implement this
+hono.delete("/bookings/:id", (c) => { // TODO(@finxol): Implement this
     return tmpResponse(c)
 })
 

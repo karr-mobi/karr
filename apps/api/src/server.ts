@@ -3,13 +3,13 @@ import { validator } from "hono/validator"
 import { HTTPException } from "hono/http-exception"
 import { v4 as uuidv4 } from "@std/uuid"
 
-import { API_VERSION } from "./util/config.ts"
+import { API_VERSION } from "@config"
 
 import system from "./routes/system.ts"
 import user from "./routes/user.ts"
 import account from "./routes/account.ts"
 import trip from "./routes/trip.ts"
-import logger from "./util/logger.ts"
+import logger from "@util/logger.ts"
 
 /**
  * Setup the Hono app with all the routes and plugins

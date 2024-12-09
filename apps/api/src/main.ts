@@ -1,6 +1,6 @@
 import { build } from "./server.ts"
-import logger from "./util/logger.ts"
-import { LOG_LEVEL, logLevels, PORT, PRODUCTION } from "./util/config.ts"
+import logger from "@util/logger.ts"
+import { LOG_LEVEL, logLevels, PORT, PRODUCTION } from "@config"
 import type { Hono } from "hono"
 
 if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
@@ -13,6 +13,7 @@ if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
 }
 
 logger.info("Starting server...")
+// deno-lint-ignore no-undef
 logger.info(`Timezone: ${Temporal.Now.timeZoneId()}`)
 
 // Run the server!

@@ -1,5 +1,5 @@
-import logger from "../util/logger.ts"
-import { ADMIN_EMAIL } from "./config.ts"
+import logger from "@util/logger.ts"
+import { ADMIN_EMAIL } from "@config"
 import type { Context } from "hono"
 
 /**
@@ -12,6 +12,7 @@ export function tmpResponse(
 ) {
     c.status(418)
     return c.json({
+        // deno-lint-ignore no-undef
         timestamp: Temporal.Now.instant().epochMilliseconds,
         data: {
             message: "I'm a teapot",
@@ -32,6 +33,7 @@ export function responseErrorObject(
     ...args: unknown[]
 ) {
     return c.json({
+        // deno-lint-ignore no-undef
         timestamp: Temporal.Now.instant().epochMilliseconds,
         contact: ADMIN_EMAIL,
         error: {
@@ -60,6 +62,7 @@ export async function handleRequest<T>(
             return responseErrorObject(c, "Resource not found")
         }
         return c.json({
+            // deno-lint-ignore no-undef
             timestamp: Temporal.Now.instant().epochMilliseconds,
             data: out,
         })

@@ -1,22 +1,22 @@
 {
-    "tasks": {
-        "dev": "LOG_LEVEL=trace deno run --watch --allow-env --allow-net --allow-sys ./src/main.ts",
-        "start": "LOG_LEVEL=info deno run --allow-env --allow-net --allow-sys ./src/main.ts"
-    },
+    "workspace": [
+        "./apps/api",
+        "./apps/auth",
+        "./packages/util",
+        "./packages/config"
+    ],
+    "importMap": "./import_map.json",
     "unstable": ["temporal"],
-    "imports": {
-        "@std/assert": "jsr:@std/assert@1",
-        "@std/fmt": "jsr:@std/fmt@^1.0.3",
-        "@std/uuid": "jsr:@std/uuid@^1.0.4",
-        "@types/node": "npm:@types/node@^22.7.8",
-        "drizzle-kit": "npm:drizzle-kit@^0.27.1",
-        "drizzle-orm": "npm:drizzle-orm@^0.36.0",
-        "postgres": "npm:postgres@^3.4.5",
-        "hono": "jsr:@hono/hono@^4.6.9"
+    "tasks": {
+        "dev": "deno eval \"import logger from '@util/logger.ts'; logger.warn('TODO: Build and run Docker container'); logger.info('To run the API, first cd into apps/api');\""
     },
     "lint": {
-        "include": ["src/"],
-        "exclude": ["tests/testdata/", "src/fixtures/**/*.ts"],
+        "include": ["apps/**/src/", "packages/**/src/"],
+        "exclude": [
+            "node_modules",
+            "**/tests/testdata/",
+            "**/src/fixtures/**/*.ts"
+        ],
         "rules": {
             "tags": ["recommended"],
             "include": [
@@ -25,7 +25,6 @@
                 "no-undef",
                 "no-throw-literal",
                 "no-sync-fn-in-async-fn",
-                "no-sparse-arrays",
                 "no-self-compare",
                 "no-non-null-assertion",
                 "no-external-import",
@@ -46,6 +45,6 @@
         "semiColons": false,
         "singleQuote": false,
         "proseWrap": "preserve",
-        "include": ["src/"]
+        "include": ["apps/**/src/", "packages/**/src/"]
     }
 }

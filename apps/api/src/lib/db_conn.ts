@@ -1,5 +1,5 @@
-import { DB_CONFIG } from "../util/config.ts"
-import logger from "../util/logger.ts"
+import { DB_CONFIG } from "@config"
+import logger from "@util/logger.ts"
 
 import { drizzle } from "drizzle-orm/postgres-js"
 

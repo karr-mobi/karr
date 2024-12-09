@@ -1,7 +1,7 @@
 // deno-lint-ignore-file no-console -- all logging behaviour is defined here
 
 import { blue, cyan, gray, green, magenta, red, underline, yellow } from "@std/fmt/colors"
-import { LOG_LEVEL, LOG_TIMESTAMP } from "./config.ts"
+import { LOG_LEVEL, LOG_TIMESTAMP } from "@config"
 
 /**
  * Get the file and line number of the calling function
@@ -37,6 +37,7 @@ const getCallerFileAndLine = (): string | null => {
  * @returns The prefix for the log message
  */
 const prefix = () => {
+    // deno-lint-ignore no-undef
     const now = Temporal.Now.instant().toLocaleString("en-GB", {
         hour: "numeric",
         minute: "numeric",
@@ -67,7 +68,7 @@ const formatArg = (arg: unknown): string => {
  * The logger also logs timestamps, which can be disabled using the LOG_TIMESTAMP environment variable.
  * @example
  * ```ts
- * import logger from "./util/logger.ts"
+ * import logger from "@util/logger.ts"
  * logger.info("Hello, world!")
  * logger.error("Major error", error, 123)
  * ```

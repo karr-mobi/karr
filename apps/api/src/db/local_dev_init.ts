@@ -3,7 +3,7 @@ import { usersTable } from "./users.sql.ts"
 import { userPrefsTable } from "./userprefs.sql.ts"
 import db from "../lib/db_conn.ts"
 import { eq } from "drizzle-orm"
-import logger from "../util/logger.ts"
+import logger from "@util/logger.ts"
 
 const initUsersTable = async () => {
     // check if test user already exists

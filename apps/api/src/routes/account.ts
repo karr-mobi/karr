@@ -1,9 +1,8 @@
 import type { AccountVerified, DataResponse } from "../lib/types.d.ts"
-import logger from "../util/logger.ts"
+import logger from "@util/logger.ts"
 import { Hono } from "hono"
-import { v4 as uuidv4 } from "@std/uuid"
 import { isVerified, updateEmail } from "../db/accounts.ts"
-import { handleRequest, responseErrorObject } from "../util/helpers.ts"
+import { handleRequest, responseErrorObject } from "../lib/helpers.ts"
 
 const hono = new Hono()
 
