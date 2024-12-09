@@ -1,6 +1,0 @@
-{
-    "imports": {
-        "@config": "./packages/config/src/config.ts",
-        "@util/": "./packages/util/src/"
-    }
-}
