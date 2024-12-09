@@ -1,0 +1,30 @@
+name: Lint Deno Project
+
+on:
+    - push
+    - pull_request
+
+permissions:
+    contents: read
+
+jobs:
+    lint:
+        runs-on: ubuntu-latest
+
+        env:
+            DENO_DIR: .deno
+
+        steps:
+            - name: Git Checkout
+              uses: actions/checkout@v2
+
+            - name: Use Deno Version
+              uses: denolib/setup-deno@v2
+              with:
+                  deno-version: 2.1.2
+
+            - name: Format all files
+              run: deno fmt --check
+
+            - name: Lint project
+              run: deno lint
