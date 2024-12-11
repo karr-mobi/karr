@@ -1,5 +1,6 @@
 # Karr API
-***Open to name suggestions :)***
+
+_**Open to name suggestions :)**_
 
 _Karr: Car in Breton language._ Not a misspelling ;)
 
