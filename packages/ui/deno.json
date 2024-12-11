@@ -1,4 +1,8 @@
 {
+    "imports": {
+        "react": "npm:react@^19.0.0",
+        "react-dom": "npm:react-dom@^19.0.0"
+    },
     "lint": {
         "rules": {
             "exclude": [

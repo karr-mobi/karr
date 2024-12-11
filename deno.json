@@ -3,27 +3,42 @@
         "./apps/api",
         "./apps/auth",
         "./packages/util",
-        "./packages/config"
+        "./packages/config",
+        "./packages/ui"
     ],
+    "nodeModulesDir": "auto",
     "imports": {
         "@config": "./packages/config/src/config.ts",
         "@util/": "./packages/util/src/",
         "husky": "npm:husky@^9.1.7"
     },
-    "unstable": ["temporal"],
+    "unstable": [
+        "temporal",
+        "unsafe-proto"
+    ],
     "tasks": {
-        "dev": "deno eval \"import logger from '@util/logger.ts'; logger.warn('TODO: Build and run Docker container'); logger.info('To run the API, first cd into apps/api');\"",
         "prepare": "husky"
     },
+    "compilerOptions": {
+        "jsx": "react-jsx",
+        "jsxImportSource": "npm:react"
+    },
     "lint": {
-        "include": ["apps/**/src/", "packages/**/src/"],
+        "include": [
+            "apps/**/src/",
+            "packages/**/src/",
+            "apps/**/src/**/*.tsx",
+            "packages/**/src/**/*.tsx"
+        ],
         "exclude": [
             "node_modules",
             "**/tests/testdata/",
             "**/src/fixtures/**/*.ts"
         ],
         "rules": {
-            "tags": ["recommended"],
+            "tags": [
+                "recommended"
+            ],
             "include": [
                 "ban-untagged-todo",
                 "verbatim-module-syntax",
@@ -40,6 +55,9 @@
                 "default-param-last",
                 "camelcase",
                 "no-console"
+            ],
+            "exclude": [
+                "require-await"
             ]
         }
     },
@@ -50,6 +68,12 @@
         "semiColons": false,
         "singleQuote": false,
         "proseWrap": "preserve",
-        "include": ["apps/**/src/", "packages/**/src/"]
+        "include": [
+            "apps/**/src/",
+            "packages/**/src/",
+            "apps/**/src/**/*.tsx",
+            "packages/**/src/**/*.tsx",
+            "**/*.json"
+        ]
     }
 }
