@@ -9,7 +9,8 @@
     "nodeModulesDir": "auto",
     "imports": {
         "@config": "./packages/config/src/config.ts",
-        "@util/": "./packages/util/src/",
+        "@util": "./packages/util/src/utilities.ts",
+        "@ui/components": "./packages/ui/src/components/index.ts",
         "husky": "npm:husky@^9.1.7"
     },
     "unstable": [
@@ -21,7 +22,13 @@
     },
     "compilerOptions": {
         "jsx": "react-jsx",
-        "jsxImportSource": "npm:react"
+        "jsxImportSource": "npm:react",
+        "jsxImportSourceTypes": "npm:@types/react",
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "esnext"
+        ]
     },
     "lint": {
         "include": [

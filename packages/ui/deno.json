@@ -1,7 +1,10 @@
 {
     "imports": {
+        "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.0.0-beta.6",
+        "@types/react": "npm:@types/react@^19.0.1",
         "react": "npm:react@^19.0.0",
-        "react-dom": "npm:react-dom@^19.0.0"
+        "react-dom": "npm:react-dom@^19.0.0",
+        "tailwindcss": "npm:tailwindcss@^4.0.0-beta.6"
     },
     "lint": {
         "rules": {
