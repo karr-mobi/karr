@@ -23,15 +23,16 @@
                 "name": "next"
             }
         ],
+        "baseUrl": ".",
         "paths": {
             "~/*": [
                 "./src/*"
             ],
-            "@ui/*": [
-                "../../packages/ui/src/*"
+            "@ui/components": [
+                "../../packages/ui/src/components/index"
             ],
-            "@util/*": [
-                "../../packages/util/src/*"
+            "@util": [
+                "../../packages/util/src/utilities"
             ]
         }
     },
