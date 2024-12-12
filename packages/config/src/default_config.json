@@ -1,0 +1,12 @@
+{
+    "application_name": "Karr",
+    "database": {
+        "host": "localhost",
+        "port": 5432,
+        "username": "karr",
+        "password": "karr",
+        "database": "karr",
+        "user_name": "karr"
+    },
+    "admin_email": ""
+}

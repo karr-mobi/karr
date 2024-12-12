@@ -1,0 +1,10 @@
+application_name: Karr Auth
+
+database:
+    name: karr_auth
+    user: karr_auth
+    password: karr_auth
+    host: localhost
+    port: 5432
+
+foo: bar
