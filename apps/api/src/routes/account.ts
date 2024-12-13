@@ -1,5 +1,5 @@
 import type { AccountVerified, DataResponse } from "../lib/types.d.ts"
-import logger from "@util/logger.ts"
+import { logger } from "@util"
 import { Hono } from "hono"
 import { isVerified, updateEmail } from "../db/accounts.ts"
 import { handleRequest, responseErrorObject } from "../lib/helpers.ts"

@@ -68,7 +68,7 @@ const formatArg = (arg: unknown): string => {
  * The logger also logs timestamps, which can be disabled using the LOG_TIMESTAMP environment variable.
  * @example
  * ```ts
- * import logger from "@util/logger.ts"
+ * import { logger } from "@util"
  * logger.info("Hello, world!")
  * logger.error("Major error", error, 123)
  * ```

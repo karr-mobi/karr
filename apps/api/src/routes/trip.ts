@@ -1,5 +1,5 @@
 import type { DataResponse } from "../lib/types.d.ts"
-import logger from "@util/logger.ts"
+import { logger } from "@util"
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 

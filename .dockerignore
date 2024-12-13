@@ -1,0 +1,10 @@
+# Ignore everything, except...
+*
+
+# Pakcages
+!deno.json
+!deno.lock
+
+# Source
+!apps/
+!packages/

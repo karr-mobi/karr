@@ -4,7 +4,7 @@
 
 import postgres from "postgres"
 import sql, { connection } from "../lib/db_conn.ts"
-import logger from "@util/logger.ts"
+import { logger } from "@util"
 
 /**
  * Check if the database is initialised

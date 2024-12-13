@@ -1,5 +1,5 @@
 import { build } from "./server.ts"
-import logger from "@util/logger.ts"
+import { logger } from "@util"
 import { LOG_LEVEL, logLevels, PORT, PRODUCTION } from "@config"
 import type { Hono } from "hono"
 
@@ -20,13 +20,14 @@ logger.info(`Timezone: ${Temporal.Now.timeZoneId()}`)
 try {
     const app: Hono = build()
 
-    const host = "localhost"
     Deno.serve({
-        hostname: host,
         port: PORT,
+        onListen(info: { hostname: string; port: number; transport: string }) {
+            logger.info(`Server listening on ${info.hostname}:${info.port}`)
+        },
     }, app.fetch)
 
-    logger.info(`Server listening on ${host}:${PORT}`)
+    //logger.info(`Server listening on ${host}:${PORT}`)
 } catch (err) {
     logger.error(err)
     Deno.exit(1)

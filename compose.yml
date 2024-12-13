@@ -1,0 +1,47 @@
+services:
+    api:
+        build:
+            context: .
+            dockerfile: ./apps/api/Dockerfile
+        environment:
+            - LOG_LEVEL=debug
+            - DB_HOST=db
+        ports:
+            - 1993:1993
+        depends_on:
+            db:
+                condition: service_healthy
+
+    db:
+        image: postgres:17-alpine
+        ports:
+            - 5432:5432
+        environment:
+            - POSTGRES_PASSWORD=password
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=karr
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
+    caddy:
+        image: caddy:2-alpine
+        restart: unless-stopped
+        ports:
+            - "8080:8080"
+            #- "443:443"
+            #- "443:443/udp"
+        environment:
+            - TZ=Europe/Paris
+            - HOST=localhost:8080
+            - API_PORT=1993
+        volumes:
+            - ./Caddyfile:/etc/caddy/Caddyfile
+            - caddy_data:/data
+            - caddy_config:/config
+
+volumes:
+    caddy_data:
+    caddy_config:

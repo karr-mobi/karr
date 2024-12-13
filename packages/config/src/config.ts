@@ -39,7 +39,7 @@ export const DB_CONFIG = Object.freeze({
     host: Deno.env.get("DB_HOST") || "localhost",
     port: toInt(Deno.env.get("DB_PORT") || 5432),
     ssl: (Deno.env.get("DB_SSL") || "false") === "true",
-    name: Deno.env.get("DB_NAME") || "carpool",
+    name: Deno.env.get("DB_NAME") || "karr",
     user: Deno.env.get("DB_USER") ||
         (PRODUCTION ? "carpool" : "postgres"),
     password: Deno.env.get("DB_PASS") || "password",

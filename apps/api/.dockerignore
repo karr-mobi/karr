@@ -1,0 +1,17 @@
+# Ignore everything, except...
+*
+
+# Pakcages
+!deno.json
+!deno.lock
+
+# Source
+!src/
+!drizzle.config.ts
+!init.sh
+
+# ...but always include these files...
+README.md
+routes.md
+.zed
+.*ignore

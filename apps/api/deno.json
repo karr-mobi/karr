@@ -1,7 +1,7 @@
 {
     "tasks": {
         "dev": "LOG_LEVEL=trace deno run --watch --allow-env --allow-net --allow-sys ./src/main.ts",
-        "start": "LOG_LEVEL=info deno run --allow-env --allow-net --allow-sys ./src/main.ts",
+        "start": "deno run --allow-env --allow-net --allow-sys ./src/main.ts",
         "check-types": "deno check ."
     },
     "imports": {

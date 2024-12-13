@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm"
 import { userPrefsTable } from "./userprefs.sql.ts"
 import type { UserPublicProfile, UserWithPrefsAndStatus } from "../lib/types.d.ts"
 import { specialStatusTable } from "./specialstatus.sql.ts"
-import logger from "@util/logger.ts"
+import { logger } from "@util"
 
 /**
  * Select a user by their ID

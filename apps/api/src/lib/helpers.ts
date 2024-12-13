@@ -1,4 +1,4 @@
-import logger from "@util/logger.ts"
+import { logger } from "@util"
 import { ADMIN_EMAIL } from "@config"
 import type { Context } from "hono"
 

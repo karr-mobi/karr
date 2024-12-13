@@ -9,7 +9,7 @@ import system from "./routes/system.ts"
 import user from "./routes/user.ts"
 import account from "./routes/account.ts"
 import trip from "./routes/trip.ts"
-import logger from "@util/logger.ts"
+import { logger } from "@util"
 
 /**
  * Setup the Hono app with all the routes and plugins
