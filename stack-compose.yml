@@ -1,0 +1,52 @@
+services:
+    api:
+        image: ghcr.io/finxol/karr-api:latest
+        secrets:
+            - db-password
+        environment:
+            - LOG_LEVEL=debug
+            - DB_HOST=db
+            - DB_PASSWORD_FILE=/run/secrets/db-password
+        ports:
+            - 1993:1993
+        depends_on:
+            - db
+
+    db:
+        image: postgres:17-alpine
+        ports:
+            - 5432:5432
+        secrets:
+            - db-password
+        environment:
+            - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=karr
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
+    caddy:
+        image: ghcr.io/finxol/karr-server:latest
+        ports:
+            - "80:80"
+            - "443:443"
+            - "443:443/udp"
+        environment:
+            - TZ=Europe/Paris
+            - SITE_ADDRESS=karr.finxol.io
+            - API_PORT=1993
+            #- CADDY_DISABLE_TLS=1
+        volumes:
+            - caddy_data:/data
+            - caddy_config:/config
+
+volumes:
+    caddy_data:
+    caddy_config:
+
+secrets:
+    db-password:
+        external: true

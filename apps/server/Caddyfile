@@ -1,15 +1,10 @@
-{$HOST}, :80 {
-	encode zstd gzip
-	log {
-		output file /data/access.log
-		format json
-		level info
-	}
-	handle_path /api/* {
-		reverse_proxy api:{$API_PORT}
-	}
+{$SITE_ADDRESS}
 
-	handle_path /* {
-		respond "<div style='display:flex; justify-content:center; align-items:center; height:100vh; font-size:50rem; color:white;'>Karr 🚗</div>"
-	}
+handle_path /api/* {
+	reverse_proxy api:{$API_PORT}
+}
+
+handle_path /* {
+	header Content-Type text/html
+	respond "<div style='display:flex; justify-content:center; align-items:center; height:100vh; font-size:50rem; color:white;'>Karr 🚗</div>"
 }
