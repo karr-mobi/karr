@@ -10,7 +10,6 @@ permissions:
 
 jobs:
     build-server:
-        needs: lint
         runs-on: ubuntu-latest
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         permissions:
