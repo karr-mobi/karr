@@ -5,6 +5,6 @@ handle_path /api/* {
 }
 
 handle_path /* {
-	header Content-Type text/html
+	header Content-Type "text/html; charset=utf-8"
 	respond "<div style='display:flex; justify-content:center; align-items:center; height:100vh; font-size:50rem; color:white;'>Karr 🚗</div>"
 }
