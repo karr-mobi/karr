@@ -1,7 +1,7 @@
 import { parse } from "@std/yaml"
 import { dirname, fromFileUrl, join } from "@std/path"
 import { existsSync } from "@std/fs"
-import { logger, toCamelCase } from "@util"
+import { logger } from "@util"
 
 import defaultConfig from "./default_config.json" with { type: "json" }
 
@@ -28,14 +28,7 @@ function parseFile(file: string = "../karr_config.yaml") {
     }
 }
 
-function camelCaseify(obj: Config) {
-    return Object.keys(obj).reduce((acc: unknown, key: string) => {
-        acc[toCamelCase(key)] = obj[key]
-        return acc
-    }, {} as Config)
-}
-
-export function readConfig() {
+export function readConfig(): Config {
     const acceptedExtensions = ["yaml", "yml", "json"]
 
     for (const ext of acceptedExtensions) {
@@ -52,15 +45,15 @@ export function readConfig() {
                         return obj
                     }, {} as typeof defaultConfig)
 
-            return camelCaseify(Object.assign(defaultConfig, filteredUserConfig))
+            return Object.assign(defaultConfig, filteredUserConfig)
         }
     }
 
     logger.error("No configuration file found")
-    return camelCaseify(defaultConfig)
+    return defaultConfig
 }
 
-export function getDbPasswordFromFile(file: string) {
+export function getDbPasswordFromFile(file: string): string | null {
     const path = file
     if (existsSync(path)) {
         return Deno.readTextFileSync(path)

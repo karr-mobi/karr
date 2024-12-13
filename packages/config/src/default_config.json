@@ -5,8 +5,7 @@
         "port": 5432,
         "username": "karr",
         "password": "karr",
-        "database": "karr",
-        "user_name": "karr"
+        "database": "karr"
     },
-    "admin_email": ""
+    "admin_email": "admin@example.com"
 }
