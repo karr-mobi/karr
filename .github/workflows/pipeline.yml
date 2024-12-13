@@ -1,4 +1,4 @@
-name: Lint Deno Project
+name: Karr Pipeline (lint, build)
 
 on:
     push:
@@ -50,7 +50,7 @@ jobs:
               uses: docker/build-push-action@v5
               with:
                   context: .
-                  dockerfile: ./apps/api/Dockerfile
+                  file: ./apps/api/Dockerfile
                   push: true
                   tags: |
                       ghcr.io/finxol/karr-api:latest
