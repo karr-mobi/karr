@@ -26,6 +26,7 @@ pids
 .env.test.local
 .env.production.local
 .env.local
+pass.txt
 
 # Vim swap files
 *.swp

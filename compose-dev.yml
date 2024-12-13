@@ -1,6 +1,8 @@
 services:
     api:
-        image: ghcr.io/finxol/karr-api:latest
+        build:
+            context: .
+            dockerfile: ./apps/api/Dockerfile
         secrets:
             - db-password
         environment:
@@ -30,7 +32,9 @@ services:
             retries: 5
 
     caddy:
-        image: ghcr.io/finxol/karr-server:latest
+        build:
+            context: ./apps/server
+            dockerfile: Dockerfile
         restart: unless-stopped
         ports:
             - "8080:8080"
@@ -38,7 +42,7 @@ services:
             #- "443:443/udp"
         environment:
             - TZ=Europe/Paris
-            - HOST=:8080
+            - HOST=localhost:8080
             - API_PORT=1993
             - CADDY_DISABLE_TLS=1
         volumes:
@@ -51,4 +55,4 @@ volumes:
 
 secrets:
     db-password:
-        external: true
+        file: ./pass.txt

@@ -60,6 +60,14 @@ export function readConfig() {
     return camelCaseify(defaultConfig)
 }
 
+export function getDbPasswordFromFile(file: string) {
+    const path = file
+    if (existsSync(path)) {
+        return Deno.readTextFileSync(path)
+    }
+    return null
+}
+
 if (import.meta.main) {
     logger.info("Read config", readConfig())
 }

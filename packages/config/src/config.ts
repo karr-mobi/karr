@@ -1,3 +1,5 @@
+import { getDbPasswordFromFile } from "./importer.ts"
+
 export const logLevels = ["trace", "debug", "info", "warn", "error"] as const
 type LogLevel = typeof logLevels[number]
 
@@ -42,7 +44,12 @@ export const DB_CONFIG = Object.freeze({
     name: Deno.env.get("DB_NAME") || "karr",
     user: Deno.env.get("DB_USER") ||
         (PRODUCTION ? "carpool" : "postgres"),
-    password: Deno.env.get("DB_PASS") || "password",
+
+    // password can be set via DB_PASSWORD or DB_PASSWORD_FILE.
+    // File is preferred if it exists.
+    password: (Deno.env.get("DB_PASSWORD_FILE")
+        ? getDbPasswordFromFile(Deno.env.get("DB_PASSWORD_FILE"))
+        : Deno.env.get("DB_PASSWORD")) || "",
 
     // the connection info as a string
     get connStr(): string {

@@ -10,6 +10,6 @@
 	}
 
 	handle_path /* {
-		respond "Hello World"
+		respond "<div style='display:flex; justify-content:center; align-items:center; height:100vh; font-size:50rem; color:white;'>Karr 🚗</div>"
 	}
 }
