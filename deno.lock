@@ -11,6 +11,7 @@
     "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@std/uuid@^1.0.4": "1.0.4",
     "jsr:@std/yaml@^1.0.5": "1.0.5",
+    "npm:@tailwindcss/postcss@^4.0.0-beta.6": "4.0.0-beta.6",
     "npm:@tailwindcss/vite@^4.0.0-beta.6": "4.0.0-beta.6_vite@6.0.3__@types+node@22.10.1__lightningcss@1.28.2_@types+node@22.10.1_lightningcss@1.28.2",
     "npm:@types/node@22": "22.10.1",
     "npm:@types/node@^22.7.8": "22.10.1",
@@ -599,6 +600,17 @@
         "@tailwindcss/oxide-linux-x64-musl",
         "@tailwindcss/oxide-win32-arm64-msvc",
         "@tailwindcss/oxide-win32-x64-msvc"
+      ]
+    },
+    "@tailwindcss/postcss@4.0.0-beta.6": {
+      "integrity": "sha512-zTOUcNovZ1v3Uuu1ftFEYr8HUTEA5e06pwN4G5VceoA0n5NQ0HC/3rfLkSpSj5rAd7Z/KGXBMdD9IAJp6eMSbA==",
+      "dependencies": [
+        "@alloc/quick-lru",
+        "@tailwindcss/node",
+        "@tailwindcss/oxide",
+        "lightningcss",
+        "postcss@8.4.49",
+        "tailwindcss@4.0.0-beta.6"
       ]
     },
     "@tailwindcss/vite@4.0.0-beta.6_vite@6.0.3__@types+node@22.10.1__lightningcss@1.28.2_@types+node@22.10.1_lightningcss@1.28.2": {
