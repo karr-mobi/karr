@@ -11,6 +11,7 @@
         "@config": "./packages/config/src/config.ts",
         "@util": "./packages/util/src/utilities.ts",
         "@ui/components": "./packages/ui/src/components/index.ts",
+        "@ui/globals": "./packages/ui/src/global.css",
         "husky": "npm:husky@^9.1.7"
     },
     "unstable": [
