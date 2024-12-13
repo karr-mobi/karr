@@ -81,7 +81,9 @@
             "packages/**/src/",
             "apps/**/src/**/*.tsx",
             "packages/**/src/**/*.tsx",
-            "**/*.json"
+            "**/*.json",
+            "**/*.md",
+            "**/*.yml"
         ]
     }
 }
