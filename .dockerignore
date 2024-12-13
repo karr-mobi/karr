@@ -5,6 +5,9 @@
 !deno.json
 !deno.lock
 
+# Caddy server file
+!Caddyfile
+
 # Source
 !apps/
 !packages/
