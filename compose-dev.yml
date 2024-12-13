@@ -12,8 +12,7 @@ services:
         ports:
             - 1993:1993
         depends_on:
-            db:
-                condition: service_healthy
+            - db
 
     db:
         image: postgres:17-alpine

@@ -4,6 +4,8 @@ WORKDIR /app
 # make /app belong to deno user
 RUN chown -R deno:deno /app
 
+RUN apk add bash
+
 # Prefer not to run as root.
 USER deno
 
@@ -25,4 +27,7 @@ ENV PORT=1993
 # Compile the main app so that it doesn't need to be compiled each startup/entry.
 RUN deno cache ./src/main.ts
 
-CMD ["task", "start"]
+COPY --chown=deno:deno ./wait-for-it.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/wait-for-it.sh
+
+CMD ["wait-for-it.sh", "db:5432", "-t", "10", "--", "deno", "task", "start"]

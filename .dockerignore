@@ -11,3 +11,5 @@
 # Source
 !apps/
 !packages/
+
+!wait-for-it.sh
