@@ -1,4 +1,4 @@
-{$HOST} {
+{$HOST}, :80 {
 	encode zstd gzip
 	log {
 		output file /data/access.log
