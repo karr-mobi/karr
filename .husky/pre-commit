@@ -3,4 +3,4 @@ echo "Running pre-commit hook"
 deno fmt --check
 deno lint
 
-caddy fmt ./Caddyfile
+caddy fmt ./apps/server/Caddyfile
