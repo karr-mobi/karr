@@ -1,6 +1,6 @@
 echo "Running pre-commit hook"
 
-deno fmt --check
+deno fmt
 deno lint
 
 caddy fmt ./apps/server/Caddyfile
