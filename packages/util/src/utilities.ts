@@ -1,6 +1,4 @@
-import logger from "./logger.ts"
-
-export { logger }
+export { default as logger } from "./logger.ts"
 
 /**
  * Convert a snake_case string to camelCase

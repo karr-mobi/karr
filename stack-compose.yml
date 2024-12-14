@@ -48,5 +48,5 @@ volumes:
     caddy_config:
 
 secrets:
-    db-password:
+    db-password: # needs a secret created with `printf "<password>" | docker secret create db-password -`
         external: true
