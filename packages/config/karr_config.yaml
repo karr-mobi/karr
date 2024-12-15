@@ -1,4 +1,4 @@
-application_name: Karr Auth
+application_name: Karr Demo
 
 database:
     name: karr

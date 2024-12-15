@@ -1,6 +1,10 @@
-import { parse } from "@std/yaml"
-import { dirname, fromFileUrl, join } from "@std/path"
-import { existsSync } from "@std/fs"
+import { parse } from "yaml"
+//deno-lint-ignore no-external-import
+import { dirname, join } from "node:path"
+//deno-lint-ignore no-external-import
+import { existsSync } from "node:fs"
+//deno-lint-ignore no-external-import
+import { fileURLToPath } from "node:url"
 import { logger } from "@util"
 
 import defaultConfig from "./default_config.json" with { type: "json" }
@@ -8,7 +12,7 @@ import defaultConfig from "./default_config.json" with { type: "json" }
 type Config = typeof defaultConfig
 
 function resolvePath(file: string) {
-    return join(dirname(fromFileUrl(import.meta.url)), file)
+    return join(dirname(fileURLToPath(import.meta.url)), file)
 }
 
 function parseFile(file: string = "../karr_config.yaml") {
