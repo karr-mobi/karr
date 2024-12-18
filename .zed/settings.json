@@ -1,0 +1,20 @@
+{
+    "format_on_save": "on",
+    "formatter": {
+        "external": {
+            "command": "node_modules/.bin/prettier",
+            "arguments": ["--stdin-filepath", "{buffer_path}"]
+        }
+    },
+    "languages": {
+        "TypeScript": {
+            "language_servers": ["typescript-language-server", "!vtsls", "..."]
+        },
+        "TSX": {
+            "language_servers": ["typescript-language-server", "!vtsls", "..."]
+        },
+        "JavaScript": {
+            "language_servers": ["typescript-language-server", "!vtsls", "..."]
+        }
+    }
+}
