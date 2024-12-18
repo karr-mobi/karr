@@ -1,0 +1,28 @@
+{
+    "name": "@karr/util",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "tsc --watch",
+        "build": "tsc"
+    },
+    "exports": {
+        ".": {
+            "types": "./src/utilities.ts",
+            "default": "./dist/utilities.js"
+        },
+        "./logger": {
+            "types": "./src/logger.ts",
+            "default": "./dist/logger.js"
+        }
+    },
+    "dependencies": {
+        "@karr/config": "workspace:*",
+        "chalk": "^5.3.0"
+    },
+    "devDependencies": {
+        "@karr/tsconfig": "workspace:*",
+        "@types/node": "^22.10.2",
+        "typescript": "latest"
+    }
+}

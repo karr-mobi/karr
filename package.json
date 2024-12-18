@@ -1,0 +1,29 @@
+{
+    "name": "karr",
+    "private": true,
+    "scripts": {
+        "build": "turbo build",
+        "dev": "turbo dev",
+        "lint": "turbo lint",
+        "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+        "test": "echo 'no tests implemented yet'",
+        "prepare": "husky"
+    },
+    "workspaces": [
+        "apps/*",
+        "packages/*",
+        "tooling/*"
+    ],
+    "devDependencies": {
+        "@ianvs/prettier-plugin-sort-imports": "^4.4.0",
+        "husky": "^9.1.7",
+        "prettier": "^3.4.2",
+        "prettier-plugin-tailwindcss": "^0.6.9",
+        "turbo": "^2.3.3",
+        "typescript": "5.5.4"
+    },
+    "packageManager": "pnpm@9.0.0",
+    "engines": {
+        "node": ">=18"
+    }
+}

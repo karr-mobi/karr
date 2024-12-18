@@ -1,10 +1,17 @@
+#!/usr/bin/env sh
+
 echo "Running pre-commit hook"
+
+###################################################################
+# Run project tests                                               #
+###################################################################
+pnpm test
 
 ###################################################################
 # Format, lint, and type check the code                           #
 ###################################################################
-deno fmt
-deno lint
+pnpm run format
+pnpm run lint
 
 ###################################################################
 # Format Caddyfile only if caddy is installed                     #
@@ -13,51 +20,3 @@ if command -v caddy &> /dev/null
 then
     caddy fmt --overwrite ./apps/server/Caddyfile
 fi
-
-###################################################################
-# Replace placeholders in Markdown files with their actual values #
-###################################################################
-# set -e  # Exit immediately if a command exits with a non-zero status
-
-# # Define the project root (the directory where this script resides)
-# PROJECT_ROOT="$(git rev-parse --show-toplevel)"
-
-# # Function to replace placeholders in a single file
-# replace_placeholders() {
-#   local file="$1"
-
-#   # Use Perl for in-place editing with multi-line support
-#   perl -0777 -i -pe '
-#     while (/\{\{([^}]+)\}}/) {
-#       my $filepath = $1;
-#       # Resolve the absolute path relative to the project root
-#       my $abs_path = $ENV{"PROJECT_ROOT"} . "/" . $filepath;
-
-#       if (-e $abs_path) {
-#         local $/ = undef;
-#         open my $fh, "<", $abs_path or die "Cannot open file $abs_path: $!";
-#         my $content = <$fh>;
-#         close $fh;
-#         # Escape backslashes and dollar signs for replacement
-#         $content =~ s/\\/\\\\/g;
-#         $content =~ s/\$/\\\$/g;
-#         s/\{\{$filepath\}\}/$content/g;
-#       } else {
-#         die "Error: File '$filepath' not found for placeholder in $file.\n";
-#       }
-#     }
-#   ' "$file"
-# }
-
-# # Export the PROJECT_ROOT environment variable for use in Perl
-# export PROJECT_ROOT
-
-# # Find all Markdown files in the project, excluding node_modules
-# find "$PROJECT_ROOT" -type f -name "*.md" -not -path "*/node_modules/*" | while read -r md_file; do
-#   echo "Processing '$md_file'..."
-#   replace_placeholders "$md_file"
-# done
-
-# echo "All placeholders have been successfully replaced."
-
-###################################################################

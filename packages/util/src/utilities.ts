@@ -1,15 +1,14 @@
-export { default as logger } from "./logger.ts"
-
 /**
  * Convert a snake_case string to camelCase
  * @param str - A string in snake_case
  * @returns The string in camelCase
  */
 export function toCamelCase(str: string): string {
-    return str.toLowerCase().replace(
-        /(_\w)/g,
-        (match) => match[1].toUpperCase(),
-    )
+    return str
+        .toLowerCase()
+        .replace(/(_\w)/g, (match: string) =>
+            match[1] ? match[1].toUpperCase() : ""
+        )
 }
 
 /**
@@ -25,7 +24,7 @@ export function toInt(value: number | string): number {
     const parsed = parseInt(value, 10)
     if (isNaN(parsed)) {
         throw new Error(
-            `${value} is not a number \n \t\t\tHINT: likely an invalid environment variable`,
+            `${value} is not a number \n \t\t\tHINT: likely an invalid environment variable`
         )
     }
     return parsed

@@ -1,7 +1,6 @@
-// deno-lint-ignore-file no-console -- all logging behaviour is defined here
-
 import chalk from "chalk"
-import { LOG_LEVEL, LOG_TIMESTAMP } from "@config"
+
+import { LOG_LEVEL, LOG_TIMESTAMP } from "@karr/config"
 
 const { blue, cyan, gray, green, magenta, red, underline, yellow } = chalk
 
@@ -16,11 +15,11 @@ const getCallerFileAndLine = (): string | null => {
         // Skip the first two lines (Error message and this function)
         for (let i = 2; i < stackLines.length; i++) {
             const line = stackLines[i]
-            if (!line.includes("logger.ts")) {
+            if (line && !line.includes("logger.ts")) {
                 // Extract file, line, and column
                 const regex = /\s+at\s+(?:.*\s+)?\(?(.+):(\d+):(\d+)\)?/
                 const match = line.match(regex)
-                if (match) {
+                if (match && match[1]) {
                     const filepath = match[1]
                     const file = filepath.split("/").pop()
                     const lineNumber = match[2]
@@ -39,14 +38,13 @@ const getCallerFileAndLine = (): string | null => {
  * @returns The prefix for the log message
  */
 const prefix = () => {
-    // deno-lint-ignore no-undef
-    const now = Temporal.Now.instant().toLocaleString("en-GB", {
+    const now = new Date().toLocaleString("en-GB", {
         hour: "numeric",
         minute: "numeric",
         second: "numeric",
         day: "2-digit",
         month: "2-digit",
-        year: "numeric",
+        year: "numeric"
     })
     const c = getCallerFileAndLine()
     const caller = c ? gray(`(${c}) `) : ""
@@ -103,14 +101,13 @@ export default {
      */
     error: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug", "info", "warn", "error"].includes(LOG_LEVEL)) {
-            console.error(
-                red(`${prefix()}⚠️ ${underline("ERROR")} >`),
-                title,
-            )
+            console.error(red(`${prefix()}⚠️ ${underline("ERROR")} >`), title)
             args.forEach((arg) => {
-                formatArg(arg).split("\n").forEach((line) => {
-                    console.error("   ", line)
-                })
+                formatArg(arg)
+                    .split("\n")
+                    .forEach((line) => {
+                        console.error("   ", line)
+                    })
             })
         }
     },
@@ -126,14 +123,13 @@ export default {
      */
     warn: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug", "info", "warn"].includes(LOG_LEVEL)) {
-            console.warn(
-                yellow(`${prefix()}⚠ ${underline("WARN")} >`),
-                title,
-            )
+            console.warn(yellow(`${prefix()}⚠ ${underline("WARN")} >`), title)
             args.forEach((arg) => {
-                formatArg(arg).split("\n").forEach((line) => {
-                    console.warn("   ", line)
-                })
+                formatArg(arg)
+                    .split("\n")
+                    .forEach((line) => {
+                        console.warn("   ", line)
+                    })
             })
         }
     },
@@ -149,14 +145,13 @@ export default {
      */
     info: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug", "info"].includes(LOG_LEVEL)) {
-            console.info(
-                blue(`${prefix()}ℹ ${underline("INFO")} >`),
-                title,
-            )
+            console.info(blue(`${prefix()}ℹ ${underline("INFO")} >`), title)
             args.forEach((arg) => {
-                formatArg(arg).split("\n").forEach((line) => {
-                    console.info("   ", line)
-                })
+                formatArg(arg)
+                    .split("\n")
+                    .forEach((line) => {
+                        console.info("   ", line)
+                    })
             })
         }
     },
@@ -174,12 +169,14 @@ export default {
         if (["trace", "debug"].includes(LOG_LEVEL)) {
             console.debug(
                 magenta(`${prefix()}🐞 ${underline("DEBUG")} >`),
-                title,
+                title
             )
             args.forEach((arg) => {
-                formatArg(arg).split("\n").forEach((line) => {
-                    console.debug("   ", line)
-                })
+                formatArg(arg)
+                    .split("\n")
+                    .forEach((line) => {
+                        console.debug("   ", line)
+                    })
             })
         }
     },
@@ -199,9 +196,9 @@ export default {
         } else if (LOG_LEVEL === "debug") {
             console.trace(
                 gray(
-                    "[TRACE log level not enabled, remember to remove this trace call before production!]",
-                ),
+                    "[TRACE log level not enabled, remember to remove this trace call before production!]"
+                )
             )
         }
-    },
+    }
 }

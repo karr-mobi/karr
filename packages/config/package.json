@@ -1,0 +1,23 @@
+{
+    "name": "@karr/config",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "tsc --watch",
+        "build": "tsc"
+    },
+    "exports": {
+        ".": {
+            "types": "./src/config.ts",
+            "default": "./dist/config.js"
+        }
+    },
+    "dependencies": {
+        "yaml": "^2.6.1"
+    },
+    "devDependencies": {
+        "@karr/tsconfig": "workspace:*",
+        "@types/node": "^22.10.2",
+        "typescript": "latest"
+    }
+}
