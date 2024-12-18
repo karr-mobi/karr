@@ -1,4 +1,4 @@
-name: Karr Server Pipeline (from Caddy)
+name: Karr Caddy CI
 
 on:
     push:
@@ -9,7 +9,7 @@ permissions:
     contents: read
 
 jobs:
-    build-server:
+    build:
         runs-on: ubuntu-latest
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         permissions:

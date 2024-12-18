@@ -1,4 +1,4 @@
-name: Karr Pipeline (lint, build)
+name: Karr CI
 
 on:
     push:
@@ -13,48 +13,51 @@ jobs:
     lint:
         runs-on: ubuntu-latest
 
-        env:
-            DENO_DIR: .deno
-
         steps:
-            - name: Git Checkout
-              uses: actions/checkout@v2
-
-            - name: Use Deno Version
-              uses: denolib/setup-deno@v2
-              with:
-                  deno-version: 2.1.2
-
-            - name: Format all files
-              run: deno fmt --check
-
-            - name: Lint project
-              run: deno lint
-
-    build-api:
-        needs: lint
-        runs-on: ubuntu-latest
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        permissions:
-            contents: read
-            packages: write
-        steps:
-            - name: Git Checkout
+            - name: Checkout
               uses: actions/checkout@v4
 
-            - name: Log in to the Container registry
-              uses: docker/login-action@v3
+            - uses: pnpm/action-setup@v4
+              name: Install pnpm
               with:
-                  registry: https://ghcr.io
-                  username: ${{ github.actor }}
-                  password: ${{ secrets.GITHUB_TOKEN }}
+                  run_install: false
 
-            - name: Build and push API Docker image
-              uses: docker/build-push-action@v5
+            - name: Install Node.js
+              uses: actions/setup-node@v4
               with:
-                  context: .
-                  file: ./apps/api/Dockerfile
-                  push: true
-                  tags: |
-                      ghcr.io/finxol/karr-api:latest
-                      ghcr.io/finxol/karr-api:${{ github.sha }}
+                  node-version: 22
+                  cache: "pnpm"
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Lint project
+              run: pnpm lint
+
+    # build-api:
+    #     needs: lint
+    #     runs-on: ubuntu-latest
+    #     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    #     permissions:
+    #         contents: read
+    #         packages: write
+    #     steps:
+    #         - name: Git Checkout
+    #           uses: actions/checkout@v4
+
+    #         - name: Log in to the Container registry
+    #           uses: docker/login-action@v3
+    #           with:
+    #               registry: https://ghcr.io
+    #               username: ${{ github.actor }}
+    #               password: ${{ secrets.GITHUB_TOKEN }}
+
+    #         - name: Build and push API Docker image
+    #           uses: docker/build-push-action@v5
+    #           with:
+    #               context: .
+    #               file: ./apps/api/Dockerfile
+    #               push: true
+    #               tags: |
+    #                   ghcr.io/finxol/karr-api:latest
+    #                   ghcr.io/finxol/karr-api:${{ github.sha }}
