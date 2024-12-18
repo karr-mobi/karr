@@ -20,16 +20,16 @@ services:
             - db-password
         environment:
             - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-            - POSTGRES_USER=postgres
+            - POSTGRES_USER=karr
             - POSTGRES_DB=karr
         healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            test: ["CMD-SHELL", "pg_isready -U karr"]
             interval: 5s
             timeout: 5s
             retries: 5
 
     caddy:
-        image: ghcr.io/finxol/karr-server:latest
+        image: caddy:2-alpine
         ports:
             - "80:80"
             - "443:443"
@@ -40,6 +40,7 @@ services:
             - API_PORT=1993
             #- CADDY_DISABLE_TLS=1
         volumes:
+            - /srv/Caddyfile:/etc/caddy/Caddyfile
             - caddy_data:/data
             - caddy_config:/config
 

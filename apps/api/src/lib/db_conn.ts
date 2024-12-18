@@ -16,17 +16,16 @@ export const connection = {
     prepare: true, // Automatic creation of prepared statements
     //types: [], // Array of custom types, see more below
     "fetch_types": true, // Automatically fetches types on connect
-    // on initial connection.
 }
 
 logger.debug("Connecting to database", DB_CONFIG)
-let conn
+let db
 try {
-    conn = drizzle({ connection })
+    db = drizzle({ connection })
     logger.info("Connected to database using drizzle-orm")
 
     // Test the connection
-    const result = await conn.execute(
+    const result = await db.execute(
         "SELECT * FROM information_schema.tables WHERE table_name = 'Users';",
     )
     logger.debug("Database connection test result (Users table schema)", result)
@@ -34,4 +33,4 @@ try {
     logger.error("Failed to connect to database", error)
     Deno.exit(1)
 }
-export default Object.freeze(conn)
+export default Object.freeze(db)

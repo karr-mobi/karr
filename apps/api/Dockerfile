@@ -30,4 +30,4 @@ RUN deno cache ./src/main.ts
 COPY --chown=deno:deno ./wait-for-it.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/wait-for-it.sh
 
-CMD ["wait-for-it.sh", "db:5432", "-t", "10", "--", "deno", "task", "start"]
+CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "deno", "task", "start"]

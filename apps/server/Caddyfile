@@ -1,5 +1,11 @@
 {$SITE_ADDRESS}
 
+log {
+	output file /data/access.log
+	format json
+	level info
+}
+
 handle_path /api/* {
 	reverse_proxy api:{$API_PORT}
 }
