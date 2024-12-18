@@ -31,8 +31,14 @@
             "@ui/components": [
                 "../../packages/ui/src/components/index"
             ],
+            "@ui/globals": [
+                "../../packages/ui/src/global.css"
+            ],
             "@util": [
                 "../../packages/util/src/utilities"
+            ],
+            "@config": [
+                "../../packages/config/src/config.ts"
             ]
         }
     },

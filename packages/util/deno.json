@@ -1,5 +1,6 @@
 {
     "imports": {
-        "@std/fmt": "jsr:@std/fmt@^1.0.3"
+        "@std/fmt": "jsr:@std/fmt@^1.0.3",
+        "chalk": "npm:chalk@^5.3.0"
     }
 }

@@ -1,4 +1,7 @@
 {
+    "imports": {
+        "~/*": "./src/*"
+    },
     "lint": {
         "rules": {
             "exclude": [

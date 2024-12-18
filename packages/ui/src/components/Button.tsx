@@ -10,7 +10,7 @@ export default async function Button({
     await new Promise((resolve) => setTimeout(resolve, 1000))
     return (
         <button
-            className={"bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" +
+            className={"text-white font-bold py-2 px-4 rounded" +
                 className}
             onClick={async () => {
                 "use server"
