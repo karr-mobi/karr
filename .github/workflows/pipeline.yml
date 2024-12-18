@@ -9,6 +9,13 @@ on:
 permissions:
     contents: read
 
+env:
+    TURBO_TELEMETRY_DISABLED: 1
+    # You can leverage Vercel Remote Caching with Turbo to speed up your builds
+    # @link https://turborepo.org/docs/core-concepts/remote-caching#remote-caching-on-vercel-builds
+    TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+    TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+
 jobs:
     lint:
         runs-on: ubuntu-latest
@@ -32,7 +39,7 @@ jobs:
               run: pnpm install
 
             - name: Lint project
-              run: pnpm lint
+              run: pnpm run lint
 
     # build-api:
     #     needs: lint
