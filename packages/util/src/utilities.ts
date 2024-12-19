@@ -29,3 +29,14 @@ export function toInt(value: number | string): number {
     }
     return parsed
 }
+
+/**
+ * Check if a string is a valid UUID
+ * @param str The string to check
+ * @returns True if the string is a valid UUID, false otherwise
+ */
+export function isUUIDv4(str: string): boolean {
+    return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+        str
+    )
+}

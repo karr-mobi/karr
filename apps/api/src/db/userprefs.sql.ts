@@ -6,5 +6,5 @@ export const userPrefsTable = pgTable("UserPrefs", {
     defaultPlaces: integer(),
     smoke: boolean().default(false),
     music: boolean().default(true),
-    pets: boolean().default(false),
+    pets: boolean().default(false)
 })

@@ -1,7 +1,9 @@
-import type { DataResponse } from "../lib/types.d.ts"
-import { logger } from "@util"
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
+
+import logger from "@karr/util/logger"
+
+import type { DataResponse } from "../lib/types.d.ts"
 
 const hono = new Hono()
 
@@ -22,23 +24,30 @@ hono.get("/search", (c) => {
 
         function sendData(data: object[]) {
             for (const item of data) {
-                tripsToSend.push(stream.writeSSE({
-                    data: JSON.stringify(item),
-                    event: "new-trip",
-                    id: crypto.randomUUID(),
-                }))
+                tripsToSend.push(
+                    stream.writeSSE({
+                        data: JSON.stringify(item),
+                        event: "new-trip",
+                        id: crypto.randomUUID()
+                    })
+                )
             }
         }
 
         try {
             // Get the trips from the local server
-            const immediatePromise: Promise<void> = getImmediateData().then(sendData)
+            const immediatePromise: Promise<void> =
+                getImmediateData().then(sendData)
             // Get the trips from the federated servers
             const slowerPromises: Promise<void>[] = [
-                getSlowerData().then(sendData),
+                getSlowerData().then(sendData)
             ]
 
-            await Promise.all([...tripsToSend, immediatePromise, ...slowerPromises])
+            await Promise.all([
+                ...tripsToSend,
+                immediatePromise,
+                ...slowerPromises
+            ])
             logger.debug("All data sent")
         } catch (error) {
             stream.close()
@@ -56,14 +65,12 @@ hono.get("/:id", (c) => {
     const id: string = c.req.param("id")
     logger.debug(`Getting trip by ID: ${id}`)
     logger.warn('"/:id"', "Are you sure this is the route you wanted to hit?")
-    return c.json(
-        <DataResponse<object>> {
-            data: {
-                id: id,
-                name: "Test Trip",
-            },
-        },
-    )
+    return c.json(<DataResponse<object>>{
+        data: {
+            id: id,
+            name: "Test Trip"
+        }
+    })
 })
 
 export default hono
@@ -75,10 +82,13 @@ export default hono
 function getImmediateData(): Promise<object[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
-            resolve([{ immediateObject1: "data1", id: 1 }, {
-                immediateObject2: "data2",
-                id: 3,
-            }])
+            resolve([
+                { immediateObject1: "data1", id: 1 },
+                {
+                    immediateObject2: "data2",
+                    id: 3
+                }
+            ])
         }, 50) // Simulate delay
     })
 }
@@ -86,10 +96,13 @@ function getImmediateData(): Promise<object[]> {
 function getSlowerData(): Promise<object[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
-            resolve([{ slowerObject1: "data3", id: 2 }, {
-                slowerObject2: "data4",
-                id: 4,
-            }])
+            resolve([
+                { slowerObject1: "data3", id: 2 },
+                {
+                    slowerObject2: "data4",
+                    id: 4
+                }
+            ])
         }, 1500) // Simulate delay
     })
 }

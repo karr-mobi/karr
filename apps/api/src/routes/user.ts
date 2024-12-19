@@ -1,7 +1,19 @@
-import type { UserPublicProfile, UserWithPrefsAndStatus } from "../lib/types.d.ts"
-import { handleRequest, responseErrorObject, tmpResponse } from "../lib/helpers.ts"
-import { selectUserById, selectUserProfileById, updateNickname } from "../db/users.ts"
 import { Hono } from "hono"
+
+import {
+    selectUserById,
+    selectUserProfileById,
+    updateNickname
+} from "../db/users.js"
+import {
+    handleRequest,
+    responseErrorObject,
+    tmpResponse
+} from "../lib/helpers.js"
+import type {
+    UserPublicProfile,
+    UserWithPrefsAndStatus
+} from "../lib/types.d.ts"
 
 const hono = new Hono()
 
@@ -15,18 +27,23 @@ const hono = new Hono()
  */
 hono.get("/", async (c) => {
     // get the user ID from the validated headers
+    //@ts-expect-error valid does take in a parameter
     const { id } = c.req.valid("header")
 
     // get the user from the database and send it back
-    return await handleRequest<UserWithPrefsAndStatus>(c, () => selectUserById(id))
+    return await handleRequest<UserWithPrefsAndStatus>(c, () =>
+        selectUserById(id)
+    )
 })
 
 /**
  * Change the logged in user's nickname
  * @returns {Response} Data response if update was successful, ErrorResponse if not
  */
-hono.put("/nickname", async (c) => { // TODO(@finxol): Add validation for nickname
+hono.put("/nickname", async (c) => {
+    // TODO(@finxol): Add validation for nickname
     // get the user ID from the validated headers
+    //@ts-expect-error valid does take in a parameter
     const { id } = c.req.valid("header")
     const { nickname } = await c.req.json()
 
@@ -45,7 +62,8 @@ hono.put("/nickname", async (c) => { // TODO(@finxol): Add validation for nickna
  * __Not implemented yet__
  * @returns {Response} DataResponse if update was successful, ErrorResponse if not
  */
-hono.put("/preferences", (c) => { // TODO(@finxol): Implement this
+hono.put("/preferences", (c) => {
+    // TODO(@finxol): Implement this
     return tmpResponse(c)
 })
 
@@ -54,7 +72,8 @@ hono.put("/preferences", (c) => { // TODO(@finxol): Implement this
  * __Not implemented yet__
  * @returns {object} - Object containing list of trips
  */
-hono.get("/trips", (c) => { // TODO(@finxol): Implement this
+hono.get("/trips", (c) => {
+    // TODO(@finxol): Implement this
     return tmpResponse(c)
 })
 
@@ -63,7 +82,8 @@ hono.get("/trips", (c) => { // TODO(@finxol): Implement this
  * __Not implemented yet__
  * @returns {Response} DataResponse if fetch was successful, ErrorResponse if not
  */
-hono.get("/bookings", (c) => { // TODO(@finxol): Implement this
+hono.get("/bookings", (c) => {
+    // TODO(@finxol): Implement this
     return tmpResponse(c)
 })
 
@@ -72,7 +92,8 @@ hono.get("/bookings", (c) => { // TODO(@finxol): Implement this
  * __Not implemented yet__
  * @returns {Response} DataResponse if fetch was successful, ErrorResponse if not
  */
-hono.get("/bookings/:id", (c) => { // TODO(@finxol): Implement this
+hono.get("/bookings/:id", (c) => {
+    // TODO(@finxol): Implement this
     return tmpResponse(c)
 })
 
@@ -81,7 +102,8 @@ hono.get("/bookings/:id", (c) => { // TODO(@finxol): Implement this
  * __Not implemented yet__
  * @returns {Response} DataResponse if deletion was successful, ErrorResponse if not
  */
-hono.delete("/bookings/:id", (c) => { // TODO(@finxol): Implement this
+hono.delete("/bookings/:id", (c) => {
+    // TODO(@finxol): Implement this
     return tmpResponse(c)
 })
 
@@ -94,11 +116,14 @@ hono.get(
     "/profile/:id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}",
     async (c) => {
         // get the user ID from the validated headers
+        //@ts-expect-error valid does take in a parameter
         const { id } = c.req.valid("header")
 
         // get the user from the database and send it back
-        return await handleRequest<UserPublicProfile>(c, () => selectUserProfileById(id))
-    },
+        return await handleRequest<UserPublicProfile>(c, () =>
+            selectUserProfileById(id)
+        )
+    }
 )
 
 export default hono

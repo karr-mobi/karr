@@ -1,23 +1,56 @@
-import { logger } from "@util"
-import { ADMIN_EMAIL } from "@config"
 import type { Context } from "hono"
+import { HTTPException } from "hono/http-exception"
+import type { CustomHeader, RequestHeader } from "hono/utils/headers"
+
+import { ADMIN_EMAIL } from "@karr/config"
+import { isUUIDv4 } from "@karr/util"
+import logger from "@karr/util/logger"
+
+/**
+ * Check if a request is authenticated
+ * @param c The Hono context object
+ * @returns True if the request is authenticated, false otherwise
+ */
+export function checkAuth(
+    value: Record<RequestHeader | CustomHeader, string>
+): { id: string } {
+    const authorization = value["authorization"]
+
+    if (authorization === undefined || authorization === "") {
+        throw new HTTPException(400, {
+            message: "Authencation token is required in Authorization header"
+        })
+    }
+
+    // TODO(@finxol): verify the JWT
+    const id: string = authorization
+
+    // check the id is a valid UUID
+    if (!isUUIDv4(id)) {
+        throw new HTTPException(400, {
+            message: "Invalid user ID"
+        })
+    }
+
+    logger.debug(`User ID: ${id}`)
+
+    return { id }
+}
 
 /**
  * Template for a function that returns a response object
  * @param c The Hono context object
  * @returns The response object
  */
-export function tmpResponse(
-    c: Context,
-) {
+export function tmpResponse(c: Context) {
     c.status(418)
     return c.json({
-        // deno-lint-ignore no-undef
-        timestamp: Temporal.Now.instant().epochMilliseconds,
+        // get timestamp from the current time using Date
+        timestamp: new Date().getTime(),
         data: {
             message: "I'm a teapot",
-            img: "https://http.cat/images/418.jpg",
-        },
+            img: "https://http.cat/images/418.jpg"
+        }
     })
 }
 
@@ -34,12 +67,12 @@ export function responseErrorObject(
 ) {
     return c.json({
         // deno-lint-ignore no-undef
-        timestamp: Temporal.Now.instant().epochMilliseconds,
+        timestamp: new Date().getTime(),
         contact: ADMIN_EMAIL,
         error: {
             message: message,
-            details: args,
-        },
+            details: args
+        }
     })
 }
 
@@ -51,10 +84,7 @@ export function responseErrorObject(
  * @param fn The function to wrap
  * @returns The result of the function or an error object
  */
-export async function handleRequest<T>(
-    c: Context,
-    fn: () => Promise<T>,
-) {
+export async function handleRequest<T>(c: Context, fn: () => Promise<T>) {
     try {
         const out: T = await fn()
         if (!out) {
@@ -63,8 +93,8 @@ export async function handleRequest<T>(
         }
         return c.json({
             // deno-lint-ignore no-undef
-            timestamp: Temporal.Now.instant().epochMilliseconds,
-            data: out,
+            timestamp: new Date().getTime(),
+            data: out
         })
     } catch (err) {
         logger.error(err)
@@ -79,13 +109,13 @@ export async function handleRequest<T>(
  * @param c The Hono context object
  * @param done The callback to continue the request
  */
-export function checkContentType(
-    c: Context,
-    done: () => void,
-) {
+export function checkContentType(c: Context, done: () => void) {
     if (c.req.header("content-type") !== "application/json") {
         c.status(400)
-        return responseErrorObject(c, "Invalid content type. Must be application/json")
+        return responseErrorObject(
+            c,
+            "Invalid content type. Must be application/json"
+        )
     } else {
         done()
     }

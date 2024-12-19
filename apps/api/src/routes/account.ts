@@ -1,21 +1,21 @@
-import type { AccountVerified, DataResponse } from "../lib/types.d.ts"
-import { logger } from "@util"
 import { Hono } from "hono"
-import { isVerified, updateEmail } from "../db/accounts.ts"
-import { handleRequest, responseErrorObject } from "../lib/helpers.ts"
+
+import logger from "@karr/util/logger"
+
+import { isVerified, updateEmail } from "../db/accounts.js"
+import { handleRequest, responseErrorObject } from "../lib/helpers.js"
+import type { AccountVerified, DataResponse } from "../lib/types.d.ts"
 
 const hono = new Hono()
 
 hono.get("/", (c) => {
     logger.debug("Getting user")
-    return c.json(
-        <DataResponse<object>> {
-            data: {
-                name: "John Doe",
-                email: "johndoe@example.com",
-            },
-        },
-    )
+    return c.json(<DataResponse<object>>{
+        data: {
+            name: "John Doe",
+            email: "johndoe@example.com"
+        }
+    })
 })
 
 /**
@@ -24,6 +24,7 @@ hono.get("/", (c) => {
  */
 hono.put("/email", async (c) => {
     // get the user ID from the validated headers
+    //@ts-expect-error valid does take in a parameter
     const { id } = c.req.valid("header")
     const { email } = await c.req.json()
 
@@ -42,6 +43,7 @@ hono.put("/email", async (c) => {
  */
 hono.get("/verified", async (c) => {
     // get the user ID from the validated headers
+    //@ts-expect-error valid does take in a parameter
     const { id } = c.req.valid("header")
 
     // Check if the user is verified
@@ -57,6 +59,7 @@ hono.post("/verify", (c) => c.text("TODO")) // TODO(@finxol)
  */
 hono.delete("/", async (c) => {
     // get the user ID from the validated headers
+    //@ts-expect-error valid does take in a parameter
     const { id } = c.req.valid("header")
     logger.debug(`Deleting user ${id}`)
 

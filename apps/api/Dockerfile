@@ -1,33 +1,69 @@
-FROM denoland/deno:alpine-2.1.4
+FROM node:22-alpine AS base
+LABEL maintainer="finxol <contact@finxol.io>"
+LABEL repository="https://github.com/finxol/karr"
 
-WORKDIR /app
-# make /app belong to deno user
-RUN chown -R deno:deno /app
-
-RUN apk add bash
-
-# Prefer not to run as root.
-USER deno
-
-# Cache the dependencies as a layer (the following two steps are re-run only when deps.ts is modified).
-# Ideally cache deps.ts will download and compile _all_ external files used in main.ts.
-COPY --chown=deno:deno deno.json deno.lock ./
-
-# These steps will be re-run upon each file change in your working directory:
-COPY --chown=deno:deno packages packages
-COPY --chown=deno:deno apps/api apps/api
-COPY --chown=deno:deno apps/auth/deno.json ./apps/auth/deno.json
-
-WORKDIR /app/apps/api
-
-# The port that your application listens to.
-EXPOSE 1993
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV TURBO_TELEMETRY_DISABLED=1
+# The port that the api listens to.
 ENV PORT=1993
 
-# Compile the main app so that it doesn't need to be compiled each startup/entry.
-RUN deno cache ./src/main.ts
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
-COPY --chown=deno:deno ./wait-for-it.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/wait-for-it.sh
+#####################
+### BUILDER STAGE ###
+#####################
+FROM base AS installer
+RUN apk update
+RUN apk add --no-cache libc6-compat
+# Set working directory
+WORKDIR /app
+RUN pnpm add -g turbo@^2
 
-CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "deno", "task", "start"]
+COPY . .
+
+# Generate a partial monorepo with a pruned lockfile for a target workspace.
+RUN turbo prune "@karr/api" --docker
+
+#######################
+### INSTALLER STAGE ###
+#######################
+FROM base AS builder
+RUN apk update
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+# First install the dependencies (as they change less often)
+COPY --from=installer /app/out/json/ .
+RUN pnpm install
+
+# Build the project
+COPY --from=installer /app/out/full/ .
+RUN pnpm run build
+
+####################
+### RUNNER STAGE ###
+####################
+FROM base AS runner
+
+RUN apk add --no-cache bash
+
+WORKDIR /app
+# make /app belong to node user
+RUN chown -R node:node /app
+
+# Don't run production as root
+RUN addgroup --system --gid 1001 runner
+RUN adduser --system --uid 1001 runner
+
+COPY --from=installer --chown=runner:runner /app/wait-for-it.sh /usr/local/bin/
+RUN chmod 555 /usr/local/bin/wait-for-it.sh
+
+USER node
+
+COPY --from=builder --chown=runner:runner /app/apps/api/out/index.mjs ./apps/api/out/index.mjs
+
+ENV NODE_ENV=production
+
+CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "node", "apps/api/out/index.mjs"]

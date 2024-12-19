@@ -7,9 +7,9 @@ const hono = new Hono()
  */
 hono.get("/", (c) => {
     return c.json({
-        name: "Fedicarpool",
+        name: "Karr API",
         version: "0.1.0",
-        description: "API for the federated carpooling system",
+        description: "API for the federated carpooling system"
     })
 })
 
@@ -35,7 +35,7 @@ hono.get("/robots.txt", (c) => {
 hono.get("/versions", (c) => {
     return c.json({
         bestVersion: "v1",
-        availableVersions: ["v1"],
+        availableVersions: ["v1"]
     })
 })
 
@@ -54,7 +54,7 @@ hono.get("/health", (c) => {
     const dbInitialised = true
     return c.json({
         dbInitialised,
-        status: dbInitialised ? "ok" : "error",
+        status: dbInitialised ? "ok" : "error"
     })
 })
 

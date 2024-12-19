@@ -1,15 +1,15 @@
 import { Hono } from "hono"
-import { validator } from "hono/validator"
 import { HTTPException } from "hono/http-exception"
-import { v4 as uuidv4 } from "@std/uuid"
+import { validator } from "hono/validator"
 
-import { API_VERSION } from "@config"
+import { API_VERSION } from "@karr/config"
+import { isUUIDv4 } from "@karr/util"
+import logger from "@karr/util/logger"
 
-import system from "./routes/system.ts"
-import user from "./routes/user.ts"
-import account from "./routes/account.ts"
-import trip from "./routes/trip.ts"
-import { logger } from "@util"
+import account from "./routes/account.js"
+import system from "./routes/system.js"
+import trip from "./routes/trip.js"
+import user from "./routes/user.js"
 
 /**
  * Setup the Hono app with all the routes and plugins
@@ -33,29 +33,32 @@ export const build = (): Hono => {
      * Check if a user is logged in by checking the Authorization header
      * @param req The FastifyRequest objec
      */
-    hono.use(validator("header", (value, _c) => {
-        const authorization = value["authorization"]
+    hono.use(
+        validator("header", (value, _c) => {
+            const authorization = value["authorization"]
 
-        if (authorization === undefined || authorization === "") {
-            throw new HTTPException(400, {
-                message: "Authencation token is required in Authorization header",
-            })
-        }
+            if (authorization === undefined || authorization === "") {
+                throw new HTTPException(400, {
+                    message:
+                        "Authencation token is required in Authorization header"
+                })
+            }
 
-        // TODO(@finxol): verify the JWT
-        const id: string = authorization
+            // TODO(@finxol): verify the JWT
+            const id: string = authorization
 
-        // check the id is a valid UUID
-        if (!uuidv4.validate(id)) {
-            throw new HTTPException(400, {
-                message: "Invalid user ID",
-            })
-        }
+            // check the id is a valid UUID
+            if (!isUUIDv4(id)) {
+                throw new HTTPException(400, {
+                    message: "Invalid user ID"
+                })
+            }
 
-        logger.debug(`User ID: ${id}`)
+            logger.debug(`User ID: ${id}`)
 
-        return { id }
-    }))
+            return { id }
+        })
+    )
 
     // ============================
     // ===== Protected routes =====

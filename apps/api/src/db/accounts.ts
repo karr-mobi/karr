@@ -1,7 +1,8 @@
-import drizzle from "../lib/db_conn.ts"
-import { accountsTable } from "./accounts.sql.ts"
 import { eq } from "drizzle-orm"
+
+import drizzle from "../lib/db_conn.js"
 import type { AccountVerified } from "../lib/types.d.ts"
+import { accountsTable } from "./accounts.sql.js"
 
 /**
  * Change an account's email address
@@ -9,10 +10,7 @@ import type { AccountVerified } from "../lib/types.d.ts"
  * @param email The new email address
  * @returns Whether the update was successful
  */
-export async function updateEmail(
-    id: string,
-    email: string,
-): Promise<boolean> {
+export async function updateEmail(id: string, email: string): Promise<boolean> {
     await drizzle
         .update(accountsTable)
         .set({ email })
@@ -28,12 +26,12 @@ export async function updateEmail(
 export async function isVerified(id: string): Promise<AccountVerified> {
     const accounts = await drizzle
         .select({
-            verified: accountsTable.verified,
+            verified: accountsTable.verified
         })
         .from(accountsTable)
         .where(eq(accountsTable.user, id))
         .limit(1)
     return {
-        verified: accounts[0]?.verified === true,
+        verified: accounts[0]?.verified === true
     }
 }

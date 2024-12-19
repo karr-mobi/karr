@@ -2,15 +2,15 @@
 *
 
 # Pakcages
-!deno.json
-!deno.lock
+!package.json
+!pnpm-lock.yaml
 
 # Source
 !src/
 !drizzle.config.ts
 !init.sh
 
-# ...but always include these files...
+# ...but never include these files...
 README.md
 routes.md
 .zed

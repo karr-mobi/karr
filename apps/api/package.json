@@ -1,0 +1,30 @@
+{
+    "name": "@karr/api",
+    "type": "module",
+    "version": "0.0.1",
+    "description": "Karr API",
+    "scripts": {
+        "lint": "eslint . --max-warnings 0",
+        "dev": "LOG_LEVEL=trace tsx watch ./src/main.ts",
+        "start": "node ./out/index.mjs",
+        "build": "tsc --noEmit && esbuild src/main.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/index.mjs --metafile=build-meta.json",
+        "check-types": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@hono/node-server": "^1.13.7",
+        "@karr/config": "workspace:*",
+        "@karr/util": "workspace:*",
+        "drizzle-kit": "^0.27.1",
+        "drizzle-orm": "^0.36.0",
+        "hono": "^4.6.14",
+        "postgres": "^3.4.5"
+    },
+    "devDependencies": {
+        "@karr/eslint-config": "workspace:*",
+        "@karr/tsconfig": "workspace:*",
+        "@types/node": "^22.7.8",
+        "esbuild": "^0.24.0",
+        "tsx": "^4.19.2",
+        "typescript": "5.5.4"
+    }
+}

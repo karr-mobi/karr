@@ -34,6 +34,7 @@ drizzle
 out/
 build
 dist
+build-meta.json
 
 # Debug
 npm-debug.log*

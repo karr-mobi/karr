@@ -2,8 +2,11 @@
 *
 
 # Pakcages
-!deno.json
-!deno.lock
+!package.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!prettier.config.js
+!turbo.json
 
 # Caddy server file
 !Caddyfile
@@ -11,5 +14,6 @@
 # Source
 !apps/
 !packages/
+!tooling/
 
 !wait-for-it.sh
