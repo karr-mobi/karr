@@ -35,8 +35,9 @@ export function toInt(value: number | string): number {
 const userConfig = readConfig()
 
 export const API_VERSION: string = "v1"
-export const PRODUCTION: boolean = process.env.ENV === "production"
-export const PORT: number = toInt(process.env.PORT || 3000)
+export const PRODUCTION: boolean =
+    (process.env.NODE_ENV || process.env.ENV) === "production"
+export const PORT: number = toInt(process.env.PORT || 1993)
 
 export const LOG_LEVEL: LogLevel = <LogLevel>(process.env.LOG_LEVEL || "info")
 export const LOG_TIMESTAMP: boolean =
