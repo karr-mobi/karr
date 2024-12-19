@@ -3,7 +3,7 @@ name: Karr Caddy CI
 on:
     push:
         paths:
-            - apps/server/**
+            - apps/caddy/**
 
 permissions:
     contents: read
@@ -27,12 +27,12 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             # Container build will fail if the Caddyfile config is invalid
-            - name: Build and push Server Docker image
+            - name: Build and push Caddy Docker image
               uses: docker/build-push-action@v5
               with:
-                  context: ./apps/server
-                  file: ./apps/server/Dockerfile
+                  context: ./apps/caddy
+                  file: ./apps/caddy/Dockerfile
                   push: true
                   tags: |
-                      ghcr.io/finxol/karr-server:latest
-                      ghcr.io/finxol/karr-server:${{ github.sha }}
+                      ghcr.io/finxol/karr-caddy:latest
+                      ghcr.io/finxol/karr-caddy:${{ github.sha }}

@@ -18,5 +18,5 @@ pnpm run lint
 ###################################################################
 if command -v caddy &> /dev/null
 then
-    caddy fmt --overwrite ./apps/server/Caddyfile
+    caddy fmt --overwrite ./apps/caddy/Caddyfile
 fi
