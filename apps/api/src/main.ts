@@ -29,6 +29,8 @@ try {
         port: PORT
     })
 
+    // TODO: Run drizzle migrations
+
     logger.info(`Server listening on port ${PORT}`)
 } catch (err) {
     logger.error(err)

@@ -1,7 +1,11 @@
 {
     "extends": "@karr/tsconfig/react-library.json",
     "compilerOptions": {
-        "outDir": "dist"
+        "outDir": "dist",
+        "baseUrl": "src/",
+        "paths": {
+            "@/*": ["./*"]
+        }
     },
     "include": ["src"],
     "exclude": ["node_modules", "dist"]

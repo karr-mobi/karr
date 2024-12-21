@@ -4,6 +4,7 @@
     "type": "module",
     "private": true,
     "exports": {
+        "./globals.css": "./src/globals.css",
         "./button": "./src/button.tsx",
         "./card": "./src/card.tsx",
         "./code": "./src/code.tsx"
@@ -23,7 +24,10 @@
         "typescript": "5.5.4"
     },
     "dependencies": {
+        "@tailwindcss/postcss": "4.0.0-beta.8",
+        "next": "^15.1.0",
         "react": "^19.0.0",
-        "react-dom": "^19.0.0"
+        "react-dom": "^19.0.0",
+        "tailwindcss": "4.0.0-beta.8"
     }
 }

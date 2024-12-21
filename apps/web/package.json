@@ -1,5 +1,5 @@
 {
-    "name": "web",
+    "name": "@karr/web",
     "version": "0.1.0",
     "type": "module",
     "private": true,
@@ -11,8 +11,8 @@
         "check-types": "tsc --noEmit"
     },
     "dependencies": {
-        "@karr/ui": "workspace:*",
         "@karr/config": "workspace:*",
+        "@karr/ui": "workspace:*",
         "next": "^15.1.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0"
