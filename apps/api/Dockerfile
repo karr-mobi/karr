@@ -11,9 +11,9 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
-#####################
-### BUILDER STAGE ###
-#####################
+#######################
+### INSTALLER STAGE ###
+#######################
 FROM base AS installer
 RUN apk update
 RUN apk add --no-cache libc6-compat
@@ -26,9 +26,9 @@ COPY . .
 # Generate a partial monorepo with a pruned lockfile for a target workspace.
 RUN turbo prune "@karr/api" --docker
 
-#######################
-### INSTALLER STAGE ###
-#######################
+#####################
+### BUILDER STAGE ###
+#####################
 FROM base AS builder
 RUN apk update
 RUN apk add --no-cache libc6-compat
@@ -50,20 +50,18 @@ FROM base AS runner
 RUN apk add --no-cache bash
 
 WORKDIR /app
-# make /app belong to node user
-RUN chown -R node:node /app
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 runner
 RUN adduser --system --uid 1001 runner
 
 COPY --from=installer --chown=runner:runner /app/wait-for-it.sh /usr/local/bin/
-RUN chmod 555 /usr/local/bin/wait-for-it.sh
+RUN chmod 500 /usr/local/bin/wait-for-it.sh
 
-USER node
+USER runner
 
-COPY --from=builder --chown=runner:runner /app/apps/api/out/index.mjs ./apps/api/out/index.mjs
+COPY --from=builder --chown=runner:runner /app/apps/api/out/index.min.mjs ./apps/api/out/index.min.mjs
 
 ENV NODE_ENV=production
 
-CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "node", "apps/api/out/index.mjs"]
+CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "node", "apps/api/out/index.min.mjs"]

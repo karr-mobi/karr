@@ -14,17 +14,17 @@
         "@hono/node-server": "^1.13.7",
         "@karr/config": "workspace:*",
         "@karr/util": "workspace:*",
-        "drizzle-kit": "^0.27.1",
-        "drizzle-orm": "^0.36.0",
+        "drizzle-kit": "^0.30.1",
+        "drizzle-orm": "^0.38.2",
         "hono": "^4.6.14",
         "postgres": "^3.4.5"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
-        "@types/node": "^22.7.8",
-        "esbuild": "^0.24.0",
+        "@types/node": "^22.10.2",
+        "esbuild": "^0.24.2",
         "tsx": "^4.19.2",
-        "typescript": "5.5.4"
+        "typescript": "5.7.2"
     }
 }
