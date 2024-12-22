@@ -24,6 +24,7 @@ Built with:
 
 - [ ] Get deployment working
 
+    - [ ] Get Tailwind included working in production build
     - [ ] Get automatic build working
     - [ ] Deploy automatically
           ([Directly in GH actions](https://github.com/marketplace/actions/docker-stack-deploy-action),
@@ -40,7 +41,7 @@ Built with:
 - [ ] Add trip search route that gives fake, not-searched data
 - [ ] Add demo client for PoC
 
-- [ ] Minify API Docker container
+- [x] Minify API Docker container
 
 - [ ] Get auth server running (using Ory Kratos/Oathkeeper, with JWT)
 - [ ] Build proper auth frontend
