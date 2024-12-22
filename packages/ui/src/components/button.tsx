@@ -1,7 +1,5 @@
 import { ReactNode } from "react"
 
-import "./globals.css"
-
 interface ButtonProps {
     children: ReactNode
     className?: string

@@ -5,7 +5,7 @@ import logo from "@/assets/logo-tmp.jpg"
 
 import { APPLICATION_NAME } from "@karr/config"
 
-import "@karr/ui/globals.css"
+import "./globals.css"
 
 import Link from "next/link"
 

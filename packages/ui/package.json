@@ -5,9 +5,9 @@
     "private": true,
     "exports": {
         "./globals.css": "./src/globals.css",
-        "./button": "./src/button.tsx",
-        "./card": "./src/card.tsx",
-        "./code": "./src/code.tsx"
+        "./postcss-config": "./postcss-config.mjs",
+        "./button": "./src/components/button.tsx",
+        "./card": "./src/components/card.tsx"
     },
     "scripts": {
         "lint": "eslint . --max-warnings 0",

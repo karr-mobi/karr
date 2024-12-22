@@ -1,4 +1,16 @@
 services:
+    web:
+        build:
+            context: .
+            dockerfile: ./apps/web/Dockerfile
+        environment:
+            - LOG_LEVEL=debug
+            - API=http://api:1993
+        ports:
+            - 3000:3000
+        depends_on:
+            - api
+
     api:
         build:
             context: .
