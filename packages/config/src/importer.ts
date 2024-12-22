@@ -6,8 +6,14 @@ import defaultConfig from "./default_config.json" with { type: "json" }
 
 type Config = typeof defaultConfig
 
-function resolvePath(file: string) {
-    return join(process.cwd(), file)
+function resolvePath(base: string, file: string) {
+    if (base.startsWith("/")) {
+        return join(base, file)
+    }
+    if (base.startsWith(".") || base.charAt(0).match(/\w/)) {
+        return join(process.cwd(), base, file)
+    }
+    throw new Error("Invalid base path")
 }
 
 const CONFIG_DIR = process.env.CONFIG_DIR || "../../config"
@@ -35,7 +41,7 @@ export function readConfig(): Config {
     const acceptedExtensions = ["yaml", "yml", "json"]
 
     for (const ext of acceptedExtensions) {
-        const path = resolvePath(`${CONFIG_DIR}/karr_config.${ext}`)
+        const path = resolvePath(CONFIG_DIR, `karr_config.${ext}`)
 
         //TODO: remove log line
         console.log(`Reading configuration from ${path}`)
