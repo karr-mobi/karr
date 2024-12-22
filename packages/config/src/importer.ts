@@ -37,6 +37,9 @@ export function readConfig(): Config {
     for (const ext of acceptedExtensions) {
         const path = resolvePath(`${CONFIG_DIR}/karr_config.${ext}`)
 
+        //TODO: remove log line
+        console.log(`Reading configuration from ${path}`)
+
         if (existsSync(path)) {
             const userConfig = parseFile(path)
 
