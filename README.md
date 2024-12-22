@@ -7,8 +7,10 @@ _**Karr**: Car in Breton language._ Not a misspelling ;)
 Built with:
 
 - `@karr/api`: Hono, Drizzle, TypeScript, Postgres
+  ([Docker package](https://github.com/users/finxol/packages/container/package/karr-api))
 - `@karr/web`: Next.js
 - `@karr/caddy`: Caddy server
+  ([Docker package](https://github.com/users/finxol/packages/container/package/karr-caddy))
 - `@karr/auth`: Ory Kratos + Oathkeeper
 
 ## Roadmap
