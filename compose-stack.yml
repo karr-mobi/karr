@@ -3,6 +3,8 @@ services:
         image: ghcr.io/finxol/karr-web:latest
         environment:
             - LOG_LEVEL=debug
+            - CONFIG_DIR=/app/config
+            - PORT=3000
             - API=https://karr.finxol.io/api
         ports:
             - 3000:3000
@@ -15,6 +17,7 @@ services:
             - db-password
         environment:
             - LOG_LEVEL=debug
+            - CONFIG_DIR=/app/config
             - DB_USER=karr
             - DB_HOST=db
             - DB_PASSWORD_FILE=/run/secrets/db-password
@@ -49,11 +52,18 @@ services:
             - TZ=Europe/Paris
             - SITE_ADDRESS=karr.finxol.io
             - API_PORT=1993
+            - WEB_PORT=3000
             #- CADDY_DISABLE_TLS=1
         volumes:
-            - /srv/Caddyfile:/etc/caddy/Caddyfile
             - caddy_data:/data
             - caddy_config:/config
+        networks:
+            - default
+
+networks:
+    default:
+        name: karr_network
+        driver: overlay
 
 volumes:
     caddy_data:

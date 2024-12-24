@@ -5,10 +5,13 @@ services:
             dockerfile: ./apps/web/Dockerfile
         environment:
             - LOG_LEVEL=debug
+            - CONFIG_DIR=/app/config
             - API=http://api:1993
             - PORT=3000
         ports:
             - 3000:3000
+        volumes:
+            - ./config:/app/config
         depends_on:
             - api
 
@@ -20,11 +23,14 @@ services:
             - db-password
         environment:
             - LOG_LEVEL=debug
+            - CONFIG_DIR=/app/config
             - DB_HOST=db
             - DB_USER=postgres
             - DB_PASSWORD_FILE=/run/secrets/db-password
         ports:
             - 1993:1993
+        volumes:
+            - ./config:/app/config
         depends_on:
             - db
 
@@ -55,7 +61,7 @@ services:
             #- "443:443/udp"
         environment:
             - TZ=Europe/Paris
-            - HOST=:8080
+            - SITE_ADDRESS=:8080
             - API_PORT=1993
             - WEB_PORT=3000
             - CADDY_DISABLE_TLS=1

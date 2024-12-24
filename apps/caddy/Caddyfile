@@ -1,15 +1,19 @@
-{$SITE_ADDRESS}
-
-log {
-	output stdout
-	format json
-	level info
+{
+	email admin@finxol.io # For Let's Encrypt notifications
 }
 
-handle_path /api/* {
-	reverse_proxy api:{$API_PORT}
-}
+{$SITE_ADDRESS} {
+	log {
+		output stdout
+		format json
+		level info
+	}
 
-handle {
-	reverse_proxy web:{$WEB_PORT}
+	handle_path /api/* {
+		reverse_proxy api:{$API_PORT}
+	}
+
+	handle {
+		reverse_proxy web:{$WEB_PORT}
+	}
 }
