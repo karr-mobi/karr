@@ -47,3 +47,7 @@ logs
 # Misc
 .DS_Store
 *.pem
+
+# Caddy dev files
+apps/caddy/data
+apps/caddy/config

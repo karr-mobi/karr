@@ -6,6 +6,7 @@ services:
         environment:
             - LOG_LEVEL=debug
             - API=http://api:1993
+            - PORT=3000
         ports:
             - 3000:3000
         depends_on:
@@ -20,6 +21,7 @@ services:
         environment:
             - LOG_LEVEL=debug
             - DB_HOST=db
+            - DB_USER=postgres
             - DB_PASSWORD_FILE=/run/secrets/db-password
         ports:
             - 1993:1993
@@ -34,10 +36,10 @@ services:
             - db-password
         environment:
             - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-            - POSTGRES_USER=karr
+            - POSTGRES_USER=postgres
             - POSTGRES_DB=karr
         healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U karr"]
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
             interval: 5s
             timeout: 5s
             retries: 5
@@ -48,17 +50,18 @@ services:
             dockerfile: Dockerfile
         restart: unless-stopped
         ports:
-            - "8080:8080"
+            - 8080:8080
             #- "443:443"
             #- "443:443/udp"
         environment:
             - TZ=Europe/Paris
-            - HOST=localhost:8080
+            - HOST=:8080
             - API_PORT=1993
+            - WEB_PORT=3000
             - CADDY_DISABLE_TLS=1
         volumes:
-            - caddy_data:/data
-            - caddy_config:/config
+            - ./apps/caddy/data:/data
+            - ./apps/caddy/config:/config
 
 volumes:
     caddy_data:
