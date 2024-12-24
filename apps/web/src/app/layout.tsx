@@ -28,6 +28,8 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode
 }>) {
+    const loggedIn = true
+
     return (
         <html lang="en" className="bg-[#1e1e1e] text-[#e1e1e1]">
             <body>
@@ -54,13 +56,27 @@ export default function RootLayout({
                             </nav>
                         </div>
                         <nav className="flex flex-row items-center justify-end gap-4 text-lg">
-                            <Link href="/auth/signup">Sign up</Link>
-                            <Link
-                                href="/auth/login"
-                                className="rounded-sm border px-2 py-1"
-                            >
-                                Login
-                            </Link>
+                            {!loggedIn && (
+                                <>
+                                    <Link href="/auth/signup">Sign up</Link>
+                                    <Link
+                                        href="/auth/login"
+                                        className="rounded-sm border px-2 py-1"
+                                    >
+                                        Login
+                                    </Link>
+                                </>
+                            )}
+                            {loggedIn && (
+                                <>
+                                    <Link
+                                        href="/account"
+                                        className="rounded-sm border px-2 py-1"
+                                    >
+                                        Account
+                                    </Link>
+                                </>
+                            )}
                         </nav>
                     </header>
                     <main className="flex h-full flex-col items-center justify-center overflow-y-scroll">
