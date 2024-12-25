@@ -9,7 +9,7 @@ interface ButtonProps {
 export const Button = ({ children, className, onClick }: ButtonProps) => {
     return (
         <button
-            className={`rounded-xl bg-blue-500 px-2 py-1 text-white ${className}`}
+            className={`cursor-pointer rounded-lg bg-blue-500 px-2 py-1 text-white ${className}`}
             onClick={onClick}
         >
             {children}
