@@ -25,8 +25,8 @@ Built with:
 
 - [ ] Get deployment working
 
-    - [ ] Get Tailwind included working in production build
-    - [ ] Get automatic build working
+    - [x] Get Tailwind included working in production build
+    - [x] Get automatic build working
     - [ ] Deploy automatically
           ([Directly in GH actions](https://github.com/marketplace/actions/docker-stack-deploy-action),
           inspired from
