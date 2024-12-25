@@ -11,24 +11,26 @@ import {
 // Create a client
 const queryClient = new QueryClient()
 
-export default function UserInfo({
-    apiVersion
-}: Readonly<{ apiVersion: string }>) {
+export default function UserInfo() {
     return (
         <QueryClientProvider client={queryClient}>
-            <Data apiVersion={apiVersion} />
+            <Data />
         </QueryClientProvider>
     )
 }
 
-function Data({ apiVersion }: Readonly<{ apiVersion: string }>) {
+function Data() {
     // Access the client
     const _queryClient = useQueryClient()
 
     const { data: user } = useQuery({
-        queryKey: ["user", apiVersion],
+        queryKey: ["user"],
         queryFn: () => {
-            const f = fetch(`/api/${apiVersion}/user`).then((res) => res.json())
+            const f = fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/user`, {
+                headers: {
+                    authorization: "dc707395-cd78-4f10-ad18-5eaaf18478ac"
+                }
+            }).then((res) => res.json())
             console.log(f)
             return f
         }

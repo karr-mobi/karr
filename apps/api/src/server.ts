@@ -1,4 +1,5 @@
 import { Hono } from "hono"
+import { cors } from "hono/cors"
 import { HTTPException } from "hono/http-exception"
 import { validator } from "hono/validator"
 
@@ -7,9 +8,12 @@ import { isUUIDv4 } from "@karr/util"
 import logger from "@karr/util/logger"
 
 import account from "./routes/account.js"
+import configRoutes from "./routes/config.js"
 import system from "./routes/system.js"
 import trip from "./routes/trip.js"
 import user from "./routes/user.js"
+
+const prod: boolean = process.env.NODE_ENV === "production"
 
 /**
  * Setup the Hono app with all the routes and plugins
@@ -20,6 +24,21 @@ export const build = (): Hono => {
     const hono: Hono = new Hono()
 
     // TODO(@finxol): Add security headers
+
+    // Add CORS middleware
+    hono.use(
+        "/*",
+        cors({
+            origin: [
+                (prod ? process.env.WEB_URL : null) || "http://localhost:3000"
+            ],
+            credentials: true,
+            allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            allowHeaders: ["Content-Type", "Authorization"],
+            exposeHeaders: ["Content-Length"],
+            maxAge: 600
+        })
+    )
 
     // ============================
     // ==== Unprotected routes ====
@@ -65,6 +84,7 @@ export const build = (): Hono => {
     // ============================
     hono.route(`/${API_VERSION}/user`, user)
     hono.route(`/${API_VERSION}/account`, account)
+    hono.route(`/${API_VERSION}/config`, configRoutes)
     hono.route(`/${API_VERSION}/trip`, trip)
 
     return hono

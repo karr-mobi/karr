@@ -5,6 +5,7 @@
         "NODE_ENV",
         "ENV",
         "PORT",
+        "WEB_URL",
         "LOG_LEVEL",
         "LOG_TIMESTAMP",
         "TZ",
