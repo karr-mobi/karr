@@ -4,7 +4,7 @@ import type { Hono } from "hono"
 import { LOG_LEVEL, logLevels, PORT, PRODUCTION } from "@karr/config"
 import logger from "@karr/util/logger"
 
-import { build } from "./server.js"
+import { build } from "./server"
 
 if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
     logger.warn(

@@ -7,11 +7,11 @@ import { API_VERSION } from "@karr/config"
 import { isUUIDv4 } from "@karr/util"
 import logger from "@karr/util/logger"
 
-import account from "./routes/account.js"
-import configRoutes from "./routes/config.js"
-import system from "./routes/system.js"
-import trip from "./routes/trip.js"
-import user from "./routes/user.js"
+import account from "./routes/account"
+import configRoutes from "./routes/config"
+import system from "./routes/system"
+import trip from "./routes/trip"
+import user from "./routes/user"
 
 const prod: boolean = process.env.NODE_ENV === "production"
 

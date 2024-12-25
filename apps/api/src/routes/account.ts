@@ -2,8 +2,8 @@ import { Hono } from "hono"
 
 import logger from "@karr/util/logger"
 
-import { isVerified, updateEmail } from "../db/accounts.js"
-import { handleRequest, responseErrorObject } from "../lib/helpers.js"
+import { isVerified, updateEmail } from "../db/accounts"
+import { handleRequest, responseErrorObject } from "../lib/helpers"
 import type { AccountVerified, DataResponse } from "../lib/types.d.ts"
 
 const hono = new Hono()

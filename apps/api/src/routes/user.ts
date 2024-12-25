@@ -4,12 +4,8 @@ import {
     selectUserById,
     selectUserProfileById,
     updateNickname
-} from "../db/users.js"
-import {
-    handleRequest,
-    responseErrorObject,
-    tmpResponse
-} from "../lib/helpers.js"
+} from "../db/users"
+import { handleRequest, responseErrorObject, tmpResponse } from "../lib/helpers"
 import type {
     UserPublicProfile,
     UserWithPrefsAndStatus
