@@ -1,7 +1,7 @@
 import { pgTable, text, uuid } from "drizzle-orm/pg-core"
 
-import { specialStatusTable } from "./specialstatus.sql.js"
-import { userPrefsTable } from "./userprefs.sql.js"
+import { specialStatusTable } from "./specialstatus"
+import { userPrefsTable } from "./userprefs"
 
 export const usersTable = pgTable("Users", {
     id: uuid().primaryKey().defaultRandom(),

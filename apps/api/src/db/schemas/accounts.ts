@@ -1,6 +1,6 @@
 import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core"
 
-import { usersTable } from "./users.sql.js"
+import { usersTable } from "./users"
 
 export const accountsTable = pgTable("Accounts", {
     id: uuid().primaryKey().defaultRandom(),

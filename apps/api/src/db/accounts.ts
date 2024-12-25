@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm"
 
 import drizzle from "../lib/db_conn.js"
 import type { AccountVerified } from "../lib/types.d.ts"
-import { accountsTable } from "./accounts.sql.js"
+import { accountsTable } from "./schemas/accounts.js"
 
 /**
  * Change an account's email address
