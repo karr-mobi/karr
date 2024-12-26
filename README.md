@@ -2,6 +2,8 @@
 
 **The federated carpool platform**
 
+[![Karr CI](https://github.com/finxol/karr/actions/workflows/pipeline.yml/badge.svg)](https://github.com/finxol/karr/actions/workflows/pipeline.yml)
+
 _**Karr**: Car in Breton language._ Not a misspelling ;)
 
 Built with:
