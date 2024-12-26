@@ -1,6 +1,6 @@
 import chalk from "chalk"
 
-import { LOG_LEVEL, LOG_TIMESTAMP } from "@karr/config"
+import { LOG_LEVEL, LOG_TIMESTAMP, PRODUCTION } from "@karr/config"
 
 const { blue, cyan, gray, green, magenta, red, underline, yellow } = chalk
 
@@ -9,6 +9,7 @@ const { blue, cyan, gray, green, magenta, red, underline, yellow } = chalk
  * @returns The file and line number of the calling function
  */
 const getCallerFileAndLine = (): string | null => {
+    if (PRODUCTION) return null
     const stack = new Error().stack
     if (stack) {
         const stackLines = stack.split("\n")
@@ -90,8 +91,30 @@ export default {
         }
     },
     /**
-     * Log a message to the console with the trace level.
-     * Is logged for all log levels
+     * Log a success message to the console with the level.
+     * Is logged at all log levels
+     * @param args - The arguments to log
+     * @example
+     * Pass any number of arguments to log
+     * ```ts
+     * logger.success("Successfully created user", user)
+     * ```
+     */
+    success: (title: unknown, ...args: unknown[]) => {
+        if (["trace", "debug", "info", "warn", "error"].includes(LOG_LEVEL)) {
+            console.log(green(`${prefix()}✅ ${underline("SUCCESS")} >`), title)
+            args.forEach((arg) => {
+                formatArg(arg)
+                    .split("\n")
+                    .forEach((line) => {
+                        console.log("   ", line)
+                    })
+            })
+        }
+    },
+    /**
+     * Log a message to the console with the error level.
+     * Is logged at all log levels
      * @param args - The arguments to log
      * @example
      * Pass any number of arguments to log
@@ -112,13 +135,13 @@ export default {
         }
     },
     /**
-     * Log a message to the console with the trace level.
+     * Log a message to the console with the warn level.
      * Is only logged if the log level is set to trace, debug, info, or warn
      * @param args - The arguments to log
      * @example
      * Pass any number of arguments to log
      * ```ts
-     * logger.log("Warning, this happened", unimportantError, 123)
+     * logger.warn("Warning, this happened", unimportantError, 123)
      * ```
      */
     warn: (title: unknown, ...args: unknown[]) => {
@@ -134,13 +157,13 @@ export default {
         }
     },
     /**
-     * Log a message to the console with the trace level.
+     * Log a message to the console with the info level.
      * Is only logged if the log level is set to trace, debug, or info
      * @param args - The arguments to log
      * @example
      * Pass any number of arguments to log
      * ```ts
-     * logger.log("FYI", variable, 123)
+     * logger.info("FYI", variable, 123)
      * ```
      */
     info: (title: unknown, ...args: unknown[]) => {
@@ -156,13 +179,13 @@ export default {
         }
     },
     /**
-     * Log a message to the console with the trace level.
+     * Log a message to the console with the debug level.
      * Is only logged if the log level is set to trace or debug
      * @param args - The arguments to log
      * @example
      * Pass any number of arguments to log
      * ```ts
-     * logger.log("This is what's happening", variable, 123)
+     * logger.debug("This is what's happening", variable, 123)
      * ```
      */
     debug: (title: unknown, ...args: unknown[]) => {
@@ -187,7 +210,7 @@ export default {
      * @example
      * Pass any number of arguments to log
      * ```ts
-     * logger.log("This is particularly bewildering", variable, 123)
+     * logger.trace("This is particularly bewildering", variable, 123)
      * ```
      */
     trace: (...args: unknown[]) => {
