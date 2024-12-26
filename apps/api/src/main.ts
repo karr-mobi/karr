@@ -4,7 +4,8 @@ import type { Hono } from "hono"
 import { LOG_LEVEL, logLevels, PORT, PRODUCTION } from "@karr/config"
 import logger from "@karr/util/logger"
 
-import { build } from "./server"
+import { drizzleMigrate } from "~/db/migrate"
+import { build } from "~/server"
 
 if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
     logger.warn(
@@ -18,20 +19,23 @@ if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
 logger.info(
     `Starting server in ${PRODUCTION ? "production" : "development"} mode`
 )
-logger.info(`Timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`)
+logger.info(`TZ=${Intl.DateTimeFormat().resolvedOptions().timeZone}`)
 
 // Run the server!
 try {
+    // Run database migrations
+    await drizzleMigrate()
+
+    // Build the server
     const app: Hono = build()
 
+    // Start the server
     serve({
         fetch: app.fetch,
         port: PORT
     })
 
-    // TODO: Run drizzle migrations
-
-    logger.info(`Server listening on port ${PORT}`)
+    logger.success(`Server listening on port ${PORT}`)
 } catch (err) {
     logger.error(err)
     process.exit(1)

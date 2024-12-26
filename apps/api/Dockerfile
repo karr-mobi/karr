@@ -38,8 +38,10 @@ WORKDIR /app
 COPY --from=installer /app/out/json/ .
 RUN pnpm install
 
-# Build the project
 COPY --from=installer /app/out/full/ .
+# Generate the drizzle migrations
+RUN pnpm --filter "@karr/api" exec drizzle-kit generate
+# Build the project
 RUN pnpm run build
 
 ####################
@@ -60,8 +62,10 @@ RUN chmod 500 /usr/local/bin/wait-for-it.sh
 
 USER runner
 
-COPY --from=builder --chown=runner:runner /app/apps/api/out/index.min.mjs ./apps/api/out/index.min.mjs
+COPY --from=builder --chown=runner:runner /app/apps/api/out/index.min.mjs ./index.min.mjs
+# Copy migration files
+COPY --from=builder --chown=runner:runner /app/apps/api/drizzle ./drizzle
 
 ENV NODE_ENV=production
 
-CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "node", "apps/api/out/index.min.mjs"]
+CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "node", "index.min.mjs"]

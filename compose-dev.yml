@@ -34,6 +34,34 @@ services:
         depends_on:
             - db
 
+    init-db:
+        build:
+            context: .
+            dockerfile: ./apps/api/Dockerfile
+        secrets:
+            - db-password
+        environment:
+            - LOG_LEVEL=debug
+            - CONFIG_DIR=/app/config
+            - DB_HOST=db
+            - DB_USER=postgres
+            - DB_PASSWORD_FILE=/run/secrets/db-password
+        command:
+            [
+                "wait-for-it.sh",
+                "db:5432",
+                "-t",
+                "15",
+                "--",
+                "node",
+                "/app/local_dev_init.mjs"
+            ]
+        volumes:
+            - ./config:/app/config
+            - ./apps/api/out/db/local_dev_init.mjs:/app/local_dev_init.mjs
+        depends_on:
+            - db
+
     db:
         image: postgres:17-alpine
         ports:
