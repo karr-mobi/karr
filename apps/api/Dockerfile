@@ -4,6 +4,7 @@ LABEL repository="https://github.com/finxol/karr"
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
+ENV HUSKY=0
 # The port that the api listens to.
 ENV PORT=1993
 
@@ -39,10 +40,15 @@ COPY --from=installer /app/out/json/ .
 RUN pnpm install
 
 COPY --from=installer /app/out/full/ .
+
+# Build the project dependencies
+RUN pnpm --filter="!@karr/api" run build
+
 # Generate the drizzle migrations
 RUN pnpm --filter "@karr/api" exec drizzle-kit generate
+
 # Build the project
-RUN pnpm run build
+RUN pnpm --filter="@karr/api" run build
 
 ####################
 ### RUNNER STAGE ###
