@@ -16,7 +16,7 @@ services:
         secrets:
             - db-password
         environment:
-            - LOG_LEVEL=debug
+            - LOG_LEVEL=info
             - CONFIG_DIR=/app/config
             - DB_USER=karr
             - DB_HOST=db
