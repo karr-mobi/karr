@@ -2,9 +2,9 @@ import { eq } from "drizzle-orm"
 
 import logger from "@karr/util/logger"
 
-import db from "../lib/db_conn.js"
-import { accountsTable } from "./schemas/accounts.js"
-import { userPrefsTable } from "./schemas/userprefs.js"
+import { accountsTable } from "~/db/schemas/accounts.js"
+import { userPrefsTable } from "~/db/schemas/userprefs.js"
+import db from "~/lib/db_conn.js"
 import { usersTable } from "./schemas/users.js"
 
 const initUsersTable = async () => {
@@ -40,7 +40,6 @@ const initUsersTable = async () => {
     })
 
     logger.info("Test user created", { id: user[0]?.insertedId })
-    process.exit(0)
 }
 
 initUsersTable()

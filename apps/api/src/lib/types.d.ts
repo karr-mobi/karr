@@ -1,9 +1,9 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm"
 
-import type { accountsTable } from "../db/accounts.sql.ts"
-import type { specialStatusTable } from "../db/specialstatus.sql.ts"
-import type { userPrefsTable } from "../db/userprefs.sql.ts"
-import type { usersTable } from "../db/users.sql.ts"
+import type { accountsTable } from "~/db/schemas/accounts"
+import type { specialStatusTable } from "~/db/schemas/specialstatus"
+import type { userPrefsTable } from "~/db/schemas/userprefs"
+import type { usersTable } from "~/db/schemas/users"
 
 export interface DataResponse<T> {
     timestamp?: number

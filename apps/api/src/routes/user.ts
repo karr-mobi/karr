@@ -4,12 +4,12 @@ import {
     selectUserById,
     selectUserProfileById,
     updateNickname
-} from "../db/users"
-import { handleRequest, responseErrorObject, tmpResponse } from "../lib/helpers"
+} from "~/db/users"
+import { handleRequest, responseErrorObject, tmpResponse } from "~/lib/helpers"
 import type {
     UserPublicProfile,
     UserWithPrefsAndStatus
-} from "../lib/types.d.ts"
+} from "~/lib/types.d.ts"
 
 const hono = new Hono()
 

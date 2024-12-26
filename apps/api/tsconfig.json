@@ -4,7 +4,10 @@
         "outDir": "dist",
         "rootDir": "src",
         "moduleResolution": "bundler",
-        "module": "ESNext"
+        "module": "ESNext",
+        "paths": {
+            "~/*": ["./src/*"]
+        }
     },
     "include": ["src"],
     "exclude": ["node_modules", "dist", "out"]

@@ -2,14 +2,14 @@ import { eq } from "drizzle-orm"
 
 import logger from "@karr/util/logger"
 
-import drizzle from "../lib/db_conn"
+import { specialStatusTable } from "~/db/schemas/specialstatus"
+import { userPrefsTable } from "~/db/schemas/userprefs"
+import { usersTable } from "~/db/schemas/users"
+import drizzle from "~/lib/db_conn"
 import type {
     UserPublicProfile,
     UserWithPrefsAndStatus
-} from "../lib/types.d.ts"
-import { specialStatusTable } from "./schemas/specialstatus"
-import { userPrefsTable } from "./schemas/userprefs"
-import { usersTable } from "./schemas/users"
+} from "~/lib/types.d.ts"
 
 /**
  * Select a user by their ID
