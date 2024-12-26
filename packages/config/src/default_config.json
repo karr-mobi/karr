@@ -5,6 +5,7 @@
         "port": 5432,
         "username": "karr",
         "password": "karr",
+        "password_file": null,
         "database": "karr"
     },
     "admin_email": "admin@example.com"

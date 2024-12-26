@@ -39,12 +39,19 @@ export const PRODUCTION: boolean =
     (process.env.NODE_ENV || process.env.ENV) === "production"
 export const PORT: number = toInt(process.env.PORT || 1993)
 
-export const LOG_LEVEL: LogLevel = <LogLevel>(process.env.LOG_LEVEL || "info")
+// ====================
+// Could remove this eventually
+if (!PRODUCTION) console.log(userConfig)
+// ====================
+
+export const LOG_LEVEL: LogLevel = <LogLevel>(
+    (process.env.LOG_LEVEL || (PRODUCTION ? "info" : "debug"))
+)
 export const LOG_TIMESTAMP: boolean =
     (process.env.LOG_TIMESTAMP || "true") === "true"
 export const TZ: string = process.env.TZ || "Europe/Paris"
 
-export const DB_CONFIG: DbConfig = Object.freeze({
+export const DB_CONFIG: DbConfig = Object.freeze(<DbConfig>{
     host: process.env.DB_HOST || userConfig.database.host || "localhost",
     port: toInt(process.env.DB_PORT || userConfig.database.port || 5432),
     ssl: (process.env.DB_SSL || "false") === "true",
@@ -53,11 +60,17 @@ export const DB_CONFIG: DbConfig = Object.freeze({
 
     // password can be set via DB_PASSWORD or DB_PASSWORD_FILE.
     // File is preferred if it exists.
-    password:
-        (process.env.DB_PASSWORD_FILE
-            ? getDbPasswordFromFile(process.env.DB_PASSWORD_FILE)
-            : process.env.DB_PASSWORD || userConfig.database.password) ||
-        "karr",
+    password: (() => {
+        let pass: string = userConfig.database.password || "karr"
+        const passwordFile =
+            process.env.DB_PASSWORD_FILE || userConfig.database.password_file
+        if (passwordFile) {
+            pass = getDbPasswordFromFile(passwordFile) || pass
+        } else if (process.env.DB_PASSWORD) {
+            pass = process.env.DB_PASSWORD
+        }
+        return pass
+    })(),
 
     // the connection info as a string
     get connStr(): string {
