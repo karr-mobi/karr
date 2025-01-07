@@ -18,6 +18,7 @@
     },
     "devDependencies": {
         "@karr/tsconfig": "workspace:*",
+        "@karr/types": "workspace:*",
         "@types/node": "catalog:",
         "typescript": "catalog:"
     }

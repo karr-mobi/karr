@@ -236,12 +236,17 @@ importers:
       '@karr/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript-config
+      '@karr/types':
+        specifier: workspace:*
+        version: link:../types
       '@types/node':
         specifier: 'catalog:'
         version: 22.10.5
       typescript:
         specifier: 'catalog:'
         version: 5.7.2
+
+  packages/types: {}
 
   packages/ui:
     dependencies:

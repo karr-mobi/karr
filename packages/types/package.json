@@ -1,0 +1,11 @@
+{
+    "name": "@karr/types",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "lint": "eslint . --max-warnings 0"
+    },
+    "exports": {
+        ".": "./src/types.d.ts"
+    }
+}
