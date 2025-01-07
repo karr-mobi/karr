@@ -1,17 +1,13 @@
-import { getDbPasswordFromFile, readConfig } from "./importer.js"
+import type { Config, DbConfig } from "@karr/types"
+
+import {
+    getDbPasswordFromFile,
+    readConfig,
+    type ConfigFile
+} from "./importer.js"
 
 export const logLevels = ["trace", "debug", "info", "warn", "error"] as const
 type LogLevel = (typeof logLevels)[number]
-
-type DbConfig = {
-    host: string
-    port: number
-    ssl: boolean
-    name: string
-    user: string
-    password: string
-    connStr: string
-}
 
 /**
  * Convert a string or number to an integer
@@ -32,69 +28,121 @@ export function toInt(value: number | string): number {
     return parsed
 }
 
-const userConfig = readConfig()
-
-export const API_VERSION: string = "v1"
-export const PRODUCTION: boolean =
-    (process.env.NODE_ENV || process.env.ENV) === "production"
-export const PORT: number = toInt(process.env.PORT || 1993)
-
 // ====================
-// Could remove this eventually
-if (!PRODUCTION) console.log(userConfig)
+// Cached config
 // ====================
+const CONFIG_CACHE_TTL = 5 * 60 * 1000 // 5 minute
+let cachedConfig: Config = {} as Config
+let cachedUserConfig: ConfigFile = {} as ConfigFile
+let lastLoadTime: number
 
-export const LOG_LEVEL: LogLevel = <LogLevel>(
-    (process.env.LOG_LEVEL || (PRODUCTION ? "info" : "debug"))
-)
-export const LOG_TIMESTAMP: boolean =
-    (process.env.LOG_TIMESTAMP || "true") === "true"
-export const TZ: string = process.env.TZ || "Europe/Paris"
-
-export const DB_CONFIG: DbConfig = Object.freeze(<DbConfig>{
-    host: process.env.DB_HOST || userConfig.database.host || "localhost",
-    port: toInt(process.env.DB_PORT || userConfig.database.port || 5432),
-    ssl: (process.env.DB_SSL || "false") === "true",
-    name: process.env.DB_NAME || userConfig.database.database || "karr",
-    user: process.env.DB_USER || userConfig.database.username || "karr",
-
-    // password can be set via DB_PASSWORD or DB_PASSWORD_FILE.
-    // File is preferred if it exists.
-    password: (() => {
-        let pass: string = userConfig.database.password || "karr"
-        const passwordFile =
-            process.env.DB_PASSWORD_FILE || userConfig.database.password_file
-        if (passwordFile) {
-            pass = getDbPasswordFromFile(passwordFile) || pass
-        } else if (process.env.DB_PASSWORD) {
-            pass = process.env.DB_PASSWORD
-        }
-        return pass
-    })(),
-
-    // the connection info as a string
-    get connStr(): string {
-        return `postgres://${this.user}:${this.password}@${this.host}:${this.port}/${this.name}`
+/**
+ * Make the config, from config files, environment variables and defaults
+ * @param cacheControl "only-cache" will only load the config if it has been cached. "no-cache" will force a config reload
+ * @returns The config
+ */
+function loadConfig(cacheControl?: "only-cache" | "no-cache"): Config {
+    if (
+        cacheControl === "no-cache" ||
+        Object.keys(cachedUserConfig).length === 0 ||
+        Date.now() - lastLoadTime > CONFIG_CACHE_TTL
+    ) {
+        cachedUserConfig = readConfig()
     }
-})
 
-// ====================
-// Instance parameters
-// ====================
-export const APPLICATION_NAME: string =
-    process.env.APPLICATION_NAME || userConfig.application_name || "Karr"
+    const prod = (process.env.NODE_ENV || process.env.ENV) === "production"
 
-export const ADMIN_EMAIL: string =
-    process.env.ADMIN_EMAIL || userConfig.admin_email || "admin@example.com"
+    return Object.freeze(<Config>{
+        PRODUCTION: prod,
+        API_VERSION: "v1",
+        API_PORT: toInt(process.env.PORT || 1993),
 
-export default {
-    API_VERSION,
-    PRODUCTION,
-    PORT,
-    LOG_LEVEL,
-    LOG_TIMESTAMP,
-    TZ,
-    DB_CONFIG,
-    APPLICATION_NAME,
-    ADMIN_EMAIL
+        LOG_LEVEL: <LogLevel>(
+            (process.env.LOG_LEVEL || (prod ? "info" : "debug"))
+        ),
+        LOG_TIMESTAMP: (process.env.LOG_TIMESTAMP || "true") === "true",
+        TZ: process.env.TZ || "Europe/Paris",
+
+        DB_CONFIG: Object.freeze(<DbConfig>{
+            host:
+                process.env.DB_HOST ||
+                cachedUserConfig.database.host ||
+                "localhost",
+            port: toInt(
+                process.env.DB_PORT || cachedUserConfig.database.port || 5432
+            ),
+            ssl: (process.env.DB_SSL || "false") === "true",
+            name:
+                process.env.DB_NAME ||
+                cachedUserConfig.database.database ||
+                "karr",
+            user:
+                process.env.DB_USER ||
+                cachedUserConfig.database.username ||
+                "karr",
+
+            // password can be set via DB_PASSWORD or DB_PASSWORD_FILE.
+            // File is preferred if it exists.
+            password: (() => {
+                let pass: string = cachedUserConfig.database.password || "karr"
+                const passwordFile =
+                    process.env.DB_PASSWORD_FILE ||
+                    cachedUserConfig.database.password_file
+                if (passwordFile) {
+                    pass = getDbPasswordFromFile(passwordFile) || pass
+                } else if (process.env.DB_PASSWORD) {
+                    pass = process.env.DB_PASSWORD
+                }
+                return pass
+            })(),
+
+            // the connection info as a string
+            get connStr(): string {
+                return `postgres://${this.user}:${this.password}@${this.host}:${this.port}/${this.name}`
+            }
+        }),
+
+        // ====================
+        // Instance parameters
+        // ====================
+        APPLICATION_NAME: ((): string => {
+            return (
+                process.env.APPLICATION_NAME ||
+                cachedUserConfig.application_name ||
+                "Karr"
+            )
+        })(),
+
+        ADMIN_EMAIL: ((): string => {
+            return (
+                process.env.ADMIN_EMAIL ||
+                cachedUserConfig.admin_email ||
+                "admin@example.com"
+            )
+        })()
+    })
+}
+
+/**
+ * Get the config from the file system
+ * @param invalidateCache "only-cache" will only load the config if it has been cached. "no-cache" will force a config reload
+ * @returns The config
+ */
+export default function getAppConfig(
+    cacheControl?: "only-cache" | "no-cache"
+): Config {
+    if (cacheControl === "only-cache") {
+        return cachedConfig
+    }
+
+    if (
+        cacheControl === "no-cache" ||
+        Object.keys(cachedConfig).length === 0 ||
+        Date.now() - lastLoadTime > CONFIG_CACHE_TTL // This is arbitrary, could also assume all changes revalidate cache
+    ) {
+        cachedConfig = loadConfig(cacheControl)
+        lastLoadTime = Date.now()
+    }
+
+    return cachedConfig
 }

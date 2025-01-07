@@ -18,7 +18,16 @@ export default function LoginAccount() {
             >
                 Change login
             </Button>
-            {!loggedIn && (
+            {loggedIn ? (
+                <>
+                    <Link
+                        href="/account"
+                        className="rounded-sm border px-2 py-1"
+                    >
+                        Account
+                    </Link>
+                </>
+            ) : (
                 <>
                     <Link href="/auth/signup">Sign up</Link>
                     <Link
@@ -26,16 +35,6 @@ export default function LoginAccount() {
                         className="rounded-sm border px-2 py-1"
                     >
                         Login
-                    </Link>
-                </>
-            )}
-            {loggedIn && (
-                <>
-                    <Link
-                        href="/account"
-                        className="rounded-sm border px-2 py-1"
-                    >
-                        Account
                     </Link>
                 </>
             )}

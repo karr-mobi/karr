@@ -1,15 +1,15 @@
 import { drizzle } from "drizzle-orm/postgres-js"
 
-import { DB_CONFIG } from "@karr/config"
+import getAppConfig from "@karr/config"
 import logger from "@karr/util/logger"
 
 export const connection = {
-    host: DB_CONFIG.host, // Postgres ip address[es] or domain name[s]
-    port: DB_CONFIG.port, // Postgres server port[s]
-    database: DB_CONFIG.name, // Name of database to connect to
-    username: DB_CONFIG.user, // Username of database user
-    password: DB_CONFIG.password, // Password of database user
-    ssl: DB_CONFIG.ssl, // true, prefer, require, tls.connect options
+    host: getAppConfig().DB_CONFIG.host, // Postgres ip address[es] or domain name[s]
+    port: getAppConfig().DB_CONFIG.port, // Postgres server port[s]
+    database: getAppConfig().DB_CONFIG.name, // Name of database to connect to
+    username: getAppConfig().DB_CONFIG.user, // Username of database user
+    password: getAppConfig().DB_CONFIG.password, // Password of database user
+    ssl: getAppConfig().DB_CONFIG.ssl, // true, prefer, require, tls.connect options
     max: 10, // Max number of connections
     idle_timeout: 0, // Idle connection timeout in seconds
     connect_timeout: 30, // Connect timeout in seconds
@@ -18,7 +18,7 @@ export const connection = {
     fetch_types: true // Automatically fetches types on connect
 }
 
-logger.debug("Connecting to database", DB_CONFIG)
+logger.debug("Connecting to database", connection)
 let db
 try {
     db = drizzle({ connection })

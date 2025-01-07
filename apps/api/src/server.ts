@@ -3,12 +3,11 @@ import { cors } from "hono/cors"
 import { HTTPException } from "hono/http-exception"
 import { validator } from "hono/validator"
 
-import { API_VERSION } from "@karr/config"
+import getAppConfig from "@karr/config"
 import { isUUIDv4 } from "@karr/util"
 import logger from "@karr/util/logger"
 
 import account from "~/routes/account"
-import configRoutes from "~/routes/config"
 import system from "~/routes/system"
 import trip from "~/routes/trip"
 import user from "~/routes/user"
@@ -44,7 +43,6 @@ export const build = (): Hono => {
     // ==== Unprotected routes ====
     // ============================
     hono.route("/", system)
-    hono.route(`/${API_VERSION}/config`, configRoutes)
 
     // =============================
     // ======== Middlewares ========
@@ -83,9 +81,9 @@ export const build = (): Hono => {
     // ============================
     // ===== Protected routes =====
     // ============================
-    hono.route(`/${API_VERSION}/user`, user)
-    hono.route(`/${API_VERSION}/account`, account)
-    hono.route(`/${API_VERSION}/trip`, trip)
+    hono.route(`/${getAppConfig().API_VERSION}/user`, user)
+    hono.route(`/${getAppConfig().API_VERSION}/account`, account)
+    hono.route(`/${getAppConfig().API_VERSION}/trip`, trip)
 
     return hono
 }

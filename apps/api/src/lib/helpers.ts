@@ -2,7 +2,7 @@ import type { Context } from "hono"
 import { HTTPException } from "hono/http-exception"
 import type { CustomHeader, RequestHeader } from "hono/utils/headers"
 
-import { ADMIN_EMAIL } from "@karr/config"
+import getAppConfig from "@karr/config"
 import { isUUIDv4 } from "@karr/util"
 import logger from "@karr/util/logger"
 
@@ -68,7 +68,7 @@ export function responseErrorObject(
     return c.json({
         // deno-lint-ignore no-undef
         timestamp: new Date().getTime(),
-        contact: ADMIN_EMAIL,
+        contact: getAppConfig().ADMIN_EMAIL,
         error: {
             message: message,
             details: args

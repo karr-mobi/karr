@@ -36,6 +36,8 @@ Built with:
     - [ ] Add versioning
           ([Changesets](https://github.com/changesets/changesets))
 
+- [x] Make config reloadable
+
 - [ ] Add mock login
     - [ ] Use clsx ?
     - [ ] Add [Iconify](https://iconify.design/docs/iconify-icon/react.html)

@@ -1,8 +1,9 @@
+import { revalidatePath } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
 import logo from "@/assets/logo-tmp.jpg"
 
-import { APPLICATION_NAME } from "@karr/config"
+import getAppConfig from "@karr/config"
 import { Button } from "@karr/ui/button"
 
 export default function Home() {
@@ -11,7 +12,7 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
                     <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
-                        {APPLICATION_NAME}
+                        {getAppConfig().APPLICATION_NAME}
                     </h1>
                     <p className="mt-4 text-lg text-gray-300">
                         The federated carpool platform.
@@ -35,6 +36,24 @@ export default function Home() {
                     </Button>
                 </div>
             </div>
+
+            <form
+                className="mt-12 flex flex-col"
+                action={async (formData: FormData) => {
+                    "use server"
+
+                    const name = formData.get("name") as string
+
+                    process.env.APPLICATION_NAME = name
+
+                    getAppConfig("no-cache")
+                    revalidatePath("/")
+                }}
+            >
+                <label htmlFor="name">App Name</label>
+                <input id="name" name="name" type="text" placeholder="Search" />
+                <button type="submit">Save</button>
+            </form>
         </div>
     )
 }

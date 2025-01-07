@@ -4,7 +4,7 @@ import { parse } from "yaml"
 
 import defaultConfig from "./default_config.json" with { type: "json" }
 
-type Config = typeof defaultConfig
+export type ConfigFile = typeof defaultConfig
 
 function resolvePath(base: string, file: string) {
     if (base.startsWith("/")) {
@@ -37,7 +37,7 @@ function parseFile(file: string = ".") {
     }
 }
 
-export function readConfig(): Config {
+export function readConfig(): ConfigFile {
     const acceptedExtensions = ["yaml", "yml", "json"]
 
     for (const ext of acceptedExtensions) {

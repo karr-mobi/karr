@@ -2,8 +2,9 @@ import type { Metadata } from "next"
 import localFont from "next/font/local"
 import Image from "next/image"
 import logo from "@/assets/logo-tmp.jpg"
+import AppName from "@/components/appname"
 
-import { APPLICATION_NAME } from "@karr/config"
+import getAppConfig from "@karr/config"
 
 import "@/assets/globals.css"
 
@@ -21,8 +22,8 @@ const geistMono = localFont({
 })
 
 export const metadata: Metadata = {
-    title: APPLICATION_NAME,
-    description: `${APPLICATION_NAME} is a federated carpool platform.`
+    title: getAppConfig().APPLICATION_NAME,
+    description: `${getAppConfig().APPLICATION_NAME} is a federated carpool platform.`
 }
 
 export default function RootLayout({
@@ -49,7 +50,7 @@ export default function RootLayout({
                                     height={40}
                                     className="rounded-lg"
                                 />
-                                <h1>{APPLICATION_NAME}</h1>
+                                <AppName />
                             </Link>
                             <nav className="flex flex-row items-center justify-end gap-4 text-lg">
                                 <Link href="/search">Search for trips</Link>

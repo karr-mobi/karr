@@ -1,9 +1,9 @@
 import { Metadata } from "next"
 
-import { APPLICATION_NAME } from "@karr/config"
+import getAppConfig from "@karr/config"
 
 export const metadata: Metadata = {
-    title: `${APPLICATION_NAME} Signup`
+    title: `${getAppConfig().APPLICATION_NAME} Signup`
 }
 
 export default function Signup() {

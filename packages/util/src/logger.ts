@@ -1,6 +1,6 @@
 import chalk from "chalk"
 
-import { LOG_LEVEL, LOG_TIMESTAMP, PRODUCTION } from "@karr/config"
+import getAppConfig from "@karr/config"
 
 const { blue, cyan, gray, green, magenta, red, underline, yellow } = chalk
 
@@ -9,7 +9,7 @@ const { blue, cyan, gray, green, magenta, red, underline, yellow } = chalk
  * @returns The file and line number of the calling function
  */
 const getCallerFileAndLine = (): string | null => {
-    if (PRODUCTION) return null
+    if (getAppConfig().PRODUCTION) return null
     const stack = new Error().stack
     if (stack) {
         const stackLines = stack.split("\n")
@@ -49,7 +49,7 @@ const prefix = () => {
     })
     const c = getCallerFileAndLine()
     const caller = c ? gray(`(${c}) `) : ""
-    const timestamp = LOG_TIMESTAMP ? `[${now}] ` : ""
+    const timestamp = getAppConfig().LOG_TIMESTAMP ? `[${now}] ` : ""
     return `${timestamp}${caller}`
 }
 
@@ -86,7 +86,7 @@ export default {
      * ```
      */
     log: (...args: unknown[]) => {
-        if (["trace", "debug", "info"].includes(LOG_LEVEL)) {
+        if (["trace", "debug", "info"].includes(getAppConfig().LOG_LEVEL)) {
             console.log(cyan(`${prefix()}>`), ...args)
         }
     },
@@ -101,7 +101,11 @@ export default {
      * ```
      */
     success: (title: unknown, ...args: unknown[]) => {
-        if (["trace", "debug", "info", "warn", "error"].includes(LOG_LEVEL)) {
+        if (
+            ["trace", "debug", "info", "warn", "error"].includes(
+                getAppConfig().LOG_LEVEL
+            )
+        ) {
             console.log(green(`${prefix()}✅ ${underline("SUCCESS")} >`), title)
             args.forEach((arg) => {
                 formatArg(arg)
@@ -123,7 +127,11 @@ export default {
      * ```
      */
     error: (title: unknown, ...args: unknown[]) => {
-        if (["trace", "debug", "info", "warn", "error"].includes(LOG_LEVEL)) {
+        if (
+            ["trace", "debug", "info", "warn", "error"].includes(
+                getAppConfig().LOG_LEVEL
+            )
+        ) {
             console.error(red(`${prefix()}⚠️ ${underline("ERROR")} >`), title)
             args.forEach((arg) => {
                 formatArg(arg)
@@ -145,7 +153,11 @@ export default {
      * ```
      */
     warn: (title: unknown, ...args: unknown[]) => {
-        if (["trace", "debug", "info", "warn"].includes(LOG_LEVEL)) {
+        if (
+            ["trace", "debug", "info", "warn"].includes(
+                getAppConfig().LOG_LEVEL
+            )
+        ) {
             console.warn(yellow(`${prefix()}⚠ ${underline("WARN")} >`), title)
             args.forEach((arg) => {
                 formatArg(arg)
@@ -167,7 +179,7 @@ export default {
      * ```
      */
     info: (title: unknown, ...args: unknown[]) => {
-        if (["trace", "debug", "info"].includes(LOG_LEVEL)) {
+        if (["trace", "debug", "info"].includes(getAppConfig().LOG_LEVEL)) {
             console.info(blue(`${prefix()}ℹ ${underline("INFO")} >`), title)
             args.forEach((arg) => {
                 formatArg(arg)
@@ -189,7 +201,7 @@ export default {
      * ```
      */
     debug: (title: unknown, ...args: unknown[]) => {
-        if (["trace", "debug"].includes(LOG_LEVEL)) {
+        if (["trace", "debug"].includes(getAppConfig().LOG_LEVEL)) {
             console.debug(
                 magenta(`${prefix()}🐞 ${underline("DEBUG")} >`),
                 title
@@ -214,9 +226,9 @@ export default {
      * ```
      */
     trace: (...args: unknown[]) => {
-        if (["trace"].includes(LOG_LEVEL)) {
+        if (["trace"].includes(getAppConfig().LOG_LEVEL)) {
             console.trace(green(`${prefix()}>`), ...args)
-        } else if (LOG_LEVEL === "debug") {
+        } else if (getAppConfig().LOG_LEVEL === "debug") {
             console.trace(
                 gray(
                     "[TRACE log level not enabled, remember to remove this trace call before production!]"

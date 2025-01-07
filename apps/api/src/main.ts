@@ -1,15 +1,18 @@
 import { serve } from "@hono/node-server"
 import type { Hono } from "hono"
 
-import { LOG_LEVEL, logLevels, PORT, PRODUCTION } from "@karr/config"
+import getAppConfig, { logLevels } from "@karr/config"
 import logger from "@karr/util/logger"
 
 import { drizzleMigrate } from "~/db/migrate"
 import { build } from "~/server"
 
-if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
+if (
+    getAppConfig().PRODUCTION &&
+    logLevels.findIndex((l) => l === getAppConfig().LOG_LEVEL) < 2
+) {
     logger.warn(
-        `Log level is set to '${LOG_LEVEL}' in a production environment.`,
+        `Log level is set to '${getAppConfig().LOG_LEVEL}' in a production environment.`,
         "This may result in an excessive amount of logs.",
         "/!\\ It may also log sensitive infornmation",
         "Consider setting LOG_LEVEL to 'info' or 'warn' in .env"
@@ -17,7 +20,7 @@ if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
 }
 
 logger.info(
-    `Starting server in ${PRODUCTION ? "production" : "development"} mode`
+    `Starting server in ${getAppConfig().PRODUCTION ? "production" : "development"} mode`
 )
 logger.info(`TZ=${Intl.DateTimeFormat().resolvedOptions().timeZone}`)
 
@@ -32,10 +35,10 @@ try {
     // Start the server
     serve({
         fetch: app.fetch,
-        port: PORT
+        port: getAppConfig().API_PORT
     })
 
-    logger.success(`Server listening on port ${PORT}`)
+    logger.success(`Server listening on port ${getAppConfig().API_PORT}`)
 } catch (err) {
     logger.error(err)
     process.exit(1)
