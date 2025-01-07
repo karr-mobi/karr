@@ -12,20 +12,20 @@
         "build:localinit": "esbuild src/db/local_dev_init.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/db/local_dev_init.mjs"
     },
     "dependencies": {
-        "@hono/node-server": "^1.13.7",
+        "@hono/node-server": "catalog:",
         "@karr/config": "workspace:*",
         "@karr/util": "workspace:*",
-        "drizzle-kit": "^0.30.1",
-        "drizzle-orm": "^0.38.2",
-        "hono": "^4.6.14",
-        "postgres": "^3.4.5"
+        "drizzle-kit": "catalog:",
+        "drizzle-orm": "catalog:",
+        "hono": "catalog:",
+        "postgres": "catalog:"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
-        "@types/node": "^22.10.2",
-        "esbuild": "^0.24.2",
-        "tsx": "^4.19.2",
-        "typescript": "5.7.2"
+        "@types/node": "catalog:",
+        "esbuild": "catalog:",
+        "tsx": "catalog:",
+        "typescript": "catalog:"
     }
 }

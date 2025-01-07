@@ -9,17 +9,17 @@
         "./react-internal": "./react-internal.js"
     },
     "devDependencies": {
-        "@next/eslint-plugin-next": "^15.1.0",
-        "@tanstack/eslint-plugin-query": "^5.62.9",
-        "@typescript-eslint/eslint-plugin": "^8.15.0",
-        "@typescript-eslint/parser": "^8.15.0",
-        "eslint": "^9.15.0",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-react": "^7.37.2",
-        "eslint-plugin-react-hooks": "^5.0.0",
-        "eslint-plugin-turbo": "^2.3.0",
-        "globals": "^15.12.0",
-        "typescript": "^5.5.4",
-        "typescript-eslint": "^8.15.0"
+        "@next/eslint-plugin-next": "catalog:",
+        "@tanstack/eslint-plugin-query": "catalog:",
+        "@typescript-eslint/eslint-plugin": "catalog:",
+        "@typescript-eslint/parser": "catalog:",
+        "eslint": "catalog:",
+        "eslint-config-prettier": "catalog:",
+        "eslint-plugin-react": "catalog:",
+        "eslint-plugin-react-hooks": "catalog:",
+        "eslint-plugin-turbo": "catalog:",
+        "globals": "catalog:",
+        "typescript": "catalog:",
+        "typescript-eslint": "catalog:"
     }
 }

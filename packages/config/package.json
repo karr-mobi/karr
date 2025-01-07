@@ -14,11 +14,11 @@
         }
     },
     "dependencies": {
-        "yaml": "^2.6.1"
+        "yaml": "catalog:"
     },
     "devDependencies": {
         "@karr/tsconfig": "workspace:*",
-        "@types/node": "^22.10.2",
-        "typescript": "5.7.2"
+        "@types/node": "catalog:",
+        "typescript": "catalog:"
     }
 }
