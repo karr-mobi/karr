@@ -44,6 +44,7 @@ export const build = (): Hono => {
     // ==== Unprotected routes ====
     // ============================
     hono.route("/", system)
+    hono.route(`/${API_VERSION}/config`, configRoutes)
 
     // =============================
     // ======== Middlewares ========
@@ -84,7 +85,6 @@ export const build = (): Hono => {
     // ============================
     hono.route(`/${API_VERSION}/user`, user)
     hono.route(`/${API_VERSION}/account`, account)
-    hono.route(`/${API_VERSION}/config`, configRoutes)
     hono.route(`/${API_VERSION}/trip`, trip)
 
     return hono
