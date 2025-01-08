@@ -1,11 +1,16 @@
-application_name: Karr PoC
-
-database:
-    name: karr
-    user: karr
+PRODUCTION: false
+API_VERSION: v1
+API_PORT: 3000
+LOG_LEVEL: debug
+LOG_TIMESTAMP: true
+TZ: Europe/Paris
+DB_CONFIG:
     host: localhost
     port: 5432
-
-admin_email: foo@bar.com
-
-foo: bar # this won't be included in the config
+    ssl: false
+    name: karr
+    user: karr
+    password: karr
+    connStr: postgres://karr:karr@localhost:5432/karr
+APPLICATION_NAME: Karr PoC
+ADMIN_EMAIL: foo@bar.com

@@ -18,7 +18,8 @@
         "DB_PASSWORD_FILE",
         "APPLICATION_NAME",
         "ADMIN_EMAIL",
-        "CONFIG_DIR"
+        "CONFIG_DIR",
+        "CONFIG_FILE"
     ],
     "ui": "tui",
     "tasks": {

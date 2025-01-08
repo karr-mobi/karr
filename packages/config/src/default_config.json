@@ -1,12 +1,12 @@
 {
-    "application_name": "Karr",
-    "database": {
+    "APPLICATION_NAME": "Karr",
+    "DB_CONFIG": {
         "host": "localhost",
         "port": 5432,
-        "username": "karr",
+        "user": "karr",
         "password": "karr",
         "password_file": null,
         "database": "karr"
     },
-    "admin_email": "admin@example.com"
+    "ADMIN_EMAIL": "admin@example.com"
 }

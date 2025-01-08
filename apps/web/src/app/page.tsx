@@ -1,7 +1,7 @@
-import { revalidatePath } from "next/cache"
 import Image from "next/image"
 import Link from "next/link"
 import logo from "@/assets/logo-tmp.jpg"
+import EditConfig from "@/components/EditConfig"
 
 import getAppConfig from "@karr/config"
 import { Button } from "@karr/ui/button"
@@ -37,23 +37,7 @@ export default function Home() {
                 </div>
             </div>
 
-            <form
-                className="mt-12 flex flex-col"
-                action={async (formData: FormData) => {
-                    "use server"
-
-                    const name = formData.get("name") as string
-
-                    process.env.APPLICATION_NAME = name
-
-                    getAppConfig("no-cache")
-                    revalidatePath("/")
-                }}
-            >
-                <label htmlFor="name">App Name</label>
-                <input id="name" name="name" type="text" placeholder="Search" />
-                <button type="submit">Save</button>
-            </form>
+            <EditConfig />
         </div>
     )
 }

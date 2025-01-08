@@ -1,5 +1,6 @@
 import type { Config, DbConfig } from "@karr/types"
 
+import { saveConfigToFile } from "./exporter.js"
 import {
     getDbPasswordFromFile,
     readConfig,
@@ -32,8 +33,8 @@ export function toInt(value: number | string): number {
 // Cached config
 // ====================
 const CONFIG_CACHE_TTL = 5 * 60 * 1000 // 5 minute
-let cachedConfig: Config = {} as Config
 let cachedUserConfig: ConfigFile = {} as ConfigFile
+let cachedConfig: Config = loadConfig("no-cache")
 let lastLoadTime: number
 
 /**
@@ -52,7 +53,7 @@ function loadConfig(cacheControl?: "only-cache" | "no-cache"): Config {
 
     const prod = (process.env.NODE_ENV || process.env.ENV) === "production"
 
-    return Object.freeze(<Config>{
+    return <Config>{
         PRODUCTION: prod,
         API_VERSION: "v1",
         API_PORT: toInt(process.env.PORT || 1993),
@@ -66,28 +67,28 @@ function loadConfig(cacheControl?: "only-cache" | "no-cache"): Config {
         DB_CONFIG: Object.freeze(<DbConfig>{
             host:
                 process.env.DB_HOST ||
-                cachedUserConfig.database.host ||
+                cachedUserConfig.DB_CONFIG.host ||
                 "localhost",
             port: toInt(
-                process.env.DB_PORT || cachedUserConfig.database.port || 5432
+                process.env.DB_PORT || cachedUserConfig.DB_CONFIG.port || 5432
             ),
             ssl: (process.env.DB_SSL || "false") === "true",
             name:
                 process.env.DB_NAME ||
-                cachedUserConfig.database.database ||
+                cachedUserConfig.DB_CONFIG.database ||
                 "karr",
             user:
                 process.env.DB_USER ||
-                cachedUserConfig.database.username ||
+                cachedUserConfig.DB_CONFIG.user ||
                 "karr",
 
             // password can be set via DB_PASSWORD or DB_PASSWORD_FILE.
             // File is preferred if it exists.
             password: (() => {
-                let pass: string = cachedUserConfig.database.password || "karr"
+                let pass: string = cachedUserConfig.DB_CONFIG.password || "karr"
                 const passwordFile =
                     process.env.DB_PASSWORD_FILE ||
-                    cachedUserConfig.database.password_file
+                    cachedUserConfig.DB_CONFIG.password_file
                 if (passwordFile) {
                     pass = getDbPasswordFromFile(passwordFile) || pass
                 } else if (process.env.DB_PASSWORD) {
@@ -108,7 +109,7 @@ function loadConfig(cacheControl?: "only-cache" | "no-cache"): Config {
         APPLICATION_NAME: ((): string => {
             return (
                 process.env.APPLICATION_NAME ||
-                cachedUserConfig.application_name ||
+                cachedUserConfig.APPLICATION_NAME ||
                 "Karr"
             )
         })(),
@@ -116,11 +117,11 @@ function loadConfig(cacheControl?: "only-cache" | "no-cache"): Config {
         ADMIN_EMAIL: ((): string => {
             return (
                 process.env.ADMIN_EMAIL ||
-                cachedUserConfig.admin_email ||
+                cachedUserConfig.ADMIN_EMAIL ||
                 "admin@example.com"
             )
         })()
-    })
+    }
 }
 
 /**
@@ -128,11 +129,9 @@ function loadConfig(cacheControl?: "only-cache" | "no-cache"): Config {
  * @param invalidateCache "only-cache" will only load the config if it has been cached. "no-cache" will force a config reload
  * @returns The config
  */
-export default function getAppConfig(
-    cacheControl?: "only-cache" | "no-cache"
-): Config {
+export function getAppConfig(cacheControl?: "only-cache" | "no-cache"): Config {
     if (cacheControl === "only-cache") {
-        return cachedConfig
+        return Object.freeze(structuredClone(cachedConfig))
     }
 
     if (
@@ -144,5 +143,35 @@ export default function getAppConfig(
         lastLoadTime = Date.now()
     }
 
-    return cachedConfig
+    return Object.freeze(structuredClone(cachedConfig))
+}
+
+export default getAppConfig
+
+/**
+ * Set a config value
+ * @param key Config key
+ * @param value Config value
+ */
+export function setAppConfig<K extends keyof Config>(key: K, value: Config[K]) {
+    // TODO: optimise, secure, and check for valid values
+
+    const confKeys = Object.keys(getAppConfig())
+    if (!confKeys.includes(key)) {
+        console.error(`Invalid config key: ${key}`)
+        return
+    }
+
+    if (process.env[key]) {
+        delete process.env[key]
+    }
+
+    cachedConfig[key] = value
+
+    saveConfigToFile(cachedConfig)
+
+    console.log(`Config key ${key} set to ${value}`)
+
+    // Force a reload of the config
+    getAppConfig("no-cache")
 }

@@ -11,6 +11,7 @@
         "check-types": "tsc --noEmit"
     },
     "dependencies": {
+        "@karr/types": "workspace:*",
         "@karr/config": "workspace:*",
         "@karr/ui": "workspace:*",
         "@tailwindcss/postcss": "catalog:",

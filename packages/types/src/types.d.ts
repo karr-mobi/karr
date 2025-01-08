@@ -5,6 +5,8 @@ export type DbConfig = {
     name: string
     user: string
     password: string
+    password_file: string
+    database: string
     connStr: string
 }
 

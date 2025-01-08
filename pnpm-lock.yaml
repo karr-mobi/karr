@@ -186,6 +186,9 @@ importers:
       '@karr/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@karr/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@karr/ui':
         specifier: workspace:*
         version: link:../../packages/ui
