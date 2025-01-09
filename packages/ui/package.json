@@ -6,8 +6,7 @@
     "exports": {
         "./globals.css": "./src/globals.css",
         "./postcss-config": "./postcss-config.mjs",
-        "./Button": "./src/components/Button.tsx",
-        "./Card": "./src/components/Card.tsx"
+        "./*": "./src/components/*.tsx"
     },
     "scripts": {
         "lint": "eslint . --max-warnings 0",
