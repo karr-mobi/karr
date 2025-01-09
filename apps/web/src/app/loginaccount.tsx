@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 
-import { Button } from "@karr/ui/Button"
+import { Button } from "@karr/ui/button"
 
 export default function LoginAccount() {
     const [loggedIn, setLoggedIn] = useState(false)

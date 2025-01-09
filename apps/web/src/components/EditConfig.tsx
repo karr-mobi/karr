@@ -1,12 +1,13 @@
 import { revalidatePath } from "next/cache"
 
 import { setAppConfig } from "@karr/config"
+import { Button } from "@karr/ui/button"
 
 export default function EditConfig() {
     return (
         <>
             <form
-                className="mt-12 flex flex-col"
+                className="mt-12 flex flex-col gap-4"
                 action={async (formData: FormData) => {
                     "use server"
 
@@ -28,7 +29,9 @@ export default function EditConfig() {
                     type="text"
                     placeholder="Enter app name"
                 />
-                <button type="submit">Save</button>
+                <Button type="submit" wide>
+                    Save
+                </Button>
             </form>
         </>
     )
