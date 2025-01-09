@@ -9,7 +9,8 @@
         "check-types": "turbo check-types",
         "format": "prettier --write \"**/*.{ts,tsx,md,json,yml,yaml,css,html}\"",
         "test": "echo 'no tests implemented yet'",
-        "prepare": "husky"
+        "prepare": "husky",
+        "commitlint": "commitlint --edit"
     },
     "workspaces": [
         "apps/*",
@@ -17,6 +18,8 @@
         "tooling/*"
     ],
     "devDependencies": {
+        "@commitlint/cli": "catalog:",
+        "@commitlint/config-conventional": "catalog:",
         "@ianvs/prettier-plugin-sort-imports": "catalog:",
         "husky": "catalog:",
         "prettier": "catalog:",

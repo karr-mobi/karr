@@ -1,0 +1,2 @@
+# Lint commit messages to ensure they follow the conventional commits format
+pnpm commitlint ${1}
