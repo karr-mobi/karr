@@ -29,7 +29,7 @@ catalog:
     "@turbo/gen": ^1.12.4
     "@tailwindcss/postcss": 4.0.0-beta.8
     "tailwindcss": 4.0.0-beta.8
-    "next": ^15.1.3
+    "next": ^15.1.4
     "react": ^19.0.0
     "react-dom": ^19.0.0
     "@tanstack/react-query": ^5.62.16
