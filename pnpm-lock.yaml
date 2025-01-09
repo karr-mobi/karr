@@ -6,6 +6,12 @@ settings:
 
 catalogs:
   default:
+    '@commitlint/cli':
+      specifier: ^19.6.1
+      version: 19.6.1
+    '@commitlint/config-conventional':
+      specifier: ^19.6.0
+      version: 19.6.0
     '@hono/node-server':
       specifier: ^1.13.7
       version: 1.13.7
@@ -120,10 +126,10 @@ importers:
   .:
     devDependencies:
       '@commitlint/cli':
-        specifier: ^19.6.1
+        specifier: 'catalog:'
         version: 19.6.1(@types/node@22.10.5)(typescript@5.7.2)
       '@commitlint/config-conventional':
-        specifier: ^19.6.0
+        specifier: 'catalog:'
         version: 19.6.0
       '@ianvs/prettier-plugin-sort-imports':
         specifier: 'catalog:'
