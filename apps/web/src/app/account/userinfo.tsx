@@ -1,45 +1,82 @@
 "use client"
 
-import {
-    useMutation as _useMutation,
-    QueryClient,
-    QueryClientProvider,
-    useQuery,
-    useQueryClient
-} from "@tanstack/react-query"
+import { QueryProvider } from "@/components/QueryProvider"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 
-// Create a client
-const queryClient = new QueryClient()
-
-export default function UserInfo() {
+export default function UserInfo({ userid }: { userid: string }) {
     return (
-        <QueryClientProvider client={queryClient}>
-            <Data />
-        </QueryClientProvider>
+        <QueryProvider>
+            <FetchUserData userid={userid} />
+        </QueryProvider>
     )
 }
 
-function Data() {
+function FetchUserData({ userid }: { userid: string }) {
     // Access the client
     const _queryClient = useQueryClient()
 
-    const { data: user } = useQuery({
-        queryKey: ["user"],
-        queryFn: () => {
-            const f = fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/user`, {
+    const {
+        data: user,
+        isLoading,
+        isError,
+        error
+    } = useQuery({
+        queryKey: ["user", userid],
+        queryFn: async () =>
+            fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/user`, {
                 headers: {
-                    authorization: "dc707395-cd78-4f10-ad18-5eaaf18478ac"
+                    authorization: userid
                 }
             }).then((res) => res.json())
-            console.log(f)
-            return f
-        }
     })
+
+    if (isLoading) {
+        return <div>Loading...</div>
+    }
+
+    if (isError) {
+        return <div>Error: {error.message}</div>
+    }
+
+    return <ShowUserData user={user} />
+}
+
+// TODO: add user type
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function ShowUserData({ user }: { user: any }) {
+    const hasSpecialStatus = user.data.SpecialStatus
 
     return (
         <div>
             <h2>User</h2>
-            <pre>{JSON.stringify(user, null, 2)}</pre>
+            <section>
+                {!hasSpecialStatus && (
+                    <div className="w-fit rounded-full bg-red-500 px-2 py-0 text-sm text-white">
+                        <p>
+                            {user.data.SpecialStatus?.name ||
+                                "No special status"}
+                        </p>
+                    </div>
+                )}
+                <div className="flex flex-row gap-6">
+                    <h3>User ID</h3>
+                    <p>{user.data.Users.id}</p>
+                </div>
+                <div className="flex flex-row gap-6">
+                    <h3>Full Name</h3>
+                    <p>
+                        {user.data.Users.firstName} {user.data.Users.lastName}
+                    </p>
+                </div>
+                <div className="flex flex-row gap-6">
+                    <h3>Username</h3>
+                    <p>{user.data.Users.nickname ?? "No nickname"}</p>
+                </div>
+            </section>
+            <details>
+                <summary>See raw</summary>
+                <pre>{JSON.stringify(user, null, 2)}</pre>
+            </details>
         </div>
     )
 }
