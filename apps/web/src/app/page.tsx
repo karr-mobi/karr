@@ -4,7 +4,7 @@ import logo from "@/assets/logo-tmp.jpg"
 import EditConfig from "@/components/EditConfig"
 
 import getAppConfig from "@karr/config"
-import { Button } from "@karr/ui/button"
+import { Button } from "@karr/ui/Button"
 
 export default function Home() {
     return (

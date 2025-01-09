@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 
 import getAppConfig from "@karr/config"
+import { Button } from "@karr/ui/Button"
 
 export const metadata: Metadata = {
     title: `${getAppConfig().APPLICATION_NAME} Signup`
@@ -34,12 +35,12 @@ export default function Signup() {
                         className="rounded-md border px-3 py-2"
                     />
                 </section>
-                <button
+                <Button
                     type="submit"
-                    className="w-full cursor-pointer rounded-md bg-blue-400 px-4 py-2 text-xl"
+                    className="w-full cursor-pointer rounded-md px-4 py-2 text-xl"
                 >
                     Sign up
-                </button>
+                </Button>
             </form>
         </div>
     )

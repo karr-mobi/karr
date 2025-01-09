@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 
 import getAppConfig from "@karr/config"
+import { Button } from "@karr/ui/Button"
 
 import { login } from "./login"
 
@@ -33,12 +34,12 @@ export default function Login() {
                         required
                     />
                 </section>
-                <button
+                <Button
                     type="submit"
-                    className="w-full cursor-pointer rounded-md bg-blue-400 px-4 py-2 text-xl"
+                    className="w-full cursor-pointer rounded-md px-4 py-2 text-xl"
                 >
                     Login
-                </button>
+                </Button>
             </form>
         </div>
     )

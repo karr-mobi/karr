@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 
-import { Button } from "@karr/ui/button"
+import { Button } from "@karr/ui/Button"
 
 export default function LoginAccount() {
     const [loggedIn, setLoggedIn] = useState(false)
@@ -11,7 +11,6 @@ export default function LoginAccount() {
     return (
         <>
             <Button
-                className="inset-shadow-sm inset-shadow-white/20 inset-ring inset-ring-white/15 text-sm ring ring-blue-600"
                 onClick={() => {
                     setLoggedIn(!loggedIn)
                 }}
