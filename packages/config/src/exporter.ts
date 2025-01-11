@@ -1,14 +1,13 @@
 import { writeFileSync } from "node:fs"
 import { stringify } from "yaml"
 
-import type { Config } from "@karr/types"
-
 import {
     CONFIG_DIR,
     CONFIG_FILENAME,
     resolveConfigPath,
     resolvePath
 } from "./importer.js"
+import type { Config } from "./types.d.ts"
 
 function stringifyConfig(
     config: Config,

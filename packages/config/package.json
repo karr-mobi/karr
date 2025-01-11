@@ -11,14 +11,14 @@
         ".": {
             "types": "./src/config.ts",
             "default": "./dist/config.js"
-        }
+        },
+        "./types": "./src/types.d.ts"
     },
     "dependencies": {
         "yaml": "catalog:"
     },
     "devDependencies": {
         "@karr/tsconfig": "workspace:*",
-        "@karr/types": "workspace:*",
         "@types/node": "catalog:",
         "typescript": "catalog:"
     }

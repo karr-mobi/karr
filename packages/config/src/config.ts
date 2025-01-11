@@ -1,7 +1,6 @@
-import type { Config, DbConfig } from "@karr/types"
-
 import { saveConfigToFile } from "./exporter.js"
 import { getDbPasswordFromFile, readConfig, type ConfigFile } from "./importer.js"
+import type { Config, DbConfig } from "./types.d.ts"
 
 export const logLevels = ["trace", "debug", "info", "warn", "error"] as const
 type LogLevel = (typeof logLevels)[number]

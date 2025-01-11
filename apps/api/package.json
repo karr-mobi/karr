@@ -1,8 +1,10 @@
 {
     "name": "@karr/api",
     "type": "module",
-    "version": "0.0.1",
     "description": "Karr API",
+    "exports": {
+        "./types": "./src/lib/types.d.ts"
+    },
     "scripts": {
         "lint": "eslint . --max-warnings 0",
         "dev": "LOG_LEVEL=trace tsx watch ./src/main.ts",
