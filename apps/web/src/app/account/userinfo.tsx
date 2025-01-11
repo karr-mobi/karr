@@ -1,6 +1,7 @@
 "use client"
 
 import { QueryProvider } from "@/components/QueryProvider"
+import { apiFetch } from "@/util/apifetch"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 export default function UserInfo({ userid }: { userid: string }) {
@@ -17,12 +18,13 @@ function FetchUserData({ userid }: { userid: string }) {
 
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["user", userid],
+        retry: false,
         queryFn: async () =>
-            fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/user`, {
+            apiFetch("/user", {
                 headers: {
                     authorization: userid
                 }
-            }).then((res) => res.json())
+            })
     })
 
     if (isLoading) {
@@ -38,8 +40,8 @@ function FetchUserData({ userid }: { userid: string }) {
 
 // TODO: add user type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function ShowUserData({ user }: { user: any }) {
-    const hasSpecialStatus = user.data.SpecialStatus
+function ShowUserData({ user: { data: user } }: { user: any }) {
+    const hasSpecialStatus = user.SpecialStatus?.id
 
     return (
         <div>
@@ -47,25 +49,22 @@ function ShowUserData({ user }: { user: any }) {
             <section>
                 {!hasSpecialStatus && (
                     <div className="w-fit rounded-full bg-red-500 px-2 py-0 text-sm text-white">
-                        <p>
-                            {user.data.SpecialStatus?.name ||
-                                "No special status"}
-                        </p>
+                        <p>{user.SpecialStatus?.name || "No special status"}</p>
                     </div>
                 )}
                 <div className="flex flex-row gap-6">
                     <h3>User ID</h3>
-                    <p>{user.data.Users.id}</p>
+                    <p>{user.Users.id}</p>
                 </div>
                 <div className="flex flex-row gap-6">
                     <h3>Full Name</h3>
                     <p>
-                        {user.data.Users.firstName} {user.data.Users.lastName}
+                        {user.Users.firstName} {user.Users.lastName}
                     </p>
                 </div>
                 <div className="flex flex-row gap-6">
                     <h3>Username</h3>
-                    <p>{user.data.Users.nickname ?? "No nickname"}</p>
+                    <p>{user.Users.nickname ?? "No nickname"}</p>
                 </div>
             </section>
             <details>
