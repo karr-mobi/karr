@@ -30,8 +30,7 @@ hono.put("/email", async (c) => {
 
     // check the nickname is a valid string
     if (typeof email !== "string" || email.length < 1) {
-        c.status(400)
-        return responseErrorObject(c, "Invalid nickname")
+        return responseErrorObject(c, new Error("Invalid email address"), 400)
     }
 
     // Change the email in the database
