@@ -55,11 +55,14 @@ jobs:
         permissions:
             contents: write
             packages: write
+        outputs:
+            version: ${{ steps.package-version.outputs.current-version }}
         steps:
             - name: Checkout
               uses: actions/checkout@v4
               with:
                   fetch-depth: 0
+
             - name: get-npm-version
               id: package-version
               uses: martinbeentjes/npm-get-version-action@v1.3.1
@@ -109,7 +112,7 @@ jobs:
                   push: true
                   tags: |
                       ghcr.io/finxol/karr-api:latest
-                      ghcr.io/finxol/karr-api:${{ steps.package-version.outputs.current-version}}
+                      ghcr.io/finxol/karr-api:${{ needs.release.outputs.version }}
 
     build-web:
         needs: release
@@ -137,7 +140,7 @@ jobs:
                   push: true
                   tags: |
                       ghcr.io/finxol/karr-web:latest
-                      ghcr.io/finxol/karr-web:${{ steps.package-version.outputs.current-version}}
+                      ghcr.io/finxol/karr-web:${{ needs.release.outputs.version }}
 
     build-caddy:
         needs: release
@@ -166,4 +169,4 @@ jobs:
                   push: true
                   tags: |
                       ghcr.io/finxol/karr-caddy:latest
-                      ghcr.io/finxol/karr-caddy:${{ steps.package-version.outputs.current-version}}
+                      ghcr.io/finxol/karr-caddy:${{ needs.release.outputs.version }}
