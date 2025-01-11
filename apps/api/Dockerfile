@@ -41,12 +41,6 @@ RUN pnpm install
 
 COPY --from=installer /app/out/full/ .
 
-# Build the project dependencies
-RUN pnpm --filter="!@karr/api" run build
-
-# Generate the drizzle migrations
-RUN pnpm --filter "@karr/api" exec drizzle-kit generate
-
 # Build the project
 RUN pnpm --filter="@karr/api" run build
 
@@ -63,7 +57,7 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 runner
 RUN adduser --system --uid 1001 runner
 
-COPY --from=installer --chown=runner:runner /app/wait-for-it.sh /usr/local/bin/
+COPY --from=installer --chown=runner:runner /app/apps/api/wait-for-it.sh /usr/local/bin/
 RUN chmod 500 /usr/local/bin/wait-for-it.sh
 
 USER runner

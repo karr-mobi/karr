@@ -9,6 +9,7 @@
 !src/
 !drizzle.config.ts
 !init.sh
+!drizzle/
 
 # ...but never include these files...
 README.md

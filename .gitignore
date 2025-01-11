@@ -20,9 +20,6 @@ pass.txt
 # Testing
 coverage
 
-# Drizzle migration files
-drizzle
-
 # Turbo
 .turbo
 
