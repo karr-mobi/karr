@@ -2,7 +2,8 @@
     "extends": ["//"],
     "tasks": {
         "build": {
-            "dependsOn": ["@karr/config#build", "@karr/util#build"]
+            "dependsOn": ["^build"],
+            "outputs": ["out/**", "dist/**"]
         }
     }
 }
