@@ -11,6 +11,7 @@ FILES=$(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')
 # Format only staged files that match prettier's supported extensions
 echo "$FILES" | grep -E "\.(ts|tsx|md|json|yml|yaml|css|html)$" | while read -r file; do
     pnpm prettier --write "$file"
+    echo "formatted $file"
     git add "$file"
 done
 
