@@ -15,12 +15,7 @@ function FetchUserData({ userid }: { userid: string }) {
     // Access the client
     const _queryClient = useQueryClient()
 
-    const {
-        data: user,
-        isLoading,
-        isError,
-        error
-    } = useQuery({
+    const { data, isLoading, isError, error } = useQuery({
         queryKey: ["user", userid],
         queryFn: async () =>
             fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/user`, {
@@ -38,7 +33,7 @@ function FetchUserData({ userid }: { userid: string }) {
         return <div>Error: {error.message}</div>
     }
 
-    return <ShowUserData user={user} />
+    return <ShowUserData user={data} />
 }
 
 // TODO: add user type
