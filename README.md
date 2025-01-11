@@ -33,8 +33,7 @@ Built with:
           ([Directly in GH actions](https://github.com/marketplace/actions/docker-stack-deploy-action),
           inspired from
           [Zenstats](https://github.com/dreamsofcode-io/zenstats/blob/main/.github/workflows/pipeline.yaml))
-    - [ ] Add versioning
-          ([Changesets](https://github.com/changesets/changesets))
+    - [ ] Add versioning ([Changesets](https://github.com/changesets/changesets))
 
 - [x] Make config reloadable
 

@@ -27,9 +27,7 @@ function stringifyConfig(
  * @param config The config to export
  */
 export function saveConfigToFile(config: Config) {
-    const path =
-        resolveConfigPath() ||
-        resolvePath(CONFIG_DIR, `${CONFIG_FILENAME}.yaml`)
+    const path = resolveConfigPath() || resolvePath(CONFIG_DIR, `${CONFIG_FILENAME}.yaml`)
 
     const format = path.split(".").pop()
     if (!format || !["yaml", "yml", "json"].includes(format)) {

@@ -6,19 +6,14 @@ import { specialStatusTable } from "~/db/schemas/specialstatus"
 import { userPrefsTable } from "~/db/schemas/userprefs"
 import { usersTable } from "~/db/schemas/users"
 import drizzle from "~/lib/db_conn"
-import type {
-    UserPublicProfile,
-    UserWithPrefsAndStatus
-} from "~/lib/types.d.ts"
+import type { UserPublicProfile, UserWithPrefsAndStatus } from "~/lib/types.d.ts"
 
 /**
  * Select a user by their ID
  * @param id The ID of the user to select. Assumes uuid v4 format.
  * @returns The user with the given ID
  */
-export async function selectUserById(
-    id: string
-): Promise<UserWithPrefsAndStatus> {
+export async function selectUserById(id: string): Promise<UserWithPrefsAndStatus> {
     const users = await drizzle
         .select()
         .from(usersTable)
@@ -32,21 +27,13 @@ export async function selectUserById(
     return <UserWithPrefsAndStatus>users[0]
 }
 
-export async function updateNickname(
-    id: string,
-    nickname: string
-): Promise<boolean> {
+export async function updateNickname(id: string, nickname: string): Promise<boolean> {
     logger.debug(`Updating nickname for user ${id} to ${nickname}`)
-    await drizzle
-        .update(usersTable)
-        .set({ nickname })
-        .where(eq(usersTable.id, id))
+    await drizzle.update(usersTable).set({ nickname }).where(eq(usersTable.id, id))
     return Promise.resolve(true)
 }
 
-export async function selectUserProfileById(
-    id: string
-): Promise<UserPublicProfile> {
+export async function selectUserProfileById(id: string): Promise<UserPublicProfile> {
     const users = await drizzle
         .select({
             firstName: usersTable.firstName,

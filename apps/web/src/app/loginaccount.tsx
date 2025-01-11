@@ -19,20 +19,14 @@ export default function LoginAccount() {
             </Button>
             {loggedIn ? (
                 <>
-                    <Link
-                        href="/account"
-                        className="rounded-sm border px-2 py-1"
-                    >
+                    <Link href="/account" className="rounded-sm border px-2 py-1">
                         Account
                     </Link>
                 </>
             ) : (
                 <>
                     <Link href="/auth/signup">Sign up</Link>
-                    <Link
-                        href="/auth/login"
-                        className="rounded-sm border px-2 py-1"
-                    >
+                    <Link href="/auth/login" className="rounded-sm border px-2 py-1">
                         Login
                     </Link>
                 </>

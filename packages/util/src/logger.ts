@@ -102,9 +102,7 @@ export default {
      */
     success: (title: unknown, ...args: unknown[]) => {
         if (
-            ["trace", "debug", "info", "warn", "error"].includes(
-                getAppConfig().LOG_LEVEL
-            )
+            ["trace", "debug", "info", "warn", "error"].includes(getAppConfig().LOG_LEVEL)
         ) {
             console.log(green(`${prefix()}✅ ${underline("SUCCESS")} >`), title)
             args.forEach((arg) => {
@@ -128,9 +126,7 @@ export default {
      */
     error: (title: unknown, ...args: unknown[]) => {
         if (
-            ["trace", "debug", "info", "warn", "error"].includes(
-                getAppConfig().LOG_LEVEL
-            )
+            ["trace", "debug", "info", "warn", "error"].includes(getAppConfig().LOG_LEVEL)
         ) {
             console.error(red(`${prefix()}⚠️ ${underline("ERROR")} >`), title)
             args.forEach((arg) => {
@@ -153,11 +149,7 @@ export default {
      * ```
      */
     warn: (title: unknown, ...args: unknown[]) => {
-        if (
-            ["trace", "debug", "info", "warn"].includes(
-                getAppConfig().LOG_LEVEL
-            )
-        ) {
+        if (["trace", "debug", "info", "warn"].includes(getAppConfig().LOG_LEVEL)) {
             console.warn(yellow(`${prefix()}⚠ ${underline("WARN")} >`), title)
             args.forEach((arg) => {
                 formatArg(arg)
@@ -202,10 +194,7 @@ export default {
      */
     debug: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug"].includes(getAppConfig().LOG_LEVEL)) {
-            console.debug(
-                magenta(`${prefix()}🐞 ${underline("DEBUG")} >`),
-                title
-            )
+            console.debug(magenta(`${prefix()}🐞 ${underline("DEBUG")} >`), title)
             args.forEach((arg) => {
                 formatArg(arg)
                     .split("\n")

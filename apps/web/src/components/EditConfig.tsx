@@ -23,12 +23,7 @@ export default function EditConfig() {
                 }}
             >
                 <label htmlFor="name">App Name</label>
-                <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="Enter app name"
-                />
+                <input id="name" name="name" type="text" placeholder="Enter app name" />
                 <Button type="submit" wide>
                     Save
                 </Button>

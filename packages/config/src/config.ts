@@ -1,11 +1,7 @@
 import type { Config, DbConfig } from "@karr/types"
 
 import { saveConfigToFile } from "./exporter.js"
-import {
-    getDbPasswordFromFile,
-    readConfig,
-    type ConfigFile
-} from "./importer.js"
+import { getDbPasswordFromFile, readConfig, type ConfigFile } from "./importer.js"
 
 export const logLevels = ["trace", "debug", "info", "warn", "error"] as const
 type LogLevel = (typeof logLevels)[number]
@@ -58,29 +54,16 @@ function loadConfig(cacheControl?: "only-cache" | "no-cache"): Config {
         API_VERSION: "v1",
         API_PORT: toInt(process.env.PORT || 1993),
 
-        LOG_LEVEL: <LogLevel>(
-            (process.env.LOG_LEVEL || (prod ? "info" : "debug"))
-        ),
+        LOG_LEVEL: <LogLevel>(process.env.LOG_LEVEL || (prod ? "info" : "debug")),
         LOG_TIMESTAMP: (process.env.LOG_TIMESTAMP || "true") === "true",
         TZ: process.env.TZ || "Europe/Paris",
 
         DB_CONFIG: Object.freeze(<DbConfig>{
-            host:
-                process.env.DB_HOST ||
-                cachedUserConfig.DB_CONFIG.host ||
-                "localhost",
-            port: toInt(
-                process.env.DB_PORT || cachedUserConfig.DB_CONFIG.port || 5432
-            ),
+            host: process.env.DB_HOST || cachedUserConfig.DB_CONFIG.host || "localhost",
+            port: toInt(process.env.DB_PORT || cachedUserConfig.DB_CONFIG.port || 5432),
             ssl: (process.env.DB_SSL || "false") === "true",
-            name:
-                process.env.DB_NAME ||
-                cachedUserConfig.DB_CONFIG.database ||
-                "karr",
-            user:
-                process.env.DB_USER ||
-                cachedUserConfig.DB_CONFIG.user ||
-                "karr",
+            name: process.env.DB_NAME || cachedUserConfig.DB_CONFIG.database || "karr",
+            user: process.env.DB_USER || cachedUserConfig.DB_CONFIG.user || "karr",
 
             // password can be set via DB_PASSWORD or DB_PASSWORD_FILE.
             // File is preferred if it exists.

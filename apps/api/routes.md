@@ -23,13 +23,12 @@ Get user all bookings. User identified by token in header
 
 **GET /api/v1/user/bookings/{id}**
 
-Get details of booking with id `:id`. User identified by token must be the owner
-of the booking
+Get details of booking with id `:id`. User identified by token must be the owner of the
+booking
 
 **DELETE /api/v1/user/bookings/{id}**
 
-Delete booking with id `:id`. User identified by token must be the owner of the
-booking.
+Delete booking with id `:id`. User identified by token must be the owner of the booking.
 
 **GET /api/v1/user/trips**
 

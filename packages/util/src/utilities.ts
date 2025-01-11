@@ -6,9 +6,7 @@
 export function toCamelCase(str: string): string {
     return str
         .toLowerCase()
-        .replace(/(_\w)/g, (match: string) =>
-            match[1] ? match[1].toUpperCase() : ""
-        )
+        .replace(/(_\w)/g, (match: string) => (match[1] ? match[1].toUpperCase() : ""))
 }
 
 /**

@@ -14,8 +14,7 @@ export default {
                 "chore", // updating grunt tasks etc; no production code change
                 "build", // changes that affect the build system or external dependencies
                 "ci", // changes to our CI configuration files and scripts
-                "revert", // revert commits
-                "refactor" // a code change that neither fixes a bug nor adds a feature
+                "revert" // revert commits
             ]
         ]
     }

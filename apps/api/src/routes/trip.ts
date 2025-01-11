@@ -36,18 +36,11 @@ hono.get("/search", (c) => {
 
         try {
             // Get the trips from the local server
-            const immediatePromise: Promise<void> =
-                getImmediateData().then(sendData)
+            const immediatePromise: Promise<void> = getImmediateData().then(sendData)
             // Get the trips from the federated servers
-            const slowerPromises: Promise<void>[] = [
-                getSlowerData().then(sendData)
-            ]
+            const slowerPromises: Promise<void>[] = [getSlowerData().then(sendData)]
 
-            await Promise.all([
-                ...tripsToSend,
-                immediatePromise,
-                ...slowerPromises
-            ])
+            await Promise.all([...tripsToSend, immediatePromise, ...slowerPromises])
             logger.debug("All data sent")
         } catch (error) {
             stream.close()

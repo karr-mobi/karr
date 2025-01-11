@@ -11,10 +11,7 @@ import type { AccountVerified } from "~/lib/types.d.ts"
  * @returns Whether the update was successful
  */
 export async function updateEmail(id: string, email: string): Promise<boolean> {
-    await drizzle
-        .update(accountsTable)
-        .set({ email })
-        .where(eq(accountsTable.id, id))
+    await drizzle.update(accountsTable).set({ email }).where(eq(accountsTable.id, id))
     return true
 }
 

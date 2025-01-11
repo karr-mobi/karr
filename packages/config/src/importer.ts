@@ -45,9 +45,7 @@ export function resolveConfigPath(): string | undefined {
 
     const fileWithoutExt = resolvePath(CONFIG_DIR, CONFIG_FILENAME)
 
-    const ext = acceptedExtensions.find((ext) =>
-        existsSync(`${fileWithoutExt}.${ext}`)
-    )
+    const ext = acceptedExtensions.find((ext) => existsSync(`${fileWithoutExt}.${ext}`))
 
     if (ext) {
         const file = `${fileWithoutExt}.${ext}`
@@ -78,13 +76,9 @@ function parseFile(file: string = ".") {
     switch (filetype) {
         case "yaml":
         case "yml":
-            return yamlParse(
-                readFileSync(file, { encoding: "utf8", flag: "r" })
-            )
+            return yamlParse(readFileSync(file, { encoding: "utf8", flag: "r" }))
         case "json":
-            return JSON.parse(
-                readFileSync(file, { encoding: "utf8", flag: "r" })
-            )
+            return JSON.parse(readFileSync(file, { encoding: "utf8", flag: "r" }))
         default:
             throw new Error("Invalid file type")
     }
@@ -104,9 +98,7 @@ export function readConfig(): ConfigFile {
     const userConfig = parseFile(path)
 
     // remove keys that are not in the default config
-    const filteredUserConfig = (
-        Object.keys(userConfig) as Array<keyof ConfigFile>
-    )
+    const filteredUserConfig = (Object.keys(userConfig) as Array<keyof ConfigFile>)
         .filter((key) => key in defaultConfig)
         .reduce(
             (obj, key) => {
