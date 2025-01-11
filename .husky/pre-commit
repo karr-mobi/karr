@@ -3,21 +3,21 @@
 echo "Running pre-commit hook"
 
 ###################################################################
-# Run project tests                                               #
+# Format the staged files only if they match prettier's supported #
 ###################################################################
-# pnpm test
+FILES=$(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')
+[ -z "$FILES" ] && exit 0
 
-###################################################################
-# Format, lint, and type check the code                           #
-###################################################################
-pnpm run format
-# pnpm run lint
-# pnpm run check-types
+# Format only staged files that match prettier's supported extensions
+echo "$FILES" | grep -E "\.(ts|tsx|md|json|yml|yaml|css|html)$" | while read -r file; do
+    pnpm prettier --write "$file"
+    git add "$file"
+done
 
 ###################################################################
 # Format Caddyfile only if caddy is installed                     #
 ###################################################################
-if command -v caddy &> /dev/null
-then
+if command -v caddy &> /dev/null && echo "$FILES" | grep -q "Caddyfile"; then
     caddy fmt --overwrite ./apps/caddy/Caddyfile
+    git add ./apps/caddy/Caddyfile
 fi
