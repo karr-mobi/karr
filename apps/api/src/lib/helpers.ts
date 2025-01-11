@@ -1,6 +1,7 @@
 import type { Context } from "hono"
 import { HTTPException } from "hono/http-exception"
 import type { CustomHeader, RequestHeader } from "hono/utils/headers"
+import { ContentfulStatusCode } from "hono/utils/http-status"
 
 import getAppConfig from "@karr/config"
 import { isUUIDv4 } from "@karr/util"
@@ -11,9 +12,9 @@ import logger from "@karr/util/logger"
  * @param c The Hono context object
  * @returns True if the request is authenticated, false otherwise
  */
-export function checkAuth(
-    value: Record<RequestHeader | CustomHeader, string>
-): { id: string } {
+export function checkAuth(value: Record<RequestHeader | CustomHeader, string>): {
+    id: string
+} {
     const authorization = value["authorization"]
 
     if (authorization === undefined || authorization === "") {
@@ -62,18 +63,17 @@ export function tmpResponse(c: Context) {
  */
 export function responseErrorObject(
     c: Context,
-    message: string,
-    ...args: unknown[]
+    error: Error,
+    code: ContentfulStatusCode = 500
 ) {
-    return c.json({
-        // deno-lint-ignore no-undef
-        timestamp: new Date().getTime(),
-        contact: getAppConfig().ADMIN_EMAIL,
-        error: {
-            message: message,
-            details: args
-        }
-    })
+    return c.json(
+        {
+            timestamp: new Date().getTime(),
+            contact: getAppConfig().ADMIN_EMAIL,
+            error
+        },
+        code
+    )
 }
 
 /**
@@ -88,8 +88,7 @@ export async function handleRequest<T>(c: Context, fn: () => Promise<T>) {
     try {
         const out: T = await fn()
         if (!out) {
-            c.status(404)
-            return responseErrorObject(c, "Resource not found")
+            return responseErrorObject(c, new Error("Resource not found"), 404)
         }
         return c.json({
             // deno-lint-ignore no-undef
@@ -98,8 +97,11 @@ export async function handleRequest<T>(c: Context, fn: () => Promise<T>) {
         })
     } catch (err) {
         logger.error(err)
-        c.status(500)
-        return responseErrorObject(c, "Internal server error", err)
+        return responseErrorObject(
+            c,
+            new Error("Internal server error", { cause: err }),
+            500
+        )
     }
 }
 
@@ -114,7 +116,8 @@ export function checkContentType(c: Context, done: () => void) {
         c.status(400)
         return responseErrorObject(
             c,
-            "Invalid content type. Must be application/json"
+            new Error("Invalid content type. Must be application/json"),
+            400
         )
     } else {
         done()

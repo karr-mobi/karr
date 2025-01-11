@@ -1,6 +1,5 @@
 import { Hono } from "hono"
 import { cors } from "hono/cors"
-import { HTTPException } from "hono/http-exception"
 import { validator } from "hono/validator"
 
 import getAppConfig from "@karr/config"
@@ -11,6 +10,7 @@ import account from "~/routes/account"
 import system from "~/routes/system"
 import trip from "~/routes/trip"
 import user from "~/routes/user"
+import { responseErrorObject } from "./lib/helpers"
 
 const prod: boolean = process.env.NODE_ENV === "production"
 
@@ -28,9 +28,7 @@ export const build = (): Hono => {
     hono.use(
         "/*",
         cors({
-            origin: [
-                (prod ? process.env.WEB_URL : null) || "http://localhost:3000"
-            ],
+            origin: [(prod ? process.env.WEB_URL : null) || "http://localhost:3000"],
             credentials: true,
             allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             allowHeaders: ["Content-Type", "Authorization"],
@@ -52,14 +50,17 @@ export const build = (): Hono => {
      * @param req The FastifyRequest objec
      */
     hono.use(
-        validator("header", (value, _c) => {
+        validator("header", (value, c) => {
             const authorization = value["authorization"]
 
             if (authorization === undefined || authorization === "") {
-                throw new HTTPException(400, {
-                    message:
-                        "Authencation token is required in Authorization header"
-                })
+                return responseErrorObject(
+                    c,
+                    new Error("Unauthorized", {
+                        cause: "Auth token is required in Authorization header"
+                    }),
+                    401
+                )
             }
 
             // TODO(@finxol): verify the JWT
@@ -67,9 +68,13 @@ export const build = (): Hono => {
 
             // check the id is a valid UUID
             if (!isUUIDv4(id)) {
-                throw new HTTPException(400, {
-                    message: "Invalid user ID"
-                })
+                return responseErrorObject(
+                    c,
+                    new Error("Unauthorized", {
+                        cause: "Invalid user ID"
+                    }),
+                    401
+                )
             }
 
             logger.debug(`User ID: ${id}`)

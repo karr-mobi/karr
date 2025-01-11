@@ -1,15 +1,8 @@
 import { Hono } from "hono"
 
-import {
-    selectUserById,
-    selectUserProfileById,
-    updateNickname
-} from "~/db/users"
+import { selectUserById, selectUserProfileById, updateNickname } from "~/db/users"
 import { handleRequest, responseErrorObject, tmpResponse } from "~/lib/helpers"
-import type {
-    UserPublicProfile,
-    UserWithPrefsAndStatus
-} from "~/lib/types.d.ts"
+import type { UserPublicProfile, UserWithPrefsAndStatus } from "~/lib/types.d.ts"
 
 const hono = new Hono()
 
@@ -27,9 +20,7 @@ hono.get("/", async (c) => {
     const { id } = c.req.valid("header")
 
     // get the user from the database and send it back
-    return await handleRequest<UserWithPrefsAndStatus>(c, () =>
-        selectUserById(id)
-    )
+    return await handleRequest<UserWithPrefsAndStatus>(c, () => selectUserById(id))
 })
 
 /**
@@ -45,8 +36,7 @@ hono.put("/nickname", async (c) => {
 
     // check the nickname is a valid string
     if (typeof nickname !== "string" || nickname.length < 1) {
-        c.status(400)
-        return responseErrorObject(c, "Invalid nickname")
+        return responseErrorObject(c, new Error("Invalid nickname"), 400)
     }
 
     // update the user's nickname in the database
@@ -116,9 +106,7 @@ hono.get(
         const { id } = c.req.valid("header")
 
         // get the user from the database and send it back
-        return await handleRequest<UserPublicProfile>(c, () =>
-            selectUserProfileById(id)
-        )
+        return await handleRequest<UserPublicProfile>(c, () => selectUserProfileById(id))
     }
 )
 
