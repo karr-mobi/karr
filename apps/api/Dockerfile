@@ -42,7 +42,7 @@ RUN pnpm install
 COPY --from=installer /app/out/full/ .
 
 # Build the project
-RUN pnpm --filter="@karr/api" run build
+RUN pnpm run build
 
 ####################
 ### RUNNER STAGE ###
