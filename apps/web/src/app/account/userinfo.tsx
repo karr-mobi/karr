@@ -4,6 +4,8 @@ import { QueryProvider } from "@/components/QueryProvider"
 import { apiFetch } from "@/util/apifetch"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 
+import { Badge } from "@karr/ui/components/badge"
+
 export default function UserInfo({ userid }: { userid: string }) {
     return (
         <QueryProvider>
@@ -48,9 +50,9 @@ function ShowUserData({ user: { data: user } }: { user: any }) {
             <h2>User</h2>
             <section>
                 {!hasSpecialStatus && (
-                    <div className="w-fit rounded-full bg-red-500 px-2 py-0 text-sm text-white">
+                    <Badge variant="destructive">
                         <p>{user.SpecialStatus?.name || "No special status"}</p>
-                    </div>
+                    </Badge>
                 )}
                 <div className="flex flex-row gap-6">
                     <h3>User ID</h3>

@@ -1,0 +1,166 @@
+@import "tailwindcss";
+@source "../components";
+
+@variant dark (&:is(.dark *));
+
+@layer theme, base, components, utilities;
+
+@layer base {
+    /* Define the Shadcn UI CSS Variables */
+    :root {
+        --gradient: #215f00;
+        --background: hsl(105 100% 98.38%);
+        --foreground: hsl(105 10% 0.76%);
+
+        --muted: hsl(105 10% 91.9%);
+        --muted-foreground: hsl(105 5% 41.9%);
+
+        --accent: hsl(105 10% 91.9%);
+        --accent-foreground: hsl(105 10% 0.95%);
+
+        --popover: hsl(224 71% 4%);
+        --popover-foreground: hsl(215 20.2% 65.1%);
+
+        --border: hsl(105 15% 89.76%);
+        --input: hsl(105 15% 89.76%);
+
+        --card: hsl(105 10% 91.9%);
+        --card-foreground: hsl(105 10% 0.95%);
+
+        --primary: hsl(105 100% 19%);
+        --primary-foreground: hsl(105 2% 91.9%);
+
+        --secondary: hsl(105 5% 95.95%);
+        --secondary-foreground: hsl(105 7% 11.9%);
+
+        --destructive: hsl(0 84.2% 60.2%);
+        --destructive-foreground: hsl(0 0% 98%);
+
+        --ring: hsl(105 100% 19%);
+
+        --radius: 0.5rem;
+    }
+
+    .dark {
+        /* Name: custom color palette
+           Author: Ilias Ism
+           URL: https://gradient.page */
+
+        /* CSS: .bg-gradient { background: var(--gradient) } */
+        --gradient: #2f7336;
+
+        --background: hsl(134 27.3% 2.56%);
+        --foreground: hsl(134 4.2% 96.6%);
+
+        --muted: hsl(134 21% 9.6%);
+        --muted-foreground: hsl(134 4.2% 53.2%);
+
+        --popover: hsl(134 56.6% 4.16%);
+        --popover-foreground: hsl(134 4.2% 96.6%);
+
+        --card: hsl(134 56.6% 4.16%);
+        --card-foreground: hsl(134 4.2% 96.6%);
+
+        --border: hsl(134 21% 9.6%);
+        --input: hsl(134 21% 9.6%);
+
+        --primary: hsl(134 42% 32%);
+        --primary-foreground: hsl(134 4.2% 96.6%);
+
+        --secondary: hsl(134 21% 9.6%);
+        --secondary-foreground: hsl(134 4.2% 96.6%);
+
+        --accent: hsl(134 21% 9.6%);
+        --accent-foreground: hsl(134 4.2% 96.6%);
+
+        --destructive: hsl(0 62.8% 30.6%);
+        --destructive-foreground: hsl(134 4.2% 96.6%);
+
+        --ring: hsl(134 42% 32%);
+    }
+}
+
+@theme {
+    --font-family-poppins: var(--font-poppins);
+    --font-family-inter: var(--font-inter);
+
+    --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: var(--font-baskervville), ui-monospace, SFMono-Regular, Menlo, Monaco,
+        Consolas, "Liberation Mono", "Courier New", monospace;
+
+    --color-mint-green: oklch(83.66% 0.125 176.45);
+    --color-baby-blue: oklch(85.61% 0.094 225.87);
+
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+
+    --animate-accordion-down: accordion-down 0.2s ease-out;
+    --animate-accordion-up: accordion-up 0.2s ease-out;
+
+    @keyframes accordion-down {
+        from {
+            height: 0;
+        }
+
+        to {
+            height: var(--radix-accordion-content-height);
+        }
+    }
+
+    @keyframes accordion-up {
+        from {
+            height: var(--radix-accordion-content-height);
+        }
+
+        to {
+            height: "0";
+        }
+    }
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+}

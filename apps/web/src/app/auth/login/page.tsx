@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 import getAppConfig from "@karr/config"
-import { Button } from "@karr/ui/button"
+import { Button } from "@karr/ui/components/button"
 
 import { login } from "./login"
 

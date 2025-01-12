@@ -4,17 +4,17 @@ import logo from "@/assets/logo-tmp.jpg"
 import EditConfig from "@/components/EditConfig"
 
 import getAppConfig from "@karr/config"
-import { Button } from "@karr/ui/button"
+import { Button } from "@karr/ui/components/button"
 
 export default function Home() {
     return (
         <div className="flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
-                    <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl">
+                    <h1 className="font-mono text-4xl font-black tracking-tight sm:text-6xl">
                         {getAppConfig().APPLICATION_NAME}
                     </h1>
-                    <p className="mt-4 text-lg text-gray-300">
+                    <p className="mt-4 font-mono text-lg">
                         The federated carpool platform.
                     </p>
                 </div>

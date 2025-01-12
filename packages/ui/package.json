@@ -3,9 +3,11 @@
     "type": "module",
     "private": true,
     "exports": {
-        "./globals.css": "./src/globals.css",
+        "./globals.css": "./src/styles/globals.css",
         "./postcss-config": "./postcss-config.mjs",
-        "./*": "./src/components/*.tsx"
+        "./lib/*": "./src/lib/*.ts",
+        "./components/*": "./src/components/*.tsx",
+        "./hooks/*": "./src/hooks/*.ts"
     },
     "scripts": {
         "lint": "eslint . --max-warnings 0",
@@ -15,17 +17,25 @@
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
+        "@tailwindcss/postcss": "catalog:",
         "@turbo/gen": "catalog:",
         "@types/node": "catalog:",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
+        "tailwindcss": "catalog:",
         "typescript": "catalog:"
     },
     "dependencies": {
-        "@tailwindcss/postcss": "",
+        "@radix-ui/react-slot": "catalog:",
+        "class-variance-authority": "catalog:",
+        "clsx": "catalog:",
+        "lucide-react": "catalog:",
         "next": "catalog:",
+        "next-themes": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
-        "tailwindcss": "catalog:"
+        "tailwind-merge": "catalog:",
+        "tailwindcss-animate": "catalog:",
+        "zod": "catalog:"
     }
 }

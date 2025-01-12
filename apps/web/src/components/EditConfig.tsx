@@ -1,7 +1,8 @@
 import { revalidatePath } from "next/cache"
 
 import { setAppConfig } from "@karr/config"
-import { Button } from "@karr/ui/button"
+import { Button } from "@karr/ui/components/button"
+import { Input } from "@karr/ui/components/input"
 
 export default function EditConfig() {
     return (
@@ -18,13 +19,13 @@ export default function EditConfig() {
 
                         revalidatePath("/")
                     } else {
-                        throw new Error("invalid app name")
+                        throw new Error("Invalid app name")
                     }
                 }}
             >
                 <label htmlFor="name">App Name</label>
-                <input id="name" name="name" type="text" placeholder="Enter app name" />
-                <Button type="submit" wide>
+                <Input id="name" name="name" type="text" placeholder="Enter app name" />
+                <Button type="submit" variant="destructive">
                     Save
                 </Button>
             </form>
