@@ -1,6 +1,6 @@
 {
     "name": "karr",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "private": true,
     "scripts": {
         "build": "turbo build",
@@ -23,6 +23,7 @@
         "@commitlint/config-conventional": "catalog:",
         "@ianvs/prettier-plugin-sort-imports": "catalog:",
         "husky": "catalog:",
+        "lint-staged": "^15.3.0",
         "prettier": "catalog:",
         "prettier-plugin-tailwindcss": "catalog:",
         "turbo": "catalog:",
@@ -36,6 +37,14 @@
         "requiredScripts": [
             "lint",
             "format"
+        ]
+    },
+    "lint-staged": {
+        "*.{ts,tsx,md,json,yml,yaml,css,html}": [
+            "prettier --write"
+        ],
+        "apps/caddy/Caddyfile": [
+            "caddy fmt --overwrite"
         ]
     }
 }
