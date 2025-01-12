@@ -26,6 +26,10 @@ export const nextJsConfig = [
             globals: {
                 ...globals.serviceworker
             }
+        },
+        rules: {
+            // using TypeScript for type checking instead of PropTypes
+            "react/prop-types": "off"
         }
     },
     {

@@ -1,5 +1,5 @@
 {
-    "extends": "@karr/tsconfig/react-library.json",
+    "extends": "@karr/tsconfig/nextjs.json",
     "compilerOptions": {
         "outDir": "dist",
         "baseUrl": "src/",
