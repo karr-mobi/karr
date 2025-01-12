@@ -1,5 +1,7 @@
 import { Hono } from "hono"
 
+import { getAppConfig } from "@karr/config"
+
 const hono = new Hono()
 
 /**
@@ -7,7 +9,7 @@ const hono = new Hono()
  */
 hono.get("/", (c) => {
     return c.json({
-        name: "Karr API",
+        name: `${getAppConfig().APPLICATION_NAME} API`,
         version: "0.1.0",
         description: "API for the federated carpooling system"
     })
