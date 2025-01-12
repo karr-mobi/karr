@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function Login() {
     return (
         <div className="flex flex-col gap-4">
-            <h2 className="text-3xl">Login</h2>
+            <h2>Login</h2>
             <form className="flex flex-col gap-5" action={login}>
                 <section className="flex flex-col gap-2">
                     <label htmlFor="email">Email</label>
@@ -36,7 +36,7 @@ export default function Login() {
                 </section>
                 <Button
                     type="submit"
-                    className="w-full cursor-pointer rounded-md px-4 py-2 text-xl"
+                    className="text-md w-full cursor-pointer rounded-md px-4 py-2"
                 >
                     Login
                 </Button>

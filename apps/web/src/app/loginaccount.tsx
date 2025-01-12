@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import { RefreshCw, User } from "lucide-react"
 
 import { Button } from "@karr/ui/components/button"
 
@@ -12,15 +13,17 @@ export default function LoginAccount() {
         <>
             <Button
                 variant="outline"
+                size="icon"
                 onClick={() => {
                     setLoggedIn(!loggedIn)
                 }}
             >
-                Change login
+                <RefreshCw />
             </Button>
             {loggedIn ? (
                 <Button asChild>
                     <Link href="/account" className="rounded-sm border px-2 py-1">
+                        <User />
                         Account
                     </Link>
                 </Button>

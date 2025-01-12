@@ -1,0 +1,82 @@
+h1,
+h2,
+h3 {
+    line-height: 1;
+    letter-spacing: var(--tracking-s);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: bold;
+    font-family: var(--font-mono);
+}
+
+h1 {
+    font-size: var(--size-step-5);
+}
+
+h2 {
+    font-size: var(--size-step-4);
+}
+
+h3 {
+    font-size: var(--size-step-3);
+}
+
+h4 {
+    font-size: var(--size-step-2);
+}
+
+h5 {
+    font-size: var(--size-step-1);
+}
+
+h6 {
+    font-size: var(--size-step-0);
+}
+
+p,
+li,
+blockquote:not([class]) {
+    max-width: 50ch;
+}
+
+h1,
+h2,
+h3 {
+    max-width: 20ch;
+}
+
+blockquote:not([class]) {
+    font-famtly: var(--font-serif);
+    font-size: var(--size-step-2);
+}
+
+blockquote:not([class]) p:last-of-type {
+    font-family: var (--font-base);
+    font-size: var(--stze-step-1);
+    font-weight: normal;
+}
+
+svg {
+    height: 2ex;
+    width: auto;
+    flex: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+:focus {
+    outline: 2px sol10;
+    outline-offset: 0.3ch;
+}
+
+:target {
+    scroll-margin-top: 2ex;
+}

@@ -1,0 +1,58 @@
+/* @link https://utopia.fyi/type/calculator?c=320,18,1.2,1350,20,1.414,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+
+:root {
+    --size-step--2: clamp(0.6252rem, 0.8297rem + -0.2424vw, 0.7813rem);
+    --size-step--1: clamp(0.884rem, 0.9541rem + -0.0831vw, 0.9375rem);
+    --size-step-0: clamp(1.125rem, 1.0862rem + 0.1942vw, 1.25rem);
+    --size-step-1: clamp(1.35rem, 1.2203rem + 0.6485vw, 1.7675rem);
+    --size-step-2: clamp(1.62rem, 1.3468rem + 1.3658vw, 2.4992rem);
+    --size-step-3: clamp(1.944rem, 1.45rem + 2.4698vw, 3.5339rem);
+    --size-step-4: clamp(2.3328rem, 1.5051rem + 4.1385vw, 4.997rem);
+    --size-step-5: clamp(2.7994rem, 1.4739rem + 6.6274vw, 7.0657rem);
+}
+
+/* @link https://utopia.fyi/space/calculator?c=320,16,1.2,1350,20,1.414,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+
+:root {
+    --space-3xs: clamp(0.25rem, 0.2306rem + 0.0971vw, 0.3125rem);
+    --space-2xs: clamp(0.5rem, 0.4612rem + 0.1942vw, 0.625rem);
+    --space-xs: clamp(0.75rem, 0.6917rem + 0.2913vw, 0.9375rem);
+    --space-s: clamp(1rem, 0.9223rem + 0.3883vw, 1.25rem);
+    --space-m: clamp(1.5rem, 1.3835rem + 0.5825vw, 1.875rem);
+    --space-l: clamp(2rem, 1.8447rem + 0.7767vw, 2.5rem);
+    --space-xl: clamp(3rem, 2.767rem + 1.165vw, 3.75rem);
+    --space-2xl: clamp(4rem, 3.6893rem + 1.5534vw, 5rem);
+    --space-3xl: clamp(6rem, 5.534rem + 2.3301vw, 7.5rem);
+
+    /* One-up pairs */
+    --space-3xs-2xs: clamp(0.25rem, 0.1335rem + 0.5825vw, 0.625rem);
+    --space-2xs-xs: clamp(0.5rem, 0.3641rem + 0.6796vw, 0.9375rem);
+    --space-xs-s: clamp(0.75rem, 0.5947rem + 0.7767vw, 1.25rem);
+    --space-s-m: clamp(1rem, 0.7282rem + 1.3592vw, 1.875rem);
+    --space-m-l: clamp(1.5rem, 1.1893rem + 1.5534vw, 2.5rem);
+    --space-l-xl: clamp(2rem, 1.4563rem + 2.7184vw, 3.75rem);
+    --space-xl-2xl: clamp(3rem, 2.3786rem + 3.1068vw, 5rem);
+    --space-2xl-3xl: clamp(4rem, 2.9126rem + 5.4369vw, 7.5rem);
+
+    /* Custom pairs */
+    --space-s-l: clamp(1rem, 0.534rem + 2.3301vw, 2.5rem);
+}
+
+:root {
+    --text-xs: var(--size-step--2);
+    --text-sm: var(--size-step--1);
+    --text-base: var(--size-step-0);
+    --text-lg: var(--size-step-1);
+    --text-xl: var(--size-step-2);
+    --text-2xl: var(--size-step-3);
+    --text-3xl: var(--size-step-4);
+    --text-4xl: var(--size-step-5);
+}
+
+.flow > * {
+    margin-block-start: var(--flow-space, 1em);
+}
+
+.flow-inline > * + * {
+    margin-inline-start: var(--flow-space, 1em);
+}

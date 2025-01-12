@@ -1,0 +1,19 @@
+:root {
+    --gutter: var(--space-s-m);
+    --border-radius: var(--size-step-1);
+    --transition-base: 250ms ease;
+    --transition-movement: 200ms linear;
+    --transition-fade: 200ms ease;
+    --transition-bounce: 500ms cubic-bezier(0.5, 0.05, 0.2, 1.5);
+    --tracking: 0;
+    --tracking-s: -0.075ch;
+}
+
+body {
+    color: var(--color-foreground);
+    background: var(--color-background);
+    font-size: var(--step-0);
+    font-family: var(--font-sans);
+    line-height: 1.4;
+    letter-spacing: var(--tracking);
+}

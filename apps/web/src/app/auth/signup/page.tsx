@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function Signup() {
     return (
         <div className="flex flex-col gap-4">
-            <h2 className="text-3xl">Signup</h2>
+            <h2>Signup</h2>
             <form
                 className="flex flex-col gap-5"
                 action={async () => {
@@ -37,7 +37,7 @@ export default function Signup() {
                 </section>
                 <Button
                     type="submit"
-                    className="w-full cursor-pointer rounded-md px-4 py-2 text-xl"
+                    className="text-md w-full cursor-pointer rounded-md px-4 py-2"
                 >
                     Sign up
                 </Button>
