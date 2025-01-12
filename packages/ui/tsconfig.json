@@ -2,11 +2,12 @@
     "extends": "@karr/tsconfig/nextjs.json",
     "compilerOptions": {
         "outDir": "dist",
-        "baseUrl": "src/",
+        "rootDir": ".",
+        "baseUrl": "src",
         "paths": {
-            "@/*": ["./*"]
+            "@karr/ui/*": ["./src/*"]
         }
     },
-    "include": ["src"],
+    "include": ["src/**/*.ts", "src/**/*.tsx"],
     "exclude": ["node_modules", "dist"]
 }
