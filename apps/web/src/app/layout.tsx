@@ -59,6 +59,7 @@ export default function RootLayout({
                                     className="flex flex-row items-center justify-start gap-4"
                                 >
                                     <Image
+                                        alt="Karr"
                                         src={logo}
                                         width={40}
                                         height={40}
