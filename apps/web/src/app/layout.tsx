@@ -60,7 +60,6 @@ export default function RootLayout({
                                 >
                                     <Image
                                         src={logo}
-                                        alt="Karr"
                                         width={40}
                                         height={40}
                                         className="rounded-lg"

@@ -12,7 +12,7 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
                     <h1 className="tracking-tight">{getAppConfig().APPLICATION_NAME}</h1>
-                    <h6 className="h6 mt-4">The federated carpool platform.</h6>
+                    <h6 className="mt-4">The federated carpool platform.</h6>
                 </div>
                 <div className="mt-10 flex flex-col items-center justify-center gap-y-4">
                     <Image
@@ -22,7 +22,7 @@ export default function Home() {
                         height={400}
                         className="rounded-lg"
                     />
-                    <Button className="mt-4">
+                    <Button className="mt-4" asChild>
                         <Link href="https://github.com/finxol/karr" target="_blank">
                             GitHub live
                         </Link>
