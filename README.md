@@ -25,7 +25,7 @@ Built with:
 
 ## TODO
 
-- [ ] Get deployment working
+- [x] Get deployment working
 
     - [x] Get Tailwind included working in production build
     - [x] Get automatic build working
