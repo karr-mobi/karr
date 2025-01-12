@@ -63,7 +63,7 @@ export function tmpResponse(c: Context) {
  */
 export function responseErrorObject(
     c: Context,
-    error: Error,
+    error: Error | { cause?: string | unknown; message: string },
     code: ContentfulStatusCode = 500
 ) {
     return c.json(
@@ -88,10 +88,9 @@ export async function handleRequest<T>(c: Context, fn: () => Promise<T>) {
     try {
         const out: T = await fn()
         if (!out) {
-            return responseErrorObject(c, new Error("Resource not found"), 404)
+            return responseErrorObject(c, { message: "Resource not found" }, 404)
         }
         return c.json({
-            // deno-lint-ignore no-undef
             timestamp: new Date().getTime(),
             data: out
         })
@@ -99,7 +98,7 @@ export async function handleRequest<T>(c: Context, fn: () => Promise<T>) {
         logger.error(err)
         return responseErrorObject(
             c,
-            new Error("Internal server error", { cause: err }),
+            { message: "Internal server error", cause: err },
             500
         )
     }

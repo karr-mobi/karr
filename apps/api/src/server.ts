@@ -56,9 +56,10 @@ export const build = (): Hono => {
             if (authorization === undefined || authorization === "") {
                 return responseErrorObject(
                     c,
-                    new Error("Unauthorized", {
+                    {
+                        message: "Unauthorized",
                         cause: "Auth token is required in Authorization header"
-                    }),
+                    },
                     401
                 )
             }
@@ -70,9 +71,10 @@ export const build = (): Hono => {
             if (!isUUIDv4(id)) {
                 return responseErrorObject(
                     c,
-                    new Error("Unauthorized", {
-                        cause: "Invalid user ID"
-                    }),
+                    {
+                        message: "Unauthorized",
+                        cause: "Invalid authorization token"
+                    },
                     401
                 )
             }
