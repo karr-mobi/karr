@@ -64,6 +64,7 @@ export default function RootLayout({
                                         width={40}
                                         height={40}
                                         className="rounded-lg"
+                                        placeholder="blur"
                                     />
                                     <h5>
                                         <AppName />

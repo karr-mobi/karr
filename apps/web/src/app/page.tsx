@@ -21,6 +21,7 @@ export default function Home() {
                         width={400}
                         height={400}
                         className="rounded-lg"
+                        placeholder="blur"
                     />
                     <Button className="mt-4" asChild>
                         <Link href="https://github.com/finxol/karr" target="_blank">
