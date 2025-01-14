@@ -64,8 +64,9 @@ USER runner
 
 COPY --from=builder --chown=runner:runner /app/apps/api/out/index.min.mjs ./index.min.mjs
 # Copy migration files
-COPY --from=builder --chown=runner:runner /app/apps/api/drizzle ./drizzle
+COPY --from=builder --chown=runner:runner /app/packages/db/migrations ./migrations
 
 ENV NODE_ENV=production
+ENV DOCKER=1
 
 CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "node", "index.min.mjs"]

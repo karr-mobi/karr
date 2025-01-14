@@ -3,7 +3,7 @@ import { streamSSE } from "hono/streaming"
 
 import logger from "@karr/util/logger"
 
-import type { DataResponse } from "~/lib/types.d.ts"
+import type { DataResponse } from "@/lib/types.d.ts"
 
 const hono = new Hono()
 

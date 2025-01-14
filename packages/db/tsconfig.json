@@ -5,10 +5,11 @@
         "rootDir": "src",
         "moduleResolution": "bundler",
         "module": "ESNext",
+        "baseUrl": "src/",
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./*"]
         }
     },
     "include": ["src"],
-    "exclude": ["node_modules", "dist", "out"]
+    "exclude": ["node_modules", "dist"]
 }

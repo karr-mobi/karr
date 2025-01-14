@@ -1,0 +1,42 @@
+{
+    "name": "@karr/db",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "lint": "eslint . --max-warnings 0",
+        "dev": "tsc --watch",
+        "build": "tsc",
+        "check-types": "tsc --noEmit",
+        "test": "vitest",
+        "migrations:generate": "drizzle-kit generate"
+    },
+    "exports": {
+        "./migrate": {
+            "types": "./src/migrate.ts",
+            "default": "./dist/migrate.js"
+        },
+        "./conn": {
+            "types": "./src/db_conn.ts",
+            "default": "./dist/db_conn.js"
+        },
+        "./schemas/*": {
+            "types": "./src/schemas/*",
+            "default": "./dist/schemas/*"
+        }
+    },
+    "dependencies": {
+        "@karr/config": "workspace:*",
+        "@karr/util": "workspace:*",
+        "drizzle-orm": "catalog:",
+        "drizzle-kit": "catalog:",
+        "postgres": "catalog:"
+    },
+    "devDependencies": {
+        "@karr/eslint-config": "workspace:*",
+        "@karr/tsconfig": "workspace:*",
+        "@types/node": "catalog:",
+        "typescript": "catalog:",
+        "vitest": "catalog:vitest",
+        "vite-tsconfig-paths": "catalog:vitest"
+    }
+}

@@ -7,6 +7,11 @@ CREATE TABLE "Accounts" (
 	CONSTRAINT "Accounts_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
+CREATE TABLE "Settings" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"inserted_at" date DEFAULT now()
+);
+--> statement-breakpoint
 CREATE TABLE "SpecialStatus" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"title" text NOT NULL,

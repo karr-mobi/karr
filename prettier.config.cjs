@@ -8,10 +8,7 @@ const config = {
     semi: false,
     trailingComma: "none",
     tabWidth: 4,
-    plugins: [
-        "@ianvs/prettier-plugin-sort-imports",
-        "prettier-plugin-tailwindcss"
-    ],
+    plugins: ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
     // Last version that doesn't squash type and value imports
     importOrderTypeScriptVersion: "4.4.0",
     importOrder: [
@@ -22,7 +19,7 @@ const config = {
         "^@karr/(.*)$",
         "^karr/(.*)$",
         "",
-        "^~/(.*)$",
+        "^@/(.*)$",
         "^[./]"
     ],
     proseWrap: "always" // printWidth line breaks in md/mdx

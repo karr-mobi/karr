@@ -1,19 +1,27 @@
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+import { MigrationConfig } from "drizzle-orm/migrator"
 import { migrate } from "drizzle-orm/postgres-js/migrator"
 
+import db from "@karr/db/conn"
 import logger from "@karr/util/logger"
 
-import db from "~/lib/db_conn"
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 /**
  * Run database migrations
  */
 export async function drizzleMigrate(): Promise<void> {
-    logger.debug("Running database migrations...")
+    const migrationsFolder =
+        process.env.DOCKER === "1"
+            ? path.join(__dirname, "./migrations")
+            : path.join(__dirname, "../migrations")
 
+    logger.debug("Migrations path:", migrationsFolder)
     try {
         await migrate(db, {
-            migrationsFolder: "./drizzle"
-        })
+            migrationsFolder
+        } as MigrationConfig)
         logger.success("Database migrations completed successfully")
     } catch (error) {
         if (

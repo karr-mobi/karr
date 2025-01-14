@@ -1,11 +1,10 @@
 import { eq } from "drizzle-orm"
 
+import db from "@karr/db/conn"
+import { accountsTable } from "@karr/db/schemas/accounts.js"
+import { userPrefsTable } from "@karr/db/schemas/userprefs.js"
+import { usersTable } from "@karr/db/schemas/users.js"
 import logger from "@karr/util/logger"
-
-import { accountsTable } from "~/db/schemas/accounts.js"
-import { userPrefsTable } from "~/db/schemas/userprefs.js"
-import db from "~/lib/db_conn.js"
-import { usersTable } from "./schemas/users.js"
 
 const initUsersTable = async () => {
     // check if test user already exists

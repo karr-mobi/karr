@@ -1,8 +1,8 @@
 import { Hono } from "hono"
 
-import { selectUserById, selectUserProfileById, updateNickname } from "~/db/users"
-import { handleRequest, responseErrorObject, tmpResponse } from "~/lib/helpers"
-import type { UserPublicProfile, UserWithPrefsAndStatus } from "~/lib/types.d.ts"
+import { selectUserById, selectUserProfileById, updateNickname } from "@/db/users"
+import { handleRequest, responseErrorObject, tmpResponse } from "@/lib/helpers"
+import type { UserPublicProfile, UserWithPrefsAndStatus } from "@/lib/types.d.ts"
 
 const hono = new Hono()
 
