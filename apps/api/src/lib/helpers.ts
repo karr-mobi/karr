@@ -3,7 +3,7 @@ import { HTTPException } from "hono/http-exception"
 import type { CustomHeader, RequestHeader } from "hono/utils/headers"
 import { ContentfulStatusCode } from "hono/utils/http-status"
 
-import getAppConfig from "@karr/config"
+import { ADMIN_EMAIL } from "@karr/config"
 import { isUUIDv4 } from "@karr/util"
 import logger from "@karr/util/logger"
 
@@ -69,7 +69,7 @@ export function responseErrorObject(
     return c.json(
         {
             timestamp: new Date().getTime(),
-            contact: getAppConfig().ADMIN_EMAIL,
+            contact: ADMIN_EMAIL,
             error
         },
         code

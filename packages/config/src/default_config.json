@@ -1,12 +1,12 @@
 {
-    "APPLICATION_NAME": "Karr",
     "DB_CONFIG": {
         "host": "localhost",
         "port": 5432,
         "user": "karr",
         "password": "karr",
-        "password_file": null,
-        "database": "karr"
+        "db_name": "karr"
     },
-    "ADMIN_EMAIL": "admin@example.com"
+    "API_PORT": 1993,
+    "LOG_LEVEL": "info",
+    "LOG_TIMESTAMP": true
 }

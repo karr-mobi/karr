@@ -1,10 +1,10 @@
 import { Metadata } from "next"
 
-import getAppConfig from "@karr/config"
+import { APPLICATION_NAME } from "@karr/config/static"
 import { Button } from "@karr/ui/components/button"
 
 export const metadata: Metadata = {
-    title: `${getAppConfig().APPLICATION_NAME} Signup`
+    title: `${APPLICATION_NAME} Signup`
 }
 
 export default function Signup() {

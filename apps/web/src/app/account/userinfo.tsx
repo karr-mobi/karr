@@ -1,10 +1,11 @@
 "use client"
 
-import { QueryProvider } from "@/components/QueryProvider"
-import { apiFetch } from "@/util/apifetch"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { Badge } from "@karr/ui/components/badge"
+
+import { QueryProvider } from "@/components/QueryProvider"
+import { apiFetch } from "@/util/apifetch"
 
 export default function UserInfo({ userid }: { userid: string }) {
     return (

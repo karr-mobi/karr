@@ -6,21 +6,30 @@
         "lint": "eslint . --max-warnings 0",
         "dev": "tsc --watch",
         "build": "tsc",
-        "check-types": "tsc --noEmit"
+        "check-types": "tsc --noEmit",
+        "test": "vitest"
     },
     "exports": {
         ".": {
             "types": "./src/config.ts",
             "default": "./dist/config.js"
         },
-        "./types": "./src/types.d.ts"
+        "./static": {
+            "types": "./src/static.ts",
+            "default": "./dist/static.js"
+        }
     },
     "dependencies": {
-        "yaml": "catalog:"
+        "c12": "catalog:",
+        "yaml": "catalog:",
+        "zod": "catalog:"
     },
     "devDependencies": {
+        "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
         "@types/node": "catalog:",
-        "typescript": "catalog:"
+        "typescript": "catalog:",
+        "vite-tsconfig-paths": "catalog:vitest",
+        "vitest": "catalog:vitest"
     }
 }

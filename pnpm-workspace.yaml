@@ -25,6 +25,7 @@ catalog:
     "eslint-plugin-react": ^7.37.2
     "eslint-plugin-react-hooks": ^5.0.0
     "eslint-plugin-turbo": ^2.3.0
+    "c12": ^2.0.1
     "chalk": ^5.4.1
     "@turbo/gen": ^1.12.4
     "@tailwindcss/postcss": 4.0.0-beta.9

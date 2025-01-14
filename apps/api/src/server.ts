@@ -2,17 +2,15 @@ import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { validator } from "hono/validator"
 
-import getAppConfig from "@karr/config"
+import { API_VERSION, PRODUCTION } from "@karr/config"
 import { isUUIDv4 } from "@karr/util"
 import logger from "@karr/util/logger"
 
-import account from "~/routes/account"
-import system from "~/routes/system"
-import trip from "~/routes/trip"
-import user from "~/routes/user"
+import account from "@/routes/account"
+import system from "@/routes/system"
+import trip from "@/routes/trip"
+import user from "@/routes/user"
 import { responseErrorObject } from "./lib/helpers"
-
-const prod: boolean = process.env.NODE_ENV === "production"
 
 /**
  * Setup the Hono app with all the routes and plugins
@@ -28,7 +26,9 @@ export const build = (): Hono => {
     hono.use(
         "/*",
         cors({
-            origin: [(prod ? process.env.WEB_URL : null) || "http://localhost:3000"],
+            origin: [
+                (PRODUCTION ? process.env.WEB_URL : null) || "http://localhost:3000"
+            ],
             credentials: true,
             allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             allowHeaders: ["Content-Type", "Authorization"],
@@ -88,9 +88,9 @@ export const build = (): Hono => {
     // ============================
     // ===== Protected routes =====
     // ============================
-    hono.route(`/${getAppConfig().API_VERSION}/user`, user)
-    hono.route(`/${getAppConfig().API_VERSION}/account`, account)
-    hono.route(`/${getAppConfig().API_VERSION}/trip`, trip)
+    hono.route(`/${API_VERSION}/user`, user)
+    hono.route(`/${API_VERSION}/account`, account)
+    hono.route(`/${API_VERSION}/trip`, trip)
 
     return hono
 }

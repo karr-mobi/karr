@@ -1,20 +1,18 @@
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import Image from "next/image"
-import logo from "@/assets/logo-tmp.jpg"
-import AppName from "@/components/AppName"
-import ThemeProvider from "@/components/ThemeProvider"
-
-import getAppConfig from "@karr/config"
-
-import "@/assets/globals.css"
-
 import Link from "next/link"
-import ThemeSwitch from "@/components/ThemeSwitch"
 
+import { APPLICATION_NAME } from "@karr/config/static"
 import { Button } from "@karr/ui/components/button"
 import { Separator } from "@karr/ui/components/separator"
 
+import logo from "@/assets/logo-tmp.jpg"
+
+import "@/assets/globals.css"
+
+import ThemeProvider from "./_components/ThemeProvider"
+import ThemeSwitch from "./_components/ThemeSwitch"
 import LoginAccount from "./loginaccount"
 
 const geistSans = localFont({
@@ -29,8 +27,8 @@ const baskervville = localFont({
 })
 
 export const metadata: Metadata = {
-    title: getAppConfig().APPLICATION_NAME,
-    description: `${getAppConfig().APPLICATION_NAME} is a federated carpool platform.`
+    title: APPLICATION_NAME,
+    description: `${APPLICATION_NAME} is a federated carpool platform.`
 }
 
 export default function RootLayout({
@@ -66,9 +64,7 @@ export default function RootLayout({
                                         className="rounded-lg"
                                         placeholder="blur"
                                     />
-                                    <h5>
-                                        <AppName />
-                                    </h5>
+                                    <h5>{APPLICATION_NAME}</h5>
                                 </Link>
                                 <Separator orientation="vertical" className="h-8" />
                                 <nav className="flex flex-row items-center justify-end gap-4">

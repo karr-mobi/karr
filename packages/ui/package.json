@@ -14,17 +14,6 @@
         "generate:component": "turbo gen react-component",
         "check-types": "tsc --noEmit"
     },
-    "devDependencies": {
-        "@karr/eslint-config": "workspace:*",
-        "@karr/tsconfig": "workspace:*",
-        "@tailwindcss/postcss": "catalog:",
-        "@turbo/gen": "catalog:",
-        "@types/node": "catalog:",
-        "@types/react": "catalog:",
-        "@types/react-dom": "catalog:",
-        "tailwindcss": "catalog:",
-        "typescript": "catalog:"
-    },
     "dependencies": {
         "@radix-ui/react-separator": "^1.1.1",
         "@radix-ui/react-slot": "catalog:",
@@ -38,5 +27,16 @@
         "tailwind-merge": "catalog:",
         "tailwindcss-animate": "catalog:",
         "zod": "catalog:"
+    },
+    "devDependencies": {
+        "@karr/eslint-config": "workspace:*",
+        "@karr/tsconfig": "workspace:*",
+        "@tailwindcss/postcss": "catalog:",
+        "@turbo/gen": "catalog:",
+        "@types/node": "catalog:",
+        "@types/react": "catalog:",
+        "@types/react-dom": "catalog:",
+        "tailwindcss": "catalog:",
+        "typescript": "catalog:"
     }
 }
