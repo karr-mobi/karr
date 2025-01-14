@@ -2,7 +2,7 @@
     "extends": "@karr/tsconfig/base.json",
     "compilerOptions": {
         "outDir": "dist",
-        "rootDir": "src",
+        "rootDir": ".",
         "baseUrl": "src/",
         "paths": {
             "@/*": ["./*"]
