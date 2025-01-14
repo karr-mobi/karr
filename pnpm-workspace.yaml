@@ -47,7 +47,13 @@ catalog:
     "@hono/node-server": ^1.13.7
     "drizzle-kit": ^0.30.1
     "drizzle-orm": ^0.38.2
+    "drizzle-zod": ^0.6.1
     "hono": ^4.6.16
     "postgres": ^3.4.5
     "esbuild": ^0.24.2
     "tsx": ^4.19.2
+
+catalogs:
+    vitest:
+        "vitest": ^2.1.8
+        "vite-tsconfig-paths": 5.1.4

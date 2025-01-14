@@ -45,6 +45,9 @@ jobs:
             - name: Check types
               run: pnpm run check-types
 
+            - name: Run tests
+              run: pnpm run test
+
     release:
         needs: lint
         runs-on: ubuntu-latest

@@ -37,6 +37,10 @@ Built with:
 
 - [x] Make config reloadable
 
+- [ ] Add zod type checking
+
+    - [ ] Env type-safety [T3 env](https://env.t3.gg/docs/nextjs)
+
 - [ ] Add mock login
     - [ ] Use clsx ?
     - [ ] Add [Iconify](https://iconify.design/docs/iconify-icon/react.html)
@@ -50,6 +54,14 @@ Built with:
 - [ ] Get auth server running (using Ory Kratos/Oathkeeper, with JWT)
 - [ ] Build proper auth frontend
 
-- [ ] Add tests
-    - [ ] Env type-safety [T3 env](https://env.t3.gg/docs/nextjs)
+- Add tests
+
+    - [ ] config
+    - [ ] util
+    - [ ] api
+    - [ ] ui
+    - [ ] web
+    - [ ] caddy
+          (`SITE_ADDRESS=localhost API_PORT=1993 WEB_PORT=3000 caddy validate --config Caddyfile`)
+
 - [ ] Add documentation
