@@ -7,7 +7,7 @@
         "dev": "API_ROUTE='http://localhost:1993/v1' next dev --turbopack",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint --max-warnings 0",
+        "lint": "pnpm run --filter '@karr/config' build && next lint --max-warnings 0",
         "check-types": "tsc --noEmit"
     },
     "dependencies": {
