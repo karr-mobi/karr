@@ -1,8 +1,8 @@
-import chalk from "chalk"
+import c from "tinyrainbow"
 
 import { LOG_LEVEL, LOG_TIMESTAMP, PRODUCTION } from "@karr/config"
 
-const { blue, cyan, gray, green, magenta, red, underline, yellow } = chalk
+const { blue, cyan, gray, green, magenta, red, underline, yellow } = c
 
 /**
  * Get the file and line number of the calling function

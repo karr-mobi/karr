@@ -21,7 +21,7 @@
     },
     "dependencies": {
         "@karr/config": "workspace:*",
-        "chalk": "catalog:"
+        "tinyrainbow": "catalog:"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
