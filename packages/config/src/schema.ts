@@ -45,14 +45,16 @@ export type ConfigFile = z.infer<typeof ConfigFileSchema>
 // Full config spec
 // ====================================================================
 
-export const FullConfigSchema = z.object({
-    API_PORT: z.number().positive(),
-    LOG_TIMESTAMP: z.boolean(),
-    LOG_LEVEL: LogLevelSchema,
-    ADMIN_EMAIL: z.string().email().optional(),
-    API_VERSION: z.enum(["v1"]).default(staticConfig.API_VERSION),
-    APPLICATION_NAME: z.string().default(staticConfig.APPLICATION_NAME),
-    PRODUCTION: z.boolean().default(process.env.NODE_ENV === "production")
-})
+export const FullConfigSchema = z
+    .object({
+        API_PORT: z.number().positive(),
+        LOG_TIMESTAMP: z.boolean(),
+        LOG_LEVEL: LogLevelSchema,
+        ADMIN_EMAIL: z.string().email().optional(),
+        API_VERSION: z.enum(["v1"]).default(staticConfig.API_VERSION),
+        APPLICATION_NAME: z.string().default(staticConfig.APPLICATION_NAME),
+        PRODUCTION: z.boolean().default(process.env.NODE_ENV === "production")
+    })
+    .strip()
 
 export type FullConfig = z.infer<typeof FullConfigSchema>

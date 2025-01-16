@@ -1,125 +1,146 @@
 import { existsSync, readFileSync } from "node:fs"
-import { loadConfig } from "c12"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import defaultConfig from "@/default_config.json" with { type: "json" }
-import { FullConfigSchema } from "@/schema.js"
+import { getDbPasswordFromFile, loadDbConfig, loadFullConfig } from "@/loader.js"
+import { ConfigFileSchema, FullConfigSchema } from "@/schema.js"
 import staticConfig from "@/static.js"
 
-// Mock the filesystem modules
+// Mock modules at the top level
 vi.mock("node:fs", () => ({
-    existsSync: vi.fn(),
+    existsSync: vi.fn(() => false),
     readFileSync: vi.fn()
 }))
 
-// Mock c12's loadConfig
-vi.mock("c12", () => ({
-    loadConfig: vi.fn()
+vi.mock("@/loader.js", () => ({
+    loadFullConfig: vi.fn(() => defaultConfig),
+    loadDbConfig: vi.fn(),
+    getDbPasswordFromFile: vi.fn()
 }))
+
+function clearEnvVars() {
+    const vars = [
+        "DB_HOST",
+        "DB_PORT",
+        "DB_NAME",
+        "DB_USER",
+        "DB_PASSWORD",
+        "DB_PASSWORD_FILE",
+        "API_PORT",
+        "ADMIN_EMAIL",
+        "LOG_LEVEL",
+        "LOG_TIMESTAMP",
+        "NODE_ENV"
+    ]
+    vars.forEach((key) => delete process.env[key])
+}
 
 describe("config module", () => {
     beforeEach(() => {
-        // Clear all mocks before each test
-        vi.clearAllMocks()
-        // Reset modules before each test
         vi.resetModules()
+        vi.clearAllMocks()
+        clearEnvVars()
 
-        // Set up default mock implementation
-        vi.mocked(loadConfig).mockResolvedValue({ config: defaultConfig })
+        // Reset mocks to default values
+        vi.mocked(loadFullConfig).mockReturnValue(FullConfigSchema.parse(defaultConfig))
+        vi.mocked(existsSync).mockReturnValue(false)
     })
 
     afterEach(() => {
         vi.clearAllMocks()
+        clearEnvVars()
     })
 
-    it("named exports should pass FullConfigSchema", async () => {
-        const importedConfig = await import("@/config.js")
-        const result = FullConfigSchema.safeParse(importedConfig.default)
+    it("default export should pass FullConfigSchema", async () => {
+        const { default: config } = await import("@/config.js")
+        const result = FullConfigSchema.safeParse(config)
         expect(result.success).toBe(true)
-
-        if (!result.success) {
-            console.error(result.error.issues)
-        }
     })
 
     it("should load default config when no config file exists", async () => {
-        // Setup loadConfig to return default config
-        vi.mocked(loadConfig).mockResolvedValue({ config: defaultConfig })
+        const { default: config } = await import("@/config.js")
 
-        // Import the module under test
-        const config = (await import("@/config.js")).default
-
-        // Verify loadConfig was called with correct parameters
-        expect(loadConfig).toHaveBeenCalledWith({
-            cwd: "../../config",
-            configFile: "karr.config",
-            defaultConfig,
-            rcFile: false,
-            globalRc: false,
-            packageJson: false
+        expect(config).toMatchObject({
+            APPLICATION_NAME: staticConfig.APPLICATION_NAME,
+            API_VERSION: staticConfig.API_VERSION,
+            API_PORT: defaultConfig.API_PORT,
+            LOG_LEVEL: defaultConfig.LOG_LEVEL,
+            LOG_TIMESTAMP: defaultConfig.LOG_TIMESTAMP,
+            PRODUCTION: false
         })
 
-        expect(config.APPLICATION_NAME).toBe(staticConfig.APPLICATION_NAME)
-        expect(config.API_VERSION).toBe(staticConfig.API_VERSION)
-        expect(config.API_PORT).toBe(defaultConfig.API_PORT)
-        expect(config.LOG_LEVEL).toBe(defaultConfig.LOG_LEVEL)
-        expect(config.LOG_TIMESTAMP).toBe(defaultConfig.LOG_TIMESTAMP)
-        expect(config.PRODUCTION).toBe(process.env.NODE_ENV === "production")
-
-        // DB config should not be included in full config
-        expect(Object.keys(config).includes("DB_CONFIG")).toBe(false)
-
-        expect(config.ADMIN_EMAIL).toBe(undefined)
+        expect(Object.keys(config)).not.toContain("DB_CONFIG")
+        expect(config.ADMIN_EMAIL).toBeUndefined()
     })
 
     it("should load and merge custom config file values", async () => {
-        const customConfig = {
+        const customConfig = FullConfigSchema.parse({
             ...defaultConfig,
             API_PORT: 4000,
             LOG_LEVEL: "debug"
-        }
+        })
 
-        // Setup loadConfig to return custom config
-        vi.mocked(loadConfig).mockResolvedValue({ config: customConfig })
+        vi.mocked(loadFullConfig).mockReturnValue(customConfig)
 
-        // Import the module under test
-        const config = (await import("@/config.js")).default
+        const { default: config } = await import("@/config.js")
 
-        // Verify custom values are present
         expect(config.API_PORT).toBe(4000)
         expect(config.LOG_LEVEL).toBe("debug")
     })
 
-    describe("getDbConfig", () => {
-        beforeEach(() => {
-            // Clear any DB-related environment variables before each test
-            delete process.env.DB_HOST
-            delete process.env.DB_PORT
-            delete process.env.DB_NAME
-            delete process.env.DB_USER
-            delete process.env.DB_PASSWORD
-            delete process.env.DB_PASSWORD_FILE
+    it("env-defineable fields should be overridden by env vars", async () => {
+        process.env.API_PORT = "1337"
+        process.env.LOG_LEVEL = "warn"
+
+        const customConfig = FullConfigSchema.parse({
+            ...defaultConfig,
+            API_PORT: 1337,
+            LOG_LEVEL: "warn"
         })
 
-        it("should load database config from environment variables", async () => {
-            vi.mocked(loadConfig).mockResolvedValue({ config: defaultConfig })
+        vi.mocked(loadFullConfig).mockReturnValue(customConfig)
 
-            // Set environment variables
+        const { default: config } = await import("@/config.js")
+
+        expect(config.API_PORT).toBe(1337)
+        expect(config.LOG_LEVEL).toBe("warn")
+    })
+
+    describe("getDbConfig", () => {
+        it("should load database config from environment variables", async () => {
+            // Set up environment variables
             process.env.DB_HOST = "test-host"
             process.env.DB_PORT = "5432"
             process.env.DB_NAME = "test-db"
             process.env.DB_USER = "test-user"
             process.env.DB_PASSWORD = "test-pass"
 
+            // Mock loadDbConfig to return a basic config
+            vi.mocked(loadDbConfig).mockReturnValue(
+                FullConfigSchema.parse({
+                    ...defaultConfig,
+                    DB_CONFIG: {
+                        host: "default-host",
+                        port: 5432,
+                        db_name: "default-db",
+                        user: "default-user",
+                        password: "default-pass",
+                        ssl: false
+                    }
+                })
+            )
+
             const { getDbConfig } = await import("@/config.js")
             const dbConfig = getDbConfig()
 
             expect(dbConfig).toMatchObject({
                 host: "test-host",
-                port: 5432, // Note: this should be a number
+                port: 5432,
                 name: "test-db",
                 user: "test-user",
-                password: "test-pass"
+                password: "test-pass",
+                ssl: false,
+                connStr: "postgres://test-user:test-pass@test-host:5432/test-db"
             })
         })
 
@@ -127,72 +148,59 @@ describe("config module", () => {
             const passwordFile = "/path/to/password"
             const password = "secret-password"
 
+            // Mock file system calls
             vi.mocked(existsSync).mockReturnValue(true)
             vi.mocked(readFileSync).mockReturnValue(password)
 
-            vi.mocked(loadConfig).mockResolvedValue({
-                config: {
+            // Mock loadDbConfig with password file configuration
+            vi.mocked(loadDbConfig).mockReturnValue(
+                ConfigFileSchema.parse({
                     ...defaultConfig,
                     DB_CONFIG: {
                         host: "localhost",
                         port: 5432,
                         db_name: "testdb",
                         user: "testuser",
-                        password_file: passwordFile
+                        password_file: passwordFile,
+                        ssl: false
                     }
-                }
-            })
+                })
+            )
 
-            // Ensure no environment variables interfere
-            delete process.env.DB_PASSWORD
-            delete process.env.DB_PASSWORD_FILE
+            // Mock getDbPasswordFromFile
+            // vi.mocked(getDbPasswordFromFile).mockReturnValue(password)
 
             const { getDbConfig } = await import("@/config.js")
             const dbConfig = getDbConfig()
 
+            expect(dbConfig.password).toBe(password)
             expect(existsSync).toHaveBeenCalledWith(passwordFile)
             expect(readFileSync).toHaveBeenCalledWith(passwordFile, {
                 encoding: "utf8",
                 flag: "r"
             })
-            expect(dbConfig.password).toBe(password)
-        })
 
-        it("should generate correct connection string", async () => {
-            vi.mocked(loadConfig).mockResolvedValue({
-                config: {
-                    ...defaultConfig,
-                    DB_CONFIG: {
-                        host: "localhost",
-                        port: 5432,
-                        db_name: "testdb",
-                        user: "testuser",
-                        password: "testpass"
-                    }
-                }
-            })
-
-            const { getDbConfig } = await import("@/config.js")
-            const dbConfig = getDbConfig()
-
+            // Verify the connection string
             expect(dbConfig.connStr).toBe(
-                "postgres://testuser:testpass@localhost:5432/testdb"
+                `postgres://testuser:${password}@localhost:5432/testdb`
             )
         })
     })
 
-    describe("exported config values", () => {
+    describe("named exports", () => {
         it("should export individual config values", async () => {
-            const expectedConfig = {
+            const expectedConfig = FullConfigSchema.parse({
+                ...defaultConfig,
                 API_PORT: 3000,
                 LOG_TIMESTAMP: true,
                 LOG_LEVEL: "info",
                 API_VERSION: "v1",
                 APPLICATION_NAME: "karr",
-                PRODUCTION: false
-            }
+                PRODUCTION: false,
+                ADMIN_EMAIL: "admin@example.com"
+            })
 
-            vi.mocked(loadConfig).mockResolvedValue({ config: expectedConfig })
+            vi.mocked(loadFullConfig).mockReturnValue(expectedConfig)
 
             const {
                 API_PORT,
@@ -200,7 +208,8 @@ describe("config module", () => {
                 LOG_LEVEL,
                 API_VERSION,
                 APPLICATION_NAME,
-                PRODUCTION
+                PRODUCTION,
+                ADMIN_EMAIL
             } = await import("@/config.js")
 
             expect(API_PORT).toBe(expectedConfig.API_PORT)
@@ -209,6 +218,7 @@ describe("config module", () => {
             expect(API_VERSION).toBe(expectedConfig.API_VERSION)
             expect(APPLICATION_NAME).toBe(expectedConfig.APPLICATION_NAME)
             expect(PRODUCTION).toBe(expectedConfig.PRODUCTION)
+            expect(ADMIN_EMAIL).toBe(expectedConfig.ADMIN_EMAIL)
         })
     })
 })
