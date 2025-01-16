@@ -15,7 +15,7 @@ For example, the `DbConfig.port` in the default config should be written `DB_POR
 
 ## Config file
 
-Is loaded with [`c12`](https://github.com/unjs/c12). Refer to their docs for more info
+The file can be either .yaml, .yml, .json5 or .json, in this order of precedence
 
 ```json
 {{packages/config/src/default_config.json}}

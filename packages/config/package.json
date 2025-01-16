@@ -20,7 +20,7 @@
         }
     },
     "dependencies": {
-        "c12": "catalog:",
+        "confbox": "catalog:",
         "yaml": "catalog:",
         "zod": "catalog:"
     },
