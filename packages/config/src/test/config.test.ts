@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import defaultConfig from "@/default_config.json" with { type: "json" }
-import { getDbPasswordFromFile, loadDbConfig, loadFullConfig } from "@/loader.js"
+import { loadDbConfig, loadFullConfig } from "@/loader.js"
 import { ConfigFileSchema, FullConfigSchema } from "@/schema.js"
 import staticConfig from "@/static.js"
 
