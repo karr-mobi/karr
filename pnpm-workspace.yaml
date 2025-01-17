@@ -3,31 +3,11 @@ packages:
     - "packages/*"
     - "tooling/*"
 catalog:
-    "turbo": ^2.3.3
-    "husky": ^9.1.7
-    "@commitlint/cli": ^19.6.1
-    "@commitlint/config-conventional": ^19.6.0
-    "prettier": ^3.4.2
-    "@ianvs/prettier-plugin-sort-imports": ^4.4.0
-    "prettier-plugin-tailwindcss": ^0.6.9
-    "typescript": ^5.7.2
     "@types/node": ^22.10.5
     "@types/react": 19.0.3
     "@types/react-dom": 19.0.2
-    "globals": ^15.12.0
-    "typescript-eslint": ^8.15.0
-    "@next/eslint-plugin-next": ^15.1.0
-    "@tanstack/eslint-plugin-query": ^5.62.9
-    "@typescript-eslint/eslint-plugin": ^8.15.0
-    "@typescript-eslint/parser": ^8.15.0
-    "eslint": ^9.15.0
-    "eslint-config-prettier": ^9.1.0
-    "eslint-plugin-react": ^7.37.2
-    "eslint-plugin-react-hooks": ^5.0.0
-    "eslint-plugin-turbo": ^2.3.0
     "confbox": ^0.1.8
     "tinyrainbow": ^2.0.0
-    "@turbo/gen": ^1.12.4
     "@tailwindcss/postcss": 4.0.0-beta.9
     "tailwindcss": 4.0.0-beta.9
     "babel-plugin-react-compiler": 19.0.0-beta-63e3235-20250105
@@ -44,7 +24,6 @@ catalog:
     "clsx": ^2.1.1
     "zod": ^3.24.1
     "ofetch": ^1.4.1
-    "yaml": ^2.6.1
     "@hono/node-server": ^1.13.7
     "drizzle-kit": ^0.30.1
     "drizzle-orm": ^0.38.2
@@ -52,9 +31,32 @@ catalog:
     "hono": ^4.6.16
     "postgres": ^3.4.5
     "esbuild": ^0.24.2
-    "tsx": ^4.19.2
 
 catalogs:
+    tooling:
+        "turbo": ^2.3.3
+        "@turbo/gen": ^2.3.3
+        "husky": ^9.1.7
+        "@commitlint/cli": ^19.6.1
+        "@commitlint/config-conventional": ^19.6.0
+        "lint-staged": ^15.3.0
+        "prettier": ^3.4.2
+        "@ianvs/prettier-plugin-sort-imports": ^4.4.0
+        "prettier-plugin-tailwindcss": ^0.6.9
+        "typescript": ^5.7.2
+        "tsx": ^4.19.2
+        "globals": ^15.12.0
+        "typescript-eslint": ^8.15.0
+        "@next/eslint-plugin-next": ^15.1.0
+        "@tanstack/eslint-plugin-query": ^5.62.9
+        "@typescript-eslint/eslint-plugin": ^8.15.0
+        "@typescript-eslint/parser": ^8.15.0
+        "eslint": ^9.15.0
+        "eslint-config-prettier": ^9.1.0
+        "eslint-plugin-react": ^7.37.2
+        "eslint-plugin-react-hooks": ^5.0.0
+        "eslint-plugin-turbo": ^2.3.0
+
     vitest:
         "vitest": ^2.1.8
         "vite-tsconfig-paths": 5.1.4

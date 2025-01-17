@@ -20,19 +20,20 @@
         "tooling/*"
     ],
     "devDependencies": {
-        "@commitlint/cli": "catalog:",
-        "@commitlint/config-conventional": "catalog:",
-        "@ianvs/prettier-plugin-sort-imports": "catalog:",
-        "husky": "catalog:",
-        "lint-staged": "^15.3.0",
-        "prettier": "catalog:",
-        "prettier-plugin-tailwindcss": "catalog:",
-        "turbo": "catalog:",
-        "typescript": "catalog:"
+        "@commitlint/cli": "catalog:tooling",
+        "@commitlint/config-conventional": "catalog:tooling",
+        "@ianvs/prettier-plugin-sort-imports": "catalog:tooling",
+        "@turbo/gen": "catalog:tooling",
+        "husky": "catalog:tooling",
+        "lint-staged": "catalog:tooling",
+        "prettier": "catalog:tooling",
+        "prettier-plugin-tailwindcss": "catalog:tooling",
+        "turbo": "catalog:tooling",
+        "typescript": "catalog:tooling"
     },
     "packageManager": "pnpm@9.15.4",
     "engines": {
-        "node": ">=18"
+        "node": ">=22"
     },
     "pnpm": {
         "requiredScripts": [

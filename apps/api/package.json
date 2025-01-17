@@ -31,7 +31,7 @@
         "@karr/tsconfig": "workspace:*",
         "@types/node": "catalog:",
         "esbuild": "catalog:",
-        "tsx": "catalog:",
-        "typescript": "catalog:"
+        "tsx": "catalog:tooling",
+        "typescript": "catalog:tooling"
     }
 }

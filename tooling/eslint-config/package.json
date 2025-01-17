@@ -9,17 +9,17 @@
         "./react-internal": "./react-internal.js"
     },
     "devDependencies": {
-        "@next/eslint-plugin-next": "catalog:",
-        "@tanstack/eslint-plugin-query": "catalog:",
-        "@typescript-eslint/eslint-plugin": "catalog:",
-        "@typescript-eslint/parser": "catalog:",
-        "eslint": "catalog:",
-        "eslint-config-prettier": "catalog:",
-        "eslint-plugin-react": "catalog:",
-        "eslint-plugin-react-hooks": "catalog:",
-        "eslint-plugin-turbo": "catalog:",
-        "globals": "catalog:",
-        "typescript": "catalog:",
-        "typescript-eslint": "catalog:"
+        "@next/eslint-plugin-next": "catalog:tooling",
+        "@tanstack/eslint-plugin-query": "catalog:tooling",
+        "@typescript-eslint/eslint-plugin": "catalog:tooling",
+        "@typescript-eslint/parser": "catalog:tooling",
+        "eslint": "catalog:tooling",
+        "eslint-config-prettier": "catalog:tooling",
+        "eslint-plugin-react": "catalog:tooling",
+        "eslint-plugin-react-hooks": "catalog:tooling",
+        "eslint-plugin-turbo": "catalog:tooling",
+        "globals": "catalog:tooling",
+        "typescript": "catalog:tooling",
+        "typescript-eslint": "catalog:tooling"
     }
 }

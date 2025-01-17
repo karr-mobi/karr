@@ -32,11 +32,11 @@
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
         "@tailwindcss/postcss": "catalog:",
-        "@turbo/gen": "catalog:",
+        "@turbo/gen": "catalog:tooling",
         "@types/node": "catalog:",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
         "tailwindcss": "catalog:",
-        "typescript": "catalog:"
+        "typescript": "catalog:tooling"
     }
 }
