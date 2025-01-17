@@ -12,7 +12,9 @@ import {
 } from "./schema.js"
 import { toInt } from "./utils.js"
 
-const CONFIG_DIR = process.env.CONFIG_DIR || "../../config"
+const CONFIG_DIR =
+    process.env.CONFIG_DIR ||
+    (process.env.DOCKER === "1" ? "/app/config" : "../../config")
 const CONFIG_FILENAME = process.env.CONFIG_FILE || "karr.config"
 
 /**
