@@ -155,8 +155,11 @@ export function loadFullConfig(): FullConfig {
  * @returns The password, or null if the file does not exist
  */
 export function getDbPasswordFromFile(path: string | undefined): string | null {
-    if (path && existsSync(path)) {
-        return readFileSync(path, { encoding: "utf8", flag: "r" })
+    if (!path) return null
+
+    const filepath = resolvePath(path, "")
+    if (existsSync(filepath)) {
+        return readFileSync(filepath, { encoding: "utf8", flag: "r" })
     }
     return null
 }

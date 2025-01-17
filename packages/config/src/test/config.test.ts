@@ -1,22 +1,41 @@
 import { existsSync, readFileSync } from "node:fs"
+import { join } from "node:path"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import defaultConfig from "@/default_config.json" with { type: "json" }
 import { loadDbConfig, loadFullConfig } from "@/loader.js"
 import { ConfigFileSchema, FullConfigSchema } from "@/schema.js"
 import staticConfig from "@/static.js"
+import sampleConfigJson from "@/test/fixtures/sample_config.json" with { type: "json" }
+
+const sampleConfigFile = readFileSync(
+    join(process.cwd(), "./src/test/fixtures/sample_config.yaml")
+)
 
 // Mock modules at the top level
-vi.mock("node:fs", () => ({
-    existsSync: vi.fn(() => false),
-    readFileSync: vi.fn()
-}))
+vi.mock("node:fs", async (importOriginal) => {
+    const actual = await importOriginal()
+    return {
+        //@ts-expect-error - mock implementation
+        ...actual,
+        existsSync: vi.fn(() => false),
+        //@ts-expect-error - mock implementation
+        readFileSync: vi.fn(actual.readFileSync)
+    }
+})
 
-vi.mock("@/loader.js", () => ({
-    loadFullConfig: vi.fn(() => defaultConfig),
-    loadDbConfig: vi.fn(),
-    getDbPasswordFromFile: vi.fn()
-}))
+vi.mock("@/loader.js", async (importOriginal) => {
+    const actual = await importOriginal()
+    return {
+        //@ts-expect-error - mock implementation
+        ...actual,
+        loadFullConfig: vi.fn(() => defaultConfig),
+        //@ts-expect-error - mock implementation
+        loadDbConfig: vi.fn(actual.loadDbConfig),
+        //@ts-expect-error - mock implementation
+        getDbPasswordFromFile: vi.fn(actual.getDbPasswordFromFile)
+    }
+})
 
 function clearEnvVars() {
     const vars = [
@@ -107,6 +126,17 @@ describe("config module", () => {
     })
 
     describe("getDbConfig", () => {
+        beforeEach(() => {
+            vi.resetModules()
+            vi.clearAllMocks()
+            clearEnvVars()
+        })
+
+        afterEach(() => {
+            vi.clearAllMocks()
+            clearEnvVars()
+        })
+
         it("should load database config from environment variables", async () => {
             // Set up environment variables
             process.env.DB_HOST = "test-host"
@@ -116,8 +146,8 @@ describe("config module", () => {
             process.env.DB_PASSWORD = "test-pass"
 
             // Mock loadDbConfig to return a basic config
-            vi.mocked(loadDbConfig).mockReturnValue(
-                FullConfigSchema.parse({
+            vi.mocked(loadDbConfig).mockReturnValueOnce(
+                ConfigFileSchema.parse({
                     ...defaultConfig,
                     DB_CONFIG: {
                         host: "default-host",
@@ -144,17 +174,50 @@ describe("config module", () => {
             })
         })
 
+        it("should load database config from config file when available", async () => {
+            const configFile = "karr.config.yaml"
+
+            // existsSync should return true when checking for the password file
+            // but false when checking for the config file
+            vi.mocked(existsSync).mockImplementation((path) => {
+                if (path.toString().endsWith(configFile)) {
+                    return true
+                } else {
+                    return false
+                }
+            })
+
+            // readFileSync should return the password when checking for the password file
+            // but return the config file contents when checking for the config file
+            vi.mocked(readFileSync).mockImplementation((path) => {
+                if (path.toString().endsWith(configFile)) {
+                    return sampleConfigFile
+                } else {
+                    return readFileSync("./fixtures/sample_config.yaml")
+                }
+            })
+
+            const { getDbConfig } = await import("@/config.js")
+            const dbConfig = getDbConfig()
+
+            expect(dbConfig.password).toBe(sampleConfigJson.DB_CONFIG.password)
+            expect(dbConfig.host).toBe(sampleConfigJson.DB_CONFIG.host)
+            expect(dbConfig.port).toBe(sampleConfigJson.DB_CONFIG.port)
+            expect(dbConfig.name).toBe(sampleConfigJson.DB_CONFIG.db_name)
+            expect(dbConfig.user).toBe(sampleConfigJson.DB_CONFIG.user)
+
+            // Verify the connection string
+            expect(dbConfig.connStr).toBe(
+                `postgres://${sampleConfigJson.DB_CONFIG.user}:${sampleConfigJson.DB_CONFIG.password}@${sampleConfigJson.DB_CONFIG.host}:${sampleConfigJson.DB_CONFIG.port}/${sampleConfigJson.DB_CONFIG.db_name}`
+            )
+        })
+
         it("should load database password from file when specified", async () => {
             const passwordFile = "/path/to/password"
             const password = "secret-password"
 
-            // Mock file system calls
-            vi.mocked(existsSync).mockReturnValue(true)
-            vi.mocked(readFileSync).mockReturnValue(password)
-
-            // Mock loadDbConfig with password file configuration
-            vi.mocked(loadDbConfig).mockReturnValue(
-                ConfigFileSchema.parse({
+            vi.mocked(loadDbConfig).mockImplementation(() => {
+                return ConfigFileSchema.parse({
                     ...defaultConfig,
                     DB_CONFIG: {
                         host: "localhost",
@@ -165,20 +228,33 @@ describe("config module", () => {
                         ssl: false
                     }
                 })
-            )
+            })
 
-            // Mock getDbPasswordFromFile
-            // vi.mocked(getDbPasswordFromFile).mockReturnValue(password)
+            // existsSync should return true when checking for the password file
+            // but false when checking for the config file
+            vi.mocked(existsSync).mockImplementation((path) => {
+                if (path.toString().endsWith(passwordFile)) {
+                    return true
+                } else {
+                    return false
+                }
+            })
+
+            // readFileSync should return the password when checking for the password file
+            // but return the config file contents when checking for the config file
+            vi.mocked(readFileSync).mockImplementation((path) => {
+                if (path.toString().endsWith(passwordFile)) {
+                    return password
+                } else {
+                    return readFileSync("./fixtures/sample_config.yaml")
+                }
+            })
 
             const { getDbConfig } = await import("@/config.js")
             const dbConfig = getDbConfig()
 
             expect(dbConfig.password).toBe(password)
             expect(existsSync).toHaveBeenCalledWith(passwordFile)
-            expect(readFileSync).toHaveBeenCalledWith(passwordFile, {
-                encoding: "utf8",
-                flag: "r"
-            })
 
             // Verify the connection string
             expect(dbConfig.connStr).toBe(

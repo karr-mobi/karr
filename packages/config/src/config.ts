@@ -49,10 +49,10 @@ export function getDbConfig(): DbConfig {
         name: process.env.DB_NAME || fileConfig.DB_CONFIG?.db_name || "karr",
         user: process.env.DB_USER || fileConfig.DB_CONFIG?.user || "postgres",
         password:
-            process.env.DB_PASSWORD ||
             getDbPasswordFromFile(
                 process.env.DB_PASSWORD_FILE || fileConfig.DB_CONFIG?.password_file
             ) ||
+            process.env.DB_PASSWORD ||
             fileConfig.DB_CONFIG?.password,
         get connStr(): string {
             return `postgres://${this.user}:${this.password}@${this.host}:${this.port}/${this.name}`

@@ -1,0 +1,13 @@
+{
+    "API_PORT": 1993,
+    "LOG_TIMESTAMP": true,
+    "LOG_LEVEL": "debug",
+    "ADMIN_EMAIL": "foo@bar.com",
+    "DB_CONFIG": {
+        "host": "localhost",
+        "port": 5432,
+        "user": "karr",
+        "password": "karr",
+        "db_name": "karr"
+    }
+}
