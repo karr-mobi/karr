@@ -1,0 +1,27 @@
+{
+    "name": "@karr/{{ name }}",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "lint": "eslint . --max-warnings 0",
+        "dev": "tsc --watch",
+        "build": "tsc",
+        "check-types": "tsc--noEmit",
+        "test": "vitest"
+    },
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "default": "./dist/index.js"
+        }
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "@karr/eslint-config": "workspace:*",
+        "@karr/tsconfig": "workspace:*",
+        "@types/node": "catalog:",
+        "typescript": "catalog:tooling",
+        "vitest": "catalog:vitest",
+        "vite-tsconfig-paths": "catalog:vitest"
+    }
+}

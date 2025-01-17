@@ -1,0 +1,9 @@
+import { describe, expect, it } from "vitest"
+
+import { helloWorld } from "../index.js"
+
+describe("{{name}}", () => {
+    it("should pass", () => {
+        expect(helloWorld()).toBe("Hello world!")
+    })
+})
