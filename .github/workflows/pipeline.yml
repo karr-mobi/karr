@@ -18,7 +18,7 @@ env:
     HUSKY: 0
 
 jobs:
-    lint:
+    checks:
         runs-on: ubuntu-latest
 
         steps:
@@ -49,7 +49,7 @@ jobs:
               run: pnpm run test
 
     release:
-        needs: lint
+        needs: checks
         runs-on: ubuntu-latest
         if: |
             github.event_name == 'push' &&
