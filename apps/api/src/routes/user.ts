@@ -1,8 +1,13 @@
 import { Hono } from "hono"
 
+import logger from "@karr/util/logger"
+
 import { selectUserById, selectUserProfileById, updateNickname } from "@/db/users"
 import { handleRequest, responseErrorObject, tmpResponse } from "@/lib/helpers"
-import type { UserPublicProfile, UserWithPrefsAndStatus } from "@/lib/types.d.ts"
+import type {
+    UserWithPrefsAndStatus as _UserWithPrefsAndStatus,
+    UserPublicProfile
+} from "@/lib/types.d.ts"
 
 const hono = new Hono()
 
@@ -17,10 +22,10 @@ const hono = new Hono()
 hono.get("/", async (c) => {
     // get the user ID from the validated headers
     //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("header")
+    const { id } = c.req.valid("cookie")
 
     // get the user from the database and send it back
-    return await handleRequest<UserWithPrefsAndStatus>(c, () => selectUserById(id))
+    return await handleRequest<unknown>(c, () => selectUserById(id))
 })
 
 /**
@@ -31,7 +36,7 @@ hono.put("/nickname", async (c) => {
     // TODO(@finxol): Add validation for nickname
     // get the user ID from the validated headers
     //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("header")
+    const { id } = c.req.valid("cookie")
     const { nickname } = await c.req.json()
 
     // check the nickname is a valid string
@@ -103,7 +108,7 @@ hono.get(
     async (c) => {
         // get the user ID from the validated headers
         //@ts-expect-error valid does take in a parameter
-        const { id } = c.req.valid("header")
+        const { id } = c.req.valid("cookie")
 
         // get the user from the database and send it back
         return await handleRequest<UserPublicProfile>(c, () => selectUserProfileById(id))

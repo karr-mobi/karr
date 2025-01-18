@@ -1,4 +1,5 @@
 import { Hono } from "hono"
+import { getCookie } from "hono/cookie"
 import { cors } from "hono/cors"
 import { validator } from "hono/validator"
 
@@ -11,6 +12,7 @@ import auth from "@/routes/auth"
 import system from "@/routes/system"
 import trip from "@/routes/trip"
 import user from "@/routes/user"
+import { getAccount } from "./lib/auth"
 import { responseErrorObject } from "./lib/helpers"
 
 /**
@@ -51,10 +53,10 @@ export const build = (): Hono => {
      * Check if a user is logged in by checking the Authorization header
      */
     hono.use(
-        validator("header", (value, c) => {
-            const authorization = value["authorization"]
+        validator("cookie", async (value, c) => {
+            const authtoken = getCookie(c, "auth-token")
 
-            if (authorization === undefined || authorization === "") {
+            if (authtoken === undefined || authtoken === "") {
                 return responseErrorObject(
                     c,
                     {
@@ -66,10 +68,9 @@ export const build = (): Hono => {
             }
 
             // TODO(@finxol): verify the JWT
-            const id: string = authorization
+            const id: string | null = await getAccount(authtoken)
 
-            // check the id is a valid UUID
-            if (!isUUIDv4(id)) {
+            if (id === null) {
                 return responseErrorObject(
                     c,
                     {
@@ -80,7 +81,17 @@ export const build = (): Hono => {
                 )
             }
 
-            logger.debug(`User ID: ${id}`)
+            // check the id is a valid UUID
+            // if (!isUUIDv4(id)) {
+            //     return responseErrorObject(
+            //         c,
+            //         {
+            //             message: "Unauthorized",
+            //             cause: "Invalid authorization token"
+            //         },
+            //         401
+            //     )
+            // }
 
             return { id }
         })

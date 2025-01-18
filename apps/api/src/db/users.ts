@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm"
 
 import drizzle from "@karr/db"
+import { accountsTable } from "@karr/db/schemas/accounts.js"
 import { specialStatusTable } from "@karr/db/schemas/specialstatus.js"
 import { userPrefsTable } from "@karr/db/schemas/userprefs.js"
 import { usersTable } from "@karr/db/schemas/users.js"
@@ -13,18 +14,24 @@ import type { UserPublicProfile, UserWithPrefsAndStatus } from "@/lib/types.d.ts
  * @param id The ID of the user to select. Assumes uuid v4 format.
  * @returns The user with the given ID
  */
-export async function selectUserById(id: string): Promise<UserWithPrefsAndStatus> {
+export async function selectUserById(id: string): Promise<unknown> {
+    // TODO: move back to Users table, not Accounts!!
     const users = await drizzle
-        .select()
-        .from(usersTable)
-        .where(eq(usersTable.id, id))
-        .leftJoin(userPrefsTable, eq(usersTable.prefs, userPrefsTable.id))
-        .leftJoin(
-            specialStatusTable,
-            eq(usersTable.specialStatus, specialStatusTable.title)
-        )
+        .select({
+            id: accountsTable.id,
+            email: accountsTable.email,
+            blocked: accountsTable.blocked,
+            verified: accountsTable.verified
+        })
+        .from(accountsTable)
+        .where(eq(accountsTable.id, id))
+        // .leftJoin(userPrefsTable, eq(usersTable.prefs, userPrefsTable.id))
+        // .leftJoin(
+        //     specialStatusTable,
+        //     eq(usersTable.specialStatus, specialStatusTable.title)
+        // )
         .limit(1)
-    return <UserWithPrefsAndStatus>users[0]
+    return users[0]
 }
 
 export async function updateNickname(id: string, nickname: string): Promise<boolean> {

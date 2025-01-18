@@ -57,7 +57,6 @@ hono.post("/signup", async (c) => {
 })
 
 hono.get("/logout", async (c) => {
-    logger.debug("logout")
     // this means anyone can log someone else out, will be fixed with jwt
     const authToken = getCookie(c, "auth-token")
     setCookie(c, "auth-token", "", {

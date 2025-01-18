@@ -6,8 +6,6 @@ import { accountsTable } from "@karr/db/schemas/accounts.js"
 import logger from "@karr/util/logger"
 
 export async function authenticate(email: string, password: string) {
-    logger.debug("Authenticating", { email, password })
-
     const user = await db
         .select({
             id: accountsTable.id,
@@ -47,7 +45,15 @@ export async function login(email: string, password: string) {
     // generate a new token
     const token = crypto.randomUUID()
 
-    db.update(accountsTable).set({ token }).where(eq(accountsTable.id, user.id))
+    const saved = await db
+        .update(accountsTable)
+        .set({ token })
+        .where(eq(accountsTable.id, user.id))
+        .returning({ token: accountsTable.token })
+
+    if (!saved || saved.length === 0 || saved[0] === undefined) {
+        logger.error(`Failed to save token: ${token}`)
+    }
 
     return token
 }
@@ -104,17 +110,18 @@ export async function logout(token: string) {
     db.update(accountsTable).set({ token: "" }).where(eq(accountsTable.token, token))
 }
 
-export async function getAccount(id: string) {
+export async function getAccount(token: string): Promise<string | null> {
     const account = await db
         .select({
-            id: accountsTable.id,
-            email: accountsTable.email,
-            blocked: accountsTable.blocked,
-            verified: accountsTable.verified
+            id: accountsTable.id
         })
         .from(accountsTable)
-        .where(eq(accountsTable.id, id))
+        .where(eq(accountsTable.token, token))
         .limit(1)
 
-    return account ? account[0] : null
+    if (!account || account.length === 0 || account[0] === undefined) {
+        return null
+    }
+
+    return account[0].id
 }
