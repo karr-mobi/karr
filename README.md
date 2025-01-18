@@ -32,12 +32,9 @@ Optional:
 
 ##### API
 
+- [ ] Build mock login
 - [ ] Return mock trips
 - [ ] Add federation module for federation-specific routes
-
-Optional:
-
-- [ ] Build mock login
 
 ## Roadmap
 
