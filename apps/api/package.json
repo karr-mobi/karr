@@ -7,7 +7,7 @@
     },
     "scripts": {
         "lint": "eslint . --max-warnings 0",
-        "dev": "LOG_LEVEL=trace tsx watch ./src/main.ts",
+        "dev": "cross-env LOG_LEVEL=trace tsx watch ./src/main.ts",
         "start": "node ./out/index.min.mjs",
         "build": "tsc --noEmit && esbuild src/main.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/index.min.mjs --metafile=build-meta.json --external:node:*",
         "check-types": "tsc --noEmit",
@@ -29,8 +29,8 @@
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
-        "@types/bcrypt": "^5.0.2",
         "@types/node": "catalog:",
+        "cross-env": "catalog:tooling",
         "esbuild": "catalog:",
         "tsx": "catalog:tooling",
         "typescript": "catalog:tooling"

@@ -4,7 +4,7 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "dev": "API_ROUTE='http://localhost:1993/v1' next dev --turbopack",
+        "dev": "cross-env API_ROUTE='http://localhost:1993/v1' next dev --turbopack",
         "build": "next build",
         "start": "next start",
         "lint": "pnpm run --filter '@karr/config' build && next lint --max-warnings 0",
@@ -22,7 +22,7 @@
         "ofetch": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
-        "react-hook-form": "^7.54.2",
+        "react-hook-form": "catalog:",
         "tailwindcss": "catalog:"
     },
     "devDependencies": {
@@ -31,6 +31,7 @@
         "@types/node": "catalog:",
         "@types/react": "catalog:",
         "@types/react-dom": "catalog:",
+        "cross-env": "catalog:tooling",
         "typescript": "catalog:tooling"
     }
 }

@@ -17,6 +17,8 @@ catalog:
     "react": ^19.0.0
     "react-dom": ^19.0.0
     "@tanstack/react-query": ^5.62.16
+    "react-hook-form": ^7.54.2
+    "@radix-ui/react-separator": ^1.1.1
     "@radix-ui/react-slot": ^1.1.1
     "tailwind-merge": ^2.6.0
     "tailwindcss-animate": ^1.0.7
@@ -45,6 +47,7 @@ catalogs:
         "prettier-plugin-tailwindcss": ^0.6.9
         "typescript": ^5.7.2
         "tsx": ^4.19.2
+        "cross-env": ^7.0.3
         "globals": ^15.12.0
         "typescript-eslint": ^8.15.0
         "@next/eslint-plugin-next": ^15.1.0
