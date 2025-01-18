@@ -120,6 +120,11 @@ function readConfig(): ConfigFile {
         return ConfigFileSchema.parse(defaultConfig)
     }
 
+    // In development, default to trace log level
+    if (!(process.env.NODE_ENV === "production" || process.env.DOCKER)) {
+        defaultConfig.LOG_LEVEL = "trace"
+    }
+
     const userConfig = Object.assign(defaultConfig, parseFile(path))
 
     return ConfigFileSchema.parse(userConfig)
@@ -136,6 +141,10 @@ export function loadFullConfig(): FullConfig {
 
     if (process.env.API_PORT) {
         config.API_PORT = toInt(process.env.API_PORT)
+    }
+
+    if (process.env.API_BASE) {
+        config.API_BASE = process.env.API_BASE
     }
 
     if (process.env.LOG_TIMESTAMP) {

@@ -1,6 +1,6 @@
 API_PORT: 1993
+API_BASE: http://localhost:1993
 LOG_TIMESTAMP: true
-LOG_LEVEL: debug
 ADMIN_EMAIL: foo@bar.com
 DB_CONFIG:
     host: localhost
