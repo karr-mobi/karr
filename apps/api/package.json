@@ -19,6 +19,7 @@
         "@karr/config": "workspace:*",
         "@karr/db": "workspace:*",
         "@karr/util": "workspace:*",
+        "bcrypt": "^5.1.1",
         "drizzle-kit": "catalog:",
         "drizzle-orm": "catalog:",
         "drizzle-zod": "catalog:",
@@ -29,6 +30,7 @@
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
+        "@types/bcrypt": "^5.0.2",
         "@types/node": "catalog:",
         "esbuild": "catalog:",
         "tsx": "catalog:tooling",

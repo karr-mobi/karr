@@ -7,6 +7,7 @@ import { isUUIDv4 } from "@karr/util"
 import logger from "@karr/util/logger"
 
 import account from "@/routes/account"
+import auth from "@/routes/auth"
 import system from "@/routes/system"
 import trip from "@/routes/trip"
 import user from "@/routes/user"
@@ -41,13 +42,13 @@ export const build = (): Hono => {
     // ==== Unprotected routes ====
     // ============================
     hono.route("/", system)
+    hono.route(`/${API_VERSION}/auth`, auth)
 
     // =============================
     // ======== Middlewares ========
     // =============================
     /**
      * Check if a user is logged in by checking the Authorization header
-     * @param req The FastifyRequest objec
      */
     hono.use(
         validator("header", (value, c) => {

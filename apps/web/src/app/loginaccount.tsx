@@ -1,28 +1,38 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { RefreshCw, User } from "lucide-react"
+import { User } from "lucide-react"
 
 import { Button } from "@karr/ui/components/button"
 
+import { getAuthentication } from "@/util/auth"
+
 export default function LoginAccount() {
-    const [loggedIn, setLoggedIn] = useState(false)
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+    useEffect(() => {
+        // Set initial state
+        setIsAuthenticated(getAuthentication())
+
+        // Listen for authentication changes
+        const handleAuthChange = () => {
+            setIsAuthenticated(getAuthentication())
+        }
+
+        window.addEventListener("auth-change", handleAuthChange)
+
+        // Cleanup
+        return () => {
+            window.removeEventListener("auth-change", handleAuthChange)
+        }
+    }, [])
 
     return (
         <>
-            <Button
-                variant="outline"
-                size="icon"
-                onClick={() => {
-                    setLoggedIn(!loggedIn)
-                }}
-            >
-                <RefreshCw />
-            </Button>
-            {loggedIn ? (
+            {isAuthenticated ? (
                 <Button asChild>
-                    <Link href="/account" className="rounded-sm border px-2 py-1">
+                    <Link href="/account">
                         <User />
                         Account
                     </Link>
