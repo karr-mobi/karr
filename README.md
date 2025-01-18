@@ -16,6 +16,29 @@ Built with:
   ([Docker package](https://github.com/users/finxol/packages/container/package/karr-caddy))
 - `@karr/auth`: Ory Kratos + Oathkeeper
 
+## PoC Roadmap
+
+Target: get a basic "fake" demo working
+
+##### Web
+
+- [ ] Build trip search page. This page will only have the UI components for search, no
+      actual logic behind it.
+
+Optional:
+
+- [ ] Build better login page
+- [ ] Build basic account page (show email, name, number of trips published)
+
+##### API
+
+- [ ] Return mock trips
+- [ ] Add federation module for federation-specific routes
+
+Optional:
+
+- [ ] Build mock login
+
 ## Roadmap
 
 - [ ] Carpool platform with recurring trips
