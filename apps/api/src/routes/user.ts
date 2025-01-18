@@ -1,7 +1,5 @@
 import { Hono } from "hono"
 
-import logger from "@karr/util/logger"
-
 import { selectUserById, selectUserProfileById, updateNickname } from "@/db/users"
 import { handleRequest, responseErrorObject, tmpResponse } from "@/lib/helpers"
 import type {

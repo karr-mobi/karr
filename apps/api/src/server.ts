@@ -4,8 +4,6 @@ import { cors } from "hono/cors"
 import { validator } from "hono/validator"
 
 import { API_VERSION, PRODUCTION } from "@karr/config"
-import { isUUIDv4 } from "@karr/util"
-import logger from "@karr/util/logger"
 
 import account from "@/routes/account"
 import auth from "@/routes/auth"

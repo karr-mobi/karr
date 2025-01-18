@@ -2,12 +2,13 @@ import { eq } from "drizzle-orm"
 
 import drizzle from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
-import { specialStatusTable } from "@karr/db/schemas/specialstatus.js"
-import { userPrefsTable } from "@karr/db/schemas/userprefs.js"
 import { usersTable } from "@karr/db/schemas/users.js"
 import logger from "@karr/util/logger"
 
-import type { UserPublicProfile, UserWithPrefsAndStatus } from "@/lib/types.d.ts"
+import type {
+    UserWithPrefsAndStatus as _UserWithPrefsAndStatus,
+    UserPublicProfile
+} from "@/lib/types.d.ts"
 
 /**
  * Select a user by their ID
