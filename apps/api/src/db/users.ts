@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 
-import drizzle from "@karr/db/conn"
+import drizzle from "@karr/db"
 import { specialStatusTable } from "@karr/db/schemas/specialstatus.js"
 import { userPrefsTable } from "@karr/db/schemas/userprefs.js"
 import { usersTable } from "@karr/db/schemas/users.js"

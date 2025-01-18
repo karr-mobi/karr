@@ -15,7 +15,7 @@
             "types": "./src/migrate.ts",
             "default": "./dist/migrate.js"
         },
-        "./conn": {
+        ".": {
             "types": "./src/db_conn.ts",
             "default": "./dist/db_conn.js"
         },

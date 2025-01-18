@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 
-import drizzle from "@karr/db/conn"
+import drizzle from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
 
 import type { AccountVerified } from "@/lib/types.d.ts"
