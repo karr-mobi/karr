@@ -214,9 +214,6 @@ importers:
       '@karr/util':
         specifier: workspace:*
         version: link:../../packages/util
-      '@types/bcrypt':
-        specifier: ^5.0.2
-        version: 5.0.2
       bcrypt:
         specifier: ^5.1.1
         version: 5.1.1
@@ -245,6 +242,9 @@ importers:
       '@karr/tsconfig':
         specifier: workspace:*
         version: link:../../tooling/typescript-config
+      '@types/bcrypt':
+        specifier: ^5.0.2
+        version: 5.0.2
       '@types/node':
         specifier: 'catalog:'
         version: 22.10.5
