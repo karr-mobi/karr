@@ -69,7 +69,7 @@ export default function RootLayout({
                                 <Separator orientation="vertical" className="h-8" />
                                 <nav className="flex flex-row items-center justify-end gap-4">
                                     <Button asChild variant="link" className="text-md">
-                                        <Link href="/search">Search for trips</Link>
+                                        <Link href="/search">Trips</Link>
                                     </Button>
                                 </nav>
                             </div>
@@ -80,7 +80,7 @@ export default function RootLayout({
                                 <ThemeSwitch />
                             </div>
                         </header>
-                        <main className="flex h-full flex-col items-center justify-start overflow-y-scroll">
+                        <main className="mx-4 flex h-full flex-col items-center justify-start overflow-y-scroll">
                             {children}
                         </main>
                     </div>

@@ -1,7 +1,7 @@
 import { desc } from "drizzle-orm"
 import { createSelectSchema } from "drizzle-zod"
 
-import drizzle from "@karr/db/conn"
+import drizzle from "@karr/db"
 import { settingsTable } from "@karr/db/schemas/settings.js"
 
 const settingsSelectSchema = createSelectSchema(settingsTable)

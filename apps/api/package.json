@@ -7,7 +7,7 @@
     },
     "scripts": {
         "lint": "eslint . --max-warnings 0",
-        "dev": "LOG_LEVEL=trace tsx watch ./src/main.ts",
+        "dev": "tsx watch ./src/main.ts",
         "start": "node ./out/index.min.mjs",
         "build": "tsc --noEmit && esbuild src/main.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/index.min.mjs --metafile=build-meta.json --external:node:*",
         "check-types": "tsc --noEmit",

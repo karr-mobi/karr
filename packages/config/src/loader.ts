@@ -14,7 +14,9 @@ import { toInt } from "./utils.js"
 
 const CONFIG_DIR =
     process.env.CONFIG_DIR ||
-    (process.env.DOCKER === "1" ? "/app/config" : "../../config")
+    (process.env.DOCKER === "1"
+        ? "/app/config"
+        : join(process.cwd(), "..", "..", "config"))
 const CONFIG_FILENAME = process.env.CONFIG_FILE || "karr.config"
 
 /**
@@ -118,6 +120,11 @@ function readConfig(): ConfigFile {
         return ConfigFileSchema.parse(defaultConfig)
     }
 
+    // In development, default to trace log level
+    if (!(process.env.NODE_ENV === "production" || process.env.DOCKER)) {
+        defaultConfig.LOG_LEVEL = "trace"
+    }
+
     const userConfig = Object.assign(defaultConfig, parseFile(path))
 
     return ConfigFileSchema.parse(userConfig)
@@ -134,6 +141,10 @@ export function loadFullConfig(): FullConfig {
 
     if (process.env.API_PORT) {
         config.API_PORT = toInt(process.env.API_PORT)
+    }
+
+    if (process.env.API_BASE) {
+        config.API_BASE = process.env.API_BASE
     }
 
     if (process.env.LOG_TIMESTAMP) {

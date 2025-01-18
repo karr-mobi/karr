@@ -25,7 +25,7 @@ hono.get("/", (c) => {
 hono.put("/email", async (c) => {
     // get the user ID from the validated headers
     //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("header")
+    const { id } = c.req.valid("cookie")
     const { email } = await c.req.json()
 
     // check the nickname is a valid string
@@ -43,7 +43,7 @@ hono.put("/email", async (c) => {
 hono.get("/verified", async (c) => {
     // get the user ID from the validated headers
     //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("header")
+    const { id } = c.req.valid("cookie")
 
     // Check if the user is verified
     return await handleRequest<AccountVerified>(c, () => isVerified(id))
@@ -59,7 +59,7 @@ hono.post("/verify", (c) => c.text("TODO")) // TODO(@finxol)
 hono.delete("/", async (c) => {
     // get the user ID from the validated headers
     //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("header")
+    const { id } = c.req.valid("cookie")
     logger.debug(`Deleting user ${id}`)
 
     // delete the user's account from the database

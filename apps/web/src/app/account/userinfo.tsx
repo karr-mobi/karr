@@ -44,30 +44,32 @@ function FetchUserData({ userid }: { userid: string }) {
 // TODO: add user type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ShowUserData({ user: { data: user } }: { user: any }) {
-    const hasSpecialStatus = user.SpecialStatus?.id
+    const hasSpecialStatus = user.SpecialStatus?.id || false
+
+    console.log(user)
 
     return (
         <div>
             <h2>User</h2>
-            <section>
+            <section className="flow">
                 {!hasSpecialStatus && (
                     <Badge variant="destructive">
                         <p>{user.SpecialStatus?.name || "No special status"}</p>
                     </Badge>
                 )}
                 <div className="flex flex-row gap-6">
-                    <h3>User ID</h3>
-                    <p>{user.Users.id}</p>
+                    <b>User ID</b>
+                    <p>{user.id}</p>
                 </div>
                 <div className="flex flex-row gap-6">
-                    <h3>Full Name</h3>
+                    <b>Full Name</b>
                     <p>
-                        {user.Users.firstName} {user.Users.lastName}
+                        {user.firstName} {user.lastName}
                     </p>
                 </div>
                 <div className="flex flex-row gap-6">
-                    <h3>Username</h3>
-                    <p>{user.Users.nickname ?? "No nickname"}</p>
+                    <b>Username</b>
+                    <p>{user.nickname ?? "No nickname"}</p>
                 </div>
             </section>
             <details>

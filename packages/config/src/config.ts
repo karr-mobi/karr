@@ -9,6 +9,7 @@ export default config
 
 export const {
     API_PORT,
+    API_BASE,
     LOG_TIMESTAMP,
     LOG_LEVEL,
     ADMIN_EMAIL,

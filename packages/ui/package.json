@@ -15,7 +15,7 @@
         "check-types": "tsc --noEmit"
     },
     "dependencies": {
-        "@radix-ui/react-separator": "^1.1.1",
+        "@radix-ui/react-separator": "catalog:",
         "@radix-ui/react-slot": "catalog:",
         "class-variance-authority": "catalog:",
         "clsx": "catalog:",

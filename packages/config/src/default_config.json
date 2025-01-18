@@ -7,6 +7,7 @@
         "db_name": "karr"
     },
     "API_PORT": 1993,
+    "API_BASE": "/api",
     "LOG_LEVEL": "info",
     "LOG_TIMESTAMP": true
 }

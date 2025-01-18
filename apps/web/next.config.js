@@ -1,4 +1,4 @@
-import { API_VERSION } from "@karr/config/static"
+import { API_BASE, API_VERSION } from "@karr/config"
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -9,7 +9,7 @@ const nextConfig = {
         "/**/*.css": ["src/assets/**/*.css"]
     },
     env: {
-        NEXT_PUBLIC_API_ROUTE: process.env.API_ROUTE || `/api/${API_VERSION}`
+        NEXT_PUBLIC_API_ROUTE: `${API_BASE}/${API_VERSION}`
     },
 
     experimental: {
