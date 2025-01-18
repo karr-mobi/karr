@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt"
+import crypto from "node:crypto"
 import { eq } from "drizzle-orm"
 
 import db from "@karr/db"
@@ -36,7 +36,7 @@ const initUsersTable = async () => {
     // create a test user in the accounts table
     await db.insert(accountsTable).values({
         email: "test@example.org",
-        password: await bcrypt.hash("test", 10),
+        password: crypto.createHash("sha256").update("password").digest("hex"),
         user: user[0]!.insertedId
     })
 

@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt"
+import crypto from "node:crypto"
 import { and, eq } from "drizzle-orm"
 
 import db from "@karr/db"
@@ -22,9 +22,9 @@ export async function authenticate(email: string, password: string) {
         throw new Error("Invalid email or password")
     }
 
-    const valid = await bcrypt.compare(password, user[0].password)
+    const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
 
-    if (!valid) {
+    if (hashedPassword !== user[0].password) {
         throw new Error("Invalid email or password")
     }
 
@@ -63,7 +63,7 @@ export async function register(email: string, password: string): Promise<string>
         .insert(accountsTable)
         .values({
             email,
-            password: await bcrypt.hash(password, 10),
+            password: crypto.createHash("sha256").update(password).digest("hex"),
             blocked: false,
             verified: true
         })

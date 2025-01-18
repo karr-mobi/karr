@@ -19,7 +19,6 @@
         "@karr/config": "workspace:*",
         "@karr/db": "workspace:*",
         "@karr/util": "workspace:*",
-        "bcrypt": "^5.1.1",
         "drizzle-kit": "catalog:",
         "drizzle-orm": "catalog:",
         "drizzle-zod": "catalog:",
