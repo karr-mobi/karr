@@ -14,7 +14,9 @@ import { toInt } from "./utils.js"
 
 const CONFIG_DIR =
     process.env.CONFIG_DIR ||
-    (process.env.DOCKER === "1" ? "/app/config" : "../../config")
+    (process.env.DOCKER === "1"
+        ? "/app/config"
+        : join(process.cwd(), "..", "..", "config"))
 const CONFIG_FILENAME = process.env.CONFIG_FILE || "karr.config"
 
 /**
