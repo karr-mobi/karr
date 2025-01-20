@@ -46,21 +46,22 @@ jobs:
               run: pnpm run test
 
             - name: Debug specific files
+              continue-on-error: true # This will make the step continue even if it fails
               run: |
                   echo "Checking ThemeSwitch.tsx:"
-                  pnpm prettier --check apps/web/src/app/_components/ThemeSwitch.tsx --debug-print-doc
+                  pnpm prettier --check apps/web/src/app/_components/ThemeSwitch.tsx --debug-print-doc || true
 
                   echo "\nChecking current format:"
-                  cat apps/web/src/app/_components/ThemeSwitch.tsx
+                  cat apps/web/src/app/_components/ThemeSwitch.tsx || true
 
                   echo "\nChecking with write:"
-                  pnpm prettier apps/web/src/app/_components/ThemeSwitch.tsx --write --loglevel debug
+                  pnpm prettier apps/web/src/app/_components/ThemeSwitch.tsx --write --loglevel debug || true
 
             - name: Debug Prettier plugins
               run: |
                   echo "Prettier config:"
-                  NODE_DEBUG=prettier pnpm prettier --find-config-path apps/web/src/app/_components/ThemeSwitch.tsx
-                  NODE_DEBUG=prettier pnpm prettier --config-precedence prefer-file --check apps/web/src/app/_components/ThemeSwitch.tsx
+                  NODE_DEBUG=prettier pnpm prettier --find-config-path apps/web/src/app/_components/ThemeSwitch.tsx || true
+                  NODE_DEBUG=prettier pnpm prettier --config-precedence prefer-file --check apps/web/src/app/_components/ThemeSwitch.tsx || true
 
             - name: Check formatting
               run: pnpm run format:check
