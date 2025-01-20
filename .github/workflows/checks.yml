@@ -57,6 +57,24 @@ jobs:
                   echo "\nChecking format with explicit config:"
                   pnpm prettier --config prettier.config.mjs --check "**/*.{ts,tsx,md,json,yml,yaml,css,html}"
 
+            - name: Deep Debug Prettier
+              continue-on-error: true # This will make the step continue even if it fails
+              run: |
+                  echo "Debug single file with diff:"
+                  pnpm prettier --plugin-search-dir=. apps/web/src/app/_components/ThemeSwitch.tsx --write --log-level debug
+
+                  echo "\nDebug formatted vs current:"
+                  pnpm prettier --plugin-search-dir=. apps/web/src/app/_components/ThemeSwitch.tsx --write --list-different
+
+            - name: Debug Plugin Resolution
+              continue-on-error: true # This will make the step continue even if it fails
+              run: |
+                  echo "Plugin paths:"
+                  find . -name "prettier-plugin-tailwindcss" -o -name "@ianvs/prettier-plugin-sort-imports"
+
+                  echo "\nPlugin resolution:"
+                  NODE_DEBUG=module pnpm prettier apps/web/src/app/_components/ThemeSwitch.tsx --write --log-level debug
+
             - name: Debug Prettier plugins
               run: |
                   echo "Prettier config:"

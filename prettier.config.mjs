@@ -1,5 +1,8 @@
 /** @typedef  {import("prettier").Config} PrettierConfig */
 
+import module from 'module'
+const require = module.createRequire(import.meta.url)
+
 /** @type { PrettierConfig | SortImportsConfig } */
 const config = {
     arrowParens: "always",
@@ -8,7 +11,7 @@ const config = {
     semi: false,
     trailingComma: "none",
     tabWidth: 4,
-    plugins: ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
+    plugins: ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"].map((plugin) => require.resolve(plugin)),
     tailwindStylesheet: "./packages/ui/src/styles/globals.css",
     tailwindFunctions: ["cn", "clsx"],
     // Last version that doesn't squash type and value imports
