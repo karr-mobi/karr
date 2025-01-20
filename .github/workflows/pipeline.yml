@@ -19,6 +19,5 @@ env:
 
 jobs:
     checks:
-        checks:
-            uses: ./.github/workflows/checks.yml
-            secrets: inherit # Pass through secrets if needed
+        uses: ./.github/workflows/checks.yml
+        secrets: inherit # Pass through secrets if needed
