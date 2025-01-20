@@ -48,14 +48,14 @@ jobs:
             - name: Debug specific files
               continue-on-error: true # This will make the step continue even if it fails
               run: |
-                  echo "Checking ThemeSwitch.tsx:"
-                  pnpm prettier --check apps/web/src/app/_components/ThemeSwitch.tsx --debug-print-doc || true
+                  echo "Using Prettier config at:"
+                  pnpm prettier --find-config-path apps/web/src/app/_components/ThemeSwitch.tsx
 
-                  echo "\nChecking current format:"
-                  cat apps/web/src/app/_components/ThemeSwitch.tsx || true
+                  echo "\nPrettier version:"
+                  pnpm prettier --version
 
-                  echo "\nChecking with write:"
-                  pnpm prettier apps/web/src/app/_components/ThemeSwitch.tsx --write --loglevel debug || true
+                  echo "\nChecking format with explicit config:"
+                  pnpm prettier --config prettier.config.mjs --check "**/*.{ts,tsx,md,json,yml,yaml,css,html}"
 
             - name: Debug Prettier plugins
               run: |
