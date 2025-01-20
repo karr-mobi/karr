@@ -121,6 +121,9 @@ catalogs:
     '@typescript-eslint/parser':
       specifier: ^8.15.0
       version: 8.18.1
+    changelogen:
+      specifier: ^0.5.7
+      version: 0.5.7
     eslint:
       specifier: ^9.15.0
       version: 9.17.0
@@ -188,7 +191,7 @@ importers:
         specifier: catalog:tooling
         version: 2.3.3(@types/node@22.10.5)(typescript@5.7.2)
       changelogen:
-        specifier: ^0.5.7
+        specifier: catalog:tooling
         version: 0.5.7
       husky:
         specifier: catalog:tooling
