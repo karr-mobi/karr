@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.7.1
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.0...v0.7.1)
+
+### 🏡 Chore
+
+- Build release on tag ([2612dbd](https://github.com/finxol/karr/commit/2612dbd))
+
+### ❤️ Contributors
+
+- Finxol <git@finxol.io>
+
 ## v0.7.0
 
 ### 🚀 Enhancements
