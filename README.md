@@ -22,13 +22,13 @@ Target: get a basic "fake" demo working
 
 ##### Web
 
-- [ ] Build trip search page. This page will only have the UI components for search, no
-      actual logic behind it.
+- [x] Build login
+- [x] Show all trips on instance + federated
+- [ ] Build "add trip" UI
 
 Optional:
 
-- [ ] Build better login page
-- [ ] Build basic account page (show email, name, number of trips published)
+- [ ] show number of trips on account page
 
 ##### API
 

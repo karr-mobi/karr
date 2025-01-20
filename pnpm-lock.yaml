@@ -269,6 +269,9 @@ importers:
       '@karr/config':
         specifier: workspace:*
         version: link:../../packages/config
+      '@karr/db':
+        specifier: workspace:*
+        version: link:../../packages/db
       '@karr/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -373,6 +376,9 @@ importers:
       postgres:
         specifier: 'catalog:'
         version: 3.4.5
+      zod:
+        specifier: 'catalog:'
+        version: 3.24.1
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*

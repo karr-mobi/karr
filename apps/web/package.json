@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@karr/config": "workspace:*",
+        "@karr/db": "workspace:*",
         "@karr/ui": "workspace:*",
         "@tailwindcss/postcss": "catalog:",
         "@tanstack/react-query": "catalog:",
