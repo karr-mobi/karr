@@ -32,7 +32,7 @@ Optional:
 
 ##### API
 
-- [ ] Build mock login
+- [x] Build mock login
 - [ ] Return mock trips
 - [ ] Add federation module for federation-specific routes
 
@@ -61,9 +61,8 @@ Optional:
 
     - [ ] Env type-safety [T3 env](https://env.t3.gg/docs/nextjs)
 
-- [ ] Add mock login
-    - [ ] Use clsx ?
-    - [ ] Add [Iconify](https://iconify.design/docs/iconify-icon/react.html)
+- [x] Add mock login
+    - [x] Use clsx ?
     - [ ] Add i18n
           [info in Nextjs docs](https://nextjs.org/docs/pages/building-your-application/routing/internationalization)
 - [ ] Add trip search route that gives fake, not-searched data
@@ -76,7 +75,7 @@ Optional:
 
 - Add tests
 
-    - [ ] config
+    - [x] config
     - [ ] util
     - [ ] api
     - [ ] ui
