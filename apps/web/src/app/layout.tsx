@@ -52,7 +52,7 @@ export default function RootLayout({
                         disableTransitionOnChange
                     >
                         <div className="grid h-screen grid-cols-1 grid-rows-[auto_1fr]">
-                            <header className="bg-primary/4 flex h-16 w-full flex-row items-center justify-between px-4 py-2">
+                            <header className="flex h-16 w-full flex-row items-center justify-between bg-primary/4 px-4 py-2">
                                 <div className="flow-inline flex flex-row items-center justify-end">
                                     <Link
                                         href="/"
