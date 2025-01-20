@@ -1,5 +1,27 @@
 # Changelog
 
+## v0.7.3
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.2...v0.7.3)
+
+### 🚀 Enhancements
+
+- **PoC:** Display trips on trips page
+  ([e87b037](https://github.com/finxol/karr/commit/e87b037))
+
+### 🏡 Chore
+
+- Comment out unused ([2296b00](https://github.com/finxol/karr/commit/2296b00))
+
+### 🤖 CI
+
+- Adjust trigger ([196c705](https://github.com/finxol/karr/commit/196c705))
+- Adjust changelogen config ([6b3497b](https://github.com/finxol/karr/commit/6b3497b))
+
+### ❤️ Contributors
+
+- Finxol <git@finxol.io>
+
 ## v0.7.2
 
 [compare changes](https://github.com/finxol/karr/compare/v0.7.1...v0.7.2)
