@@ -59,12 +59,12 @@
                 "title": "🚀 Enhancements",
                 "semver": "minor"
             },
-            "perf": {
-                "title": "🔥 Performance",
-                "semver": "patch"
-            },
             "fix": {
                 "title": "🩹 Fixes",
+                "semver": "patch"
+            },
+            "perf": {
+                "title": "🔥 Performance",
                 "semver": "patch"
             },
             "build": {
@@ -72,7 +72,8 @@
                 "semver": "patch"
             },
             "style": {
-                "title": "🎨 Styles"
+                "title": "🎨 Styles",
+                "semver": "patch"
             }
         }
     }
