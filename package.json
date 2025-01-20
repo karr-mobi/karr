@@ -13,7 +13,8 @@
         "format:check": "prettier --config prettier.config.mjs --check \"**/*.{ts,tsx,md,json,yml,yaml,css,html}\"",
         "test": "turbo test",
         "prepare": "husky",
-        "commitlint": "commitlint --edit"
+        "commitlint": "commitlint --edit",
+        "release": "changelogen --release --push"
     },
     "workspaces": [
         "apps/*",
@@ -25,6 +26,7 @@
         "@commitlint/config-conventional": "catalog:tooling",
         "@ianvs/prettier-plugin-sort-imports": "catalog:tooling",
         "@turbo/gen": "catalog:tooling",
+        "changelogen": "^0.5.7",
         "husky": "catalog:tooling",
         "lint-staged": "catalog:tooling",
         "prettier": "catalog:tooling",
@@ -49,5 +51,29 @@
         "apps/caddy/Caddyfile": [
             "caddy fmt --overwrite"
         ]
+    },
+    "changelog": {
+        "repo": "finxol/karr",
+        "types": {
+            "feat": {
+                "title": "🚀 Enhancements",
+                "semver": "minor"
+            },
+            "perf": {
+                "title": "🔥 Performance",
+                "semver": "patch"
+            },
+            "fix": {
+                "title": "🩹 Fixes",
+                "semver": "patch"
+            },
+            "build": {
+                "title": "📦 Build",
+                "semver": "patch"
+            },
+            "style": {
+                "title": "🎨 Styles"
+            }
+        }
     }
 }
