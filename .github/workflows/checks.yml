@@ -45,5 +45,16 @@ jobs:
             - name: Run tests
               run: pnpm run test
 
+            - name: Debug Prettier difference
+              run: |
+                  echo "Prettier diff:"
+                  pnpm prettier --check "**/*.{ts,tsx,md,json,yml,yaml,css,html}" --debug-check
+
+            - name: Debug Prettier plugins
+              run: |
+                  echo "Prettier config:"
+                  NODE_DEBUG=prettier pnpm prettier --find-config-path apps/web/src/app/_components/ThemeSwitch.tsx
+                  NODE_DEBUG=prettier pnpm prettier --config-precedence prefer-file --check apps/web/src/app/_components/ThemeSwitch.tsx
+
             - name: Check formatting
               run: pnpm run format:check

@@ -10,6 +10,7 @@ const config = {
     tabWidth: 4,
     plugins: ["@ianvs/prettier-plugin-sort-imports", "prettier-plugin-tailwindcss"],
     tailwindStylesheet: "./packages/ui/src/styles/globals.css",
+    tailwindFunctions: ["cx", "clsx"],
     // Last version that doesn't squash type and value imports
     importOrderTypeScriptVersion: "4.4.0",
     importOrder: [
