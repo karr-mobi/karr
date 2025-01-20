@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.7.2
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.1...v0.7.2)
+
+### 🏡 Chore
+
+- Add changelogen ([cebe1fb](https://github.com/finxol/karr/commit/cebe1fb))
+
+### ❤️ Contributors
+
+- Finxol <git@finxol.io>
+
 ## v0.7.1
 
 [compare changes](https://github.com/finxol/karr/compare/v0.7.0...v0.7.1)
