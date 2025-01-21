@@ -29,7 +29,8 @@
         "@karr/util": "workspace:*",
         "drizzle-orm": "catalog:",
         "drizzle-kit": "catalog:",
-        "postgres": "catalog:"
+        "postgres": "catalog:",
+        "zod": "catalog:"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",

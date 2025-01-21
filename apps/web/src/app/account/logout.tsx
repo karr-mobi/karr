@@ -19,7 +19,7 @@ export default function Logout() {
     }
 
     return (
-        <Button onClick={logout} className="mt-2 mb-6">
+        <Button onClick={logout} className="mb-6 mt-2">
             Logout
         </Button>
     )

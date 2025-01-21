@@ -1,8 +1,10 @@
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 
+import type { Trip } from "@karr/db/schemas/trips.js"
 import logger from "@karr/util/logger"
 
+import { getTrips } from "@/db/trips"
 import type { DataResponse } from "@/lib/types.d.ts"
 
 const hono = new Hono()
@@ -22,13 +24,15 @@ hono.get("/search", (c) => {
 
         const tripsToSend: Promise<void>[] = []
 
-        function sendData(data: object[]) {
+        // TODO(@finxol): Fix the type of data
+        function sendData(data: Trip[]) {
+            logger.debug(`Sending ${data.length} trips`, data)
             for (const item of data) {
                 tripsToSend.push(
                     stream.writeSSE({
                         data: JSON.stringify(item),
                         event: "new-trip",
-                        id: crypto.randomUUID()
+                        id: item.id
                     })
                 )
             }
@@ -36,7 +40,8 @@ hono.get("/search", (c) => {
 
         try {
             // Get the trips from the local server
-            const immediatePromise: Promise<void> = getImmediateData().then(sendData)
+            const immediatePromise: Promise<void> = getTrips().then(sendData)
+
             // Get the trips from the federated servers
             const slowerPromises: Promise<void>[] = [getSlowerData().then(sendData)]
 
@@ -72,30 +77,21 @@ export default hono
 // ================ For SSE tests ================
 // ===============================================
 
-function getImmediateData(): Promise<object[]> {
+function getSlowerData(): Promise<Trip[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
             resolve([
-                { immediateObject1: "data1", id: 1 },
                 {
-                    immediateObject2: "data2",
-                    id: 3
+                    id: crypto.randomUUID(),
+                    from: "Rennes",
+                    to: "Acigne",
+                    departure: "2025-01-23",
+                    price: 5,
+                    createdAt: undefined,
+                    updatedAt: undefined,
+                    account: "715d3ca1-50ec-4bd1-8934-15bd0676a23b"
                 }
             ])
-        }, 50) // Simulate delay
-    })
-}
-
-function getSlowerData(): Promise<object[]> {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve([
-                { slowerObject1: "data3", id: 2 },
-                {
-                    slowerObject2: "data4",
-                    id: 4
-                }
-            ])
-        }, 1500) // Simulate delay
+        }, 3000) // Simulate delay
     })
 }

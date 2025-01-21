@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/postgres-js"
 
-import { getDbConfig } from "@karr/config"
+import { getDbConfig, PRODUCTION } from "@karr/config"
 
 const config = getDbConfig()
 
@@ -21,6 +21,10 @@ const connection = {
 
 let db
 try {
+    if (!PRODUCTION) {
+        console.log("Connecting to database...", { connection })
+    }
+
     db = drizzle({ connection })
 
     // Test the connection
