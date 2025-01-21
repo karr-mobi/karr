@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs"
-import { join } from "node:path"
+import { join, normalize } from "node:path"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import defaultConfig from "@/default_config.json" with { type: "json" }
@@ -213,7 +213,7 @@ describe("config module", () => {
         })
 
         it("should load database password from file when specified", async () => {
-            const passwordFile = "/path/to/password"
+            const passwordFile = join("test", "fixtures", "password.txt")
             const password = "secret-password"
 
             vi.mocked(loadDbConfig).mockImplementation(() => {
@@ -233,21 +233,16 @@ describe("config module", () => {
             // existsSync should return true when checking for the password file
             // but false when checking for the config file
             vi.mocked(existsSync).mockImplementation((path) => {
-                if (path.toString().endsWith(passwordFile)) {
-                    return true
-                } else {
-                    return false
-                }
+                return normalize(path.toString()) === normalize(passwordFile)
             })
 
             // readFileSync should return the password when checking for the password file
             // but return the config file contents when checking for the config file
             vi.mocked(readFileSync).mockImplementation((path) => {
-                if (path.toString().endsWith(passwordFile)) {
+                if (normalize(path.toString()) === normalize(passwordFile)) {
                     return password
-                } else {
-                    return readFileSync("./fixtures/sample_config.yaml")
                 }
+                return readFileSync("./fixtures/sample_config.yaml")
             })
 
             const { getDbConfig } = await import("@/config.js")
