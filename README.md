@@ -23,7 +23,8 @@ Target: get a basic "fake" demo working
 ##### Web
 
 - [x] Build login
-- [x] Show all trips on instance + federated
+- [x] Show all trips on instance
+- [ ] Show federated trips
 - [ ] Build "add trip" UI
 
 Optional:
