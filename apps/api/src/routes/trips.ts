@@ -1,10 +1,11 @@
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 
-import type { Trip } from "@karr/db/schemas/trips.js"
+import { NewTrip, NewTripSchema, Trip } from "@karr/db/schemas/trips.js"
 import logger from "@karr/util/logger"
 
-import { getTrips } from "@/db/trips"
+import { addTrip, getTrips } from "@/db/trips"
+import { responseErrorObject } from "@/lib/helpers"
 import type { DataResponse } from "@/lib/types.d.ts"
 
 const hono = new Hono()
@@ -52,6 +53,31 @@ hono.get("/search", (c) => {
             logger.error("Error sending SSE data:", error)
         }
     })
+})
+
+hono.post("/add", async (c) => {
+    //@ts-expect-error valid does take in a parameter
+    const { id } = c.req.valid("cookie")
+
+    try {
+        const trip: NewTrip = NewTripSchema.parse(await c.req.json<NewTrip>())
+
+        trip.account = id
+
+        const createdTrip = await addTrip(trip)
+
+        logger.debug(`Added trip:`, createdTrip)
+
+        return c.json(<DataResponse<object>>{
+            data: {
+                id: createdTrip.id,
+                name: "Test Trip"
+            }
+        })
+    } catch (error) {
+        logger.error("Error adding trip:", error)
+        return responseErrorObject(c, { message: "Error adding trip" }, 500)
+    }
 })
 
 /**
