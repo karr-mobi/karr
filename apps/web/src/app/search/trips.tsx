@@ -13,6 +13,7 @@ import {
     CardTitle
 } from "@karr/ui/components/card"
 
+import Loading from "@/components/Loading"
 import { QueryProvider } from "@/components/QueryProvider"
 import { apiFetch } from "@/util/apifetch"
 
@@ -28,6 +29,7 @@ function FetchTrips({ userid }: { userid: string }) {
     // Access the client
     const _queryClient = useQueryClient()
     const [trips, setTrips] = useState<Trip[]>([])
+    const [loading, setLoading] = useState(false)
 
     const {
         data: stream,
@@ -58,9 +60,13 @@ function FetchTrips({ userid }: { userid: string }) {
 
         async function processStream() {
             try {
+                setLoading(true)
                 while (true) {
                     const { done, value } = await reader.read()
-                    if (done) break
+                    if (done) {
+                        setLoading(false)
+                        break
+                    }
 
                     buffer += decoder.decode(value, { stream: true })
 
@@ -111,7 +117,7 @@ function FetchTrips({ userid }: { userid: string }) {
     }, [stream])
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <Loading />
     }
 
     if (isError || !stream) {
@@ -124,6 +130,7 @@ function FetchTrips({ userid }: { userid: string }) {
                 const t = TripSchema.parse(trip)
                 return <TripCard key={t.id} trip={t} />
             })}
+            {loading && <Loading />}
         </section>
     )
 }
