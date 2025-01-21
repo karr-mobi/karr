@@ -28,3 +28,13 @@ export const TripSchema = z.object({
 })
 
 export type Trip = z.infer<typeof TripSchema>
+
+export const NewTripSchema = z.object({
+    from: z.string(),
+    to: z.string(),
+    departure: z.string(),
+    price: z.number(),
+    account: z.any().optional()
+})
+
+export type NewTrip = z.infer<typeof NewTripSchema>
