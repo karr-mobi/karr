@@ -60,5 +60,24 @@ export const nextJsConfig = [
         rules: {
             ...pluginTanstackQuery.configs.recommended.rules
         }
+    },
+    {
+        files: ["src/**/*.{js,ts,jsx,tsx}"],
+        rules: {
+            "no-restricted-imports": [
+                "error",
+                {
+                    paths: [
+                        {
+                            name: "@karr/config",
+                            message:
+                                "Importing '@karr/config' directly is not allowed in Next apps because of fs read. " +
+                                "Only the variables in '@karr/config/static' are allowed."
+                        }
+                    ]
+                    // No patterns, so submodules like '@karr/config/static' are allowed
+                }
+            ]
+        }
     }
 ]

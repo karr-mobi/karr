@@ -1,0 +1,49 @@
+name: Karr CI
+
+on:
+    workflow_call:
+
+permissions:
+    contents: read
+
+env:
+    TURBO_TELEMETRY_DISABLED: 1
+    # You can leverage Vercel Remote Caching with Turbo to speed up your builds
+    # @link https://turborepo.org/docs/core-concepts/remote-caching#remote-caching-on-vercel-builds
+    TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+    TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    HUSKY: 0
+
+jobs:
+    checks:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+              name: Install pnpm
+              with:
+                  run_install: false
+
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 22
+                  cache: "pnpm"
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Lint project
+              run: pnpm run lint
+
+            - name: Check types
+              run: pnpm run check-types
+
+            - name: Run tests
+              run: pnpm run test
+
+            - name: Check formatting
+              run: pnpm run format:check

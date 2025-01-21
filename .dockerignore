@@ -15,7 +15,6 @@
 !apps/
 !packages/
 !tooling/
-!config/
 
 !wait-for-it.sh
 

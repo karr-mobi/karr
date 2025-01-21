@@ -1,6 +1,6 @@
 {
     "name": "karr",
-    "version": "0.4.3",
+    "version": "0.7.3",
     "private": true,
     "repository": "https://github.com/finxol/karr",
     "scripts": {
@@ -10,10 +10,11 @@
         "lint": "turbo lint",
         "check-types": "turbo check-types",
         "format": "prettier --write \"**/*.{ts,tsx,md,json,yml,yaml,css,html}\"",
-        "format:check": "prettier --check \"**/*.{ts,tsx,md,json,yml,yaml,css,html}\"",
+        "format:check": "prettier --config prettier.config.mjs --check \"**/*.{ts,tsx,md,json,yml,yaml,css,html}\"",
         "test": "turbo test",
         "prepare": "husky",
-        "commitlint": "commitlint --edit"
+        "commitlint": "commitlint --edit",
+        "release": "changelogen --release --push"
     },
     "workspaces": [
         "apps/*",
@@ -25,6 +26,7 @@
         "@commitlint/config-conventional": "catalog:tooling",
         "@ianvs/prettier-plugin-sort-imports": "catalog:tooling",
         "@turbo/gen": "catalog:tooling",
+        "changelogen": "catalog:tooling",
         "husky": "catalog:tooling",
         "lint-staged": "catalog:tooling",
         "prettier": "catalog:tooling",
@@ -49,5 +51,30 @@
         "apps/caddy/Caddyfile": [
             "caddy fmt --overwrite"
         ]
+    },
+    "changelog": {
+        "repo": "finxol/karr",
+        "types": {
+            "feat": {
+                "title": "🚀 Enhancements",
+                "semver": "minor"
+            },
+            "fix": {
+                "title": "🩹 Fixes",
+                "semver": "patch"
+            },
+            "perf": {
+                "title": "🔥 Performance",
+                "semver": "patch"
+            },
+            "build": {
+                "title": "📦 Build",
+                "semver": "patch"
+            },
+            "style": {
+                "title": "🎨 Styles",
+                "semver": "patch"
+            }
+        }
     }
 }

@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "node:fs"
-import { join } from "node:path"
+import { isAbsolute, join } from "node:path"
 import { parseJSON, parseJSON5, parseYAML } from "confbox"
 
 import defaultConfig from "./default_config.json" with { type: "json" }
@@ -34,7 +34,7 @@ const CONFIG_FILENAME = process.env.CONFIG_FILE || "karr.config"
  * @throws {Error} If the base path starts with anythinng other than "/", "." or a character
  */
 function resolvePath(base: string, file: string): string {
-    if (base.startsWith("/")) {
+    if (isAbsolute(base)) {
         return join(base, file)
     }
     if (base.startsWith(".") || base.charAt(0).match(/\w/)) {
@@ -54,6 +54,8 @@ function resolveConfigPath(): string | undefined {
     const acceptedExtensions = ["yaml", "yml", "json5", "json"]
 
     const fileWithoutExt = resolvePath(CONFIG_DIR, CONFIG_FILENAME)
+
+    console.log("fileWithoutExt", fileWithoutExt)
 
     const ext = acceptedExtensions.find((ext) => existsSync(`${fileWithoutExt}.${ext}`))
 

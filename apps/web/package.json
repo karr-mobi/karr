@@ -12,6 +12,7 @@
     },
     "dependencies": {
         "@karr/config": "workspace:*",
+        "@karr/db": "workspace:*",
         "@karr/ui": "workspace:*",
         "@tailwindcss/postcss": "catalog:",
         "@tanstack/react-query": "catalog:",
@@ -20,6 +21,7 @@
         "next": "catalog:",
         "next-themes": "catalog:",
         "ofetch": "catalog:",
+        "posthog-js": "^1.207.0",
         "react": "catalog:",
         "react-dom": "catalog:",
         "react-hook-form": "catalog:",

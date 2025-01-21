@@ -8,7 +8,7 @@ import { API_VERSION, PRODUCTION } from "@karr/config"
 import account from "@/routes/account"
 import auth from "@/routes/auth"
 import system from "@/routes/system"
-import trip from "@/routes/trip"
+import trips from "@/routes/trips"
 import user from "@/routes/user"
 import { getAccount } from "./lib/auth"
 import { responseErrorObject } from "./lib/helpers"
@@ -100,7 +100,7 @@ export const build = (): Hono => {
     // ============================
     hono.route(`/${API_VERSION}/user`, user)
     hono.route(`/${API_VERSION}/account`, account)
-    hono.route(`/${API_VERSION}/trip`, trip)
+    hono.route(`/${API_VERSION}/trips`, trips)
 
     return hono
 }

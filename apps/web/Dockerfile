@@ -65,9 +65,6 @@ COPY --from=builder --chown=runner:runner /app/apps/web/.next/standalone ./
 COPY --from=builder --chown=runner:runner /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder --chown=runner:runner /app/apps/web/public ./apps/web/public
 
-# Copy over application config file
-COPY --from=installer --chown=runner:runner /app/config ./config
-
 USER runner
 
 CMD ["node", "apps/web/server.js"]
