@@ -233,13 +233,13 @@ describe("config module", () => {
             // existsSync should return true when checking for the password file
             // but false when checking for the config file
             vi.mocked(existsSync).mockImplementation((path) => {
-                return normalize(path.toString()) === normalize(passwordFile)
+                return normalize(path.toString()).endsWith(normalize(passwordFile))
             })
 
             // readFileSync should return the password when checking for the password file
             // but return the config file contents when checking for the config file
             vi.mocked(readFileSync).mockImplementation((path) => {
-                if (normalize(path.toString()) === normalize(passwordFile)) {
+                if (normalize(path.toString()).endsWith(normalize(passwordFile))) {
                     return password
                 }
                 return readFileSync("./fixtures/sample_config.yaml")
@@ -249,7 +249,7 @@ describe("config module", () => {
             const dbConfig = getDbConfig()
 
             expect(dbConfig.password).toBe(password)
-            expect(existsSync).toHaveBeenCalledWith(passwordFile)
+            expect(existsSync).toHaveBeenCalledWith(join(process.cwd(), passwordFile))
 
             // Verify the connection string
             expect(dbConfig.connStr).toBe(

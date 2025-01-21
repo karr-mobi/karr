@@ -55,8 +55,6 @@ function resolveConfigPath(): string | undefined {
 
     const fileWithoutExt = resolvePath(CONFIG_DIR, CONFIG_FILENAME)
 
-    console.log("fileWithoutExt", fileWithoutExt)
-
     const ext = acceptedExtensions.find((ext) => existsSync(`${fileWithoutExt}.${ext}`))
 
     if (ext) {
