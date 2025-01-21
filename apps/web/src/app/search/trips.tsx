@@ -37,6 +37,9 @@ function FetchTrips({ userid }: { userid: string }) {
     } = useQuery({
         queryKey: ["user", userid],
         retry: false,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        refetchOnReconnect: false,
         queryFn: async () =>
             apiFetch("/trips/search", {
                 headers: {
