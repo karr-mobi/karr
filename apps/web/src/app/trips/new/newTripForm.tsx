@@ -37,7 +37,8 @@ export default function NewTripForm() {
             from: "",
             to: "",
             price: 6
-        }
+        },
+        mode: "onSubmit"
     })
 
     const onSubmit = async (data: NewTripInput) => {
@@ -67,7 +68,9 @@ export default function NewTripForm() {
                                     <Input placeholder="Vannes" {...field} />
                                 </FormControl>
                                 <FormDescription />
-                                <FormMessage />
+                                <FormMessage>
+                                    {form.formState.errors.from?.message}
+                                </FormMessage>
                             </FormItem>
                         )}
                     />
@@ -81,7 +84,9 @@ export default function NewTripForm() {
                                     <Input placeholder="Rennes" {...field} />
                                 </FormControl>
                                 <FormDescription />
-                                <FormMessage />
+                                <FormMessage>
+                                    {form.formState.errors.to?.message}
+                                </FormMessage>
                             </FormItem>
                         )}
                     />
@@ -120,7 +125,9 @@ export default function NewTripForm() {
                                         />
                                     </PopoverContent>
                                 </Popover>
-                                <FormMessage />
+                                <FormMessage>
+                                    {form.formState.errors.departure?.message}
+                                </FormMessage>
                                 <FormDescription />
                             </FormItem>
                         )}
@@ -139,7 +146,9 @@ export default function NewTripForm() {
                                         />
                                     </div>
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage>
+                                    {form.formState.errors.price?.message}
+                                </FormMessage>
                                 <FormDescription />
                             </FormItem>
                         )}
