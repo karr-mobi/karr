@@ -11,12 +11,14 @@
         "check-types": "tsc --noEmit"
     },
     "dependencies": {
+        "@hookform/resolvers": "^3.10.0",
         "@karr/config": "workspace:*",
         "@karr/db": "workspace:*",
         "@karr/ui": "workspace:*",
         "@tailwindcss/postcss": "catalog:",
         "@tanstack/react-query": "catalog:",
         "babel-plugin-react-compiler": "catalog:",
+        "date-fns": "^4.1.0",
         "lucide-react": "catalog:",
         "next": "catalog:",
         "next-themes": "catalog:",
