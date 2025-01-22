@@ -75,7 +75,7 @@ export default function RootLayout({
                                             variant="link"
                                             className="text-md"
                                         >
-                                            <Link href="/search">Trips</Link>
+                                            <Link href="/trips/search">Trips</Link>
                                         </Button>
                                     </nav>
                                 </div>
