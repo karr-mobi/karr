@@ -1,5 +1,63 @@
 # Changelog
 
+## v0.7.4
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.3...v0.7.4)
+
+### 🚀 Enhancements
+
+- **api:** Build trip add route ([#3](https://github.com/finxol/karr/pull/3))
+- **pages:** Create NewTripForm page for creating new trips
+  ([18382dc](https://github.com/finxol/karr/commit/18382dc))
+- **ui:** Add Calendar, Form, Label, and Popover components from shadcnui
+  ([fe5ffc2](https://github.com/finxol/karr/commit/fe5ffc2))
+- **ui:** Implement CurrencyInput component
+  ([8d75075](https://github.com/finxol/karr/commit/8d75075))
+- **trips:** Trips add and delete ([#5](https://github.com/finxol/karr/pull/5))
+
+### 🩹 Fixes
+
+- **trips:** Prevent unnecessary refetching on window focus
+  ([fd0513c](https://github.com/finxol/karr/commit/fd0513c))
+- **trips:** Prevent unnecessary refetching on window focus
+  ([dfc4323](https://github.com/finxol/karr/commit/dfc4323))
+- Should fix tests on windows ([503c0f7](https://github.com/finxol/karr/commit/503c0f7))
+- Correct absolute path mistake ([e261bad](https://github.com/finxol/karr/commit/e261bad))
+- **layout:** Update link to point to the new trips search path
+  ([d4c7b98](https://github.com/finxol/karr/commit/d4c7b98))
+- **schema:** Enforce minimum price validation and add NewTripInputSchema
+  ([ec4ee62](https://github.com/finxol/karr/commit/ec4ee62))
+
+### 💅 Refactors
+
+- **pages:** Reorganize trips pages for better hierarchy
+  ([823f209](https://github.com/finxol/karr/commit/823f209))
+- **structure:** Move the search folder to trips for better hierarchy
+  ([089ba3e](https://github.com/finxol/karr/commit/089ba3e))
+- **prettier:** Clean up prettierrc
+  ([705af1e](https://github.com/finxol/karr/commit/705af1e))
+
+### 🏡 Chore
+
+- Federated trips are separate step
+  ([1e4f5c5](https://github.com/finxol/karr/commit/1e4f5c5))
+- **css:** Update shadcn variable
+  ([14601ce](https://github.com/finxol/karr/commit/14601ce))
+- **config:** Add .prettierrc for better Windows compatibility
+  ([202cb12](https://github.com/finxol/karr/commit/202cb12))
+- **vscode:** Configure Prettier settings for consistent code formatting
+  ([e9b81b2](https://github.com/finxol/karr/commit/e9b81b2))
+- Fix vscode prettier config path
+  ([c8a711e](https://github.com/finxol/karr/commit/c8a711e))
+- Move deps versions to workspace catalog
+  ([27f5176](https://github.com/finxol/karr/commit/27f5176))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@finxol.io>
+- Finxol <git@finxol.io>
+- Saunier Martin <blasster35@gmail.com>
+
 ## v0.7.3
 
 [compare changes](https://github.com/finxol/karr/compare/v0.7.2...v0.7.3)
