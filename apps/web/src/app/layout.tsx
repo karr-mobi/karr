@@ -6,6 +6,7 @@ import Link from "next/link"
 import { APPLICATION_NAME } from "@karr/config/static"
 import { Button } from "@karr/ui/components/button"
 import { Separator } from "@karr/ui/components/separator"
+import { Toaster } from "@karr/ui/components/sonner"
 
 import logo from "@/assets/logo-tmp.jpg"
 
@@ -73,13 +74,13 @@ export default function RootLayout({
                                         <Button
                                             asChild
                                             variant="link"
-                                            className="text-md"
+                                            className="text-md px-0"
                                         >
                                             <Link href="/trips/search">Trips</Link>
                                         </Button>
                                     </nav>
                                 </div>
-                                <div className="flex flex-row items-center justify-end gap-8">
+                                <div className="flex flex-row items-center justify-end gap-4">
                                     <nav className="flex flex-row items-center justify-end gap-4">
                                         <LoginAccount />
                                     </nav>
@@ -90,6 +91,7 @@ export default function RootLayout({
                                 {children}
                             </main>
                         </div>
+                        <Toaster richColors />
                     </ThemeProvider>
                 </body>
             </CSPostHogProvider>
