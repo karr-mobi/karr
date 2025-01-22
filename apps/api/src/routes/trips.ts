@@ -4,8 +4,8 @@ import { streamSSE } from "hono/streaming"
 import { NewTrip, NewTripSchema, Trip } from "@karr/db/schemas/trips.js"
 import logger from "@karr/util/logger"
 
-import { addTrip, getTrips } from "@/db/trips"
-import { responseErrorObject } from "@/lib/helpers"
+import { addTrip, deleteTrip, getTrips } from "@/db/trips"
+import { handleRequest, responseErrorObject } from "@/lib/helpers"
 import type { DataResponse } from "@/lib/types.d.ts"
 
 const hono = new Hono()
@@ -55,6 +55,11 @@ hono.get("/search", (c) => {
     })
 })
 
+/**
+ * Add a trip
+ * @param id The ID of the account that is adding the trip
+ * @returns The trip id and name
+ */
 hono.post("/add", async (c) => {
     //@ts-expect-error valid does take in a parameter
     const { id } = c.req.valid("cookie")
@@ -78,6 +83,21 @@ hono.post("/add", async (c) => {
         logger.error("Error adding trip:", error)
         return responseErrorObject(c, { message: "Error adding trip" }, 500)
     }
+})
+
+/**
+ * Delete a trip by ID
+ * @param id The ID of the trip
+ * @returns The trip
+ */
+hono.delete("/:id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}", (c) => {
+    //@ts-expect-error valid does take in a parameter
+    const { id } = c.req.valid("cookie")
+
+    const tripId: string = c.req.param("id")
+
+    logger.debug(`Deleting trip: ${id}`)
+    return handleRequest(c, () => deleteTrip(tripId, id))
 })
 
 /**

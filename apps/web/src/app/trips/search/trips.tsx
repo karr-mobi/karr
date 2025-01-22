@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { Trash as IconTrash } from "lucide-react"
 
 import { TripSchema, type Trip } from "@karr/db/schemas/trips.js"
+import { Button } from "@karr/ui/components/button"
 import {
     Card,
     CardContent,
@@ -12,6 +14,7 @@ import {
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
+import { toast } from "@karr/ui/components/sonner"
 
 import Loading from "@/components/Loading"
 import { QueryProvider } from "@/components/QueryProvider"
@@ -27,9 +30,28 @@ export default function TripList({ userid }: { userid: string }) {
 
 function FetchTrips({ userid }: { userid: string }) {
     // Access the client
-    const _queryClient = useQueryClient()
+    const queryClient = useQueryClient()
     const [trips, setTrips] = useState<Trip[]>([])
     const [loading, setLoading] = useState(false)
+
+    async function deleteTrip(tripId: string): Promise<undefined> {
+        try {
+            await apiFetch(`/trips/${tripId}`, {
+                method: "DELETE",
+                headers: {
+                    authorization: tripId
+                }
+            })
+            toast.success("Successfully deleted trip")
+            // Invalidate and refetch
+            queryClient.invalidateQueries({ queryKey: ["trips"] })
+            // Clear local trips state
+            setTrips([])
+        } catch (e) {
+            console.error(e)
+            toast.error("Failed to delete trip")
+        }
+    }
 
     const {
         data: stream,
@@ -37,15 +59,12 @@ function FetchTrips({ userid }: { userid: string }) {
         isError,
         error
     } = useQuery({
-        queryKey: ["user", userid],
+        queryKey: ["trips"],
         retry: false,
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
         queryFn: async () =>
             apiFetch("/trips/search", {
-                headers: {
-                    authorization: userid
-                },
                 responseType: "stream"
             })
     })
@@ -56,11 +75,13 @@ function FetchTrips({ userid }: { userid: string }) {
         const reader = stream.getReader()
         const decoder = new TextDecoder()
         let buffer = ""
+        let mounted = true // Add mounted flag
 
         async function processStream() {
             try {
                 setLoading(true)
-                while (true) {
+                while (mounted) {
+                    // Check if still mounted
                     const { done, value } = await reader.read()
                     if (done) {
                         setLoading(false)
@@ -88,13 +109,14 @@ function FetchTrips({ userid }: { userid: string }) {
                         })
                         .filter((trip): trip is Trip => trip !== null)
 
-                    if (newTrips.length > 0) {
+                    if (newTrips.length > 0 && mounted) {
+                        // Check if still mounted
                         setTrips((prev) => [...prev, ...newTrips])
                     }
                 }
 
                 // Process any remaining data
-                if (buffer.trim()) {
+                if (buffer.trim() && mounted) {
                     try {
                         const tripData = JSON.parse(buffer)
                         const trip = TripSchema.parse(tripData)
@@ -104,17 +126,34 @@ function FetchTrips({ userid }: { userid: string }) {
                     }
                 }
             } catch (e) {
-                console.error("Stream reading error:", e)
+                if (mounted) {
+                    // Only log if still mounted
+                    console.error("Stream reading error:", e)
+                }
             }
         }
 
         processStream()
 
         return () => {
-            reader.cancel()
-            reader.releaseLock()
+            mounted = false // Set mounted to false on cleanup
+            // Ensure we properly clean up the reader
+            try {
+                reader.cancel()
+            } catch (e) {
+                console.error("Error cleaning up reader:", e)
+            } finally {
+                reader.releaseLock()
+                // Clear local trips state
+                setTrips([])
+            }
         }
     }, [stream])
+
+    useEffect(() => {
+        // Clear trips when component mounts or userid changes
+        setTrips([])
+    }, [userid])
 
     if (isLoading) {
         return <Loading />
@@ -128,19 +167,32 @@ function FetchTrips({ userid }: { userid: string }) {
         <section className="mt-10 flex flex-col items-center justify-start gap-4">
             {trips.map((trip: Trip) => {
                 const t = TripSchema.parse(trip)
-                return <TripCard key={t.id} trip={t} />
+                return <TripCard key={t.id} trip={t} onDelete={deleteTrip} />
             })}
             {loading && <Loading />}
         </section>
     )
 }
 
-function TripCard({ trip }: { trip: Trip }) {
+function TripCard({
+    trip,
+    onDelete
+}: {
+    trip: Trip
+    onDelete: (id: string) => Promise<void>
+}) {
     return (
         <Card className="max-w-full w-lg">
             <CardHeader>
                 <CardTitle>
-                    {trip.from} to {trip.to}
+                    <div className="flex flex-row justify-between items-center gap-2">
+                        <p>
+                            {trip.from} to {trip.to}
+                        </p>
+                        <Button variant="outline" onClick={() => onDelete(trip.id)}>
+                            <IconTrash />
+                        </Button>
+                    </div>
                 </CardTitle>
                 <CardDescription>
                     {new Date(trip.departure).toLocaleDateString()}
