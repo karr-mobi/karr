@@ -21,7 +21,7 @@ export const TripSchema = z.object({
     from: z.string(),
     to: z.string(),
     departure: z.string(),
-    price: z.number(),
+    price: z.number().min(0),
     createdAt: z.string().optional().nullable(),
     updatedAt: z.string().optional().nullable(),
     account: z.any().optional()
@@ -33,8 +33,18 @@ export const NewTripSchema = z.object({
     from: z.string(),
     to: z.string(),
     departure: z.string(),
-    price: z.number(),
+    price: z.number().min(0),
     account: z.any().optional()
 })
 
 export type NewTrip = z.infer<typeof NewTripSchema>
+
+export const NewTripInputSchema = z.object({
+    from: z.string().min(1),
+    to: z.string().min(1),
+    departure: z.date(),
+    price: z.number().min(0),
+    account: z.any().optional()
+})
+
+export type NewTripInput = z.infer<typeof NewTripInputSchema>

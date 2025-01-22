@@ -29,8 +29,8 @@
         --accent: hsl(105 10% 91.9%);
         --accent-foreground: hsl(105 10% 0.95%);
 
-        --popover: hsl(224 71% 4%);
-        --popover-foreground: hsl(215 20.2% 65.1%);
+        --popover: hsl(105 100% 98.38%);
+        --popover-foreground: hsl(105 10% 0.95%);
 
         --border: hsl(105 15% 89.76%);
         --input: hsl(105 15% 89.76%);

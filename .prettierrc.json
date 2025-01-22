@@ -1,0 +1,25 @@
+{
+    "arrowParens": "always",
+    "printWidth": 90,
+    "singleQuote": false,
+    "semi": false,
+    "trailingComma": "none",
+    "tabWidth": 4,
+    "bracketSpacing": true,
+    "plugins": ["prettier-plugin-tailwindcss", "@ianvs/prettier-plugin-sort-imports"],
+    "tailwindStylesheet": "./packages/ui/src/styles/globals.css",
+    "tailwindFunctions": ["cn", "clsx"],
+    "importOrderTypeScriptVersion": "4.4.0",
+    "importOrder": [
+        "^(react/(.*)$)|^(react$)",
+        "^(next/(.*)$)|^(next$)",
+        "<THIRD_PARTY_MODULES>",
+        "",
+        "^@karr/(.*)$",
+        "^karr/(.*)$",
+        "",
+        "^@/(.*)$",
+        "^[./]"
+    ],
+    "proseWrap": "always"
+}
