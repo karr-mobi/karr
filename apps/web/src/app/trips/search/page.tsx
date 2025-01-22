@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import Link from "next/link"
-import { Plus } from "lucide-react"
+import { Plus as IconPlus } from "lucide-react"
 
 import { Button } from "@karr/ui/components/button"
 
@@ -14,7 +14,7 @@ export default function Search() {
 
             <Button variant="default" className="mt-4" asChild>
                 <Link href="/trips/new">
-                    <Plus />
+                    <IconPlus />
                     <span className="ml-2">Create a new trip</span>
                 </Link>
             </Button>

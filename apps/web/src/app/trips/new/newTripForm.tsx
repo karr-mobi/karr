@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
-import { CalendarDays } from "lucide-react"
+import { CalendarDays as IconCalendarDays } from "lucide-react"
 import { useForm } from "react-hook-form"
 
 import { NewTripInputSchema, type NewTripInput } from "@karr/db/schemas/trips.js"
@@ -107,7 +107,7 @@ export default function NewTripForm() {
                                                 ) : (
                                                     <span>Pick a date</span>
                                                 )}
-                                                <CalendarDays className="ml-auto w-4 h-4" />
+                                                <IconCalendarDays className="ml-auto w-4 h-4" />
                                             </Button>
                                         </FormControl>
                                     </PopoverTrigger>
