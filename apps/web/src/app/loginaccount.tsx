@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { User } from "lucide-react"
+import { User as IconUser } from "lucide-react"
 
 import { Button } from "@karr/ui/components/button"
 
@@ -33,8 +33,8 @@ export default function LoginAccount() {
             {isAuthenticated ? (
                 <Button asChild>
                     <Link href="/account">
-                        <User />
-                        Account
+                        <IconUser />
+                        <span className="hidden sm:block">Account</span>
                     </Link>
                 </Button>
             ) : (

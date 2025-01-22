@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm"
+import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 
 import drizzle from "@karr/db"
@@ -41,4 +41,11 @@ export async function addTrip(trip: NewTrip): Promise<{ id: string }> {
     })
 
     return InsertedTripSchema.parse(inserted[0])
+}
+
+export async function deleteTrip(tripId: string, userId: string): Promise<boolean> {
+    await drizzle
+        .delete(tripsTable)
+        .where(and(eq(tripsTable.id, tripId), eq(tripsTable.account, userId)))
+    return true
 }
