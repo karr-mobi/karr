@@ -38,42 +38,51 @@ function FetchUserData({ userid }: { userid: string }) {
         return <div>Error: {error.message}</div>
     }
 
-    return <ShowUserData user={data} />
+    return <ShowUserData data={data} />
 }
 
 // TODO: add user type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function ShowUserData({ user: { data: user } }: { user: any }) {
+function ShowUserData({ data: { data: user } }: { data: any }) {
     const hasSpecialStatus = user.SpecialStatus?.id || false
 
     console.log(user)
 
     return (
         <div>
-            <h2>User</h2>
             <section className="flow">
-                {!hasSpecialStatus && (
-                    <Badge variant="destructive">
-                        <p>{user.SpecialStatus?.name || "No special status"}</p>
-                    </Badge>
-                )}
+                <aside className="flex flex-row gap-4">
+                    {user.blocked ? (
+                        <Badge variant="destructive">
+                            <p>⚠️ Account blocked</p>
+                        </Badge>
+                    ) : user.verified ? (
+                        <Badge variant="default">
+                            <p>✔︎ Account verified</p>
+                        </Badge>
+                    ) : (
+                        <Badge variant="destructive">
+                            <p>❌ Account not verified</p>
+                        </Badge>
+                    )}
+
+                    {!hasSpecialStatus && (
+                        <Badge variant="destructive">
+                            <p>{user.SpecialStatus?.name || "No special status"}</p>
+                        </Badge>
+                    )}
+                </aside>
                 <div className="flex flex-row gap-6">
                     <b>User ID</b>
                     <p>{user.id}</p>
                 </div>
                 <div className="flex flex-row gap-6">
-                    <b>Full Name</b>
-                    <p>
-                        {user.firstName} {user.lastName}
-                    </p>
-                </div>
-                <div className="flex flex-row gap-6">
-                    <b>Username</b>
-                    <p>{user.nickname ?? "No nickname"}</p>
+                    <b>Email</b>
+                    <p>{user.email}</p>
                 </div>
             </section>
-            <details>
-                <summary>See raw</summary>
+            <details className="mt-12">
+                <summary className="text-gray-300 dark:text-gray-700">See raw</summary>
                 <pre>{JSON.stringify(user, null, 2)}</pre>
             </details>
         </div>

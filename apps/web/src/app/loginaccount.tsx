@@ -34,7 +34,7 @@ export default function LoginAccount() {
                 <Button asChild>
                     <Link href="/account">
                         <User />
-                        Account
+                        <span className="hidden sm:block">Account</span>
                     </Link>
                 </Button>
             ) : (

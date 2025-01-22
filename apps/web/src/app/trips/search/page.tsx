@@ -9,7 +9,7 @@ import TripList from "./trips"
 
 export default function Search() {
     return (
-        <article className="mt-6 max-w-full w-2xl">
+        <article className="my-6 max-w-full w-2xl">
             <h3>Search for trips</h3>
 
             <Button variant="default" className="mt-4" asChild>

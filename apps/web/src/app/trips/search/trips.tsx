@@ -40,7 +40,6 @@ function FetchTrips({ userid }: { userid: string }) {
         queryKey: ["user", userid],
         retry: false,
         refetchOnWindowFocus: false,
-        refetchOnMount: false,
         refetchOnReconnect: false,
         queryFn: async () =>
             apiFetch("/trips/search", {
@@ -113,6 +112,7 @@ function FetchTrips({ userid }: { userid: string }) {
 
         return () => {
             reader.cancel()
+            reader.releaseLock()
         }
     }, [stream])
 
@@ -137,7 +137,7 @@ function FetchTrips({ userid }: { userid: string }) {
 
 function TripCard({ trip }: { trip: Trip }) {
     return (
-        <Card className="min-w-lg">
+        <Card className="max-w-full w-lg">
             <CardHeader>
                 <CardTitle>
                     {trip.from} to {trip.to}
@@ -150,7 +150,7 @@ function TripCard({ trip }: { trip: Trip }) {
                 <p>{trip.price} €</p>
             </CardContent>
             <CardFooter>
-                <p>{trip.account}</p>
+                <p>{trip.account.split("-")[0]}</p>
             </CardFooter>
         </Card>
     )
