@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.7.5
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.4...v0.7.5)
+
+### 🩹 Fixes
+
+- **form:** Correct error messages display below fields
+  ([#6](https://github.com/finxol/karr/pull/6))
+
+### ❤️ Contributors
+
+- Martin ([@KimBlazter](http://github.com/KimBlazter))
+
 ## v0.7.4
 
 [compare changes](https://github.com/finxol/karr/compare/v0.7.3...v0.7.4)
