@@ -17,7 +17,6 @@ export async function drizzleMigrate(): Promise<void> {
             ? path.join(__dirname, "./migrations")
             : path.join(__dirname, "../migrations")
 
-    logger.debug("Migrations path:", migrationsFolder)
     try {
         await migrate(db, {
             migrationsFolder
