@@ -3,6 +3,17 @@
 echo "Running pre-commit hook"
 
 ###################################################################
+# Disallow commits to main branch                                 #
+###################################################################
+pnpm commitlint --edit $1
+branch=$(git symbolic-ref HEAD)
+if [[ "$branch" == "refs/heads/main" ]]; then
+    echo "Direct commits to main branch are not allowed"
+    echo "Please create a feature branch and submit a PR"
+    exit 1
+fi
+
+###################################################################
 # Format the staged files using lint-staged                       #
 ###################################################################
 pnpm lint-staged
