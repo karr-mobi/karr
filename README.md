@@ -24,8 +24,8 @@ Target: get a basic "fake" demo working
 
 - [x] Build login
 - [x] Show all trips on instance
+- [x] Build "add trip" UI
 - [ ] Show federated trips
-- [ ] Build "add trip" UI
 
 Optional:
 
@@ -34,7 +34,7 @@ Optional:
 ##### API
 
 - [x] Build mock login
-- [ ] Return mock trips
+- [x] Return mock trips
 - [ ] Add federation module for federation-specific routes
 
 ## Roadmap
@@ -56,8 +56,6 @@ Optional:
           [Zenstats](https://github.com/dreamsofcode-io/zenstats/blob/main/.github/workflows/pipeline.yaml))
     - [ ] Add versioning ([Changesets](https://github.com/changesets/changesets))
 
-- [x] Make config reloadable
-
 - [ ] Add zod type checking
 
     - [ ] Env type-safety [T3 env](https://env.t3.gg/docs/nextjs)
@@ -66,7 +64,7 @@ Optional:
     - [x] Use clsx ?
     - [ ] Add i18n
           [info in Nextjs docs](https://nextjs.org/docs/pages/building-your-application/routing/internationalization)
-- [ ] Add trip search route that gives fake, not-searched data
+- [x] Add trip search route that gives fake, not-searched data
 - [ ] Add demo client for PoC
 
 - [x] Minify API Docker container
