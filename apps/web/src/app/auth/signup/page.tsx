@@ -32,7 +32,7 @@ export default function Login() {
                 body: { email: data.email, password: data.password }
             })
             setAuthentication(true)
-            router.push("/search")
+            router.push("/trips/search")
         } catch (e) {
             console.log(e)
             setError("Invalid email or password")
