@@ -135,7 +135,8 @@ function getSlowerData(): Promise<Trip[]> {
                     price: 5,
                     createdAt: undefined,
                     updatedAt: undefined,
-                    account: "715d3ca1-50ec-4bd1-8934-15bd0676a23b"
+                    account: "715d3ca1-50ec-4bd1-8934-15bd0676a23b",
+                    email: "test@email.com"
                 }
             ])
         }, 3000) // Simulate delay
