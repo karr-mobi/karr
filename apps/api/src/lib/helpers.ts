@@ -1,42 +1,8 @@
 import type { Context } from "hono"
-import { HTTPException } from "hono/http-exception"
-import type { CustomHeader, RequestHeader } from "hono/utils/headers"
 import { ContentfulStatusCode } from "hono/utils/http-status"
 
 import { ADMIN_EMAIL } from "@karr/config"
-import { isUUIDv4 } from "@karr/util"
 import logger from "@karr/util/logger"
-
-/**
- * Check if a request is authenticated
- * @param c The Hono context object
- * @returns True if the request is authenticated, false otherwise
- */
-export function checkAuth(value: Record<RequestHeader | CustomHeader, string>): {
-    id: string
-} {
-    const authorization = value["authorization"]
-
-    if (authorization === undefined || authorization === "") {
-        throw new HTTPException(400, {
-            message: "Authencation token is required in Authorization header"
-        })
-    }
-
-    // TODO(@finxol): verify the JWT
-    const id: string = authorization
-
-    // check the id is a valid UUID
-    if (!isUUIDv4(id)) {
-        throw new HTTPException(400, {
-            message: "Invalid user ID"
-        })
-    }
-
-    logger.debug(`User ID: ${id}`)
-
-    return { id }
-}
 
 /**
  * Template for a function that returns a response object
