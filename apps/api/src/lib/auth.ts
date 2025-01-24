@@ -110,6 +110,11 @@ export async function logout(token: string) {
     db.update(accountsTable).set({ token: "" }).where(eq(accountsTable.token, token))
 }
 
+/**
+ * Get the account ID for a given token
+ * @param token The user's token
+ * @returns the account ID
+ */
 export async function getAccount(token: string): Promise<string | null> {
     const account = await db
         .select({
