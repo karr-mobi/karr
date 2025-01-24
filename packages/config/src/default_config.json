@@ -10,5 +10,6 @@
     "API_BASE": "/api",
     "LOG_LEVEL": "info",
     "LOG_TIMESTAMP": true,
-    "FEDERATION": true
+    "FEDERATION": true,
+    "FEDERATION_TARGETS": []
 }
