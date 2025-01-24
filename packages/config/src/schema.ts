@@ -16,6 +16,7 @@ export const ConfigFileSchema = z
         LOG_TIMESTAMP: z.boolean().optional(),
         LOG_LEVEL: LogLevelSchema.optional(),
         ADMIN_EMAIL: z.string().email().optional(),
+        FEDERATION: z.boolean().optional(),
         DB_CONFIG: z
             .object({
                 host: z.string().optional(),
@@ -57,6 +58,7 @@ export const FullConfigSchema = z
                 : "info"
         ),
         ADMIN_EMAIL: z.string().email().optional(),
+        FEDERATION: z.boolean(),
         API_VERSION: z.enum(["v1"]).default(staticConfig.API_VERSION),
         APPLICATION_NAME: z.string().default(staticConfig.APPLICATION_NAME),
         PRODUCTION: z.boolean().default(process.env.NODE_ENV === "production")

@@ -159,6 +159,10 @@ export function loadFullConfig(): FullConfig {
         config.ADMIN_EMAIL = process.env.ADMIN_EMAIL
     }
 
+    if (process.env.FEDERATION) {
+        config.FEDERATION = !(process.env.LOG_TIMESTAMP === "false")
+    }
+
     return FullConfigSchema.parse(config)
 }
 

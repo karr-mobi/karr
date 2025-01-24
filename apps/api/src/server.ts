@@ -3,10 +3,11 @@ import { getCookie } from "hono/cookie"
 import { cors } from "hono/cors"
 import { validator } from "hono/validator"
 
-import { API_VERSION, PRODUCTION } from "@karr/config"
+import { API_VERSION, FEDERATION, PRODUCTION } from "@karr/config"
 
 import account from "@/routes/account"
 import auth from "@/routes/auth"
+import federation from "@/routes/federation"
 import system from "@/routes/system"
 import trips from "@/routes/trips"
 import user from "@/routes/user"
@@ -101,6 +102,10 @@ export const build = (): Hono => {
     hono.route(`/${API_VERSION}/user`, user)
     hono.route(`/${API_VERSION}/account`, account)
     hono.route(`/${API_VERSION}/trips`, trips)
+
+    if (FEDERATION) {
+        hono.route(`/${API_VERSION}/federation`, federation)
+    }
 
     return hono
 }
