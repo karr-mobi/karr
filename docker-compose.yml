@@ -4,7 +4,7 @@ services:
         environment:
             - LOG_LEVEL=debug
         ports:
-            - 3000:3000
+            - 3003:3000
         volumes:
             - /srv/http/karr/karr.config.yaml:/app/config/karr.config.yaml
         depends_on:
@@ -44,15 +44,12 @@ services:
     caddy:
         image: ghcr.io/finxol/karr-caddy:latest
         ports:
-            - "80:80"
-            - "443:443"
-            - "443:443/udp"
+            - "8088:8088"
         environment:
             - TZ=Europe/Paris
-            - SITE_ADDRESS=karr.finxol.io
+            - SITE_ADDRESS=http://karr2.finxol.io:8088
             - API_PORT=1993
-            - WEB_PORT=3000
-            #- CADDY_DISABLE_TLS=1
+            - WEB_PORT=3003
         volumes:
             - caddy_data:/data
             - caddy_config:/config
@@ -62,5 +59,5 @@ volumes:
     caddy_config:
 
 secrets:
-    db-password: # needs a secret created with `printf "<password>" | docker secret create db-password -`
-        external: true
+    db-password: # needs a db-password.txt file created with `printf "<password>" > db-password.txt`
+        file: ./db-password.txt
