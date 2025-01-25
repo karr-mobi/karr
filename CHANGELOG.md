@@ -1,5 +1,74 @@
 # Changelog
 
+## v0.7.11
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.8...v0.7.11)
+
+### 🩹 Fixes
+
+- **trips:** New trip schema validation ([#14](https://github.com/finxol/karr/pull/14))
+
+### 💅 Refactors
+
+- **husky:** Only allow release commit to main
+  ([e7f3f34](https://github.com/finxol/karr/commit/e7f3f34))
+
+### 🏡 Chore
+
+- **husky:** Allow release commit only on main
+  ([795cf71](https://github.com/finxol/karr/commit/795cf71))
+
+### ❤️ Contributors
+
+- Finxol <git@finxol.io>
+- Colin Ozanne <git@finxol.io>
+
+## v0.7.10
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.8...v0.7.10)
+
+### 🩹 Fixes
+
+- **trips:** New trip schema validation ([#14](https://github.com/finxol/karr/pull/14))
+
+### 💅 Refactors
+
+- **husky:** Only allow release commit to main
+  ([e7f3f34](https://github.com/finxol/karr/commit/e7f3f34))
+
+### 🏡 Chore
+
+- **husky:** Allow release commit only on main
+  ([795cf71](https://github.com/finxol/karr/commit/795cf71))
+
+### ❤️ Contributors
+
+- Finxol <git@finxol.io>
+- Colin Ozanne <git@finxol.io>
+
+## v0.7.9
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.8...v0.7.9)
+
+### 🩹 Fixes
+
+- **trips:** New trip schema validation ([#14](https://github.com/finxol/karr/pull/14))
+
+### 💅 Refactors
+
+- **husky:** Only allow release commit to main
+  ([e7f3f34](https://github.com/finxol/karr/commit/e7f3f34))
+
+### 🏡 Chore
+
+- **husky:** Allow release commit only on main
+  ([795cf71](https://github.com/finxol/karr/commit/795cf71))
+
+### ❤️ Contributors
+
+- Finxol <git@finxol.io>
+- Colin Ozanne <git@finxol.io>
+
 ## v0.7.8
 
 [compare changes](https://github.com/finxol/karr/compare/v0.7.7...v0.7.8)
