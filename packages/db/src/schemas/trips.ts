@@ -12,8 +12,8 @@ export const tripsTable = pgTable("Trips", {
     createdAt: date().defaultNow(),
     updatedAt: date().defaultNow(),
     account: uuid()
-        // .notNull()
         .references(() => accountsTable.id)
+        .notNull()
 })
 
 export const TripSchema = z.object({
@@ -24,8 +24,8 @@ export const TripSchema = z.object({
     price: z.number().min(0),
     createdAt: z.string().optional().nullable(),
     updatedAt: z.string().optional().nullable(),
-    account: z.any().optional(),
-    email: z.string().email()
+    account: z.string().uuid(),
+    email: z.string().email().nullable()
 })
 
 export type Trip = z.infer<typeof TripSchema>
@@ -35,7 +35,7 @@ export const NewTripSchema = z.object({
     to: z.string(),
     departure: z.string(),
     price: z.number().min(0),
-    account: z.any().optional()
+    account: z.string().uuid()
 })
 
 export type NewTrip = z.infer<typeof NewTripSchema>
