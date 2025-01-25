@@ -225,7 +225,7 @@ function TripCard({
                         <IconHouse className="my-0.5" />
                     </Badge>
                 )}
-                <p>{trip.account.split("-")[0]}</p>
+                <p>{trip.email?.split("@")[0] || trip.account.split("-")[0]}</p>
             </CardFooter>
         </Card>
     )
