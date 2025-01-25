@@ -1,5 +1,9 @@
 {
 	email admin@finxol.io # For Let's Encrypt notifications
+
+	servers {
+		trusted_proxies static private_ranges
+	}
 }
 
 {$SITE_ADDRESS} {
