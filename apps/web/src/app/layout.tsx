@@ -45,6 +45,9 @@ export default function RootLayout({
             suppressHydrationWarning
             className={`${geistSans.variable} ${baskervville.variable}`}
         >
+            <head>
+                {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js" async /> */}
+            </head>
             <CSPostHogProvider>
                 <body>
                     <ThemeProvider
