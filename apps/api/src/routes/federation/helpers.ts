@@ -25,7 +25,10 @@ export async function getFederatedTrips(): Promise<Trip[]> {
             }
         }
     } catch (error) {
-        logger.error("Error fetching trips from federation:", (error as FetchError)?.data)
+        logger.error(
+            "Error fetching trips from federation:",
+            (error as FetchError)?.data || error
+        )
     }
     return trips
 }

@@ -69,9 +69,9 @@ hono.post("/add", async (c) => {
     const { id } = c.req.valid("cookie")
 
     try {
-        const trip: NewTrip = NewTripSchema.parse(await c.req.json<NewTrip>())
-
-        trip.account = id
+        const t = await c.req.json<NewTrip>()
+        t.account = id
+        const trip: NewTrip = NewTripSchema.parse(t)
 
         const createdTrip = await addTrip(trip)
 
