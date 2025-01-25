@@ -1,2 +1,37 @@
-# Lint commit messages to ensure they follow the conventional commits format
+#!/usr/bin/env sh
+
+echo "Running commit-msg hook"
+
+#######################################################################
+# Disallow commits to main branch, allow release commits only on main #                           #
+#######################################################################
+branch=$(git symbolic-ref HEAD)
+commit_msg=$(cat "$1")
+
+# Check if it's a release commit
+is_release_commit=0
+if [[ "$commit_msg" =~ ^chore\(release\):\ v ]]; then
+    is_release_commit=1
+fi
+
+if [[ "$branch" == "refs/heads/main" ]]; then
+    # On main branch: only allow release commits
+    if [[ $is_release_commit == 0 ]]; then
+        echo "Direct commits to main branch are not allowed"
+        echo "Please create a feature branch and submit a PR"
+        echo "Only release commits (starting with 'chore(release): v') are allowed on main"
+        exit 1
+    fi
+else
+    # On other branches: block release commits
+    if [[ $is_release_commit == 1 ]]; then
+        echo "Release commits are only allowed on the main branch"
+        echo "Please switch to main branch for release commits"
+        exit 1
+    fi
+fi
+
+################################################################
+# Check if commit message is in the conventional commit format #
+################################################################
 pnpm commitlint ${1}
