@@ -15,7 +15,7 @@ Built with:
   ([Docker package](https://github.com/users/finxol/packages/container/package/karr-web))
 - `@karr/caddy`: Caddy server
   ([Docker package](https://github.com/users/finxol/packages/container/package/karr-caddy))
-- `@karr/auth`: Ory Kratos + Oathkeeper
+- `@karr/auth`: Ory Kratos + Oathkeeper (or OpenAuth)
 
 ## PoC Roadmap
 
@@ -26,7 +26,7 @@ Target: get a basic "fake" demo working
 - [x] Build login
 - [x] Show all trips on instance
 - [x] Build "add trip" UI
-- [ ] Show federated trips
+- [x] Show federated trips
 
 Optional:
 
@@ -36,7 +36,7 @@ Optional:
 
 - [x] Build mock login
 - [x] Return mock trips
-- [ ] Add federation module for federation-specific routes
+- [x] Add federation module for federation-specific routes
 
 ## Roadmap
 
@@ -67,7 +67,7 @@ Optional:
     - [ ] Add i18n
           [info in Nextjs docs](https://nextjs.org/docs/app/building-your-application/routing/internationalization)
 - [x] Add trip search route that gives fake, not-searched data
-- [ ] Add demo client for PoC
+- [x] Add demo client for PoC
 
 - [x] Minify API Docker container
 
