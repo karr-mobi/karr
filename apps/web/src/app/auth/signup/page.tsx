@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 
@@ -83,6 +84,13 @@ export default function Login() {
                     </p>
                 )}
             </form>
+
+            <p className="text-center text-sm text-muted-foreground mt-4">
+                Already have an account?
+                <Button asChild variant="link" className="text-sm">
+                    <Link href="/auth/login">Log in</Link>
+                </Button>
+            </p>
         </div>
     )
 }

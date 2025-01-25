@@ -12,9 +12,10 @@ import logo from "@/assets/logo-tmp.jpg"
 
 import "@/assets/globals.css"
 
+import Footer from "./_components/footer"
+import LoginAccount from "./_components/loginaccount"
 import ThemeProvider from "./_components/ThemeProvider"
 import ThemeSwitch from "./_components/ThemeSwitch"
-import LoginAccount from "./loginaccount"
 import { CSPostHogProvider } from "./providers"
 
 const geistSans = localFont({
@@ -87,9 +88,10 @@ export default function RootLayout({
                                     <ThemeSwitch />
                                 </div>
                             </header>
-                            <main className="mx-4 flex h-full flex-col items-center justify-start overflow-y-scroll">
+                            <main className="mx-4 mt-4 flex h-full flex-col items-center justify-start overflow-y-scroll">
                                 {children}
                             </main>
+                            <Footer />
                         </div>
                         <Toaster richColors />
                     </ThemeProvider>
