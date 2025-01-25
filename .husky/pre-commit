@@ -5,12 +5,18 @@ echo "Running pre-commit hook"
 ###################################################################
 # Disallow commits to main branch                                 #
 ###################################################################
-pnpm commitlint --edit $1
 branch=$(git symbolic-ref HEAD)
 if [[ "$branch" == "refs/heads/main" ]]; then
-    echo "Direct commits to main branch are not allowed"
-    echo "Please create a feature branch and submit a PR"
-    exit 1
+    # Get the commit message from the staged commit
+    commit_msg=$(cat "$PWD/.git/COMMIT_EDITMSG" 2>/dev/null)
+
+    # Check if it's a release commit
+    if [[ ! "$commit_msg" =~ ^chore\(release\):\ v ]]; then
+        echo "Direct commits to main branch are not allowed"
+        echo "Please create a feature branch and submit a PR"
+        echo "Only release commits (starting with 'chore(release): v') are allowed on main"
+        exit 1
+    fi
 fi
 
 ###################################################################
