@@ -39,11 +39,11 @@ export default function LoginAccount() {
                 </Button>
             ) : (
                 <>
-                    <Button asChild variant="secondary">
-                        <Link href="/auth/login">Login</Link>
+                    <Button asChild variant="secondary" className="hidden sm:block">
+                        <Link href="/auth/signup">Sign up</Link>
                     </Button>
                     <Button asChild>
-                        <Link href="/auth/signup">Sign up</Link>
+                        <Link href="/auth/login">Login</Link>
                     </Button>
                 </>
             )}
