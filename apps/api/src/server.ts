@@ -60,14 +60,16 @@ export const build = (): Hono => {
                     c,
                     {
                         message: "Unauthorized",
-                        cause: "Auth token is required in Authorization header"
+                        cause: "Auth token is required in cookie"
                     },
                     401
                 )
             }
 
             // TODO(@finxol): verify the JWT
-            const id: string | null = await getAccount(authtoken)
+            const id: string | null =
+                // very unsafe, but it's just for the PoC
+                authtoken === "federation" ? "federation" : await getAccount(authtoken)
 
             if (id === null) {
                 return responseErrorObject(
