@@ -1,5 +1,28 @@
 # Changelog
 
+## v0.7.12
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.11...v0.7.12)
+
+### 🚀 Enhancements
+
+- **trips:** Show email instead of id on results
+  ([e77ca67](https://github.com/finxol/karr/commit/e77ca67))
+
+### 🩹 Fixes
+
+- **caddy:** Allow to run behind another proxy
+  ([#16](https://github.com/finxol/karr/pull/16))
+
+### 🏡 Chore
+
+- **husky:** Fix commit hooks ([1d6a333](https://github.com/finxol/karr/commit/1d6a333))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@finxol.io>
+- Finxol <git@finxol.io>
+
 ## v0.7.11
 
 [compare changes](https://github.com/finxol/karr/compare/v0.7.8...v0.7.11)
