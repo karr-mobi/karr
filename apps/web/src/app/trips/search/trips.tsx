@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { Trash as IconTrash } from "lucide-react"
+import { Earth as IconEarth, House as IconHouse, Trash as IconTrash } from "lucide-react"
 
 import { TripSchema, type Trip } from "@karr/db/schemas/trips.js"
+import { Badge } from "@karr/ui/components/badge"
 import { Button } from "@karr/ui/components/button"
 import {
     Card,
@@ -167,7 +168,13 @@ function FetchTrips({ userid }: { userid: string }) {
         <section className="mt-10 flex flex-col items-center justify-start gap-4">
             {trips.map((trip: Trip) => {
                 const t = TripSchema.parse(trip)
-                return <TripCard key={t.id} trip={t} onDelete={deleteTrip} />
+                return (
+                    <TripCard
+                        key={`${trip.origin || ""}@${t.id}`}
+                        trip={t}
+                        onDelete={deleteTrip}
+                    />
+                )
             })}
             {loading && <Loading />}
         </section>
@@ -201,7 +208,23 @@ function TripCard({
             <CardContent>
                 <p>{trip.price} €</p>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flow-inline">
+                {trip.origin ? (
+                    <Badge
+                        variant="outline"
+                        className="text-sm flex flex-row items-center gap-1"
+                    >
+                        <IconEarth />
+                        {trip.origin}
+                    </Badge>
+                ) : (
+                    <Badge
+                        variant="outline"
+                        className="text-sm flex flex-row items-center gap-1"
+                    >
+                        <IconHouse className="my-0.5" />
+                    </Badge>
+                )}
                 <p>{trip.account.split("-")[0]}</p>
             </CardFooter>
         </Card>

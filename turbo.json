@@ -13,6 +13,8 @@
         "ADMIN_EMAIL",
         "LOG_LEVEL",
         "LOG_TIMESTAMP",
+        "FEDERATION",
+        "FEDERATION_TARGETS",
         "DB_HOST",
         "DB_PORT",
         "DB_SSL",

@@ -18,6 +18,7 @@ export const tripsTable = pgTable("Trips", {
 
 export const TripSchema = z.object({
     id: z.string().uuid(),
+    origin: z.string().optional().nullable(),
     from: z.string(),
     to: z.string(),
     departure: z.string(),

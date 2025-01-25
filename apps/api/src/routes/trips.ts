@@ -7,6 +7,7 @@ import logger from "@karr/util/logger"
 import { addTrip, deleteTrip, getTrips } from "@/db/trips"
 import { handleRequest, responseErrorObject } from "@/lib/helpers"
 import type { DataResponse } from "@/lib/types.d.ts"
+import { getFederatedTrips } from "./federation/helpers"
 
 const hono = new Hono()
 
@@ -44,7 +45,10 @@ hono.get("/search", (c) => {
             const immediatePromise: Promise<void> = getTrips().then(sendData)
 
             // Get the trips from the federated servers
-            const slowerPromises: Promise<void>[] = [getSlowerData().then(sendData)]
+            const slowerPromises: Promise<void>[] = [
+                getFederatedTrips().then(sendData)
+                // getSlowerData().then(sendData)
+            ]
 
             await Promise.all([...tripsToSend, immediatePromise, ...slowerPromises])
             logger.debug("All data sent")
@@ -123,6 +127,7 @@ export default hono
 // ================ For SSE tests ================
 // ===============================================
 
+//eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getSlowerData(): Promise<Trip[]> {
     return new Promise((resolve) => {
         setTimeout(() => {
