@@ -3,11 +3,10 @@ services:
         image: ghcr.io/finxol/karr-web:latest
         environment:
             - LOG_LEVEL=debug
-            - CONFIG_DIR=/app/config
-            - PORT=3000
-            - API=https://karr.finxol.io/api
         ports:
             - 3000:3000
+        volumes:
+            - /srv/http/karr/karr.config.yaml:/app/config/karr.config.yaml
         depends_on:
             - api
 
@@ -16,13 +15,13 @@ services:
         secrets:
             - db-password
         environment:
-            - LOG_LEVEL=info
-            - CONFIG_DIR=/app/config
             - DB_USER=karr
             - DB_HOST=db
             - DB_PASSWORD_FILE=/run/secrets/db-password
         ports:
             - 1993:1993
+        volumes:
+            - /srv/http/karr/karr.config.yaml:/app/config/karr.config.yaml
         depends_on:
             - db
 
