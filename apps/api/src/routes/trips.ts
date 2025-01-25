@@ -133,10 +133,10 @@ function getSlowerData(): Promise<Trip[]> {
                     to: "Acigne",
                     departure: "2025-01-23",
                     price: 5,
-                    createdAt: undefined,
-                    updatedAt: undefined,
-                    account: "715d3ca1-50ec-4bd1-8934-15bd0676a23b",
-                    email: "test@email.com"
+                    email: "john.doe@example.com",
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    account: "715d3ca1-50ec-4bd1-8934-15bd0676a23b"
                 }
             ])
         }, 3000) // Simulate delay
