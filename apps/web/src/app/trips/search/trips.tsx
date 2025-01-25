@@ -196,9 +196,11 @@ function TripCard({
                         <p>
                             {trip.from} to {trip.to}
                         </p>
-                        <Button variant="outline" onClick={() => onDelete(trip.id)}>
-                            <IconTrash />
-                        </Button>
+                        {!trip.origin && (
+                            <Button variant="outline" onClick={() => onDelete(trip.id)}>
+                                <IconTrash />
+                            </Button>
+                        )}
                     </div>
                 </CardTitle>
                 <CardDescription>
