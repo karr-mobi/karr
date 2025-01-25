@@ -57,14 +57,15 @@ Optional:
           [Zenstats](https://github.com/dreamsofcode-io/zenstats/blob/main/.github/workflows/pipeline.yaml))
     - [ ] Add versioning ([Changesets](https://github.com/changesets/changesets))
 
-- [ ] Add zod type checking
+- [ ] Add zod validation in Hono
+      ([Hono docs](https://github.com/honojs/middleware/tree/main/packages/zod-validator))
 
     - [ ] Env type-safety [T3 env](https://env.t3.gg/docs/nextjs)
 
 - [x] Add mock login
     - [x] Use clsx ?
     - [ ] Add i18n
-          [info in Nextjs docs](https://nextjs.org/docs/pages/building-your-application/routing/internationalization)
+          [info in Nextjs docs](https://nextjs.org/docs/app/building-your-application/routing/internationalization)
 - [x] Add trip search route that gives fake, not-searched data
 - [ ] Add demo client for PoC
 

@@ -1,7 +1,8 @@
-import { and, eq } from "drizzle-orm"
+import { and, eq, getTableColumns } from "drizzle-orm"
 import { z } from "zod"
 
 import drizzle from "@karr/db"
+import { accountsTable } from "@karr/db/schemas/accounts.js"
 import {
     NewTripSchema,
     TripSchema,
@@ -12,7 +13,13 @@ import {
 import logger from "@karr/util/logger"
 
 export async function getTrips(): Promise<Trip[]> {
-    const trips = await drizzle.select().from(tripsTable)
+    const trips = await drizzle
+        .select({
+            ...getTableColumns(tripsTable),
+            email: accountsTable.email
+        })
+        .from(tripsTable)
+        .leftJoin(accountsTable, eq(tripsTable.account, accountsTable.id))
     return TripSchema.array().parse(trips)
 }
 
