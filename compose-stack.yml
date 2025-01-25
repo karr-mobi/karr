@@ -1,10 +1,10 @@
 services:
     web:
         image: ghcr.io/finxol/karr-web:latest
+        networks:
+            - karr_network
         environment:
             - LOG_LEVEL=debug
-        ports:
-            - 3000:3000
         volumes:
             - /srv/http/karr/karr.config.yaml:/app/config/karr.config.yaml
         depends_on:
@@ -12,14 +12,14 @@ services:
 
     api:
         image: ghcr.io/finxol/karr-api:latest
+        networks:
+            - karr_network
         secrets:
             - db-password
         environment:
             - DB_USER=karr
             - DB_HOST=db
             - DB_PASSWORD_FILE=/run/secrets/db-password
-        ports:
-            - 1993:1993
         volumes:
             - /srv/http/karr/karr.config.yaml:/app/config/karr.config.yaml
         depends_on:
@@ -27,8 +27,8 @@ services:
 
     db:
         image: postgres:17-alpine
-        ports:
-            - 5432:5432
+        networks:
+            - karr_network
         secrets:
             - db-password
         environment:
@@ -43,16 +43,16 @@ services:
 
     caddy:
         image: ghcr.io/finxol/karr-caddy:latest
+        networks:
+            - karr_network
         ports:
             - "80:80"
             - "443:443"
             - "443:443/udp"
         environment:
-            - TZ=Europe/Paris
             - SITE_ADDRESS=karr.finxol.io
             - API_PORT=1993
             - WEB_PORT=3000
-            #- CADDY_DISABLE_TLS=1
         volumes:
             - caddy_data:/data
             - caddy_config:/config
@@ -60,6 +60,9 @@ services:
 volumes:
     caddy_data:
     caddy_config:
+
+networks:
+    karr_network:
 
 secrets:
     db-password: # needs a secret created with `printf "<password>" | docker secret create db-password -`

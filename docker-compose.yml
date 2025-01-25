@@ -1,10 +1,10 @@
 services:
     web:
         image: ghcr.io/finxol/karr-web:latest
+        networks:
+            - karr_network
         environment:
             - LOG_LEVEL=debug
-        ports:
-            - 3003:3000
         volumes:
             - /srv/http/karr/karr.config.yaml:/app/config/karr.config.yaml
         depends_on:
@@ -12,6 +12,8 @@ services:
 
     api:
         image: ghcr.io/finxol/karr-api:latest
+        networks:
+            - karr_network
         secrets:
             - db-password
         environment:
@@ -27,6 +29,8 @@ services:
 
     db:
         image: postgres:17-alpine
+        networks:
+            - karr_network
         ports:
             - 5432:5432
         secrets:
@@ -43,13 +47,15 @@ services:
 
     caddy:
         image: ghcr.io/finxol/karr-caddy:latest
+        networks:
+            - karr_network
         ports:
             - "8088:8088"
         environment:
             - TZ=Europe/Paris
             - SITE_ADDRESS=http://karr2.finxol.io:8088
             - API_PORT=1993
-            - WEB_PORT=3003
+            - WEB_PORT=3000
         volumes:
             - caddy_data:/data
             - caddy_config:/config
@@ -57,6 +63,9 @@ services:
 volumes:
     caddy_data:
     caddy_config:
+
+networks:
+    karr_network:
 
 secrets:
     db-password: # needs a db-password.txt file created with `printf "<password>" > db-password.txt`
