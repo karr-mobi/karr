@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.7.8
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.7...v0.7.8)
+
+### 🏡 Chore
+
+- Fix formatting ([26fbbdd](https://github.com/finxol/karr/commit/26fbbdd))
+
+### ❤️ Contributors
+
+- Finxol <git@finxol.io>
+
 ## v0.7.7
 
 [compare changes](https://github.com/finxol/karr/compare/v0.7.5...v0.7.7)
