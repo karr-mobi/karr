@@ -1,5 +1,63 @@
 # Changelog
 
+## v0.7.7
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.5...v0.7.7)
+
+### 🚀 Enhancements
+
+- **api:** Add email field to getTrips requests ([#13](https://github.com/finxol/karr/pull/13))
+- **federation:** Add basic federation for trips ([#11](https://github.com/finxol/karr/pull/11))
+
+### 🩹 Fixes
+
+- **auth:** Change success redirect url ([25199fc](https://github.com/finxol/karr/commit/25199fc))
+- **ui:** Adjust font size ([9e57f89](https://github.com/finxol/karr/commit/9e57f89))
+
+### 🏡 Chore
+
+- Update checklist ([5a7c842](https://github.com/finxol/karr/commit/5a7c842))
+- Remove useless logs ([2af4d78](https://github.com/finxol/karr/commit/2af4d78))
+- Disallow committing to main ([16741d7](https://github.com/finxol/karr/commit/16741d7))
+- Add version ([b8bc6dd](https://github.com/finxol/karr/commit/b8bc6dd))
+- Update todo ([647dc7c](https://github.com/finxol/karr/commit/647dc7c))
+- Add pr title cheking ([4221477](https://github.com/finxol/karr/commit/4221477))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@finxol.io>
+- Martin ([@KimBlazter](http://github.com/KimBlazter))
+- Finxol <git@finxol.io>
+
+## v0.7.6
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.5...v0.7.6)
+
+### 🚀 Enhancements
+
+- **api:** Add email field to getTrips requests ([#13](https://github.com/finxol/karr/pull/13))
+- **federation:** Add basic federation for trips ([#11](https://github.com/finxol/karr/pull/11))
+
+### 🩹 Fixes
+
+- **auth:** Change success redirect url ([25199fc](https://github.com/finxol/karr/commit/25199fc))
+- **ui:** Adjust font size ([9e57f89](https://github.com/finxol/karr/commit/9e57f89))
+
+### 🏡 Chore
+
+- Update checklist ([5a7c842](https://github.com/finxol/karr/commit/5a7c842))
+- Remove useless logs ([2af4d78](https://github.com/finxol/karr/commit/2af4d78))
+- Disallow committing to main ([16741d7](https://github.com/finxol/karr/commit/16741d7))
+- Add version ([b8bc6dd](https://github.com/finxol/karr/commit/b8bc6dd))
+- Update todo ([647dc7c](https://github.com/finxol/karr/commit/647dc7c))
+- Add pr title cheking ([4221477](https://github.com/finxol/karr/commit/4221477))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@finxol.io>
+- Martin ([@KimBlazter](http://github.com/KimBlazter))
+- Finxol <git@finxol.io>
+
 ## v0.7.5
 
 [compare changes](https://github.com/finxol/karr/compare/v0.7.4...v0.7.5)
