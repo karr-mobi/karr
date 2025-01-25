@@ -1,5 +1,28 @@
 # Changelog
 
+## v0.7.14
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.12...v0.7.14)
+
+### 🚀 Enhancements
+
+- **web:** UI enhancements ([#17](https://github.com/finxol/karr/pull/17))
+
+### 🩹 Fixes
+
+- **docker:** Improve compose files
+  ([2384226](https://github.com/finxol/karr/commit/2384226))
+
+### 🏡 Chore
+
+- Update deps ([5cd1eec](https://github.com/finxol/karr/commit/5cd1eec))
+- **release:** V0.7.13 ([8d5ccf7](https://github.com/finxol/karr/commit/8d5ccf7))
+
+### ❤️ Contributors
+
+- Finxol <git@finxol.io>
+- Colin Ozanne <git@finxol.io>
+
 ## v0.7.13
 
 [compare changes](https://github.com/finxol/karr/compare/v0.7.12...v0.7.13)
