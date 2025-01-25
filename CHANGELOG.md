@@ -6,12 +6,15 @@
 
 ### 🚀 Enhancements
 
-- **api:** Add email field to getTrips requests ([#13](https://github.com/finxol/karr/pull/13))
-- **federation:** Add basic federation for trips ([#11](https://github.com/finxol/karr/pull/11))
+- **api:** Add email field to getTrips requests
+  ([#13](https://github.com/finxol/karr/pull/13))
+- **federation:** Add basic federation for trips
+  ([#11](https://github.com/finxol/karr/pull/11))
 
 ### 🩹 Fixes
 
-- **auth:** Change success redirect url ([25199fc](https://github.com/finxol/karr/commit/25199fc))
+- **auth:** Change success redirect url
+  ([25199fc](https://github.com/finxol/karr/commit/25199fc))
 - **ui:** Adjust font size ([9e57f89](https://github.com/finxol/karr/commit/9e57f89))
 
 ### 🏡 Chore
@@ -35,12 +38,15 @@
 
 ### 🚀 Enhancements
 
-- **api:** Add email field to getTrips requests ([#13](https://github.com/finxol/karr/pull/13))
-- **federation:** Add basic federation for trips ([#11](https://github.com/finxol/karr/pull/11))
+- **api:** Add email field to getTrips requests
+  ([#13](https://github.com/finxol/karr/pull/13))
+- **federation:** Add basic federation for trips
+  ([#11](https://github.com/finxol/karr/pull/11))
 
 ### 🩹 Fixes
 
-- **auth:** Change success redirect url ([25199fc](https://github.com/finxol/karr/commit/25199fc))
+- **auth:** Change success redirect url
+  ([25199fc](https://github.com/finxol/karr/commit/25199fc))
 - **ui:** Adjust font size ([9e57f89](https://github.com/finxol/karr/commit/9e57f89))
 
 ### 🏡 Chore
