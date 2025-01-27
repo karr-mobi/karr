@@ -12,7 +12,7 @@ export default function Footer() {
             </p>
             <Button variant="link" asChild className="text-sm text-muted-foreground">
                 <Link
-                    href={`https://github.com/finxol/karr/releases?q=v${version}`}
+                    href={`https://github.com/finxol/karr/releases/tag/v${version}`}
                     target="_blank"
                 >
                     Version {version} {isProduction ? "" : "(dev)"}
