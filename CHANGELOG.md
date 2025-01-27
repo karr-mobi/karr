@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.7.15
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.14...v0.7.15)
+
+### 🚀 Enhancements
+
+- **web:** Redirect to auth when logged out
+  ([#19](https://github.com/finxol/karr/pull/19))
+
+### 🩹 Fixes
+
+- **web:** Don’t show delete button for federated trips
+  ([668cbf8](https://github.com/finxol/karr/commit/668cbf8))
+
+### 🏡 Chore
+
+- Update todo list ([4981fd9](https://github.com/finxol/karr/commit/4981fd9))
+- Add react scan ([d515be7](https://github.com/finxol/karr/commit/d515be7))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@finxol.io>
+- Finxol <git@finxol.io>
+
 ## v0.7.14
 
 [compare changes](https://github.com/finxol/karr/compare/v0.7.12...v0.7.14)
