@@ -1,5 +1,5 @@
 import { Hono } from "hono"
-import { getCookie, setCookie } from "hono/cookie"
+import { deleteCookie, getCookie, setCookie } from "hono/cookie"
 
 import logger from "@karr/util/logger"
 
@@ -59,11 +59,8 @@ hono.post("/signup", async (c) => {
 hono.get("/logout", async (c) => {
     // this means anyone can log someone else out, will be fixed with jwt
     const authToken = getCookie(c, "auth-token")
-    setCookie(c, "auth-token", "", {
-        httpOnly: true,
-        sameSite: "strict",
-        maxAge: 0
-    })
+    deleteCookie(c, "auth-token")
+
     logout(authToken || "")
     return c.json("ok")
 })
