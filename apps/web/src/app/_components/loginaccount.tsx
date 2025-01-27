@@ -1,32 +1,12 @@
-"use client"
-
-import { useEffect, useState } from "react"
+import { cookies } from "next/headers"
 import Link from "next/link"
 import { User as IconUser } from "lucide-react"
 
 import { Button } from "@karr/ui/components/button"
 
-import { getAuthentication } from "@/util/auth"
-
-export default function LoginAccount() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
-
-    useEffect(() => {
-        // Set initial state
-        setIsAuthenticated(getAuthentication())
-
-        // Listen for authentication changes
-        const handleAuthChange = () => {
-            setIsAuthenticated(getAuthentication())
-        }
-
-        window.addEventListener("auth-change", handleAuthChange)
-
-        // Cleanup
-        return () => {
-            window.removeEventListener("auth-change", handleAuthChange)
-        }
-    }, [])
+export default async function LoginAccount() {
+    const c = await cookies()
+    const isAuthenticated = c.get("auth-token") !== undefined
 
     return (
         <>

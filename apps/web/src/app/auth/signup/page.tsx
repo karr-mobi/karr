@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form"
 import { Button } from "@karr/ui/components/button"
 
 import { apiFetch } from "@/util/apifetch"
-import { setAuthentication } from "@/util/auth"
 
 type Inputs = {
     email: string
@@ -32,8 +31,8 @@ export default function Login() {
                 method: "POST",
                 body: { email: data.email, password: data.password }
             })
-            setAuthentication(true)
             router.push("/trips/search")
+            router.refresh()
         } catch (e) {
             console.log(e)
             setError("Invalid email or password")
