@@ -69,4 +69,4 @@ networks:
 
 secrets:
     db-password: # needs a db-password.txt file created with `printf "<password>" > db-password.txt`
-        file: ./db-password.txt
+        file: ./pass.txt
