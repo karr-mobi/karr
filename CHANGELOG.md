@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.8.0
+
+[compare changes](https://github.com/finxol/karr/compare/v0.7.15...v0.8.0)
+
+### 🚀 Enhancements
+
+- **config:** ⚠️ Allow app name customisation
+  ([#21](https://github.com/finxol/karr/pull/21))
+
+### 🩹 Fixes
+
+- **version:** Change version release url
+  ([a8df0ed](https://github.com/finxol/karr/commit/a8df0ed))
+
+#### ⚠️ Breaking Changes
+
+- **config:** ⚠️ Allow app name customisation
+  ([#21](https://github.com/finxol/karr/pull/21))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@finxol.io>
+- Finxol <git@finxol.io>
+
 ## v0.7.15
 
 [compare changes](https://github.com/finxol/karr/compare/v0.7.14...v0.7.15)
