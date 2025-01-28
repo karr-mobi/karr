@@ -1,3 +1,4 @@
+APPLICATION_NAME: Karr demo
 API_PORT: 1993
 API_BASE: http://localhost:1993
 LOG_TIMESTAMP: true

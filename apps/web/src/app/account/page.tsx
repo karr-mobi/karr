@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 
 import Loading from "@/components/Loading"
+
 import Logout from "./logout"
 import UserInfo from "./userinfo"
 

@@ -139,6 +139,10 @@ export function loadDbConfig(): ConfigFile {
 export function loadFullConfig(): FullConfig {
     const config = readConfig()
 
+    if (process.env.APPLICATION_NAME) {
+        config.APPLICATION_NAME = process.env.APPLICATION_NAME
+    }
+
     if (process.env.API_PORT) {
         config.API_PORT = toInt(process.env.API_PORT)
     }

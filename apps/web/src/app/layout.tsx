@@ -3,14 +3,14 @@ import localFont from "next/font/local"
 import Image from "next/image"
 import Link from "next/link"
 
-import { APPLICATION_NAME } from "@karr/config/static"
 import { Button } from "@karr/ui/components/button"
 import { Separator } from "@karr/ui/components/separator"
 import { Toaster } from "@karr/ui/components/sonner"
 
-import logo from "@/assets/logo-tmp.jpg"
-
 import "@/assets/globals.css"
+
+import { APPLICATION_NAME } from "@/util/appname"
+import logo from "@/assets/logo-tmp.jpg"
 
 import Footer from "./_components/footer"
 import LoginAccount from "./_components/loginaccount"

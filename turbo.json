@@ -8,6 +8,7 @@
         "CONFIG_FILE",
 
         // Config file overrides
+        "APPLICATION_NAME",
         "API_PORT",
         "API_BASE",
         "ADMIN_EMAIL",

@@ -11,6 +11,7 @@ export const LogLevelSchema = z.enum(logLevels)
 
 export const ConfigFileSchema = z
     .object({
+        APPLICATION_NAME: z.string().optional(),
         API_PORT: z.number().positive().optional(),
         API_BASE: z.string().optional(),
         LOG_TIMESTAMP: z.boolean().optional(),

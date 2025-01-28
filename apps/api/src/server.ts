@@ -5,14 +5,14 @@ import { validator } from "hono/validator"
 
 import { API_VERSION, FEDERATION, PRODUCTION } from "@karr/config"
 
+import { getAccount } from "@/lib/auth"
+import { responseErrorObject } from "@/lib/helpers"
 import account from "@/routes/account"
 import auth from "@/routes/auth"
 import federation from "@/routes/federation"
 import system from "@/routes/system"
 import trips from "@/routes/trips"
 import user from "@/routes/user"
-import { getAccount } from "./lib/auth"
-import { responseErrorObject } from "./lib/helpers"
 
 /**
  * Setup the Hono app with all the routes and plugins

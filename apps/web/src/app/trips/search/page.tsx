@@ -5,6 +5,7 @@ import { Plus as IconPlus } from "lucide-react"
 import { Button } from "@karr/ui/components/button"
 
 import Loading from "@/components/Loading"
+
 import TripList from "./trips"
 
 export default function Search() {

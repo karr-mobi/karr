@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 
 import Loading from "@/components/Loading"
+
 import NewTripForm from "./newTripForm"
 
 export default function New() {
