@@ -4,9 +4,10 @@ import { streamSSE } from "hono/streaming"
 import { NewTrip, NewTripSchema, Trip } from "@karr/db/schemas/trips.js"
 import logger from "@karr/util/logger"
 
-import { addTrip, deleteTrip, getTrips } from "@/db/trips"
 import { handleRequest, responseErrorObject } from "@/lib/helpers"
 import type { DataResponse } from "@/lib/types.d.ts"
+import { addTrip, deleteTrip, getTrips } from "@/db/trips"
+
 import { getFederatedTrips } from "./federation/helpers"
 
 const hono = new Hono()

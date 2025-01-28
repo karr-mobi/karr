@@ -4,8 +4,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { Badge } from "@karr/ui/components/badge"
 
-import { QueryProvider } from "@/components/QueryProvider"
 import { apiFetch } from "@/util/apifetch"
+import { QueryProvider } from "@/components/QueryProvider"
 
 export default function UserInfo({ userid }: { userid: string }) {
     return (

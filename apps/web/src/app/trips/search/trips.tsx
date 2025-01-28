@@ -17,9 +17,9 @@ import {
 } from "@karr/ui/components/card"
 import { toast } from "@karr/ui/components/sonner"
 
+import { apiFetch } from "@/util/apifetch"
 import Loading from "@/components/Loading"
 import { QueryProvider } from "@/components/QueryProvider"
-import { apiFetch } from "@/util/apifetch"
 
 export default function TripList({ userid }: { userid: string }) {
     return (
