@@ -1,0 +1,58 @@
+{
+    "HomePage": {
+        "slogan": "La plateforme de covoiturage fédérée."
+    },
+    "auth": {
+        "SignUp": {
+            "title": "S'inscrire",
+            "form": {
+                "email": {
+                    "label": "Email",
+                    "errors": {
+                        "required": "L'email est obligatoire"
+                    }
+                },
+                "password": {
+                    "label": "Mot de passe",
+                    "errors": {
+                        "required": "Le mot de passe est obligatoire"
+                    }
+                }
+            },
+            "haveAnAccountQuestion": "Vous avez déjà un compte?"
+        },
+        "Login": {
+            "title": "Se connecter",
+            "form": {
+                "email": {
+                    "label": "Email",
+                    "errors": {
+                        "required": "L'email est obligatoire"
+                    }
+                },
+                "password": {
+                    "label": "Mot de passe",
+                    "errors": {
+                        "required": "Le mot de passe est obligatoire"
+                    }
+                }
+            },
+            "dontHaveAnAccountQuestion": "Vous n'avez pas encore de compte?"
+        },
+        "Logout": {
+            "title": "Se déconnecter"
+        },
+        "Account": {
+            "title": "Compte"
+        }
+    },
+    "trips": {
+        "title": "Trajets",
+        "Search": {
+            "title": "Rechercher un trajet"
+        },
+        "Create": {
+            "title": "Créer un nouveau trajet"
+        }
+    }
+}
