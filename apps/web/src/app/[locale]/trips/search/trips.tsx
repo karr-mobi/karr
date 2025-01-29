@@ -194,7 +194,7 @@ function TripCard({
                 <CardTitle>
                     <div className="flex flex-row justify-between items-center gap-2">
                         <p>
-                            {trip.from} to {trip.to}
+                            {trip.from} – {trip.to}
                         </p>
                         {!trip.origin && (
                             <Button variant="outline" onClick={() => onDelete(trip.id)}>

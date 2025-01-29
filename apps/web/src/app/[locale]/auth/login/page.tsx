@@ -3,6 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useForm } from "react-hook-form"
 
 import { Button } from "@karr/ui/components/button"
@@ -15,6 +16,8 @@ type Inputs = {
 }
 
 export default function Login() {
+    const t = useTranslations("auth.Login")
+    const signupT = useTranslations("auth.SignUp")
     const router = useRouter()
     const [error, setError] = useState<string | null>(null)
 
@@ -41,10 +44,10 @@ export default function Login() {
 
     return (
         <div className="flex flex-col gap-4">
-            <h2>Login</h2>
+            <h2>{t("title")}</h2>
             <form className="flex flex-col gap-5" onSubmit={onSubmit}>
                 <section className="flex flex-col gap-2">
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">{t("form.email.label")}</label>
                     <input
                         type="text"
                         id="email"
@@ -54,11 +57,11 @@ export default function Login() {
                 </section>
                 {errors.email && (
                     <p className="rounded-md border border-red-600 bg-red-100 px-2 py-1">
-                        Username is required
+                        {t("form.email.errors.required")}
                     </p>
                 )}
                 <section className="flex flex-col gap-2">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">{t("form.password.label")}</label>
                     <input
                         type="password"
                         id="password"
@@ -68,7 +71,7 @@ export default function Login() {
                 </section>
                 {errors.password && (
                     <p className="rounded-md border border-red-600 bg-red-100 px-2 py-1">
-                        Password is required
+                        {t("form.password.errors.required")}
                     </p>
                 )}
                 <Button
@@ -85,9 +88,9 @@ export default function Login() {
             </form>
 
             <p className="text-center text-sm text-muted-foreground mt-4">
-                Don't have an account yet?
+                {t("dontHaveAnAccountQuestion")}
                 <Button asChild variant="link" className="text-sm">
-                    <Link href="/auth/signup">Sign up</Link>
+                    <Link href="/auth/signup">{signupT("title")}</Link>
                 </Button>
             </p>
         </div>

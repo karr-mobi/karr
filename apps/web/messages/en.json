@@ -1,0 +1,58 @@
+{
+    "HomePage": {
+        "slogan": "The federated carpool platform."
+    },
+    "auth": {
+        "SignUp": {
+            "title": "Sign up",
+            "form": {
+                "email": {
+                    "label": "Email",
+                    "errors": {
+                        "required": "Username is required"
+                    }
+                },
+                "password": {
+                    "label": "Password",
+                    "errors": {
+                        "required": "Password is required"
+                    }
+                }
+            },
+            "haveAnAccountQuestion": "Already have an account?"
+        },
+        "Login": {
+            "title": "Sign in",
+            "form": {
+                "email": {
+                    "label": "Email",
+                    "errors": {
+                        "required": "Username is required"
+                    }
+                },
+                "password": {
+                    "label": "Password",
+                    "errors": {
+                        "required": "Password is required"
+                    }
+                }
+            },
+            "dontHaveAnAccountQuestion": "Don't have an account yet?"
+        },
+        "Logout": {
+            "title": "Logout"
+        },
+        "Account": {
+            "title": "Account"
+        }
+    },
+    "trips": {
+        "title": "Trips",
+        "Search": {
+            "title": "Search for trips"
+        },
+        "Create": {
+            "title": "Create a new trip"
+        }
+    }
+}
