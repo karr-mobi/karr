@@ -7,7 +7,7 @@ import { routing } from "./i18n/routing"
 const i18nMiddleware = createMiddleware(routing)
 
 export function middleware(request: NextRequest) {
-    let response = i18nMiddleware(request)
+    const response = i18nMiddleware(request)
 
     if (response && !response.ok) {
         // response not in the range 200-299 (usually a redirect)
