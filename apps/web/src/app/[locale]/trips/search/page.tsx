@@ -1,22 +1,25 @@
 import { Suspense } from "react"
-import Link from "next/link"
 import { Plus as IconPlus } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { Button } from "@karr/ui/components/button"
 
 import Loading from "@/components/Loading"
+import { Link } from "@/i18n/routing"
 
 import TripList from "./trips"
 
 export default function Search() {
+    const t = useTranslations("trips")
+
     return (
         <article className="my-6 max-w-full w-2xl">
-            <h3>Search for trips</h3>
+            <h3>{t("Search.title")}</h3>
 
             <Button variant="default" className="mt-4" asChild>
                 <Link href="/trips/new">
                     <IconPlus />
-                    <span className="ml-2">Create a new trip</span>
+                    <span className="ml-2">{t("Create.title")}</span>
                 </Link>
             </Button>
 
