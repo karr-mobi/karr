@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.8.2
+
+[compare changes](https://github.com/finxol/karr/compare/v0.8.0...v0.8.2)
+
+### 🚀 Enhancements
+
+- **i18n:** Integrate next-intl for internationalization
+  ([#22](https://github.com/finxol/karr/pull/22))
+
+### 🏡 Chore
+
+- **release:** V0.8.1 ([252e574](https://github.com/finxol/karr/commit/252e574))
+
+### ❤️ Contributors
+
+- Finxol <git@finxol.io>
+- Martin ([@KimBlazter](http://github.com/KimBlazter))
+
 ## v0.8.1
 
 [compare changes](https://github.com/finxol/karr/compare/v0.8.0...v0.8.1)
