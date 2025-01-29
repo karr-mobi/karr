@@ -1,13 +1,13 @@
 import { cookies } from "next/headers"
 import { User as IconUser } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 
 import { Button } from "@karr/ui/components/button"
 
 import { Link } from "@/i18n/routing"
 
 export default async function LoginAccount() {
-    const t = useTranslations("auth")
+    const t = await getTranslations("auth")
 
     const c = await cookies()
     const isAuthenticated = c.get("auth-token") !== undefined
