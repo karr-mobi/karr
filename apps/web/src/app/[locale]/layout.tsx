@@ -12,10 +12,10 @@ import "@/assets/globals.css"
 import { APPLICATION_NAME } from "@/util/appname"
 import logo from "@/assets/logo-tmp.jpg"
 
-import Footer from "./_components/footer"
-import LoginAccount from "./_components/loginaccount"
-import ThemeProvider from "./_components/ThemeProvider"
-import ThemeSwitch from "./_components/ThemeSwitch"
+import Footer from "../_components/footer"
+import LoginAccount from "../_components/loginaccount"
+import ThemeProvider from "../_components/ThemeProvider"
+import ThemeSwitch from "../_components/ThemeSwitch"
 import { CSPostHogProvider } from "./providers"
 
 const geistSans = localFont({
