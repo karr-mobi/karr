@@ -27,6 +27,7 @@
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
         "@types/node": "catalog:",
+        "eslint": "catalog:tooling",
         "typescript": "catalog:tooling",
         "vite-tsconfig-paths": "catalog:vitest",
         "vitest": "catalog:vitest"

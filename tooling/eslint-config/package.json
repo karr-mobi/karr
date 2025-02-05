@@ -13,6 +13,7 @@
         "@tanstack/eslint-plugin-query": "catalog:tooling",
         "@typescript-eslint/eslint-plugin": "catalog:tooling",
         "@typescript-eslint/parser": "catalog:tooling",
+        "@eslint/js": "catalog:tooling",
         "eslint": "catalog:tooling",
         "eslint-config-prettier": "catalog:tooling",
         "eslint-plugin-react": "catalog:tooling",
