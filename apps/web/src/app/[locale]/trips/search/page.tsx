@@ -4,8 +4,8 @@ import { useTranslations } from "next-intl"
 
 import { Button } from "@karr/ui/components/button"
 
-import Loading from "@/components/Loading"
 import { Link } from "@/i18n/routing"
+import Loading from "@/components/Loading"
 
 import TripList from "./trips"
 

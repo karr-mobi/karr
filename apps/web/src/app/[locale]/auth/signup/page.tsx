@@ -6,8 +6,8 @@ import { useForm } from "react-hook-form"
 
 import { Button } from "@karr/ui/components/button"
 
-import { apiFetch } from "@/util/apifetch"
 import { Link, useRouter } from "@/i18n/routing"
+import { apiFetch } from "@/util/apifetch"
 
 type Inputs = {
     email: string

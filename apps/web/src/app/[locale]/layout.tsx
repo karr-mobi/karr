@@ -10,8 +10,8 @@ import { notFound } from "next/navigation"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages } from "next-intl/server"
 
-import { APPLICATION_NAME } from "@/util/appname"
 import { routing } from "@/i18n/routing"
+import { APPLICATION_NAME } from "@/util/appname"
 
 import Footer from "../_components/footer"
 import Header from "../_components/header"
@@ -71,7 +71,7 @@ export default async function RootLayout({
                         <NextIntlClientProvider messages={messages}>
                             <div className="grid h-screen grid-cols-1 grid-rows-[auto_1fr]">
                                 <Header />
-                                <main className="mx-4 mt-4 flex h-full flex-col items-center justify-start overflow-y-scroll">
+                                <main className="mx-4 mt-4 flex h-full flex-col items-center justify-start">
                                     {children}
                                 </main>
                                 <Footer />

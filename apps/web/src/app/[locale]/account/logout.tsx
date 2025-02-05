@@ -4,8 +4,8 @@ import { useTranslations } from "next-intl"
 
 import { Button } from "@karr/ui/components/button"
 
-import { apiFetch } from "@/util/apifetch"
 import { useRouter } from "@/i18n/routing"
+import { apiFetch } from "@/util/apifetch"
 
 export default function Logout() {
     const t = useTranslations("auth")
