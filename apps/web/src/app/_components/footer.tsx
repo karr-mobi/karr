@@ -1,6 +1,6 @@
-import Link from "next/link"
-
 import { Button } from "@karr/ui/components/button"
+
+import { Link } from "@/i18n/routing"
 
 import { isProduction, version } from "./version"
 

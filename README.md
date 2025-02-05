@@ -64,7 +64,7 @@ Optional:
 
 - [x] Add mock login
     - [x] Use clsx ?
-    - [ ] Add i18n
+    - [x] Add i18n
           [info in Nextjs docs](https://nextjs.org/docs/app/building-your-application/routing/internationalization)
 - [x] Add trip search route that gives fake, not-searched data
 - [x] Add demo client for PoC

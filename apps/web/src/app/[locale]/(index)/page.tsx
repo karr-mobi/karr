@@ -1,10 +1,10 @@
 import Image from "next/image"
-import Link from "next/link"
 import { useTranslations } from "next-intl"
 
 import { APPLICATION_NAME } from "@karr/config/static"
 import { Button } from "@karr/ui/components/button"
 
+import { Link } from "@/i18n/routing"
 import logo from "@/assets/logo-tmp.jpg"
 
 export default function Home() {

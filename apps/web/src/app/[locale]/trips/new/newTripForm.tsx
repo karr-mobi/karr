@@ -1,6 +1,5 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
 import { CalendarDays as IconCalendarDays } from "lucide-react"
@@ -24,6 +23,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@karr/ui/components/pop
 import { toast } from "@karr/ui/components/sonner"
 import { cn } from "@karr/ui/lib/utils"
 
+import { useRouter } from "@/i18n/routing"
 import { apiFetch } from "@/util/apifetch"
 
 export default function NewTripForm() {

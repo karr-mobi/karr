@@ -1,13 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { useForm } from "react-hook-form"
 
 import { Button } from "@karr/ui/components/button"
 
+import { Link, useRouter } from "@/i18n/routing"
 import { apiFetch } from "@/util/apifetch"
 
 type Inputs = {
