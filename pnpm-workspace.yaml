@@ -42,7 +42,7 @@ catalog:
     "drizzle-zod": ^0.6.1
     "hono": ^4.6.17
     "postgres": ^3.4.5
-    "esbuild": ^0.24.2
+    "esbuild": ^0.25.0
 
 catalogs:
     tooling:
