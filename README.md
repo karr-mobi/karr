@@ -17,26 +17,7 @@ Built with:
   ([Docker package](https://github.com/users/finxol/packages/container/package/karr-caddy))
 - `@karr/auth`: Ory Kratos + Oathkeeper (or OpenAuth)
 
-## PoC Roadmap
-
-Target: get a basic "fake" demo working
-
-##### Web
-
-- [x] Build login
-- [x] Show all trips on instance
-- [x] Build "add trip" UI
-- [x] Show federated trips
-
-Optional:
-
-- [ ] show number of trips on account page
-
-##### API
-
-- [x] Build mock login
-- [x] Return mock trips
-- [x] Add federation module for federation-specific routes
+Documentation: [docs.karr.finxol.io](https://docs.karr.finxol.io/)
 
 ## Roadmap
 
