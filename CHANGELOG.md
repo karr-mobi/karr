@@ -1,5 +1,31 @@
 # Changelog
 
+## v0.8.3
+
+[compare changes](https://github.com/finxol/karr/compare/v0.8.2...v0.8.3)
+
+### 🚀 Enhancements
+
+- **config:** Add memoization ([#31](https://github.com/finxol/karr/pull/31))
+
+### 🩹 Fixes
+
+- **i18n:** Use next-intl for links
+  ([0149ee9](https://github.com/finxol/karr/commit/0149ee9))
+- **ui:** Fix up UI errors ([7af9a7e](https://github.com/finxol/karr/commit/7af9a7e))
+
+### 🏡 Chore
+
+- **tooling:** Fix eslint exec not found + upgrade
+  ([4ef1773](https://github.com/finxol/karr/commit/4ef1773))
+- **readme:** Add docs link + remove PoC roadmap
+  ([eb0639b](https://github.com/finxol/karr/commit/eb0639b))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](http://github.com/finxol))
+- Finxol ([@finxol](http://github.com/finxol))
+
 ## v0.8.2
 
 [compare changes](https://github.com/finxol/karr/compare/v0.8.0...v0.8.2)
