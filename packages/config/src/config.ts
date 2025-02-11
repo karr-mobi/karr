@@ -3,9 +3,19 @@ import { z } from "zod"
 import { getDbPasswordFromFile, loadDbConfig, loadFullConfig } from "./loader.js"
 import { toInt } from "./utils.js"
 
-const config = loadFullConfig()
+function lazy<T>(getter: () => T): { value: T } {
+    return {
+        get value() {
+            const value = getter()
+            Object.defineProperty(this, "value", { value })
+            return value
+        }
+    }
+}
 
-export default config
+const config = lazy(() => loadFullConfig())
+
+export default config.value
 
 export const {
     API_PORT,
@@ -18,7 +28,7 @@ export const {
     API_VERSION,
     APPLICATION_NAME,
     PRODUCTION
-} = config
+} = config.value
 
 export { logLevels } from "./schema.js"
 
