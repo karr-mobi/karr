@@ -7,9 +7,11 @@ ENV TURBO_TELEMETRY_DISABLED=1
 ENV HUSKY=0
 # The port that the api listens to.
 ENV PORT=1993
+ENV DOCKER=1
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+RUN npm install -g corepack@latest
 RUN corepack enable
 
 #######################
@@ -18,6 +20,7 @@ RUN corepack enable
 FROM base AS installer
 RUN apk update
 RUN apk add --no-cache libc6-compat
+
 # Set working directory
 WORKDIR /app
 RUN pnpm add -g turbo@^2

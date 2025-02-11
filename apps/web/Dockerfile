@@ -4,12 +4,14 @@ LABEL repository="https://github.com/finxol/karr"
 
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
+ENV HUSKY=0
 # The port that the api listens to.
 ENV API=localhost:1993
 ENV DOCKER=1
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+RUN npm install -g corepack@latest
 RUN corepack enable
 
 #######################
