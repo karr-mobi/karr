@@ -43,7 +43,13 @@
             "title": "Logout"
         },
         "Account": {
-            "title": "Account"
+            "title": "Account",
+            "blocked": "Account blocked",
+            "verified": "Account verified",
+            "not-verified": "Account not verified",
+            "no-special-status": "No special status",
+            "user-id": "User ID",
+            "email": "Email"
         }
     },
     "trips": {
