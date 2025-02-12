@@ -43,14 +43,12 @@ export default function NewTripForm() {
     })
 
     const onSubmit = async (data: NewTripInput) => {
-        console.log("Submitting...")
-
         try {
             const _res = await apiFetch("/trips/add", {
                 method: "POST",
                 body: data
             })
-            toast.success("Trip added!")
+            toast.success(t("added"))
 
             router.push("/trips/search")
         } catch (err) {
@@ -112,7 +110,7 @@ export default function NewTripForm() {
                                             {field.value ? (
                                                 format(field.value, "dd/MM/yyyy")
                                             ) : (
-                                                <span>Pick a date</span>
+                                                <span>{t("pick-date")}</span>
                                             )}
                                             <IconCalendarDays className="ml-auto w-4 h-4" />
                                         </Button>

@@ -62,8 +62,10 @@
             "from": "De",
             "to": "Vers",
             "departure": "Départ",
+            "pick-date": "Choisir une date",
             "price": "Prix (par passager)",
-            "create": "Créer un nouveau trajet"
+            "create": "Créer un nouveau trajet",
+            "added": "Trajet ajouté !"
         }
     }
 }

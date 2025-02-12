@@ -62,8 +62,10 @@
             "from": "From",
             "to": "To",
             "departure": "Departure",
+            "pick-date": "Pick a date",
             "price": "Price (per passenger)",
-            "create": "Create new trip"
+            "create": "Create new trip",
+            "added": "Trip added!"
         }
     }
 }
