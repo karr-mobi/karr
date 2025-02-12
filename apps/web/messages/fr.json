@@ -58,7 +58,12 @@
             "title": "Rechercher un trajet"
         },
         "Create": {
-            "title": "Créer un nouveau trajet"
+            "title": "Créer un nouveau trajet",
+            "from": "De",
+            "to": "Vers",
+            "departure": "Départ",
+            "price": "Prix (par passager)",
+            "create": "Créer un nouveau trajet"
         }
     }
 }

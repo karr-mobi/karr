@@ -58,7 +58,12 @@
             "title": "Search for trips"
         },
         "Create": {
-            "title": "Create a new trip"
+            "title": "Create a new trip",
+            "from": "From",
+            "to": "To",
+            "departure": "Departure",
+            "price": "Price (per passenger)",
+            "create": "Create new trip"
         }
     }
 }

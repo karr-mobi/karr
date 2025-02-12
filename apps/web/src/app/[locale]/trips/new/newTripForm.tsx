@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
 import { CalendarDays as IconCalendarDays } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useForm } from "react-hook-form"
 
 import { NewTripInputSchema, type NewTripInput } from "@karr/db/schemas/trips.js"
@@ -27,6 +28,7 @@ import { useRouter } from "@/i18n/routing"
 import { apiFetch } from "@/util/apifetch"
 
 export default function NewTripForm() {
+    const t = useTranslations("trips.Create")
     const router = useRouter()
 
     const form = useForm<NewTripInput>({
@@ -66,7 +68,7 @@ export default function NewTripForm() {
                     name="from"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>From</FormLabel>
+                            <FormLabel>{t("from")}</FormLabel>
                             <FormControl>
                                 <Input placeholder="Vannes" {...field} />
                             </FormControl>
@@ -82,7 +84,7 @@ export default function NewTripForm() {
                     name="to"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>To</FormLabel>
+                            <FormLabel>{t("to")}</FormLabel>
                             <FormControl>
                                 <Input placeholder="Rennes" {...field} />
                             </FormControl>
@@ -96,7 +98,7 @@ export default function NewTripForm() {
                     name="departure"
                     render={({ field }) => (
                         <FormItem className="flex flex-col">
-                            <FormLabel>Departure</FormLabel>
+                            <FormLabel>{t("departure")}</FormLabel>
                             <Popover>
                                 <PopoverTrigger asChild>
                                     <FormControl>
@@ -137,7 +139,7 @@ export default function NewTripForm() {
                     name="price"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Price (per passenger)</FormLabel>
+                            <FormLabel>{t("price")}</FormLabel>
                             <FormControl>
                                 <div>
                                     <CurrencyInput
@@ -154,7 +156,7 @@ export default function NewTripForm() {
                     )}
                 />
                 <Button type="submit" className="mt-3">
-                    Create new trip
+                    {t("create")}
                 </Button>
             </form>
         </Form>
