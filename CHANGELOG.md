@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.8.4
+
+[compare changes](https://github.com/finxol/karr/compare/v0.8.3...v0.8.4)
+
+### 🚀 Enhancements
+
+- **i18n:** Various i18n fixes ([#32](https://github.com/finxol/karr/pull/32))
+
+### 🩹 Fixes
+
+- Proper hierarchy for h tag ([d1bdccb](https://github.com/finxol/karr/commit/d1bdccb))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](http://github.com/finxol))
+- Colin Ozanne ([@finxol](http://github.com/finxol))
+
 ## v0.8.3
 
 [compare changes](https://github.com/finxol/karr/compare/v0.8.2...v0.8.3)
