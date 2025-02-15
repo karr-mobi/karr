@@ -1,3 +1,4 @@
+import { memo } from "react"
 import Image from "next/image"
 import { useTranslations } from "next-intl"
 
@@ -12,8 +13,11 @@ import LocaleSwitcher from "../_components/LocaleSwitcher"
 import LoginAccount from "../_components/loginaccount"
 import ThemeSwitch from "../_components/ThemeSwitch"
 
+const MemoizedAppName = memo(() => <h5>{APPLICATION_NAME}</h5>)
+
 export default function Header() {
     const t = useTranslations("trips")
+
     return (
         <header className="bg-background h-16 w-full sticky top-0 z-50">
             <div className="flex flex-row items-center justify-between px-4 py-2 bg-primary/4 w-full">
@@ -30,7 +34,7 @@ export default function Header() {
                             className="rounded-lg"
                             placeholder="blur"
                         />
-                        <h5>{APPLICATION_NAME}</h5>
+                        <MemoizedAppName />
                     </Link>
                     <Separator orientation="vertical" className="h-8" />
                     <nav className="flex flex-row items-center justify-end gap-4">
