@@ -43,7 +43,13 @@
             "title": "Se déconnecter"
         },
         "Account": {
-            "title": "Compte"
+            "title": "Compte",
+            "blocked": "Compte bloqué",
+            "verified": "Compte vérifié",
+            "not-verified": "Compte non vérifié",
+            "no-special-status": "Pas de statut spécial",
+            "user-id": "ID utilisateur",
+            "email": "Email"
         }
     },
     "trips": {
@@ -52,7 +58,14 @@
             "title": "Rechercher un trajet"
         },
         "Create": {
-            "title": "Créer un nouveau trajet"
+            "title": "Créer un nouveau trajet",
+            "from": "De",
+            "to": "Vers",
+            "departure": "Départ",
+            "pick-date": "Choisir une date",
+            "price": "Prix (par passager)",
+            "create": "Créer un nouveau trajet",
+            "added": "Trajet ajouté !"
         }
     }
 }

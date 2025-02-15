@@ -1,6 +1,7 @@
 "use client"
 
 import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useTranslations } from "next-intl"
 
 import { Badge } from "@karr/ui/components/badge"
 
@@ -44,6 +45,8 @@ function FetchUserData({ userid }: { userid: string }) {
 // TODO: add user type
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ShowUserData({ data: { data: user } }: { data: any }) {
+    const t = useTranslations("auth.Account")
+
     const hasSpecialStatus = user.SpecialStatus?.id || false
 
     console.log(user)
@@ -54,30 +57,30 @@ function ShowUserData({ data: { data: user } }: { data: any }) {
                 <aside className="flex flex-row gap-4">
                     {user.blocked ? (
                         <Badge variant="destructive">
-                            <p>⚠️ Account blocked</p>
+                            <p>⚠️ {t("blocked")}</p>
                         </Badge>
                     ) : user.verified ? (
                         <Badge variant="default">
-                            <p>✔︎ Account verified</p>
+                            <p>✔︎ {t("verified")}</p>
                         </Badge>
                     ) : (
                         <Badge variant="destructive">
-                            <p>❌ Account not verified</p>
+                            <p>❌ {t("not-verified")}</p>
                         </Badge>
                     )}
 
                     {!hasSpecialStatus && (
                         <Badge variant="destructive">
-                            <p>{user.SpecialStatus?.name || "No special status"}</p>
+                            <p>{user.SpecialStatus?.name || t("no-special-status")}</p>
                         </Badge>
                     )}
                 </aside>
                 <div className="flex flex-row gap-6">
-                    <b>User ID</b>
+                    <b>{t("user-id")}</b>
                     <p>{user.id}</p>
                 </div>
                 <div className="flex flex-row gap-6">
-                    <b>Email</b>
+                    <b>{t("email")}</b>
                     <p>{user.email}</p>
                 </div>
             </section>

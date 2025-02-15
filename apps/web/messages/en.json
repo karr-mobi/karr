@@ -43,7 +43,13 @@
             "title": "Logout"
         },
         "Account": {
-            "title": "Account"
+            "title": "Account",
+            "blocked": "Account blocked",
+            "verified": "Account verified",
+            "not-verified": "Account not verified",
+            "no-special-status": "No special status",
+            "user-id": "User ID",
+            "email": "Email"
         }
     },
     "trips": {
@@ -52,7 +58,14 @@
             "title": "Search for trips"
         },
         "Create": {
-            "title": "Create a new trip"
+            "title": "Create a new trip",
+            "from": "From",
+            "to": "To",
+            "departure": "Departure",
+            "pick-date": "Pick a date",
+            "price": "Price (per passenger)",
+            "create": "Create new trip",
+            "added": "Trip added!"
         }
     }
 }

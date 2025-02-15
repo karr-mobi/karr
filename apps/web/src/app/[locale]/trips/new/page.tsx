@@ -9,7 +9,7 @@ export default function New() {
     const t = useTranslations("trips.Create")
     return (
         <article className="mt-6">
-            <h3>{t("title")}</h3>
+            <h3 className="mb-4">{t("title")}</h3>
 
             <Suspense fallback={<Loading />}>
                 <NewTripForm />

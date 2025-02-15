@@ -20,14 +20,19 @@ export function middleware(request: NextRequest) {
 
 function authMiddleware(request: NextRequest, response: NextResponse) {
     const isAuthenticated = request.cookies.get("auth-token") !== undefined
+    const localesPattern = routing.locales.join("|")
+    const regex = new RegExp(`^/(${localesPattern})/trips/`)
 
-    if (!isAuthenticated && request.nextUrl.pathname.startsWith("/trips")) {
-        return NextResponse.redirect(new URL("/auth/login", request.url))
+    const locale = request.nextUrl.pathname.split("/")[1]
+
+    // this regex needs updating when adding a language
+    if (!isAuthenticated && request.nextUrl.pathname.match(regex)) {
+        return NextResponse.redirect(new URL(`/${locale}/auth/login`, request.url))
     }
 
     return response
 }
 
 export const config = {
-    matcher: ["/trips/:path*", "/account", "/", "/(fr|en)/:path*"]
+    matcher: ["/trips/:path*", "/account", "/", `/(fr|en)/:path*`]
 }
