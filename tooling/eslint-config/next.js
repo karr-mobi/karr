@@ -73,11 +73,11 @@ export const nextJsConfig = [
                             message:
                                 "Importing '@karr/config' directly is not allowed in Next apps because of fs read. " +
                                 "Only the variables in '@karr/config/static' are allowed."
-                        }, // No patterns, so submodules like '@karr/config/static' are allowed
+                        }, // No other patterns, so submodules like '@karr/config/static' are allowed
                         // Consistently import navigation APIs from `@/i18n/routing`
                         {
                             name: "next/link",
-                            message: "Please import from `@/i18n/routing` instead."
+                            message: "Please import Link from `@/i18n/routing` instead."
                         },
                         {
                             name: "next/navigation",

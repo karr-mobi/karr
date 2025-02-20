@@ -19,10 +19,6 @@ export const config = [
         languageOptions: {
             parser: tsParser
         },
-        plugins: {
-            "@typescript-eslint": tsPlugin,
-            turbo: turboPlugin
-        },
         rules: {
             "turbo/no-undeclared-env-vars": "warn",
             "@typescript-eslint/no-unused-vars": [
@@ -32,6 +28,12 @@ export const config = [
                     varsIgnorePattern: "^_"
                 }
             ]
+        }
+    },
+    {
+        plugins: {
+            // Add only the turbo plugin here
+            turbo: turboPlugin
         }
     },
     {
