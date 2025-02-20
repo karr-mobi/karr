@@ -34,7 +34,7 @@
         "turbo": "catalog:tooling",
         "typescript": "catalog:tooling"
     },
-    "packageManager": "pnpm@10.3.0",
+    "packageManager": "pnpm@10.4.1",
     "engines": {
         "node": ">=22"
     },
