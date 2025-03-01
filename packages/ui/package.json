@@ -32,7 +32,7 @@
         "react-day-picker": "catalog:",
         "react-dom": "catalog:",
         "react-hook-form": "catalog:",
-        "sonner": "^1.7.2",
+        "sonner": "catalog:",
         "tailwind-merge": "catalog:",
         "tailwindcss-animate": "catalog:",
         "zod": "catalog:"
