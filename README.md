@@ -44,7 +44,6 @@ Documentation: [docs.karr.finxol.io](https://docs.karr.finxol.io/)
     - [ ] Env type-safety [T3 env](https://env.t3.gg/docs/nextjs)
 
 - [x] Add mock login
-    - [x] Use clsx ?
     - [x] Add i18n
           [info in Nextjs docs](https://nextjs.org/docs/app/building-your-application/routing/internationalization)
 - [x] Add trip search route that gives fake, not-searched data

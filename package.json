@@ -31,10 +31,10 @@
         "lint-staged": "catalog:tooling",
         "prettier": "catalog:tooling",
         "prettier-plugin-tailwindcss": "catalog:tooling",
-        "turbo": "^2.4.2",
+        "turbo": "catalog:tooling",
         "typescript": "catalog:tooling"
     },
-    "packageManager": "pnpm@10.4.1",
+    "packageManager": "pnpm@10.5.2",
     "engines": {
         "node": ">=22"
     },
@@ -42,6 +42,10 @@
         "requiredScripts": [
             "lint",
             "format"
+        ],
+        "onlyBuiltDependencies": [
+            "core-js",
+            "core-js-pure"
         ]
     },
     "lint-staged": {
