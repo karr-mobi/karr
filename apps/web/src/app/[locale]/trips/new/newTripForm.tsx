@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { format } from "date-fns"
 import { CalendarDays as IconCalendarDays } from "lucide-react"
@@ -30,6 +31,13 @@ import { apiFetch } from "@/util/apifetch"
 export default function NewTripForm() {
     const t = useTranslations("trips.Create")
     const router = useRouter()
+
+    // Add this state to control client-side rendering
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     const form = useForm<NewTripInput>({
         resolver: zodResolver(NewTripInputSchema),
@@ -107,7 +115,7 @@ export default function NewTripForm() {
                                                 !field.value && "text-muted-foreground"
                                             )}
                                         >
-                                            {field.value ? (
+                                            {mounted && field.value ? (
                                                 format(field.value, "dd/MM/yyyy")
                                             ) : (
                                                 <span>{t("pick-date")}</span>
