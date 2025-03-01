@@ -18,6 +18,7 @@
         "@hookform/resolvers": "catalog:",
         "@radix-ui/react-label": "catalog:",
         "@radix-ui/react-popover": "catalog:",
+        "@radix-ui/react-select": "catalog:",
         "@radix-ui/react-separator": "catalog:",
         "@radix-ui/react-slot": "catalog:",
         "class-variance-authority": "catalog:",

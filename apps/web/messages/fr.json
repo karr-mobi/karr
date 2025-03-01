@@ -2,6 +2,15 @@
     "HomePage": {
         "slogan": "La plateforme de covoiturage fédérée."
     },
+    "Footer": {
+        "select-locale": "Choisir la langue"
+    },
+    "NavBar": {
+        "home": "Accueil",
+        "trips": "Trajets",
+        "utilities": "Utilitaires",
+        "account": "Compte"
+    },
     "auth": {
         "SignUp": {
             "title": "S'inscrire",

@@ -7,7 +7,7 @@ import { useTheme } from "next-themes"
 
 import { Button } from "@karr/ui/components/button"
 
-export default function ThemeSwitch() {
+function ThemeSwitch() {
     const { resolvedTheme, setTheme } = useTheme()
     const [mounted, setMounted] = useState(false)
 
@@ -62,3 +62,5 @@ export default function ThemeSwitch() {
         </Button>
     )
 }
+
+export { ThemeSwitch }

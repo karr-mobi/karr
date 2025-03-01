@@ -2,6 +2,15 @@
     "HomePage": {
         "slogan": "The federated carpool platform."
     },
+    "Footer": {
+        "select-locale": "Select locale"
+    },
+    "NavBar": {
+        "home": "Home",
+        "trips": "Trips",
+        "utilities": "Utilities",
+        "account": "Account"
+    },
     "auth": {
         "SignUp": {
             "title": "Sign up",
