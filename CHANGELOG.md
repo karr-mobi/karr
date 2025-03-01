@@ -1,5 +1,26 @@
 # Changelog
 
+## v0.8.5
+
+[compare changes](https://github.com/finxol/karr/compare/v0.8.4...v0.8.5)
+
+### 🚀 Enhancements
+
+- **ui:** Add prorgess indicator component
+  ([86b55ef](https://github.com/finxol/karr/commit/86b55ef))
+- **ui:** Rebuild UI ([#57](https://github.com/finxol/karr/pull/57))
+
+### 🏡 Chore
+
+- **lint:** Fix config files ([1326e2f](https://github.com/finxol/karr/commit/1326e2f))
+- Add typescript `erasableSyntaxOnly` rule
+  ([8c19b1a](https://github.com/finxol/karr/commit/8c19b1a))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](http://github.com/finxol))
+- Finxol ([@finxol](http://github.com/finxol))
+
 ## v0.8.4
 
 [compare changes](https://github.com/finxol/karr/compare/v0.8.3...v0.8.4)
