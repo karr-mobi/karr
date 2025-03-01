@@ -2,6 +2,15 @@
     "HomePage": {
         "slogan": "The federated carpool platform."
     },
+    "Footer": {
+        "select-locale": "Select locale"
+    },
+    "NavBar": {
+        "home": "Home",
+        "trips": "Trips",
+        "utilities": "Utilities",
+        "account": "Account"
+    },
     "auth": {
         "SignUp": {
             "title": "Sign up",
@@ -67,5 +76,34 @@
             "create": "Create new trip",
             "added": "Trip added!"
         }
+    },
+    "Utilities": {
+        "next": "Next",
+        "prev": "Previous",
+        "save": "Save",
+        "submit": "Submit",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "create": "Create",
+        "filter": "Filter",
+        "search": "Search",
+        "close": "Close",
+        "back": "Back",
+        "more": "More",
+        "view": "View",
+        "show": "Show",
+        "hide": "Hide",
+        "add": "Add",
+        "share": "Share",
+        "calendar": "Calendar",
+        "details": "Details",
+        "map": "Map",
+        "car": "Car",
+        "scooter": "Scooter",
+        "public": "Public",
+        "private": "Private",
+        "unknown": "Unknown",
+        "none": "None"
     }
 }

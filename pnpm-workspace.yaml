@@ -12,10 +12,11 @@ catalog:
 
     # Web packages
     "@hookform/resolvers": ^3.10.0
-    "@radix-ui/react-separator": ^1.1.1
-    "@radix-ui/react-slot": ^1.1.1
-    "@radix-ui/react-label": ^2.1.1
-    "@radix-ui/react-popover": ^1.1.4
+    "@radix-ui/react-separator": ^1.1.2
+    "@radix-ui/react-slot": ^1.1.2
+    "@radix-ui/react-label": ^2.1.2
+    "@radix-ui/react-select": ^2.1.6
+    "@radix-ui/react-popover": ^1.1.6
     "@tailwindcss/postcss": 4.0.0
     "@tanstack/react-query": ^5.66.0
     babel-plugin-react-compiler: 19.0.0-beta-decd7b8-20250118
@@ -26,6 +27,7 @@ catalog:
     lucide-react: ^0.474.0
     next: ^15.2.0
     next-themes: ^0.4.4
+    next-intl: ^3.26.3
     ofetch: ^1.4.1
     posthog-js: ^1.218.2
     react: ^19.0.0
@@ -34,6 +36,7 @@ catalog:
     react-hook-form: ^7.54.2
     tailwindcss: 4.0.0
     tailwindcss-animate: ^1.0.7
+    sonner: ^2.0.1
     tailwind-merge: ^3.0.2
     zod: ^3.24.1
 

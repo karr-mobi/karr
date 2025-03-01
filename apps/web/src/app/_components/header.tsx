@@ -9,9 +9,7 @@ import { Link } from "@/i18n/routing"
 import { APPLICATION_NAME } from "@/util/appname"
 import logo from "@/assets/logo-tmp.jpg"
 
-import LocaleSwitcher from "../_components/LocaleSwitcher"
 import LoginAccount from "../_components/loginaccount"
-import ThemeSwitch from "../_components/ThemeSwitch"
 
 const MemoizedAppName = memo(() => <h5>{APPLICATION_NAME}</h5>)
 
@@ -19,8 +17,8 @@ export default function Header() {
     const t = useTranslations("trips")
 
     return (
-        <header className="bg-background h-16 w-full sticky top-0 z-50">
-            <div className="flex flex-row items-center justify-between px-4 py-2 bg-primary/4 w-full">
+        <header className="bg-background w-full sticky top-0 z-50 px-2">
+            <div className="flex flex-row items-center justify-between mt-2 px-4 py-2 bg-primary/4 w-full rounded-lg">
                 <div className="flow-inline flex flex-row items-center justify-end">
                     <Link
                         href="/"
@@ -31,7 +29,7 @@ export default function Header() {
                             src={logo}
                             width={40}
                             height={40}
-                            className="rounded-lg"
+                            className="rounded-lg hidden md:block"
                             placeholder="blur"
                         />
                         <MemoizedAppName />
@@ -47,8 +45,6 @@ export default function Header() {
                     <nav className="flex flex-row items-center justify-end gap-4">
                         <LoginAccount />
                     </nav>
-                    <ThemeSwitch />
-                    <LocaleSwitcher />
                 </div>
             </div>
         </header>

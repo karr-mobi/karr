@@ -1,14 +1,12 @@
 import type { Metadata } from "next"
 import localFont from "next/font/local"
+import { notFound } from "next/navigation"
+import { NextIntlClientProvider } from "next-intl"
+import { getMessages } from "next-intl/server"
 
 import { Toaster } from "@karr/ui/components/sonner"
 
 import "@/assets/globals.css"
-
-import { notFound } from "next/navigation"
-/** next-intl imports */
-import { NextIntlClientProvider } from "next-intl"
-import { getMessages } from "next-intl/server"
 
 import { routing } from "@/i18n/routing"
 import { APPLICATION_NAME } from "@/util/appname"
@@ -51,6 +49,7 @@ export default async function RootLayout({
     // Providing all messages to the client
     // side is the easiest way to get started
     const messages = await getMessages()
+
     return (
         <html
             lang={locale}
