@@ -19,6 +19,7 @@
         "@tanstack/react-query": "catalog:",
         "babel-plugin-react-compiler": "catalog:",
         "date-fns": "catalog:",
+        "framer-motion": "catalog:",
         "lucide-react": "catalog:",
         "next": "catalog:",
         "next-intl": "catalog:",

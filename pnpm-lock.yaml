@@ -326,6 +326,9 @@ importers:
       date-fns:
         specifier: 'catalog:'
         version: 4.1.0
+      framer-motion:
+        specifier: 'catalog:'
+        version: 12.4.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       lucide-react:
         specifier: 'catalog:'
         version: 0.474.0(react@19.0.0)
