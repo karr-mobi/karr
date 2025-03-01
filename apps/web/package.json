@@ -21,7 +21,7 @@
         "date-fns": "catalog:",
         "lucide-react": "catalog:",
         "next": "catalog:",
-        "next-intl": "^3.26.3",
+        "next-intl": "catalog:",
         "next-themes": "catalog:",
         "ofetch": "catalog:",
         "posthog-js": "catalog:",

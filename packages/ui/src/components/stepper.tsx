@@ -3,6 +3,7 @@
 import React, { useState } from "react"
 import { motion } from "framer-motion"
 import { ChevronRight, CircleCheck } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 import { cn } from "@karr/ui/lib/utils"
 
@@ -37,7 +38,15 @@ const widths = [
     "768px"
 ]
 
-const Stepper = ({ children }: { children: React.ReactNode[] }) => {
+const Stepper = ({
+    children,
+    className
+}: {
+    children: React.ReactNode[]
+    className?: string
+}) => {
+    const t = useTranslations("Utilities")
+
     const [step, setStep] = useState(1)
     const [isExpanded, setIsExpanded] = useState(true)
 
@@ -76,7 +85,7 @@ const Stepper = ({ children }: { children: React.ReactNode[] }) => {
     }
 
     return (
-        <div className="mt-12 flex flex-col items-center justify-center gap-8">
+        <div className={cn("flex flex-col items-center justify-center gap-8", className)}>
             <div className="flex items-center gap-6 relative">
                 {Array.from({ length: steps }).map((_dot: unknown, index: number) => (
                     <div
@@ -135,65 +144,63 @@ const Stepper = ({ children }: { children: React.ReactNode[] }) => {
             </div>
 
             {/* Buttons container */}
-            <div className="w-[80%] max-w-50">
-                <motion.div className="flex items-end gap-1 justify-end z-4">
-                    {!isExpanded && (
+            <div className="w-[80%] max-w-50 flex items-end gap-6 justify-end z-4">
+                {!isExpanded && (
+                    <motion.div
+                        initial={{ opacity: 0, width: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, width: "64px", scale: 1 }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 15,
+                            mass: 0.8,
+                            bounce: 0.25,
+                            duration: 0.6,
+                            opacity: { duration: 0.2 }
+                        }}
+                        onClick={handleBack}
+                    >
+                        <Button variant="ghost">{t("back")}</Button>
+                    </motion.div>
+                )}
+
+                <Button onClick={handleContinue}>
+                    {/* Completed step icon */}
+                    {step === steps && (
                         <motion.div
-                            initial={{ opacity: 0, width: 0, scale: 0.8 }}
-                            animate={{ opacity: 1, width: "64px", scale: 1 }}
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
                             transition={{
                                 type: "spring",
-                                stiffness: 400,
+                                stiffness: 500,
                                 damping: 15,
-                                mass: 0.8,
-                                bounce: 0.25,
-                                duration: 0.6,
-                                opacity: { duration: 0.2 }
+                                mass: 0.5,
+                                bounce: 0.4
                             }}
-                            onClick={handleBack}
                         >
-                            <Button variant="ghost">Back</Button>
+                            <CircleCheck size={16} />
                         </motion.div>
                     )}
 
-                    <Button onClick={handleContinue}>
-                        {/* Completed step icon */}
-                        {step === steps && (
-                            <motion.div
-                                initial={{ scale: 0, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 500,
-                                    damping: 15,
-                                    mass: 0.5,
-                                    bounce: 0.4
-                                }}
-                            >
-                                <CircleCheck size={16} />
-                            </motion.div>
-                        )}
+                    <TextMorph>{step === steps ? t("submit") : t("next")}</TextMorph>
 
-                        <TextMorph>{step === steps ? "Submit" : "Next"}</TextMorph>
-
-                        {/* Next step icon */}
-                        {step !== steps && (
-                            <motion.div
-                                initial={{ scale: 0, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 500,
-                                    damping: 15,
-                                    mass: 0.5,
-                                    bounce: 0.4
-                                }}
-                            >
-                                <ChevronRight size={16} />
-                            </motion.div>
-                        )}
-                    </Button>
-                </motion.div>
+                    {/* Next step icon */}
+                    {step !== steps && (
+                        <motion.div
+                            initial={{ scale: 0, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 500,
+                                damping: 15,
+                                mass: 0.5,
+                                bounce: 0.4
+                            }}
+                        >
+                            <ChevronRight size={16} />
+                        </motion.div>
+                    )}
+                </Button>
             </div>
         </div>
     )

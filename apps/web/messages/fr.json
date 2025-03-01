@@ -67,5 +67,34 @@
             "create": "Créer un nouveau trajet",
             "added": "Trajet ajouté !"
         }
+    },
+    "Utilities": {
+        "next": "Suivant",
+        "prev": "Précédent",
+        "save": "Enregistrer",
+        "submit": "Soumettre",
+        "cancel": "Annuler",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "create": "Créer",
+        "filter": "Filtrer",
+        "search": "Rechercher",
+        "close": "Fermer",
+        "back": "Retour",
+        "more": "Plus",
+        "view": "Voir",
+        "show": "Afficher",
+        "hide": "Masquer",
+        "add": "Ajouter",
+        "share": "Partager",
+        "calendar": "Calendrier",
+        "details": "Détails",
+        "map": "Carte",
+        "car": "Voiture",
+        "scooter": "Scooter",
+        "public": "Public",
+        "private": "Privé",
+        "unknown": "Inconnu",
+        "none": "Aucun"
     }
 }
