@@ -2,6 +2,7 @@ import { Button } from "@karr/ui/components/button"
 
 import { Link } from "@/i18n/routing"
 
+import ThemeSwitch from "./ThemeSwitch"
 import { isProduction, version } from "./version"
 
 export default function Footer() {
@@ -10,14 +11,18 @@ export default function Footer() {
             <p className="text-sm text-muted-foreground">
                 © {new Date().getFullYear()} Karr
             </p>
-            <Button variant="link" asChild className="text-sm text-muted-foreground">
-                <Link
-                    href={`https://github.com/finxol/karr/releases/tag/v${version}`}
-                    target="_blank"
-                >
-                    Version {version} {isProduction ? "" : "(dev)"}
-                </Link>
-            </Button>
+
+            <div>
+                <Button variant="link" asChild className="text-sm text-muted-foreground">
+                    <Link
+                        href={`https://github.com/finxol/karr/releases/tag/v${version}`}
+                        target="_blank"
+                    >
+                        Version {version} {isProduction ? "" : "(dev)"}
+                    </Link>
+                </Button>
+                <ThemeSwitch />
+            </div>
         </footer>
     )
 }

@@ -11,7 +11,6 @@ import logo from "@/assets/logo-tmp.jpg"
 
 import LocaleSwitcher from "../_components/LocaleSwitcher"
 import LoginAccount from "../_components/loginaccount"
-import ThemeSwitch from "../_components/ThemeSwitch"
 
 const MemoizedAppName = memo(() => <h5>{APPLICATION_NAME}</h5>)
 
@@ -31,7 +30,7 @@ export default function Header() {
                             src={logo}
                             width={40}
                             height={40}
-                            className="rounded-lg"
+                            className="rounded-lg hidden md:block"
                             placeholder="blur"
                         />
                         <MemoizedAppName />
@@ -47,7 +46,6 @@ export default function Header() {
                     <nav className="flex flex-row items-center justify-end gap-4">
                         <LoginAccount />
                     </nav>
-                    <ThemeSwitch />
                     <LocaleSwitcher />
                 </div>
             </div>
