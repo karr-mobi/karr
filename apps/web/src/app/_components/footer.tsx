@@ -17,7 +17,7 @@ export default function Footer() {
                 <Button
                     variant="link"
                     asChild
-                    className="text-sm text-muted-foreground px-0"
+                    className="text-xs text-muted-foreground px-0"
                 >
                     <Link
                         href={`https://github.com/finxol/karr/releases/tag/v${version}`}
