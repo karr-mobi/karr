@@ -165,7 +165,7 @@ function FetchTrips({ userid }: { userid: string }) {
     }
 
     return (
-        <section className="mt-10 flex flex-col items-center justify-start gap-4">
+        <section className="flex flex-col items-center justify-start gap-4">
             {trips.map((trip: Trip) => {
                 const t = TripSchema.parse(trip)
                 return (

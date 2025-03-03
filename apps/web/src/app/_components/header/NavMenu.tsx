@@ -78,10 +78,11 @@ export function DesktopNavMenu() {
                                 {cat.items.map((item) => (
                                     <DropdownMenuItem
                                         key={`desktop-menu-item-${item.url}`}
+                                        asChild
                                     >
                                         <Link
                                             href={item.url}
-                                            className="flex items-center justify-start gap-2 w-full"
+                                            className="flex items-center justify-start gap-2 w-full cursor-pointer"
                                         >
                                             {item.icon ? (
                                                 <item.icon
@@ -129,7 +130,10 @@ export function MobileNavMenu() {
                             <DropdownMenuLabel>{t(cat.label)}</DropdownMenuLabel>
                             <DropdownMenuGroup>
                                 {cat.items.map((item) => (
-                                    <DropdownMenuItem key={`menu-item-${item.url}`}>
+                                    <DropdownMenuItem
+                                        key={`menu-item-${item.url}`}
+                                        asChild
+                                    >
                                         <Link
                                             href={item.url}
                                             className="flex items-center justify-start gap-2"

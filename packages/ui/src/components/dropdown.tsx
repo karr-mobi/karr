@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
+import { motion } from "framer-motion"
 import { CheckIcon, ChevronRightIcon, Dot as DotIcon } from "lucide-react"
 
 import { cn } from "@karr/ui/lib/utils"
@@ -115,15 +116,25 @@ const DropdownMenuContent = React.forwardRef<
                 <DropdownMenuPrimitive.Content
                     ref={ref}
                     sideOffset={sideOffset}
-                    className={cn(
-                        "z-50 min-w-40 overflow-hidden rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-lg shadow-black/5 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-                        className
-                    )}
                     onPointerDown={handlePointerDown}
                     onPointerDownOutside={handlePointerDownOutside}
                     onCloseAutoFocus={handleCloseAutoFocus}
+                    asChild
                     {...props}
-                />
+                >
+                    <motion.div
+                        className={cn(
+                            "z-50 min-w-40 overflow-hidden rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-lg shadow-black/5",
+                            className
+                        )}
+                        initial={{ opacity: 0, y: -5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }}
+                        transition={{ duration: 0.15 }}
+                    >
+                        {props.children}
+                    </motion.div>
+                </DropdownMenuPrimitive.Content>
             </DropdownMenuPrimitive.Portal>
         )
     }
