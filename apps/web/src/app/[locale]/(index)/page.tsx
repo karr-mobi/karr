@@ -8,7 +8,10 @@ import { Button } from "@karr/ui/components/button"
 import { Link } from "@/i18n/routing"
 import logo from "@/assets/logo-tmp.jpg"
 
-const MemoizedAppName = memo(() => <h1 className="tracking-tight">{APPLICATION_NAME}</h1>)
+const MemoizedAppName = memo(
+    () => <h1 className="tracking-tight">{APPLICATION_NAME}</h1>,
+    () => true // Never update
+)
 
 export default function Home() {
     const t = useTranslations("HomePage")
