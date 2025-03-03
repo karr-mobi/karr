@@ -33,7 +33,7 @@ function ThemeSwitch() {
     return (
         <Button variant="ghost" size="icon" onClick={toggleTheme}>
             <AnimatePresence mode="wait">
-                {(!mounted || resolvedTheme === "light") && (
+                {!mounted || resolvedTheme === "light" ? (
                     <motion.div
                         key={moonId}
                         variants={iconVariants}
@@ -44,8 +44,7 @@ function ThemeSwitch() {
                     >
                         <IconMoon className="size-[1.2rem]" />
                     </motion.div>
-                )}
-                {resolvedTheme === "dark" && (
+                ) : (
                     <motion.div
                         key={sunId}
                         variants={iconVariants}
