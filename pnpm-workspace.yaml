@@ -43,7 +43,7 @@ catalog:
     # API packages
     "@hono/node-server": ^1.13.7
     drizzle-kit: ^0.30.2
-    drizzle-orm: ^0.39.2
+    drizzle-orm: ^0.40.0
     drizzle-zod: ^0.6.1
     esbuild: ^0.25.0
     hono: ^4.7.2
