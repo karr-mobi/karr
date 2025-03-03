@@ -9,7 +9,7 @@ import { Link } from "@/i18n/routing"
 import { APPLICATION_NAME } from "@/util/appname"
 import logo from "@/assets/logo-tmp.jpg"
 
-import LoginAccount from "../_components/loginaccount"
+import LoginAccount from "./header/LoginAccount"
 
 const MemoizedAppName = memo(() => <h5>{APPLICATION_NAME}</h5>)
 

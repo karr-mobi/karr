@@ -2,9 +2,9 @@ import { Button } from "@karr/ui/components/button"
 
 import { Link } from "@/i18n/routing"
 
-import { LocaleSwitcher } from "./LocaleSwitcher"
-import { ThemeSwitch } from "./ThemeSwitch"
-import { isProduction, version } from "./version"
+import { LocaleSwitcher } from "./footer/LocaleSwitcher"
+import { ThemeSwitch } from "./footer/ThemeSwitch"
+import { isProduction, version } from "./footer/version"
 
 export default function Footer() {
     return (
