@@ -70,7 +70,7 @@ export default async function RootLayout({
                         <NextIntlClientProvider messages={messages}>
                             <div className="grid h-screen grid-cols-1 grid-rows-[auto_1fr]">
                                 <Header />
-                                <main className="mx-4 mt-4 flex h-full flex-col items-center justify-start">
+                                <main className="mx-4 mt-4 flex h-full flex-col items-start justify-start">
                                     {children}
                                 </main>
                                 <Footer />

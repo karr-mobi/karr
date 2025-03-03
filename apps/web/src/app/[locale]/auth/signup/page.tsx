@@ -42,7 +42,7 @@ export default function Login() {
     })
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full items-center">
             <h2>{t("title")}</h2>
             <form className="flex flex-col gap-5" onSubmit={onSubmit}>
                 <section className="flex flex-col gap-2">

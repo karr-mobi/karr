@@ -17,7 +17,7 @@ export default function Home() {
     const t = useTranslations("HomePage")
 
     return (
-        <div className="flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+        <div className="w-full flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
                     <MemoizedAppName />

@@ -77,7 +77,7 @@ function ShowUserData({ data: { data: user } }: { data: any }) {
                 </aside>
                 <div className="flex flex-row gap-6">
                     <b>{t("user-id")}</b>
-                    <p>{user.id}</p>
+                    <p>{user.id.split("-")[0]}</p>
                 </div>
                 <div className="flex flex-row gap-6">
                     <b>{t("email")}</b>
