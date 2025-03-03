@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.9.0
+
+[compare changes](https://github.com/finxol/karr/compare/v0.8.5...v0.9.0)
+
+### 🚀 Enhancements
+
+- **ui:** ⚠️ Vastly improve nav bar ([#64](https://github.com/finxol/karr/pull/64))
+
+#### ⚠️ Breaking Changes
+
+- **ui:** ⚠️ Vastly improve nav bar ([#64](https://github.com/finxol/karr/pull/64))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+
 ## v0.8.5
 
 [compare changes](https://github.com/finxol/karr/compare/v0.8.4...v0.8.5)
