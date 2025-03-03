@@ -1,4 +1,3 @@
-import { Button } from "@karr/ui/components/button"
 import { Separator } from "@karr/ui/components/separator"
 
 import { Link } from "@/i18n/routing"
@@ -12,23 +11,20 @@ export default function Footer() {
         <footer className="bg-background/50 flex w-full flex-col items-center justify-between px-4 py-2">
             <Separator />
             <div className="bg-background/50 flex h-16 w-full flex-row items-center justify-between">
-                <p className="text-sm text-muted-foreground">
-                    © {new Date().getFullYear()} Karr
-                </p>
+                <div className="flex flex-row items-end justify-start gap-2">
+                    <p className="text-sm text-muted-foreground">
+                        © {new Date().getFullYear()} Karr
+                    </p>
+                    <Link
+                        href={`https://github.com/finxol/karr/releases/tag/v${version}`}
+                        className="text-xs text-muted-foreground px-0 mb-[1px]" // 1px mb to fix alignment
+                        target="_blank"
+                    >
+                        v{version} {isProduction ? "" : "(dev)"}
+                    </Link>
+                </div>
 
                 <div className="flex flex-row gap-3">
-                    <Button
-                        variant="link"
-                        asChild
-                        className="text-xs text-muted-foreground px-0"
-                    >
-                        <Link
-                            href={`https://github.com/finxol/karr/releases/tag/v${version}`}
-                            target="_blank"
-                        >
-                            {version} {isProduction ? "" : "(dev)"}
-                        </Link>
-                    </Button>
                     <LocaleSwitcher />
                     <ThemeSwitch />
                 </div>

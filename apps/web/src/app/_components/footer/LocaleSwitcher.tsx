@@ -62,7 +62,7 @@ function LocaleSwitcher() {
         <Select defaultValue={locale} onValueChange={switchLocale}>
             <SelectTrigger
                 id={id}
-                className="ps-2 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_[data-square]]:shrink-0"
+                className="ps-2 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_[data-square]]:shrink-0 cursor-pointer"
             >
                 <SelectValue placeholder="Select locale" />
             </SelectTrigger>
@@ -70,7 +70,11 @@ function LocaleSwitcher() {
                 <SelectGroup>
                     <SelectLabel className="ps-2">{t("select-locale")}</SelectLabel>
                     {allLocales.map((l) => (
-                        <SelectItem value={l} key={l}>
+                        <SelectItem
+                            value={l}
+                            key={l}
+                            className="hover:bg-accent cursor-pointer"
+                        >
                             <Square>{localeIcons[l]}</Square>
                             <span className="truncate">{l}</span>
                         </SelectItem>
