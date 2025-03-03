@@ -26,7 +26,7 @@ const Square = ({
     <span
         data-square
         className={cn(
-            "flex size-5 items-center justify-center rounded bg-muted text-xs font-medium text-muted-foreground",
+            "flex size-5 items-center justify-center rounded text-xs font-medium",
             className
         )}
         aria-hidden="true"
@@ -44,6 +44,11 @@ function LocaleSwitcher() {
     const locale = useLocale() as "en" | "fr"
     const router = useRouter()
     const pathname = usePathname()
+
+    const localeIcons = {
+        en: "🇬🇧",
+        fr: "🇫🇷"
+    }
 
     const switchLocale = useCallback(() => {
         const currentIndex = allLocales.indexOf(locale)
@@ -66,9 +71,7 @@ function LocaleSwitcher() {
                     <SelectLabel className="ps-2">{t("select-locale")}</SelectLabel>
                     {allLocales.map((l) => (
                         <SelectItem value={l} key={l}>
-                            <Square className="bg-primary/20 text-indigo-500">
-                                {l === "en" ? "🇬🇧" : "🇫🇷"}
-                            </Square>
+                            <Square>{localeIcons[l]}</Square>
                             <span className="truncate">{l}</span>
                         </SelectItem>
                     ))}

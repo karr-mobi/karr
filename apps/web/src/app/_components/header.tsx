@@ -15,8 +15,8 @@ const MemoizedAppName = memo(
 
 export default function Header() {
     return (
-        <header className="bg-background w-full sticky top-0 z-50 px-2">
-            <div className="flex flex-row items-center justify-between mx-auto mt-2 px-2 py-2 max-w-[60rem] bg-primary/4 w-full rounded-md">
+        <header className="bg-transparent w-full sticky top-0 z-50 px-2">
+            <div className="flex flex-row items-center justify-between mx-auto mt-2 px-2 py-2 max-w-[60rem] bg-popover w-full rounded-md">
                 <div className="flow-inline flex flex-row items-center justify-end">
                     <Link
                         href="/"
