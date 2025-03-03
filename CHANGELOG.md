@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.9.1
+
+[compare changes](https://github.com/finxol/karr/compare/v0.9.0...v0.9.1)
+
+### 🩹 Fixes
+
+- **ui:** Theme colours looked weird ([#66](https://github.com/finxol/karr/pull/66))
+- **ui:** Adjustments ([#69](https://github.com/finxol/karr/pull/69))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+
 ## v0.9.0
 
 [compare changes](https://github.com/finxol/karr/compare/v0.8.5...v0.9.0)
