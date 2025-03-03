@@ -1,4 +1,5 @@
 import { memo } from "react"
+import { cookies } from "next/headers"
 import Image from "next/image"
 
 import { Link } from "@/i18n/routing"
@@ -13,10 +14,13 @@ const MemoizedAppName = memo(
     () => false // Never update
 )
 
-export default function Header() {
+export default async function Header() {
+    const c = await cookies()
+    const isAuthenticated = c.get("auth-token") !== undefined
+
     return (
         <header className="bg-transparent w-full sticky top-0 z-50 px-2">
-            <div className="flex flex-row items-center justify-between mx-auto mt-2 px-2 py-2 max-w-[60rem] bg-popover w-full rounded-md">
+            <div className="flex flex-row items-center justify-between mx-auto mt-2 px-2 py-2 max-w-[60rem] bg-header-background w-full rounded-md">
                 <div className="flow-inline flex flex-row items-center justify-end">
                     <Link
                         href="/"
@@ -32,10 +36,10 @@ export default function Header() {
                         />
                         <MemoizedAppName />
                     </Link>
-                    <DesktopNavMenu />
+                    {isAuthenticated && <DesktopNavMenu />}
                 </div>
                 <div className="flex flex-row items-center justify-end gap-4">
-                    <MobileNavMenu />
+                    {isAuthenticated && <MobileNavMenu />}
                     <nav className="flex flex-row items-center justify-end gap-4">
                         <LoginAccount />
                     </nav>
