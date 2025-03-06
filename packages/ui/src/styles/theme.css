@@ -4,7 +4,7 @@
     :root {
         --background: hsl(140 20% 97%);
         --foreground: hsl(132 5% 10%);
-        --header-background: hsl(132 37% 95%);
+        --header-background: hsl(132 45% 90%);
         --card: hsl(132 37% 90%);
         --card-foreground: hsl(132 5% 15%);
         --popover: hsl(132 30% 97%);
@@ -24,6 +24,7 @@
         --ring: hsl(132 74% 32%);
         --radius: 0.7rem;
     }
+
     .dark {
         --background: hsl(132 4% 10%);
         --foreground: hsl(132 5% 90%);
