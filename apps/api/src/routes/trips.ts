@@ -27,7 +27,6 @@ hono.get("/search", (c) => {
 
         const tripsToSend: Promise<void>[] = []
 
-        // TODO(@finxol): Fix the type of data
         function sendData(data: TripSelect[]) {
             logger.debug(`Sending ${data.length} trips`, data)
             for (const item of data) {
