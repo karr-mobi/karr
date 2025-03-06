@@ -2,8 +2,13 @@
 
 echo "Running commit-msg hook"
 
+################################################################
+# Check if commit message is in the conventional commit format #
+################################################################
+pnpm commitlint ${1}
+
 #######################################################################
-# Disallow commits to main branch, allow release commits only on main #                           #
+# Disallow commits to main branch, allow release commits only on main #
 #######################################################################
 branch=$(git symbolic-ref HEAD)
 commit_msg=$(cat "$1")
@@ -30,8 +35,3 @@ else
         exit 1
     fi
 fi
-
-################################################################
-# Check if commit message is in the conventional commit format #
-################################################################
-pnpm commitlint ${1}
