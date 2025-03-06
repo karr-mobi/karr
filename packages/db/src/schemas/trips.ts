@@ -1,4 +1,5 @@
 import { date, integer, pgTable, text, uuid } from "drizzle-orm/pg-core"
+import { createSelectSchema } from "drizzle-zod"
 import { z } from "zod"
 
 import { accountsTable } from "./accounts"
@@ -16,20 +17,26 @@ export const tripsTable = pgTable("Trips", {
         .notNull()
 })
 
-export const TripSchema = z.object({
-    id: z.string().uuid(),
-    origin: z.string().optional().nullable(),
-    from: z.string(),
-    to: z.string(),
-    departure: z.string(),
-    price: z.number().min(0),
-    createdAt: z.string().optional().nullable(),
-    updatedAt: z.string().optional().nullable(),
-    account: z.string().uuid(),
-    email: z.string().email().nullable()
-})
+export const TripSelectSchema = createSelectSchema(tripsTable)
+export type TripSelect = z.infer<typeof TripSelectSchema> & {
+    origin?: string
+    email?: string
+}
 
-export type Trip = z.infer<typeof TripSchema>
+// export const TripSchema = z.object({
+//     id: z.string().uuid(),
+//     origin: z.string().optional().nullable(),
+//     from: z.string(),
+//     to: z.string(),
+//     departure: z.string(),
+//     price: z.number().min(0),
+//     createdAt: z.string().optional().nullable(),
+//     updatedAt: z.string().optional().nullable(),
+//     account: z.string().uuid(),
+//     email: z.string().email().nullable()
+// })
+
+// export type Trip = z.infer<typeof TripSchema>
 
 export const NewTripSchema = z.object({
     from: z.string(),
