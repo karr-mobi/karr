@@ -17,11 +17,12 @@ export const tripsTable = pgTable("Trips", {
         .notNull()
 })
 
-export const TripSelectSchema = createSelectSchema(tripsTable)
-export type TripSelect = z.infer<typeof TripSelectSchema> & {
-    origin?: string
-    email?: string
-}
+// TODO(@finxol): use views instead, will enable proper typing
+export const TripSelectSchema = createSelectSchema(tripsTable, {
+    origin: z.string().optional(),
+    email: z.string().optional()
+})
+export type TripSelect = z.infer<typeof TripSelectSchema>
 
 // export const TripSchema = z.object({
 //     id: z.string().uuid(),
