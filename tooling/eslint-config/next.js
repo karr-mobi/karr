@@ -1,11 +1,8 @@
-import js from "@eslint/js"
 import pluginNext from "@next/eslint-plugin-next"
 import pluginTanstackQuery from "@tanstack/eslint-plugin-query"
-import eslintConfigPrettier from "eslint-config-prettier"
 import pluginReact from "eslint-plugin-react"
 import pluginReactHooks from "eslint-plugin-react-hooks"
 import globals from "globals"
-import tseslint from "typescript-eslint"
 
 import { config as baseConfig } from "./base.js"
 
@@ -16,9 +13,6 @@ import { config as baseConfig } from "./base.js"
  * */
 export const nextJsConfig = [
     ...baseConfig,
-    js.configs.recommended,
-    eslintConfigPrettier,
-    ...tseslint.configs.recommended,
     {
         ...pluginReact.configs.flat.recommended,
         languageOptions: {
@@ -33,12 +27,15 @@ export const nextJsConfig = [
         }
     },
     {
+        files: ["**/*.ts", "**/*.tsx"],
         plugins: {
             "@next/next": pluginNext
         },
         rules: {
             ...pluginNext.configs.recommended.rules,
-            ...pluginNext.configs["core-web-vitals"].rules
+            ...pluginNext.configs["core-web-vitals"].rules,
+            // Disable the rule since this is only a component library
+            "@next/next/no-html-link-for-pages": "off"
         }
     },
     {

@@ -9,11 +9,11 @@
         "./react-internal": "./react-internal.js"
     },
     "devDependencies": {
+        "@eslint/js": "catalog:tooling",
         "@next/eslint-plugin-next": "catalog:tooling",
         "@tanstack/eslint-plugin-query": "catalog:tooling",
         "@typescript-eslint/eslint-plugin": "catalog:tooling",
         "@typescript-eslint/parser": "catalog:tooling",
-        "@eslint/js": "catalog:tooling",
         "eslint": "catalog:tooling",
         "eslint-config-prettier": "catalog:tooling",
         "eslint-plugin-react": "catalog:tooling",
@@ -22,5 +22,8 @@
         "globals": "catalog:tooling",
         "typescript": "catalog:tooling",
         "typescript-eslint": "catalog:tooling"
+    },
+    "dependencies": {
+        "jsonc-eslint-parser": "^2.4.0"
     }
 }
