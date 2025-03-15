@@ -7,8 +7,7 @@ import {
     NewTripSchema,
     TripSelectSchema,
     tripsTable,
-    type NewTrip,
-    type TripSelect
+    type NewTrip
 } from "@karr/db/schemas/trips.js"
 import logger from "@karr/util/logger"
 
@@ -23,7 +22,7 @@ export async function getTrips() {
     return TripSelectSchema.array().parse(trips)
 }
 
-export async function getUserTrips(userId: string): Promise<TripSelect[]> {
+export async function getUserTrips(userId: string) {
     const trips = await drizzle
         .select()
         .from(tripsTable)
