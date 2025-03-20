@@ -15,6 +15,13 @@
         },
         "JavaScript": {
             "language_servers": ["typescript-language-server", "!vtsls", "..."]
+        },
+        "JSON": {
+            "language_server": {
+                "start": "eslint-language-server",
+                "args": ["--stdio"]
+            },
+            "diagnostic_source": "eslint"
         }
     }
 }

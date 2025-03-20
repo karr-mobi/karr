@@ -6,6 +6,7 @@ const withNextIntl = createNextIntlPlugin()
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    devIndicators: false,
     output: "standalone",
     /** Enables hot reloading for local packages without a build step */
     transpilePackages: ["@karr/ui", "@karr/config"],
