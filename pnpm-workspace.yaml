@@ -43,6 +43,7 @@ catalog:
 
     # API packages
     "@hono/node-server": ^1.13.8
+    "@openauthjs/openauth": ^0.4.3
     drizzle-kit: ^0.30.5
     drizzle-orm: ^0.40.0
     drizzle-zod: ^0.6.1
@@ -50,6 +51,7 @@ catalog:
     hono: ^4.7.4
     neverthrow: ^8.2.0
     postgres: ^3.4.5
+    unstorage: ^1.15.0
 
 catalogs:
     tooling:
