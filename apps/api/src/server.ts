@@ -66,12 +66,9 @@ export const build = (): Hono => {
                 )
             }
 
-            // TODO(@finxol): verify the JWT
-            const id: string | null =
-                // very unsafe, but it's just for the PoC
-                authtoken === "federation" ? "federation" : await getAccount(authtoken)
+            const acc = await getAccount(authtoken)
 
-            if (id === null) {
+            if (acc.isErr()) {
                 return responseErrorObject(
                     c,
                     {
@@ -82,17 +79,10 @@ export const build = (): Hono => {
                 )
             }
 
-            // check the id is a valid UUID
-            // if (!isUUIDv4(id)) {
-            //     return responseErrorObject(
-            //         c,
-            //         {
-            //             message: "Unauthorized",
-            //             cause: "Invalid authorization token"
-            //         },
-            //         401
-            //     )
-            // }
+            // TODO(@finxol): verify the JWT
+            const id =
+                // very unsafe, but it's just for the PoC
+                authtoken === "federation" ? "federation" : acc.value
 
             return { id }
         })
