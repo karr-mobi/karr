@@ -1,5 +1,34 @@
 # Changelog
 
+## v0.9.2
+
+[compare changes](https://github.com/finxol/karr/compare/v0.9.1...v0.9.2)
+
+### 🚀 Enhancements
+
+- Better handling ([#83](https://github.com/finxol/karr/pull/83))
+
+### 🩹 Fixes
+
+- **ui:** Tweak header bar colour
+  ([04c670b](https://github.com/finxol/karr/commit/04c670b))
+
+### 📦 Build
+
+- New elsint rule for deps versions
+  ([4edffb6](https://github.com/finxol/karr/commit/4edffb6))
+- Fix eslint package.json rule ([7343f9e](https://github.com/finxol/karr/commit/7343f9e))
+
+### 🏡 Chore
+
+- Change hooks order ([d18db8c](https://github.com/finxol/karr/commit/d18db8c))
+- Update lockfile ([146d8ed](https://github.com/finxol/karr/commit/146d8ed))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.9.1
 
 [compare changes](https://github.com/finxol/karr/compare/v0.9.0...v0.9.1)
