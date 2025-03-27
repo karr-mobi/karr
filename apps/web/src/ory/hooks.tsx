@@ -5,6 +5,8 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 
 import { kratos } from "@karr/ory/sdk/client"
 
+import { redirect } from "@/i18n/routing"
+
 export const HandleError = (
     getFlow: ((flowId: string) => Promise<void | Error>) | undefined = undefined,
     //eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -159,7 +161,13 @@ export const HandleError = (
 }
 
 // Returns a function which will log the user out
-export function LogoutLink(deps?: DependencyList) {
+export function LogoutLink({
+    deps,
+    locale = ""
+}: {
+    deps?: DependencyList
+    locale?: string
+}) {
     const [logoutToken, setLogoutToken] = useState<string>("")
 
     useEffect(() => {
@@ -184,7 +192,7 @@ export function LogoutLink(deps?: DependencyList) {
         if (logoutToken) {
             kratos
                 .updateLogoutFlow({ token: logoutToken })
-                .then(() => (window.location.href = "/auth/login"))
+                .then(() => redirect({ locale, href: "/auth/login" }))
         }
     }
 }

@@ -2,8 +2,9 @@
 
 import React, { useCallback, useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
-import { SettingsFlow, UpdateSettingsFlowBody } from "@ory/client"
+import type { SettingsFlow, UpdateSettingsFlowBody } from "@ory/client"
 import { LogOut } from "lucide-react"
+import { useLocale } from "next-intl"
 
 import { kratos } from "@karr/ory/sdk/client"
 import { Button } from "@karr/ui/components/button"
@@ -16,16 +17,17 @@ import { HandleError, LogoutLink } from "@/ory"
 import AccountSessions from "../auth/_components/accountSessions"
 import AccountSettings from "../auth/_components/accountSettings"
 
-export default function Page() {
-    const onLogout = LogoutLink()
+export default function Page({ params }: { params: { locale: string } }) {
+    const locale = useLocale()
+    const onLogout = LogoutLink({ locale })
 
     const [flow, setFlow] = useState<SettingsFlow>()
 
     const router = useRouter()
-    const params = useSearchParams()
+    const sp = useSearchParams()
 
-    const returnTo = params.get("return_to") ?? undefined
-    const flowId = params.get("flow") ?? undefined
+    const returnTo = sp.get("return_to") ?? undefined
+    const flowId = sp.get("flow") ?? undefined
 
     const getFlow = useCallback((flowId: string) => {
         return kratos
@@ -123,7 +125,7 @@ export default function Page() {
             </div>
             <Tabs
                 defaultValue="account"
-                value={params.get("tab") ?? undefined}
+                value={sp.get("tab") ?? undefined}
                 className="w-full max-w-md"
                 onValueChange={(value) => addQueryParam("tab", value)}
             >

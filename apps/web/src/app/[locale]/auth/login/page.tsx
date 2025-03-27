@@ -28,15 +28,15 @@ export default function Login() {
     const [flow, setFlow] = useState<LoginFlow>()
 
     const router = useRouter()
-    const params = useSearchParams()
+    const sp = useSearchParams()
 
-    const flowId = params.get("flow") ?? undefined
-    const aal = params.get("aal") ?? undefined
-    const refresh = params.get("refresh") ? true : undefined
-    const returnTo = params.get("return_to") ?? undefined
-    const loginChallenge = params.get("login_challenge") ?? undefined
+    const flowId = sp.get("flow") ?? undefined
+    const aal = sp.get("aal") ?? undefined
+    const refresh = sp.get("refresh") ? true : undefined
+    const returnTo = sp.get("return_to") ?? undefined
+    const loginChallenge = sp.get("login_challenge") ?? undefined
 
-    const onLogout = LogoutLink([aal, refresh])
+    const onLogout = LogoutLink({ deps: [aal, refresh] })
 
     const getFlow = useCallback((flowId: string) => {
         return kratos
@@ -64,7 +64,13 @@ export default function Login() {
                 .createBrowserLoginFlow({ aal, refresh, returnTo, loginChallenge })
                 .then(({ data }) => {
                     setFlow(data)
-                    router.push(`?flow=${data.id}`)
+                    const query: { flow: string; return_to?: string } = { flow: data.id }
+                    if (data.return_to) query.return_to = data.return_to
+
+                    router.push({
+                        pathname: "",
+                        query
+                    })
                 })
                 .catch(handleError)
         },
@@ -121,6 +127,8 @@ export default function Login() {
                                     return "Confirm Action"
                                 } else if (flow?.requested_aal === "aal2") {
                                     return "Two-Factor Authentication"
+                                } else if (returnTo) {
+                                    return "Please log in to continue"
                                 }
                                 return "Welcome"
                             })()}

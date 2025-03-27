@@ -1,12 +1,24 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { type Session } from "@ory/client"
 import createMiddleware from "next-intl/middleware"
+
+import { getFrontendApi } from "@karr/ory/sdk/server"
 
 import { routing } from "@/i18n/routing"
 
-import { getFrontendApi } from "../../../packages/ory/src/sdk/server"
-
 const i18nMiddleware = createMiddleware(routing)
+
+const PRODUCTION = process.env.NODE_ENV === "production"
+
+const logger = {
+    log: (...message: unknown[]) => {
+        if (!PRODUCTION) console.log(...message)
+    },
+    error: (...message: unknown[]) => {
+        console.error(...message)
+    }
+}
 
 export async function middleware(request: NextRequest) {
     // i18n check
@@ -15,7 +27,8 @@ export async function middleware(request: NextRequest) {
 
     // Ory session check
     const api = await getFrontendApi()
-    const session = await api
+
+    const session: Session | null = await api
         .toSession({
             cookie: `ory_kratos_session=${request.cookies.get("ory_kratos_session")?.value}`
         })
@@ -23,7 +36,7 @@ export async function middleware(request: NextRequest) {
             return response.data
         })
         .catch((err) => {
-            console.error("ERROR", err)
+            //if (!PRODUCTION) logger.error("ERROR", err)
             return null
         })
 
@@ -32,8 +45,11 @@ export async function middleware(request: NextRequest) {
         request.nextUrl.pathname.includes(path)
     )
 
+    logger.log("IS AUTH REQUIRED", isAuthRequired)
+    //logger.log("SESSION", session)
+
     if (isAuthRequired && !session) {
-        console.log("NO SESSION", request.nextUrl.pathname)
+        logger.log("NO SESSION", request.nextUrl.pathname)
 
         return NextResponse.redirect(
             new URL(
@@ -43,7 +59,7 @@ export async function middleware(request: NextRequest) {
         )
     }
 
-    console.log("SESSION EXISTS", request.nextUrl.pathname)
+    if (session) logger.log("SESSION EXISTS", request.nextUrl.pathname)
 
     return response
 }
