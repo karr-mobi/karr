@@ -21,13 +21,10 @@
         "@biomejs/biome": "catalog:tooling",
         "@commitlint/cli": "catalog:tooling",
         "@commitlint/config-conventional": "catalog:tooling",
-        "@ianvs/prettier-plugin-sort-imports": "catalog:tooling",
         "@turbo/gen": "catalog:tooling",
         "changelogen": "catalog:tooling",
         "husky": "catalog:tooling",
         "lint-staged": "catalog:tooling",
-        "prettier": "catalog:tooling",
-        "prettier-plugin-tailwindcss": "catalog:tooling",
         "turbo": "catalog:tooling",
         "typescript": "catalog:tooling"
     },
