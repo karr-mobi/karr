@@ -9,41 +9,33 @@
         "dev": "turbo dev",
         "lint": "turbo lint",
         "check-types": "turbo check-types",
-        "format": "prettier --config .prettierrc.json --write \"**/*.{ts,tsx,md,json,yml,yaml,css,html}\"",
-        "format:check": "prettier --config .prettierrc.json --check \"**/*.{ts,tsx,md,json,yml,yaml,css,html}\"",
+        "format": "biome format --write .",
+        "format:check": "biome format .",
         "test": "turbo test",
         "prepare": "husky",
         "commitlint": "commitlint --edit",
         "release": "changelogen --release --push"
     },
-    "workspaces": [
-        "apps/*",
-        "packages/*",
-        "tooling/*"
-    ],
+    "workspaces": ["apps/*", "packages/*", "tooling/*"],
     "devDependencies": {
+        "@biomejs/biome": "catalog:tooling",
         "@commitlint/cli": "catalog:tooling",
         "@commitlint/config-conventional": "catalog:tooling",
-        "@ianvs/prettier-plugin-sort-imports": "catalog:tooling",
         "@turbo/gen": "catalog:tooling",
         "changelogen": "catalog:tooling",
         "husky": "catalog:tooling",
         "lint-staged": "catalog:tooling",
-        "prettier": "catalog:tooling",
-        "prettier-plugin-tailwindcss": "catalog:tooling",
         "turbo": "catalog:tooling",
         "typescript": "catalog:tooling"
     },
-    "packageManager": "pnpm@10.6.5",
+    "packageManager": "pnpm@10.7.0",
     "engines": {
         "node": ">=22"
     },
     "pnpm": {
-        "requiredScripts": [
-            "lint",
-            "format"
-        ],
+        "requiredScripts": ["lint", "format"],
         "onlyBuiltDependencies": [
+            "@biomejs/biome",
             "core-js",
             "core-js-pure",
             "esbuild",
@@ -51,12 +43,10 @@
         ]
     },
     "lint-staged": {
-        "*.{ts,tsx,md,json,yml,yaml,css,html}": [
-            "prettier --write"
+        "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+            "biome format --write --no-errors-on-unmatched"
         ],
-        "apps/caddy/Caddyfile": [
-            "caddy fmt --overwrite"
-        ]
+        "*": ["biome format --no-errors-on-unmatched --files-ignore-unknown=true"]
     },
     "changelog": {
         "repo": "finxol/karr",

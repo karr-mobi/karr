@@ -53,12 +53,10 @@
     --font-family-poppins: var(--font-poppins);
     --font-family-inter: var(--font-inter);
 
-    --font-sans:
-        var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-        "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --font-mono:
-        var(--font-baskervville), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        "Liberation Mono", "Courier New", monospace;
+    --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-mono: var(--font-baskervville), ui-monospace, SFMono-Regular, Menlo, Monaco,
+        Consolas, "Liberation Mono", "Courier New", monospace;
 
     --color-mint-green: oklch(83.66% 0.125 176.45);
     --color-baby-blue: oklch(85.61% 0.094 225.87);
