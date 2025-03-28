@@ -53,6 +53,7 @@ catalog:
 
 catalogs:
     tooling:
+        "@biomejs/biome": 1.9.4
         "@commitlint/cli": ^19.8.0
         "@commitlint/config-conventional": ^19.8.0
         "@eslint/js": ^9.22.0
@@ -60,7 +61,6 @@ catalogs:
         "@next/eslint-plugin-next": ^15.2.2
         "@tanstack/eslint-plugin-query": ^5.68.0
         "@turbo/gen": ^2.4.4
-
         "@typescript-eslint/eslint-plugin": ^8.26.1
         "@typescript-eslint/parser": ^8.26.1
         changelogen: ^0.6.1
