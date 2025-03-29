@@ -1,52 +1,79 @@
+/**
+ * Configure OpenAuth to use unstorage as a store.
+ *
+ * This enables you to use any unstorage driver as a store.
+ * Please refer to [unstorage docs](https://unstorage.unjs.io/drivers) for details on possible drivers.
+ *
+ * By default, it uses the memory driver.
+ *
+ * :::caution
+ * The default memory driver is not meant to be used in production.
+ * :::
+ *
+ * ```ts
+ * import { UnStorage } from "@openauthjs/openauth/storage/unstorage"
+ *
+ * const storage = UnStorage()
+ *
+ * export default issuer({
+ *   storage,
+ *   // ...
+ * })
+ * ```
+ *
+ * Optionally, you can specify a driver.
+ *
+ * ```ts
+ * import fsDriver from "unstorage/drivers/fs";
+ *
+ * UnStorage({
+ *   driver: fsDriver({ base: "./tmp" }),
+ * })
+ * ```
+ *
+ * @packageDocumentation
+ */
 import { joinKey, splitKey, StorageAdapter } from "@openauthjs/openauth/storage/storage"
-import { createStorage, type Driver } from "unstorage"
-import memoryDriver from "unstorage/drivers/memory"
+import { createStorage, type Driver as UnstorageDriver } from "unstorage"
 
-export function UnStorage({ driver }: { driver?: Driver } = {}): StorageAdapter {
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
-    type Entry = [string, { value: Record<string, any>; expiry?: number }]
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Entry = { value: Record<string, any> | undefined; expiry?: number }
 
+export function UnStorage({ driver }: { driver?: UnstorageDriver } = {}): StorageAdapter {
     const store = createStorage<Entry>({
-        driver: driver ?? memoryDriver()
+        driver: driver
     })
 
     return {
         async get(key: string[]) {
             const k = joinKey(key)
-            const entry = await store.get(k)
-            const v = entry ? entry[1] : undefined
+            const entry = await store.getItem(k)
 
-            if (v === undefined) {
+            if (!entry) {
                 return undefined
             }
 
-            if (v.expiry && Date.now() >= v.expiry) {
-                await store.remove(k)
+            if (entry.expiry && Date.now() >= entry.expiry) {
+                await store.removeItem(k)
                 return undefined
             }
 
-            return v.value
+            return entry.value
         },
 
         //eslint-disable-next-line @typescript-eslint/no-explicit-any
         async set(key: string[], value: any, expiry?: Date) {
             const k = joinKey(key)
 
-            // Handle both Date objects and TTL numbers while maintaining Date type in signature
-            const v: Entry = [
-                k,
-                {
-                    value,
-                    expiry: expiry ? expiry.getTime() : expiry
-                }
-            ]
-
-            await store.setItem(k, v)
+            await store.setItem(k, {
+                value,
+                expiry: expiry ? expiry.getTime() : undefined
+            } satisfies Entry)
         },
 
         async remove(key: string[]) {
             const k = joinKey(key)
-            await store.removeItem(k, { removeMeta: true })
+            await store.removeItem(k)
         },
 
         async *scan(prefix: string[]) {
@@ -61,9 +88,13 @@ export function UnStorage({ driver }: { driver?: Driver } = {}): StorageAdapter 
                 const entry = await store.getItem(key)
 
                 if (!entry) continue
-                if (entry[1].expiry && now >= entry[1].expiry) continue
+                if (entry.expiry && now >= entry.expiry) {
+                    // Clean up expired entries as we go
+                    await store.removeItem(key)
+                    continue
+                }
 
-                yield [splitKey(key), entry[1].value]
+                yield [splitKey(key), entry.value]
             }
         }
     }
