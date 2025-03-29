@@ -13,12 +13,7 @@ localhost:80 {
 		level info
 	}
 
-	handle /.well-known/* {
-		rewrite * /v1/auth{uri}
-		reverse_proxy http://host.docker.internal:1993
-	}
-
-	handle_path /api/* {
+	handle /api/* {
 		reverse_proxy http://host.docker.internal:1993
 	}
 

@@ -13,12 +13,7 @@
 		level info
 	}
 
-	handle /.well-known/* {
-		rewrite * /v1/auth{uri}
-		reverse_proxy api:{$API_PORT}
-	}
-
-	handle_path /api/* {
+	handle /api/* {
 		reverse_proxy api:{$API_PORT}
 	}
 

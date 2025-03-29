@@ -4,7 +4,7 @@ import { showRoutes } from "hono/dev"
 import { secureHeaders } from "hono/secure-headers"
 import { validator } from "hono/validator"
 
-import { API_VERSION, FEDERATION, PRODUCTION } from "@karr/config"
+import { API_BASE, FEDERATION, PRODUCTION } from "@karr/config"
 import logger from "@karr/util/logger"
 
 import { isAuthenticated } from "@/lib/auth"
@@ -23,19 +23,19 @@ import user from "@/routes/user"
  * @returns Hono app
  */
 export const build = (): Hono => {
-    const hono: Hono = new Hono()
+    const hono: Hono = new Hono().basePath(API_BASE)
 
     // ============================
     // ==== Unprotected routes ====
     // ============================
     const unprotectedRoutes = new Hono()
     unprotectedRoutes.route("/", system)
-    unprotectedRoutes.route(`/${API_VERSION}/auth`, auth)
+    unprotectedRoutes.route("/auth", auth)
 
     // ============================
     // ====== Regular routes ======
     // ============================
-    const protectedRoutes = new Hono().basePath(`/${API_VERSION}`)
+    const protectedRoutes = new Hono()
     protectedRoutes.route("/user", user)
     protectedRoutes.route("/account", account)
     protectedRoutes.route("/trips", trips)
@@ -56,7 +56,7 @@ export const build = (): Hono => {
     // ===== Federation routes ====
     // ============================
     if (FEDERATION) {
-        const federationRoutes = new Hono().basePath(`/${API_VERSION}/federation`)
+        const federationRoutes = new Hono().basePath("/federation")
         federationRoutes.route("/", federation)
 
         hono.route("/", federationRoutes)
@@ -94,7 +94,7 @@ export const build = (): Hono => {
         return responseErrorObject(ctx, "Not Found", 404)
     })
 
-    if (!PRODUCTION) showRoutes(auth, { verbose: true })
+    if (!PRODUCTION) showRoutes(hono, { verbose: true })
 
     return hono
 }

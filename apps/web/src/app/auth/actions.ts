@@ -24,6 +24,7 @@ export async function auth() {
     })
 
     if (verified.err) {
+        console.error("Error verifying token:", verified.err)
         return false
     }
     if (verified.tokens) {
