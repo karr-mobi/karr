@@ -1,0 +1,259 @@
+diff --git a/dist/esm/client.d.js b/dist/esm/client.d.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/esm/error.d.js b/dist/esm/error.d.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/esm/issuer.js b/dist/esm/issuer.js
+index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..b678bc6425eb68a36e5d00bae894e7a88cd6c433 100644
+--- a/dist/esm/issuer.js
++++ b/dist/esm/issuer.js
+@@ -8,7 +8,7 @@ import {
+   UnauthorizedClientError,
+   UnknownStateError
+ } from "./error.js";
+-import { compactDecrypt, CompactEncrypt, SignJWT } from "jose";
++import { compactDecrypt, CompactEncrypt, jwtVerify, SignJWT } from "jose";
+ import { Storage } from "./storage/storage.js";
+ import { encryptionKeys, legacySigningKeys, signingKeys } from "./keys.js";
+ import { validatePKCE } from "./pkce.js";
+@@ -19,8 +19,11 @@ import { DynamoStorage } from "./storage/dynamo.js";
+ import { MemoryStorage } from "./storage/memory.js";
+ import { cors } from "hono/cors";
+ import { logger } from "hono/logger";
++import { createMiddleware } from "hono/factory";
+ var aws = awsHandle;
++var basePath = undefined;
+ function issuer(input) {
++  basePath = input.basePath;
+   const error = input.error ?? function(err) {
+     return new Response(err.message, {
+       status: 400,
+@@ -198,6 +201,20 @@ function issuer(input) {
+     return new URL(getRelativeUrl(ctx, "/")).origin;
+   }
+   const app = new Hono().use(logger());
++  if (basePath) {
++    app.use(createMiddleware(async (c, next) => {
++      await next();
++      if (basePath) {
++        const bp = basePath.replace(/^\/+|\/+$/g, "");
++        const loc = c.res.headers.get("Location");
++        if (loc && loc.startsWith("/")) {
++          const newLoc = `/${bp}${loc}`;
++          c.res.headers.set("Location", newLoc);
++        }
++      }
++      return c.res;
++    }));
++  }
+   for (const [name, value] of Object.entries(input.providers)) {
+     const route = new Hono;
+     route.use(async (c, next) => {
+@@ -263,7 +280,6 @@ function issuer(input) {
+           error_description: "Authorization code has been used or expired"
+         }, 400);
+       }
+-      await Storage.remove(storage, key);
+       if (payload.redirectURI !== form.get("redirect_uri")) {
+         return c.json({
+           error: "invalid_redirect_uri",
+@@ -291,6 +307,7 @@ function issuer(input) {
+         }
+       }
+       const tokens = await generateTokens(c, payload);
++      await Storage.remove(storage, key);
+       return c.json({
+         access_token: tokens.access,
+         expires_in: tokens.expiresIn,
+@@ -431,6 +448,39 @@ function issuer(input) {
+       value.type
+     ])), c.req.raw));
+   });
++  app.get("/userinfo", async (c) => {
++    const header = c.req.header("Authorization");
++    if (!header) {
++      return c.json({
++        error: "invalid_request",
++        error_description: "Missing Authorization header"
++      }, 400);
++    }
++    const [type, token] = header.split(" ");
++    if (type !== "Bearer") {
++      return c.json({
++        error: "invalid_request",
++        error_description: "Missing or invalid Authorization header"
++      }, 400);
++    }
++    if (!token) {
++      return c.json({
++        error: "invalid_request",
++        error_description: "Missing token"
++      }, 400);
++    }
++    const result = await jwtVerify(token, () => signingKey().then((item) => item.public), {
++      issuer: issuer2(c)
++    });
++    const validated = await input.subjects[result.payload.type]["~standard"].validate(result.payload.properties);
++    if (!validated.issues && result.payload.mode === "access") {
++      return c.json(validated.value);
++    }
++    return c.json({
++      error: "invalid_token",
++      error_description: "Invalid token"
++    });
++  });
+   app.onError(async (err, c) => {
+     console.error(err);
+     if (err instanceof UnknownStateError) {
+@@ -447,5 +497,6 @@ function issuer(input) {
+ }
+ export {
+   issuer,
++  basePath,
+   aws
+ };
+diff --git a/dist/esm/pkce.d.js b/dist/esm/pkce.d.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/esm/provider/linkedin.js b/dist/esm/provider/linkedin.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..44973a89632738b02ee8d1ff982a3f0803bff29f
+--- /dev/null
++++ b/dist/esm/provider/linkedin.js
+@@ -0,0 +1,15 @@
++// src/provider/linkedin.ts
++import { Oauth2Provider } from "./oauth2.js";
++function LinkedInAdapter(config) {
++  return Oauth2Provider({
++    ...config,
++    type: "linkedin",
++    endpoint: {
++      authorization: "https://www.linkedin.com/oauth/v2/authorization",
++      token: "https://www.linkedin.com/oauth/v2/accessToken"
++    }
++  });
++}
++export {
++  LinkedInAdapter
++};
+diff --git a/dist/esm/storage/cloudflare.js b/dist/esm/storage/cloudflare.js
+index da1680f81e1718274d1856be33de6492e7790f89..6240e7aa07d7057623d82dd5be8f198e3c4abc07 100644
+--- a/dist/esm/storage/cloudflare.js
++++ b/dist/esm/storage/cloudflare.js
+@@ -10,7 +10,7 @@ function CloudflareStorage(options) {
+     },
+     async set(key, value, expiry) {
+       await options.namespace.put(joinKey(key), JSON.stringify(value), {
+-        expirationTtl: expiry ? Math.floor((expiry.getTime() - Date.now()) / 1000) : undefined
++        expirationTtl: expiry ? Math.max(Math.floor((expiry.getTime() - Date.now()) / 1000), 60) : undefined
+       });
+     },
+     async remove(key) {
+diff --git a/dist/esm/subject.d.js b/dist/esm/subject.d.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/esm/ui/select.js b/dist/esm/ui/select.js
+index 35cf467b740150dbf8d1b6c325b2c9a0261ed313..6f12668bd413d34f2e24bbae7ecf710a1112ace7 100644
+--- a/dist/esm/ui/select.js
++++ b/dist/esm/ui/select.js
+@@ -1,4 +1,5 @@
+ // src/ui/select.tsx
++import { basePath } from "../issuer.js";
+ import { Layout } from "./base.js";
+ import { jsxDEV } from "hono/jsx/jsx-dev-runtime";
+ function Select(props) {
+@@ -12,7 +13,7 @@ function Select(props) {
+             return;
+           const icon = ICON[key];
+           return /* @__PURE__ */ jsxDEV("a", {
+-            href: `/${key}/authorize`,
++            href: `${basePath ? basePath : ""}/${key}/authorize`,
+             "data-component": "button",
+             "data-color": "ghost",
+             children: [
+diff --git a/dist/esm/util.d.js b/dist/esm/util.d.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+diff --git a/dist/types/issuer.d.ts b/dist/types/issuer.d.ts
+index 904bb5a4c84e7ebd410cdcfd2fb43bb30aa93549..ff9df11d3ec0bfb8fae90d4e099706836dd0c028 100644
+--- a/dist/types/issuer.d.ts
++++ b/dist/types/issuer.d.ts
+@@ -180,11 +180,39 @@ import { StorageAdapter } from "./storage/storage.js";
+ import { Theme } from "./ui/theme.js";
+ /** @internal */
+ export declare const aws: <E extends import("hono").Env = import("hono").Env, S extends import("hono").Schema = {}, BasePath extends string = "/">(app: import("hono").Hono<E, S, BasePath>) => ((event: import("hono/aws-lambda").LambdaEvent, lambdaContext?: import("hono/aws-lambda").LambdaContext) => Promise<import("hono/aws-lambda").APIGatewayProxyResult>);
++/**
++ * @internal
++ */
++export declare let basePath: string | undefined;
+ export interface IssuerInput<Providers extends Record<string, Provider<any>>, Subjects extends SubjectSchema, Result = {
+     [key in keyof Providers]: Prettify<{
+         provider: key;
+     } & (Providers[key] extends Provider<infer T> ? T : {})>;
+ }[keyof Providers]> {
++    /**
++     * With `basePath`, OpenAuth can be mounted on any sub-path of a domain.
++     *
++     * :::caution
++     * The `/.well-known` path still needs to be at the root path.
++     * Please rewrite from your reverse proxy to OpenAuth.
++     * :::
++     *
++     * @example
++     * ```ts title="issuer.ts"
++     * issuer({
++     *   basePath: "/auth",
++     * })
++     * ```
++     *
++     * The base path needs to be reflected in the issuer url for the client:
++     * ```ts title="client.ts"
++     * const client = createClient({
++     *   issuer: "https://example.com/authpath", // if OpenAuth is mounted at `/authpath`
++     *   clientID: "123",
++     * })
++     * ```
++     */
++    basePath?: string;
+     /**
+      * The shape of the subjects that you want to return.
+      *
+diff --git a/dist/types/issuer.d.ts.map b/dist/types/issuer.d.ts.map
+index e72cc33edc482b42e58aa0319004430833c97740..dea416ef30c4ed95d2bc6c0d20f657e97fd33d37 100644
+--- a/dist/types/issuer.d.ts.map
++++ b/dist/types/issuer.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
++{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/dist/types/provider/linkedin.d.ts b/dist/types/provider/linkedin.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..f3399b6acf367c5d2cad4364bb829b85a9ea7d1d
+--- /dev/null
++++ b/dist/types/provider/linkedin.d.ts
+@@ -0,0 +1,6 @@
++import { type Oauth2WrappedConfig } from "./oauth2.js";
++export declare function LinkedInAdapter(config: Oauth2WrappedConfig): import("./provider.js").Provider<{
++    tokenset: import("./oauth2.js").Oauth2Token;
++    clientID: string;
++}>;
++//# sourceMappingURL=linkedin.d.ts.map
+\ No newline at end of file
+diff --git a/dist/types/provider/linkedin.d.ts.map b/dist/types/provider/linkedin.d.ts.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..af8398ed914e582fa37f01f8fe8b8f2663b2acee
+--- /dev/null
++++ b/dist/types/provider/linkedin.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"linkedin.d.ts","sourceRoot":"","sources":["../../../src/provider/linkedin.ts"],"names":[],"mappings":"AAAA,OAAO,EAAkB,KAAK,mBAAmB,EAAE,MAAM,aAAa,CAAA;AAEtE,wBAAgB,eAAe,CAAC,MAAM,EAAE,mBAAmB;;;GAS1D"}
+\ No newline at end of file
+diff --git a/dist/types/ui/select.d.ts.map b/dist/types/ui/select.d.ts.map
+index 78c4aa2b2ca89bc6b1b7d0e7849dddb9da27409e..0f3b200b6f0c38cf7c8e8d7d28b144508c8cdd02 100644
+--- a/dist/types/ui/select.d.ts.map
++++ b/dist/types/ui/select.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"select.d.ts","sourceRoot":"","sources":["../../../src/ui/select.tsx"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,gCAAgC;AAIhC,MAAM,WAAW,WAAW;IAC1B;;;;;;;;;;;;;;OAcG;IACH,SAAS,CAAC,EAAE,MAAM,CAChB,MAAM,EACN;QACE;;;WAGG;QACH,IAAI,CAAC,EAAE,OAAO,CAAA;QACd;;WAEG;QACH,OAAO,CAAC,EAAE,MAAM,CAAA;KACjB,CACF,CAAA;CACF;AAED,wBAAgB,MAAM,CAAC,KAAK,CAAC,EAAE,WAAW,eAE3B,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,QAC3B,OAAO,KACZ,OAAO,CAAC,QAAQ,CAAC,CA6BrB"}
+\ No newline at end of file
++{"version":3,"file":"select.d.ts","sourceRoot":"","sources":["../../../src/ui/select.tsx"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,gCAAgC;AAKhC,MAAM,WAAW,WAAW;IAC1B;;;;;;;;;;;;;;OAcG;IACH,SAAS,CAAC,EAAE,MAAM,CAChB,MAAM,EACN;QACE;;;WAGG;QACH,IAAI,CAAC,EAAE,OAAO,CAAA;QACd;;WAEG;QACH,OAAO,CAAC,EAAE,MAAM,CAAA;KACjB,CACF,CAAA;CACF;AAED,wBAAgB,MAAM,CAAC,KAAK,CAAC,EAAE,WAAW,eAE3B,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,QAC3B,OAAO,KACZ,OAAO,CAAC,QAAQ,CAAC,CA6BrB"}
