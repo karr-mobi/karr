@@ -18,6 +18,7 @@ const config = lazy(() => loadFullConfig())
 export default config.value
 
 export const {
+    APP_URL,
     API_PORT,
     API_BASE,
     LOG_TIMESTAMP,
@@ -25,7 +26,6 @@ export const {
     ADMIN_EMAIL,
     FEDERATION,
     FEDERATION_TARGETS,
-    API_VERSION,
     APPLICATION_NAME,
     PRODUCTION
 } = config.value

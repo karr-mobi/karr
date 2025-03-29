@@ -277,7 +277,6 @@ describe("config module", () => {
                 API_PORT,
                 LOG_TIMESTAMP,
                 LOG_LEVEL,
-                API_VERSION,
                 APPLICATION_NAME,
                 PRODUCTION,
                 ADMIN_EMAIL
@@ -286,7 +285,6 @@ describe("config module", () => {
             expect(API_PORT).toBe(expectedConfig.API_PORT)
             expect(LOG_TIMESTAMP).toBe(expectedConfig.LOG_TIMESTAMP)
             expect(LOG_LEVEL).toBe(expectedConfig.LOG_LEVEL)
-            expect(API_VERSION).toBe(expectedConfig.API_VERSION)
             expect(APPLICATION_NAME).toBe(expectedConfig.APPLICATION_NAME)
             expect(PRODUCTION).toBe(expectedConfig.PRODUCTION)
             expect(ADMIN_EMAIL).toBe(expectedConfig.ADMIN_EMAIL)

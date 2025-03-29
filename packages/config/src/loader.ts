@@ -11,6 +11,7 @@ import {
     LogLevelSchema
 } from "./schema.js"
 import { toInt } from "./utils.js"
+import { API_VERSION } from "./static.js"
 
 const CONFIG_DIR =
     process.env.CONFIG_DIR ||
@@ -143,6 +144,10 @@ export function loadFullConfig(): FullConfig {
         config.APPLICATION_NAME = process.env.APPLICATION_NAME
     }
 
+    if (process.env.APP_URL) {
+        config.APP_URL = process.env.APP_URL
+    }
+
     if (process.env.API_PORT) {
         config.API_PORT = toInt(process.env.API_PORT)
     }
@@ -175,6 +180,8 @@ export function loadFullConfig(): FullConfig {
             })
         )
     }
+
+    config.API_BASE = config.API_BASE + "/" + API_VERSION
 
     return FullConfigSchema.parse(config)
 }
