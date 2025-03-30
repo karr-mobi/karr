@@ -10,6 +10,7 @@ import {
     type LucideIcon
 } from "lucide-react"
 import { useTranslations } from "next-intl"
+import type { Messages } from "@/../global"
 
 import { Button } from "@karr/ui/components/button"
 import {
@@ -25,10 +26,12 @@ import { Separator } from "@karr/ui/components/separator"
 
 import { Link } from "@/i18n/routing"
 
-type LinkItem = { label: string; url: string; icon?: LucideIcon }
+type LinkItem = { label: NavBarTranslationKey; url: string; icon?: LucideIcon }
+
+type NavBarTranslationKey = keyof Messages["NavBar"]
 
 type MenuItem = {
-    label: string
+    label: NavBarTranslationKey
     icon?: LucideIcon
     items: Array<LinkItem>
 }
