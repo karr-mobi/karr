@@ -1,4 +1,4 @@
-import { createClient, type ClientInput } from "@openauthjs/openauth/client"
+import { createClient } from "@openauthjs/openauth/client"
 import { logger } from "@karr/util/logger"
 
 /**
@@ -20,40 +20,46 @@ export const clientID = "karr"
  * @param apiBase - The base path of the API (e.g., /api/v1)
  * @returns The full issuer URL
  */
-export const authBaseUrl = (appUrl: string, apiBase: string) => {
+export const authBaseUrl = (apiBase: string, appUrl?: string) => {
+    const path = `${apiBase.replace(/\/$/, "")}${issuerPath}`
+    if (!appUrl) return path
+
     const url = new URL(appUrl)
-    url.pathname = `${apiBase.replace(/\/$/, "")}${issuerPath}`
+    url.pathname = path
     return url.toString()
 }
 
 /**
  * Constructs the full callback URL based on the runtime issuer URL.
- * @param issuerUrl - The full base URL of the OpenAuth issuer (e.g., http://localhost:8080/api/v1/auth)
  * @returns The full callback URL
  */
-function getRuntimeCallbackUrl(issuerUrl: string) {
+export async function getCallbackUrl() {
+    const { APP_URL, API_BASE } = await import("@karr/config")
+
+    const issuerUrl = authBaseUrl(API_BASE, APP_URL)
+
     if (!issuerUrl) {
         logger.error("Issuer URL must be provided at runtime to getCallbackUrl.")
         return ""
     }
-    // Ensure issuerUrl doesn't have a trailing slash before appending
-    const cleanIssuerUrl = issuerUrl.replace(/\/$/, "")
-    return `${cleanIssuerUrl}${callbackPath}`
+    const callbackUrl = `${issuerUrl.replace(/\/$/, "")}${callbackPath}`
+
+    if (!callbackUrl) {
+        logger.error("Failed to initialize callback URL.")
+        process.exit(1)
+    }
+
+    return callbackUrl
 }
 
 /**
  * Creates an auth client instance configured with the runtime issuer URL.
- * @param appUrl - The base URL of the app (e.g., http://localhost)
- * @param apiBase - The base path of the API (e.g., /api/v1)
- * @param options - Optional additional client options
  * @returns An initialized OpenAuth client and the callback URL
  */
-export function getRuntimeClient(
-    appUrl: string,
-    apiBase: string,
-    options?: Omit<ClientInput, "issuer" | "clientID">
-) {
-    const issuerUrl = authBaseUrl(appUrl, apiBase)
+export async function getClient() {
+    const { APP_URL, API_BASE } = await import("@karr/config")
+
+    const issuerUrl = authBaseUrl(API_BASE, APP_URL)
 
     if (!issuerUrl) {
         logger.error("Issuer URL must be provided at runtime to getClient.")
@@ -63,19 +69,16 @@ export function getRuntimeClient(
     const client = createClient({
         clientID,
         issuer: issuerUrl,
-        ...options
+        fetch: (url, options) => {
+            logger.debug("fetch", url, options)
+            return fetch(url, options)
+        }
     })
-    const callbackUrl = getRuntimeCallbackUrl(issuerUrl)
 
     if (!client) {
         logger.error("Failed to initialize OpenAuth client.")
         process.exit(1)
     }
 
-    if (!callbackUrl) {
-        logger.error("Failed to initialize callback URL.")
-        process.exit(1)
-    }
-
-    return { client, callbackUrl }
+    return client
 }

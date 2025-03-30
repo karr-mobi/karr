@@ -5,8 +5,6 @@ LABEL repository="https://github.com/finxol/karr"
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
 ENV HUSKY=0
-# The port that the api listens to.
-ENV APP_URL=http://localhost
 ENV DOCKER=1
 
 ENV PNPM_HOME="/pnpm"
@@ -43,6 +41,8 @@ COPY --from=installer /app/out/json/ .
 RUN pnpm install --frozen-lockfile
 
 ENV NODE_ENV=production
+# Set required config values for the build
+ENV APP_URL=http://buildtime
 
 # Build the project
 COPY --from=installer /app/out/full/ .
