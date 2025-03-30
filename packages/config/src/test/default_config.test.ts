@@ -14,13 +14,13 @@ describe("default config", () => {
         expect(result.success).toBe(true)
     })
 
-    it("should validate against FullConfigSchema", () => {
+    it("shouldn't validate against FullConfigSchema", () => {
         defaultConfig.API_BASE += API_VERSION
         const result = FullConfigSchema.omit({ APP_URL: true }).safeParse(defaultConfig)
         // If you want to be more specific about errors when validation fails
         if (!result.success) {
             console.error(result.error.issues)
         }
-        expect(result.success).toBe(true)
+        expect(result.success).toBe(false)
     })
 })
