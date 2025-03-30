@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs"
 import { isAbsolute, join } from "node:path"
 import { parseJSON, parseJSON5, parseYAML } from "confbox"
+import c from "tinyrainbow"
 
 import defaultConfig from "./default_config.json" with { type: "json" }
 import {
@@ -8,10 +9,12 @@ import {
     ConfigFileSchema,
     FullConfig,
     FullConfigSchema,
-    LogLevelSchema
+    LogLevelSchema,
+    requiredKeys
 } from "./schema.js"
 import { toInt } from "./utils.js"
 import { API_VERSION } from "./static.js"
+import { ZodIssue } from "zod"
 
 const CONFIG_DIR =
     process.env.CONFIG_DIR ||
@@ -62,11 +65,10 @@ function resolveConfigPath(): string | undefined {
         const file = `${fileWithoutExt}.${ext}`
 
         //TODO: remove log line
-        console.log(`Reading configuration from ${file}`)
+        console.log(c.gray(`Reading configuration from ${file}`))
 
         return file
     } else {
-        console.error("No configuration file found")
         return undefined
     }
 }
@@ -118,6 +120,12 @@ function readConfig(): ConfigFile {
     const path = resolveConfigPath()
 
     if (!path) {
+        // Warn the user that no config file was found
+        console.log(
+            c.inverse(c.bold(c.yellow(" ! WARNING "))),
+            c.yellow("No configuration file found"),
+            "\n"
+        )
         return ConfigFileSchema.parse(defaultConfig)
     }
 
@@ -128,13 +136,27 @@ function readConfig(): ConfigFile {
 
     const userConfig = Object.assign(defaultConfig, parseFile(path))
 
-    return ConfigFileSchema.parse(userConfig)
+    const parsed = ConfigFileSchema.safeParse(userConfig)
+
+    if (!parsed.success) {
+        handleConfigError(parsed.error.issues)
+        process.exit(1)
+    }
+
+    return parsed.data
 }
 
 export function loadDbConfig(): ConfigFile {
     const config = readConfig()
 
-    return ConfigFileSchema.parse(config)
+    const parsed = ConfigFileSchema.safeParse(config)
+
+    if (!parsed.success) {
+        handleConfigError(parsed.error.issues)
+        process.exit(1)
+    }
+
+    return parsed.data
 }
 
 export function loadFullConfig(): FullConfig {
@@ -161,7 +183,14 @@ export function loadFullConfig(): FullConfig {
     }
 
     if (process.env.LOG_LEVEL) {
-        config.LOG_LEVEL = LogLevelSchema.parse(process.env.LOG_LEVEL)
+        const parsed = LogLevelSchema.safeParse(process.env.LOG_LEVEL)
+
+        if (!parsed.success) {
+            handleConfigError(parsed.error.issues)
+            process.exit(1)
+        }
+
+        config.LOG_LEVEL = parsed.data
     }
 
     if (process.env.ADMIN_EMAIL) {
@@ -181,9 +210,16 @@ export function loadFullConfig(): FullConfig {
         )
     }
 
-    config.API_BASE = config.API_BASE + "/" + API_VERSION
+    config.API_BASE += config.API_BASE?.endsWith("/") ? "/" : "" + API_VERSION
 
-    return FullConfigSchema.parse(config)
+    const parsed = FullConfigSchema.safeParse(config)
+
+    if (!parsed.success) {
+        handleConfigError(parsed.error.issues)
+        process.exit(1)
+    }
+
+    return parsed.data
 }
 
 /**
@@ -199,4 +235,38 @@ export function getDbPasswordFromFile(path: string | undefined): string | null {
         return readFileSync(filepath, { encoding: "utf8", flag: "r" })
     }
     return null
+}
+
+export function handleConfigError(errors: ZodIssue[]) {
+    const numErrors = errors.length
+    const fields = errors.map((error) => error.path.join("."))
+    console.error(
+        c.inverse(c.red(" Configuration error ")),
+        c.red(`(${numErrors} issue${numErrors > 1 ? "s" : ""})`)
+    )
+    console.log()
+    console.log(c.gray(c.bold("Fields:")), c.bold(fields.join(", ")))
+
+    console.log()
+
+    for (const e of errors) {
+        const required: boolean = requiredKeys.includes(e.path.join("."))
+        console.log(
+            c.bgWhiteBright(c.black(c.bold(` ${e.code.toUpperCase()} `))),
+            c.bold(e.path.join(".")),
+            "-",
+            e.message,
+            required ? c.inverse(c.red(" REQUIRED ")) : ""
+        )
+
+        //@ts-expect-error - expected and received are not always present
+        if (e.expected && e.received) {
+            //@ts-expect-error - expected and received are not always present
+            console.log("\t", "+ Expected:", c.green(e.expected))
+            //@ts-expect-error - expected and received are not always present
+            console.log("\t", "- Received:", c.red(e.received))
+        }
+
+        console.log()
+    }
 }

@@ -1,9 +1,14 @@
 import { z } from "zod"
 
-import { getDbPasswordFromFile, loadDbConfig, loadFullConfig } from "./loader.js"
+import {
+    getDbPasswordFromFile,
+    handleConfigError,
+    loadDbConfig,
+    loadFullConfig
+} from "./loader.js"
 import { toInt } from "./utils.js"
 
-function lazy<T>(getter: () => T): { value: T } {
+export function lazy<T>(getter: () => T): { value: T } {
     return {
         get value() {
             const value = getter()
@@ -55,7 +60,7 @@ export type DbConfig = z.infer<typeof DbConfigSchema>
 export function getDbConfig(): DbConfig {
     const fileConfig = loadDbConfig()
 
-    return DbConfigSchema.parse(<DbConfig>{
+    const parsed = DbConfigSchema.safeParse(<DbConfig>{
         host: process.env.DB_HOST || fileConfig.DB_CONFIG?.host || "localhost",
         port: toInt(process.env.DB_PORT || fileConfig.DB_CONFIG?.port || "5432"),
         ssl: process.env.DB_SSL || fileConfig.DB_CONFIG?.ssl || false,
@@ -71,4 +76,11 @@ export function getDbConfig(): DbConfig {
             return `postgres://${this.user}:${this.password}@${this.host}:${this.port}/${this.name}`
         }
     })
+
+    if (!parsed.success) {
+        handleConfigError(parsed.error.issues)
+        process.exit(1)
+    }
+
+    return parsed.data
 }

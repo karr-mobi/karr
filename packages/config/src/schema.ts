@@ -9,6 +9,11 @@ import staticConfig from "./static.js"
 export const logLevels = ["trace", "debug", "info", "warn", "error"] as const
 export const LogLevelSchema = z.enum(logLevels)
 
+/**
+ * Required keys for the config file or env
+ */
+export const requiredKeys = ["APP_URL"]
+
 const appUrlSchema = z
     .string()
     .url()
@@ -16,7 +21,7 @@ const appUrlSchema = z
         message: "App URL must only be a domain and protocol"
     })
 
-const apiBaseSchema = z
+export const apiBaseSchema = z
     .string()
     .refine((val) => val.startsWith("/") && !val.endsWith("/"), {
         message: "API base must only be a pathname, without a trailing slash"

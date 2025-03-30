@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "confbox": "catalog:",
+        "tinyrainbow": "catalog:",
         "zod": "catalog:"
     },
     "devDependencies": {
