@@ -41,6 +41,7 @@ logs
 *.log
 .pnpm-debug.log*
 **/tmp
+**/.data
 
 # Misc
 .DS_Store
