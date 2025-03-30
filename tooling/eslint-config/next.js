@@ -6,6 +6,8 @@ import globals from "globals"
 
 import { config as baseConfig } from "./base.js"
 
+import serverOnlyKarrConfig from "./plugins/server-only-karr-config.js"
+
 /**
  * A custom ESLint configuration for libraries that use Next.js.
  *
@@ -13,6 +15,15 @@ import { config as baseConfig } from "./base.js"
  * */
 export const nextJsConfig = [
     ...baseConfig,
+    {
+        ignores: [
+            ".next/**", // Ignore Next.js build directory
+            "node_modules/**", // Ignore dependencies
+            "dist/**" // Ignore common build output folders
+            // Add any other folders/files you want to ignore globally
+        ]
+    },
+
     {
         ...pluginReact.configs.flat.recommended,
         languageOptions: {
@@ -59,18 +70,21 @@ export const nextJsConfig = [
         }
     },
     {
+        // Target your source files
         files: ["src/**/*.{js,ts,jsx,tsx}"],
+        // ADD the custom plugin registration HERE
+        plugins: {
+            "server-only-karr-config": serverOnlyKarrConfig
+        },
         rules: {
+            // ENABLE the custom rule HERE
+            "server-only-karr-config/enforce-server-only-for-karr-config": "error",
+
+            // Keep your existing no-restricted-imports rule
             "no-restricted-imports": [
                 "error",
                 {
                     paths: [
-                        {
-                            name: "@karr/config",
-                            message:
-                                "Importing '@karr/config' directly is not allowed in Next apps because of fs read. " +
-                                "Only the variables in '@karr/config/static' are allowed."
-                        }, // No other patterns, so submodules like '@karr/config/static' are allowed
                         // Consistently import navigation APIs from `@/i18n/routing`
                         {
                             name: "next/link",

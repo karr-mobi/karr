@@ -1,6 +1,5 @@
 import "server-only"
 import { getRuntimeClient } from "@karr/auth/client"
-//eslint-disable-next-line no-restricted-imports
 import { lazy } from "@karr/config"
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || ""
