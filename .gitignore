@@ -40,6 +40,7 @@ yarn-error.log*
 logs
 *.log
 .pnpm-debug.log*
+**/tmp
 
 # Misc
 .DS_Store

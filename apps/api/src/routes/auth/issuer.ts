@@ -4,15 +4,18 @@ import { PasswordProvider } from "@openauthjs/openauth/provider/password"
 import { PasswordUI } from "@openauthjs/openauth/ui/password"
 import { Select } from "@openauthjs/openauth/ui/select"
 import type { Theme } from "@openauthjs/openauth/ui/theme"
+import { Tokens } from "@openauthjs/openauth/client"
 import { setCookie } from "hono/cookie"
+import { Context } from "hono"
+import fsDriver from "unstorage/drivers/fs"
 
 import { callbackUrl, client } from "@karr/auth/client"
 import { subjects } from "@karr/auth/subjects"
 import { API_BASE } from "@karr/config"
-
-import { UnStorage } from "./unstorage-adapter"
 import { logger } from "@karr/util/logger"
+
 import { responseErrorObject } from "@/lib/helpers"
+import { UnStorage } from "./unstorage-adapter"
 
 async function getUser(provider: string, email: string) {
     console.log(provider, email)
@@ -66,7 +69,9 @@ const app = issuer({
             })
         )
     },
-    storage: UnStorage(),
+    storage: UnStorage({
+        driver: fsDriver({ base: "./tmp" })
+    }),
     subjects,
     theme: THEME_OPENAUTH,
     async allow(input, _req) {
@@ -116,20 +121,24 @@ app.get("/callback", async (ctx) => {
 
     logger.debug("Exchanged tokens", exchanged.tokens)
 
-    setCookie(ctx, "access_token", exchanged.tokens.access, {
+    setTokens(ctx, exchanged.tokens)
+
+    return ctx.redirect(next)
+})
+
+export function setTokens(ctx: Context, tokens: Tokens) {
+    setCookie(ctx, "access_token", tokens.access, {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        maxAge: exchanged.tokens.expiresIn
+        maxAge: tokens.expiresIn
     })
-    setCookie(ctx, "refresh_token", exchanged.tokens.refresh, {
+    setCookie(ctx, "refresh_token", tokens.refresh, {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
         maxAge: 60 * 60 * 24 * 400 // 400 days
     })
-
-    return ctx.redirect(next)
-})
+}
 
 export default app
