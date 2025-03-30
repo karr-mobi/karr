@@ -14,8 +14,6 @@
 !apps/
 !packages/
 !tooling/
+!patches/
 
 !wait-for-it.sh
-
-# Ignore database migrations
-drizzle/

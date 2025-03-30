@@ -6,7 +6,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
 ENV HUSKY=0
 # The port that the api listens to.
-ENV API=localhost:1993
+ENV APP_URL=http://localhost
 ENV DOCKER=1
 
 ENV PNPM_HOME="/pnpm"

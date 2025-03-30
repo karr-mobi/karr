@@ -40,6 +40,15 @@ WORKDIR /app
 
 # First install the dependencies (as they change less often)
 COPY --from=installer /app/out/json/ .
+
+# Copy necessary files for pnpm install to recognize patches
+COPY --from=installer /app/package.json .
+COPY --from=installer /app/pnpm-lock.yaml .
+COPY --from=installer /app/patches ./patches
+
+
+# Install dependencies - pnpm will use the root package.json for patch config
+# and the workspace package.json files to determine what to install.
 RUN pnpm install
 
 COPY --from=installer /app/out/full/ .

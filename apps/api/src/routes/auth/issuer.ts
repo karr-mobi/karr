@@ -7,7 +7,9 @@ import type { Theme } from "@openauthjs/openauth/ui/theme"
 import { Tokens } from "@openauthjs/openauth/client"
 import { setCookie } from "hono/cookie"
 import { Context } from "hono"
-import fsDriver from "unstorage/drivers/fs"
+import { createDatabase } from "db0"
+import sqlite from "db0/connectors/node-sqlite"
+import dbDriver from "unstorage/drivers/db0"
 
 import { callbackUrl, client } from "@karr/auth/client"
 import { subjects } from "@karr/auth/subjects"
@@ -22,6 +24,12 @@ async function getUser(provider: string, email: string) {
     // Get user from database and return user ID
     return "123"
 }
+
+const database = createDatabase(
+    sqlite({
+        name: "openauth"
+    })
+)
 
 const THEME_OPENAUTH: Theme = {
     title: "Karr Auth",
@@ -70,7 +78,10 @@ const app = issuer({
         )
     },
     storage: UnStorage({
-        driver: fsDriver({ base: "./tmp" })
+        driver: dbDriver({
+            database,
+            tableName: "openauth"
+        })
     }),
     subjects,
     theme: THEME_OPENAUTH,

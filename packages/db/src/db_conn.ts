@@ -1,4 +1,4 @@
-import { drizzle } from "drizzle-orm/postgres-js"
+import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js"
 
 import { getDbConfig } from "@karr/config"
 
@@ -19,7 +19,7 @@ const connection = {
     fetch_types: true // Automatically fetches types on connect
 }
 
-let db
+let db: PostgresJsDatabase
 try {
     db = drizzle({ connection })
 
@@ -32,4 +32,4 @@ try {
     process.exit(1)
 }
 
-export default Object.freeze(db)
+export default db
