@@ -83,7 +83,12 @@ export const FullConfigSchema = z
     .object({
         APP_URL: appUrlSchema,
         API_PORT: z.number().positive(),
-        API_BASE: apiBaseSchema.refine((val) => val.endsWith(staticConfig.API_VERSION)),
+        API_BASE: apiBaseSchema.refine(
+            (val) => val.endsWith("/" + staticConfig.API_VERSION),
+            {
+                message: "Computed API base must end with the API version"
+            }
+        ),
         LOG_TIMESTAMP: z.boolean(),
         LOG_LEVEL: LogLevelSchema.default(
             !(process.env.NODE_ENV === "production" || process.env.DOCKER)

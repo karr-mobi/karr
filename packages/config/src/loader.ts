@@ -210,7 +210,7 @@ export function loadFullConfig(): FullConfig {
         )
     }
 
-    config.API_BASE += config.API_BASE?.endsWith("/") ? "/" : "" + API_VERSION
+    config.API_BASE += config.API_BASE?.endsWith("/") ? "" : "/" + API_VERSION
 
     const parsed = FullConfigSchema.safeParse(config)
 
