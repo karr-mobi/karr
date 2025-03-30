@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.9.5
+
+[compare changes](https://github.com/finxol/karr/compare/v0.9.4...v0.9.5)
+
+### 💅 Refactors
+
+- Move auth client logic to separate files ([#95](https://github.com/finxol/karr/pull/95))
+
+### 🏡 Chore
+
+- Remove unused posthog ([0a6393b](https://github.com/finxol/karr/commit/0a6393b))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.9.4
 
 [compare changes](https://github.com/finxol/karr/compare/v0.9.3...v0.9.4)
