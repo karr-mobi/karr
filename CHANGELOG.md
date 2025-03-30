@@ -1,12 +1,28 @@
 # Changelog
 
+## v0.9.3
+
+[compare changes](https://github.com/finxol/karr/compare/v0.9.2...v0.9.3)
+
+### 🚀 Enhancements
+
+- **auth:** Setup OpenAuth ([#94](https://github.com/finxol/karr/pull/94))
+
+### 📦 Build
+
+- Move to Biome ([#91](https://github.com/finxol/karr/pull/91))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+
 ## v0.9.2
 
 [compare changes](https://github.com/finxol/karr/compare/v0.9.1...v0.9.2)
 
 ### 🚀 Enhancements
 
-- Better handling ([#83](https://github.com/finxol/karr/pull/83))
+- Better error handling ([#83](https://github.com/finxol/karr/pull/83))
 
 ### 🩹 Fixes
 

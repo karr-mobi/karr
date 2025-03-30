@@ -1,6 +1,6 @@
 {
     "name": "karr",
-    "version": "0.9.2",
+    "version": "0.9.3",
     "private": true,
     "repository": "https://github.com/finxol/karr",
     "scripts": {
@@ -50,7 +50,7 @@
         "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
             "biome format --write --no-errors-on-unmatched"
         ],
-        "*": ["biome format --no-errors-on-unmatched --files-ignore-unknown=true"]
+        "*": ["biome format --write --no-errors-on-unmatched --files-ignore-unknown=true"]
     },
     "changelog": {
         "repo": "finxol/karr",
