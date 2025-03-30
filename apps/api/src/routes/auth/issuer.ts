@@ -11,11 +11,11 @@ import { createDatabase } from "db0"
 import sqlite from "db0/connectors/node-sqlite"
 import dbDriver from "unstorage/drivers/db0"
 
-import { callbackUrl, client } from "@karr/auth/client"
 import { subjects } from "@karr/auth/subjects"
 import { API_BASE } from "@karr/config"
 import { logger } from "@karr/util/logger"
 
+import { callbackUrl, client } from "@/lib/auth-client"
 import { responseErrorObject } from "@/lib/helpers"
 import { UnStorage } from "./unstorage-adapter"
 

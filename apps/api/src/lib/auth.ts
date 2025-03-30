@@ -8,9 +8,9 @@ import db from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
 import { tryCatch } from "@karr/util"
 import logger from "@karr/util/logger"
-import { client } from "@karr/auth/client"
 import { subjects } from "@karr/auth/subjects"
 import { setTokens } from "@/routes/auth/issuer"
+import { client } from "./auth-client"
 
 export async function authenticate(email: string, password: string) {
     const user = await tryCatch(
@@ -123,10 +123,6 @@ export async function isAuthenticated(ctx: Context) {
     }
 
     return verified.subject
-}
-
-export async function logout(token: string) {
-    db.update(accountsTable).set({ token: "" }).where(eq(accountsTable.token, token))
 }
 
 /**

@@ -1,15 +1,15 @@
 // Types for the result object with discriminated union
-type Success<T> = {
+export type Success<T> = {
     value: T
     error: null
 }
 
-type Failure<E> = {
+export type Failure<E> = {
     value: null
     error: E
 }
 
-type Result<T, E = Error> = Success<T> | Failure<E>
+export type Result<T, E = Error> = Success<T> | Failure<E>
 
 /**
  * Wraps a promise in a try/catch block and returns a Result object

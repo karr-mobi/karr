@@ -4,7 +4,7 @@ import { showRoutes } from "hono/dev"
 import { secureHeaders } from "hono/secure-headers"
 import { createMiddleware } from "hono/factory"
 
-import { API_BASE, FEDERATION, PRODUCTION } from "@karr/config"
+import { API_BASE, APP_URL, FEDERATION, PRODUCTION } from "@karr/config"
 import logger from "@karr/util/logger"
 
 import { isAuthenticated } from "@/lib/auth"
@@ -29,9 +29,7 @@ export const build = (): Hono<{ Variables: AppVariables }> => {
     hono.use(
         "/*",
         cors({
-            origin: [
-                (PRODUCTION ? process.env.WEB_URL : null) || "http://localhost:3000"
-            ],
+            origin: [(PRODUCTION ? APP_URL : null) || "http://localhost"],
             credentials: true,
             allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             allowHeaders: ["Content-Type", "Authorization"],
