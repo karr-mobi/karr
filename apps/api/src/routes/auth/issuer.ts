@@ -12,12 +12,13 @@ import sqlite from "db0/connectors/node-sqlite"
 import dbDriver from "unstorage/drivers/db0"
 
 import { subjects } from "@karr/auth/subjects"
-import { API_BASE } from "@karr/config"
+import { API_BASE, APP_URL } from "@karr/config"
 import { logger } from "@karr/util/logger"
 
 import { callbackUrl, client } from "@/lib/auth-client"
 import { responseErrorObject } from "@/lib/helpers"
 import { UnStorage } from "./unstorage-adapter"
+import { authBaseUrl } from "@karr/auth/client"
 
 async function getUser(provider: string, email: string) {
     console.log(provider, email)
@@ -49,7 +50,7 @@ const THEME_OPENAUTH: Theme = {
 }
 
 const app = issuer({
-    basePath: `${API_BASE}/auth`,
+    basePath: authBaseUrl(API_BASE),
     select: Select({
         providers: {
             github: {
@@ -110,6 +111,15 @@ const app = issuer({
 
         throw new Error("Invalid provider")
     }
+})
+
+app.get("/test", async (ctx) => {
+    logger.debug("Test route", ctx.req.url)
+    logger.debug("callbackUrl", callbackUrl)
+    logger.debug("app url", APP_URL)
+    logger.debug("auth base", authBaseUrl(API_BASE))
+    logger.debug("auth base with app url", authBaseUrl(API_BASE, APP_URL))
+    return ctx.json({ message: "Hello, world!" })
 })
 
 app.get("/callback", async (ctx) => {

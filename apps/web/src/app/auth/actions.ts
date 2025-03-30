@@ -2,18 +2,19 @@
 
 import { cookies } from "next/headers"
 import { getLocale } from "next-intl/server"
+import { Tokens } from "@openauthjs/openauth/client"
 
-import { client, callbackUrl } from "@/app/auth/client"
+import { getClient, getCallbackUrl } from "@karr/auth/client"
 import { subjects } from "@karr/auth/subjects"
 
 import { redirect } from "@/i18n/routing"
-
-import { Tokens } from "@openauthjs/openauth/client"
 
 export async function auth() {
     const jar = await cookies()
     const accessToken = jar.get("access_token")
     const refreshToken = jar.get("refresh_token")
+
+    const client = await getClient()
 
     if (!accessToken) {
         return false
@@ -39,6 +40,9 @@ export async function login() {
     const jar = await cookies()
     const accessToken = jar.get("access_token")
     const refreshToken = jar.get("refresh_token")
+
+    const client = await getClient()
+    const callbackUrl = await getCallbackUrl()
 
     if (accessToken) {
         const verified = await client.verify(subjects, accessToken.value, {

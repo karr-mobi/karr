@@ -1,6 +1,8 @@
-import { getRuntimeClient } from "@karr/auth/client"
-import { lazy, APP_URL, API_BASE } from "@karr/config"
+import { getClient, getCallbackUrl } from "@karr/auth/client"
+import { lazy } from "@karr/config"
 
-const c = lazy(() => getRuntimeClient(APP_URL, API_BASE))
+const c = lazy(async () => await getClient())
+const u = lazy(async () => await getCallbackUrl())
 
-export const { client, callbackUrl } = c.value
+export const client = await c.value
+export const callbackUrl = await u.value

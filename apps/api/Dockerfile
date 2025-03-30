@@ -72,6 +72,9 @@ RUN adduser --system --uid 1001 runner
 COPY --from=installer --chown=runner:runner /app/apps/api/wait-for-it.sh /usr/local/bin/
 RUN chmod 500 /usr/local/bin/wait-for-it.sh
 
+RUN mkdir -p /app/.data
+RUN chown runner:runner /app/.data
+
 USER runner
 
 COPY --from=builder --chown=runner:runner /app/apps/api/out/index.min.mjs ./index.min.mjs

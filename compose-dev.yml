@@ -4,9 +4,7 @@ services:
             context: .
             dockerfile: ./apps/web/Dockerfile
         environment:
-            - LOG_LEVEL=debug
             - CONFIG_DIR=/app/config
-            - API=http://api:1993
             - PORT=3000
         ports:
             - 3000:3000
@@ -22,7 +20,6 @@ services:
         secrets:
             - db-password
         environment:
-            - LOG_LEVEL=debug
             - CONFIG_DIR=/app/config
             - DB_HOST=db
             - DB_USER=postgres
@@ -56,7 +53,7 @@ services:
             dockerfile: Dockerfile
         restart: unless-stopped
         ports:
-            - 80:80
+            - 8080:8080
             #- "443:443"
             #- "443:443/udp"
         environment:
