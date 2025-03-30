@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.9.6
+
+[compare changes](https://github.com/finxol/karr/compare/v0.9.5...v0.9.6)
+
+### 🩹 Fixes
+
+- Get config to openauth client in Next.js production build ([4bc7d2a](https://github.com/finxol/karr/commit/4bc7d2a))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.9.5
 
 [compare changes](https://github.com/finxol/karr/compare/v0.9.4...v0.9.5)
