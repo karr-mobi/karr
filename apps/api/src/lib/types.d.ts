@@ -5,6 +5,18 @@ import type { specialStatusTable } from "@/db/schemas/specialstatus"
 import type { userPrefsTable } from "@/db/schemas/userprefs"
 import type { usersTable } from "@/db/schemas/users"
 
+export type UserSubject = {
+    type: "user"
+    properties: {
+        userID: string
+    }
+}
+
+export type AppVariables = {
+    userSubject?: UserSubject
+    // Add other context variables here if needed
+}
+
 export interface DataResponse<T> {
     timestamp?: number
     data: T

@@ -69,7 +69,7 @@ export async function handleRequest<T>(c: Context, fn: () => Promise<T>) {
 
     return c.json({
         timestamp: new Date().getTime(),
-        data: out
+        data: out.value
     })
 }
 

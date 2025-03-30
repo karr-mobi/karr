@@ -8,6 +8,9 @@ import db from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
 import { tryCatch } from "@karr/util"
 import logger from "@karr/util/logger"
+import { client } from "@karr/auth/client"
+import { subjects } from "@karr/auth/subjects"
+import { setTokens } from "@/routes/auth/issuer"
 
 export async function authenticate(email: string, password: string) {
     const user = await tryCatch(
@@ -100,9 +103,26 @@ export async function register(email: string, password: string) {
  * @returns true if the user is authenticated
  */
 export async function isAuthenticated(ctx: Context) {
-    const token = getCookie(ctx, "token")
+    const accessToken = getCookie(ctx, "access_token")
+    const refreshToken = getCookie(ctx, "refresh_token")
 
-    return !!token
+    if (!accessToken) {
+        return false
+    }
+
+    const verified = await client.verify(subjects, accessToken, {
+        refresh: refreshToken
+    })
+
+    if (verified.err) {
+        console.error("Error verifying token:", verified.err)
+        return false
+    }
+    if (verified.tokens) {
+        setTokens(ctx, verified.tokens)
+    }
+
+    return verified.subject
 }
 
 export async function logout(token: string) {

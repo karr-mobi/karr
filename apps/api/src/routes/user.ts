@@ -1,10 +1,14 @@
 import { Hono } from "hono"
 
 import { handleRequest, responseErrorObject, tmpResponse } from "@/lib/helpers"
-import type { UserWithPrefsAndStatus as _UserWithPrefsAndStatus } from "@/lib/types.d.ts"
+import type {
+    UserWithPrefsAndStatus as _UserWithPrefsAndStatus,
+    AppVariables
+} from "@/lib/types.d.ts"
 import { selectUserById, selectUserProfileById, updateNickname } from "@/db/users"
+import logger from "@karr/util/logger"
 
-const hono = new Hono()
+const hono = new Hono<{ Variables: AppVariables }>()
 
 // ==============================================
 // ========== Register endpoint routes ==========
@@ -15,12 +19,26 @@ const hono = new Hono()
  * @returns Object containing user info
  */
 hono.get("/", async (c) => {
-    // get the user ID from the validated headers
-    //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("cookie")
+    // Get the subject from the context
+    const subject = c.get("userSubject")
+
+    // Middleware should prevent this, but good practice to check
+    if (!subject?.properties?.userID) {
+        logger.error("User subject missing in context for GET /user")
+        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+    }
 
     // get the user from the database and send it back
-    return await handleRequest<unknown>(c, () => selectUserById(id))
+    return await handleRequest<unknown>(
+        c,
+        async () => ({
+            id: subject.properties.userID,
+            email: "test@example.org",
+            blocked: false,
+            verified: false
+        })
+        //selectUserById(subject.properties.userID)
+    )
 })
 
 /**
