@@ -5,7 +5,7 @@ import type {
     UserWithPrefsAndStatus as _UserWithPrefsAndStatus,
     AppVariables
 } from "@/lib/types.d.ts"
-import { selectUserById, selectUserProfileById, updateNickname } from "@/db/users"
+import { selectUserProfileById, updateNickname } from "@/db/users"
 import logger from "@karr/util/logger"
 
 const hono = new Hono<{ Variables: AppVariables }>()
