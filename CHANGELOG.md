@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.9.4
+
+[compare changes](https://github.com/finxol/karr/compare/v0.9.3...v0.9.4)
+
+### 🩹 Fixes
+
+- Move to sql for openauth + fix patches in docker container ([8030379](https://github.com/finxol/karr/commit/8030379))
+
+### 🏡 Chore
+
+- Remove unused deps ([439b2eb](https://github.com/finxol/karr/commit/439b2eb))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.9.3
 
 [compare changes](https://github.com/finxol/karr/compare/v0.9.2...v0.9.3)
