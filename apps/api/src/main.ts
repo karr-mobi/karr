@@ -1,5 +1,4 @@
 import { serve } from "@hono/node-server"
-import type { Hono } from "hono"
 
 import { API_PORT, LOG_LEVEL, logLevels, PRODUCTION } from "@karr/config"
 import { drizzleMigrate } from "@karr/db/migrate"
@@ -25,7 +24,7 @@ try {
     await drizzleMigrate()
 
     // Build the server
-    const app: Hono = build()
+    const app = build()
 
     // Start the server
     serve({
