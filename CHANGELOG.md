@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.9.7
+
+[compare changes](https://github.com/finxol/karr/compare/v0.9.6...v0.9.7)
+
+### 🩹 Fixes
+
+- Update auth status check ([206752f](https://github.com/finxol/karr/commit/206752f))
+
+### 🏡 Chore
+
+- Update deps ([19a5515](https://github.com/finxol/karr/commit/19a5515))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.9.6
 
 [compare changes](https://github.com/finxol/karr/compare/v0.9.5...v0.9.6)
