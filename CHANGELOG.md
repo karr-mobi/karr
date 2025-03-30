@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.9.8
+
+[compare changes](https://github.com/finxol/karr/compare/v0.9.7...v0.9.8)
+
+### 🏡 Chore
+
+- Add postgres required dep ([db8ad2b](https://github.com/finxol/karr/commit/db8ad2b))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.9.7
 
 [compare changes](https://github.com/finxol/karr/compare/v0.9.6...v0.9.7)
