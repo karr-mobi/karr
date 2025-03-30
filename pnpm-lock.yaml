@@ -37,8 +37,8 @@ catalogs:
       specifier: 4.0.14
       version: 4.0.14
     '@tanstack/react-query':
-      specifier: ^5.68.0
-      version: 5.68.0
+      specifier: ^5.70.0
+      version: 5.70.0
     '@types/node':
       specifier: ^22.13.10
       version: 22.13.10
@@ -347,7 +347,7 @@ importers:
         version: 4.0.14
       '@tanstack/react-query':
         specifier: 'catalog:'
-        version: 5.68.0(react@19.0.0)
+        version: 5.70.0(react@19.0.0)
       babel-plugin-react-compiler:
         specifier: 'catalog:'
         version: 19.0.0-beta-decd7b8-20250118
@@ -2164,11 +2164,11 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0
 
-  '@tanstack/query-core@5.68.0':
-    resolution: {integrity: sha512-r8rFYYo8/sY/LNaOqX84h12w7EQev4abFXDWy4UoDVUJzJ5d9Fbmb8ayTi7ScG+V0ap44SF3vNs/45mkzDGyGw==}
+  '@tanstack/query-core@5.70.0':
+    resolution: {integrity: sha512-ZkkjQAZjI6nS5OyAmaSQafQXK180Xvp0lZYk4BzrnskkTV8On3zSJUxOIXnh0h/8EgqRkCA9i879DiJovA1kGw==}
 
-  '@tanstack/react-query@5.68.0':
-    resolution: {integrity: sha512-mMOdGDKlwTP/WV72QqSNf4PAMeoBp/DqBHQ222wBfb51Looi8QUqnCnb9O98ZgvNISmy6fzxRGBJdZ+9IBvX2Q==}
+  '@tanstack/react-query@5.70.0':
+    resolution: {integrity: sha512-z0tx1zz2CQ6nTm+fCaOp93FqsFjNgXtOy+4mC5ifQ4B+rJiMD0AGfJrYSGh/OuefhrzTYDAbkGUAGw6JzkWy8g==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -6285,11 +6285,11 @@ snapshots:
       - supports-color
       - typescript
 
-  '@tanstack/query-core@5.68.0': {}
+  '@tanstack/query-core@5.70.0': {}
 
-  '@tanstack/react-query@5.68.0(react@19.0.0)':
+  '@tanstack/react-query@5.70.0(react@19.0.0)':
     dependencies:
-      '@tanstack/query-core': 5.68.0
+      '@tanstack/query-core': 5.70.0
       react: 19.0.0
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
