@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@karr/config": "workspace:*",
+        "@karr/util": "workspace:*",
         "@openauthjs/openauth": "catalog:",
         "zod": "catalog:"
     },

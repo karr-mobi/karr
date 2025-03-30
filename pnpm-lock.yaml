@@ -409,6 +409,9 @@ importers:
       '@karr/config':
         specifier: workspace:*
         version: link:../config
+      '@karr/util':
+        specifier: workspace:*
+        version: link:../util
       '@openauthjs/openauth':
         specifier: 'catalog:'
         version: 0.4.3(patch_hash=09f252cb72f6a577ec17831c0e15533623f2276d76068817cad279efce2c62b0)(arctic@2.3.4)(hono@4.7.4)

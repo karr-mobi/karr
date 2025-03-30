@@ -3,7 +3,7 @@
 import { cookies } from "next/headers"
 import { getLocale } from "next-intl/server"
 
-import { callbackUrl, client } from "@karr/auth/client"
+import { client, callbackUrl } from "@/app/auth/client"
 import { subjects } from "@karr/auth/subjects"
 
 import { redirect } from "@/i18n/routing"
