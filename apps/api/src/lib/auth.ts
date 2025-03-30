@@ -1,11 +1,16 @@
 import crypto from "node:crypto"
-import { and, eq } from "drizzle-orm"
+import { eq } from "drizzle-orm"
+import { Context } from "hono"
+import { getCookie } from "hono/cookie"
 import { err, ok } from "neverthrow"
 
 import db from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
 import { tryCatch } from "@karr/util"
 import logger from "@karr/util/logger"
+import { client } from "@karr/auth/client"
+import { subjects } from "@karr/auth/subjects"
+import { setTokens } from "@/routes/auth/issuer"
 
 export async function authenticate(email: string, password: string) {
     const user = await tryCatch(
@@ -92,33 +97,32 @@ export async function register(email: string, password: string) {
     return ok(token)
 }
 
-export async function isAuthenticated(userId: string, token: string) {
-    const user = await tryCatch(
-        db
-            .select({
-                id: accountsTable.id,
-                email: accountsTable.email,
-                blocked: accountsTable.blocked,
-                verified: accountsTable.verified
-            })
-            .from(accountsTable)
-            .where(and(eq(accountsTable.token, token), eq(accountsTable.id, userId)))
-            .limit(1)
-    )
+/**
+ * Check if the user is authenticated
+ * @param ctx The request context
+ * @returns true if the user is authenticated
+ */
+export async function isAuthenticated(ctx: Context) {
+    const accessToken = getCookie(ctx, "access_token")
+    const refreshToken = getCookie(ctx, "refresh_token")
 
-    if (user.error) {
+    if (!accessToken) {
         return false
     }
 
-    if (!user || user.value.length === 0 || user.value[0] === undefined) {
+    const verified = await client.verify(subjects, accessToken, {
+        refresh: refreshToken
+    })
+
+    if (verified.err) {
+        console.error("Error verifying token:", verified.err)
         return false
     }
-
-    if (user.value[0].id !== userId) {
-        return false
+    if (verified.tokens) {
+        setTokens(ctx, verified.tokens)
     }
 
-    return true
+    return verified.subject
 }
 
 export async function logout(token: string) {

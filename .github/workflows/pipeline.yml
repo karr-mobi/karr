@@ -3,7 +3,7 @@ name: Karr CI
 on:
     push:
         branches:
-            - main
+            - "**"
         tags-ignore:
             - "v*" # Ignore version tags
     pull_request:

@@ -9,11 +9,30 @@ import staticConfig from "./static.js"
 export const logLevels = ["trace", "debug", "info", "warn", "error"] as const
 export const LogLevelSchema = z.enum(logLevels)
 
+/**
+ * Required keys for the config file or env
+ */
+export const requiredKeys = ["APP_URL"]
+
+const appUrlSchema = z
+    .string()
+    .url()
+    .refine((val) => new URL(val).pathname === "/", {
+        message: "App URL must only be a domain and protocol"
+    })
+
+export const apiBaseSchema = z
+    .string()
+    .refine((val) => val.startsWith("/") && !val.endsWith("/"), {
+        message: "API base must only be a pathname, without a trailing slash"
+    })
+
 export const ConfigFileSchema = z
     .object({
         APPLICATION_NAME: z.string().optional(),
+        APP_URL: appUrlSchema.optional(),
         API_PORT: z.number().positive().optional(),
-        API_BASE: z.string().optional(),
+        API_BASE: apiBaseSchema.optional(),
         LOG_TIMESTAMP: z.boolean().optional(),
         LOG_LEVEL: LogLevelSchema.optional(),
         ADMIN_EMAIL: z.string().email().optional(),
@@ -62,8 +81,14 @@ export type ConfigFile = z.infer<typeof ConfigFileSchema>
 
 export const FullConfigSchema = z
     .object({
+        APP_URL: appUrlSchema,
         API_PORT: z.number().positive(),
-        API_BASE: z.string(),
+        API_BASE: apiBaseSchema.refine(
+            (val) => val.endsWith("/" + staticConfig.API_VERSION),
+            {
+                message: "Computed API base must end with the API version"
+            }
+        ),
         LOG_TIMESTAMP: z.boolean(),
         LOG_LEVEL: LogLevelSchema.default(
             !(process.env.NODE_ENV === "production" || process.env.DOCKER)
@@ -79,7 +104,6 @@ export const FullConfigSchema = z
                 url: z.union([z.string().url(), z.string().ip()])
             })
         ),
-        API_VERSION: z.enum(["v1"]).default(staticConfig.API_VERSION),
         APPLICATION_NAME: z.string().default(staticConfig.APPLICATION_NAME),
         PRODUCTION: z.boolean().default(process.env.NODE_ENV === "production")
     })

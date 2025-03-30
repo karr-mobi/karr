@@ -1,5 +1,5 @@
 {
-    "name": "@karr/config",
+    "name": "@karr/auth",
     "private": true,
     "type": "module",
     "scripts": {
@@ -10,18 +10,14 @@
         "test": "vitest"
     },
     "exports": {
-        ".": {
-            "types": "./src/config.ts",
-            "default": "./dist/config.js"
-        },
-        "./static": {
-            "types": "./src/static.ts",
-            "default": "./dist/static.js"
+        "./*": {
+            "types": "./src/*.ts",
+            "default": "./dist/*.js"
         }
     },
     "dependencies": {
-        "confbox": "catalog:",
-        "tinyrainbow": "catalog:",
+        "@karr/config": "workspace:*",
+        "@openauthjs/openauth": "catalog:",
         "zod": "catalog:"
     },
     "devDependencies": {

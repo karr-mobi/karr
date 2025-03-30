@@ -1,12 +1,14 @@
-APPLICATION_NAME: Karr demo
+APPLICATION_NAME: Karr dev
+APP_URL: http://localhost/
 API_PORT: 1993
-API_BASE: http://localhost:1993
+API_BASE: /api
 LOG_TIMESTAMP: true
+LOG_LEVEL: debug
 ADMIN_EMAIL: foo@bar.com
 FEDERATION: true
 FEDERATION_TARGETS:
     - name: Karr Live
-      url: https://karr.finxol.io
+      url: https://karr.mobi
 DB_CONFIG:
     host: localhost
     port: 5432

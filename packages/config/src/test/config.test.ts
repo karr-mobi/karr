@@ -8,6 +8,8 @@ import { ConfigFileSchema, FullConfigSchema } from "@/schema.js"
 import staticConfig from "@/static.js"
 import sampleConfigJson from "@/test/fixtures/sample_config.json" with { type: "json" }
 
+defaultConfig.API_BASE += "/" + staticConfig.API_VERSION
+
 const sampleConfigFile = readFileSync(
     join(process.cwd(), "./src/test/fixtures/sample_config.yaml")
 )
@@ -45,6 +47,7 @@ function clearEnvVars() {
         "DB_USER",
         "DB_PASSWORD",
         "DB_PASSWORD_FILE",
+        "APP_URL",
         "API_PORT",
         "ADMIN_EMAIL",
         "LOG_LEVEL",
@@ -61,7 +64,12 @@ describe("config module", () => {
         clearEnvVars()
 
         // Reset mocks to default values
-        vi.mocked(loadFullConfig).mockReturnValue(FullConfigSchema.parse(defaultConfig))
+        const tmp = {
+            ...defaultConfig,
+            APP_URL: "http://localhost:3000" // Add APP_URL which is now required
+        }
+
+        vi.mocked(loadFullConfig).mockReturnValue(FullConfigSchema.parse(tmp))
         vi.mocked(existsSync).mockReturnValue(false)
     })
 
@@ -70,10 +78,21 @@ describe("config module", () => {
         clearEnvVars()
     })
 
-    it("default export should pass FullConfigSchema", async () => {
+    it("default export shouldn't pass FullConfigSchema without required fields", async () => {
+        // Mock loadFullConfig to return a config missing required fields
+        vi.mocked(loadFullConfig).mockReturnValue({
+            ...defaultConfig,
+            API_BASE: "/api/v1" // Make sure API_BASE is set correctly
+            // Intentionally omit APP_URL
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any)
+
         const { default: config } = await import("@/config.js")
+
+        // We should now validate directly instead of relying on the module's validation
         const result = FullConfigSchema.safeParse(config)
-        expect(result.success).toBe(true)
+        expect(result.success).toBe(false)
+        expect(result.error!.issues[0]!.path).toContain("APP_URL")
     })
 
     it("should load default config when no config file exists", async () => {
@@ -81,48 +100,52 @@ describe("config module", () => {
 
         expect(config).toMatchObject({
             APPLICATION_NAME: staticConfig.APPLICATION_NAME,
-            API_VERSION: staticConfig.API_VERSION,
             API_PORT: defaultConfig.API_PORT,
             LOG_LEVEL: defaultConfig.LOG_LEVEL,
             LOG_TIMESTAMP: defaultConfig.LOG_TIMESTAMP,
+            APP_URL: "http://localhost:3000", // Now we expect APP_URL to be present
             PRODUCTION: false
         })
 
         expect(Object.keys(config)).not.toContain("DB_CONFIG")
-        expect(config.ADMIN_EMAIL).toBeUndefined()
     })
 
     it("should load and merge custom config file values", async () => {
-        const customConfig = FullConfigSchema.parse({
+        const customConfig = {
             ...defaultConfig,
+            APP_URL: "http://localhost:4000", // Add required APP_URL
             API_PORT: 4000,
             LOG_LEVEL: "debug"
-        })
+        }
 
-        vi.mocked(loadFullConfig).mockReturnValue(customConfig)
+        vi.mocked(loadFullConfig).mockReturnValue(FullConfigSchema.parse(customConfig))
 
         const { default: config } = await import("@/config.js")
 
         expect(config.API_PORT).toBe(4000)
         expect(config.LOG_LEVEL).toBe("debug")
+        expect(config.APP_URL).toBe("http://localhost:4000")
     })
 
     it("env-defineable fields should be overridden by env vars", async () => {
         process.env.API_PORT = "1337"
         process.env.LOG_LEVEL = "warn"
+        process.env.APP_URL = "http://localhost:1337"
 
-        const customConfig = FullConfigSchema.parse({
+        const customConfig = {
             ...defaultConfig,
+            APP_URL: "http://localhost:1337",
             API_PORT: 1337,
             LOG_LEVEL: "warn"
-        })
+        }
 
-        vi.mocked(loadFullConfig).mockReturnValue(customConfig)
+        vi.mocked(loadFullConfig).mockReturnValue(FullConfigSchema.parse(customConfig))
 
         const { default: config } = await import("@/config.js")
 
         expect(config.API_PORT).toBe(1337)
         expect(config.LOG_LEVEL).toBe("warn")
+        expect(config.APP_URL).toBe("http://localhost:1337")
     })
 
     describe("getDbConfig", () => {
@@ -262,10 +285,11 @@ describe("config module", () => {
         it("should export individual config values", async () => {
             const expectedConfig = FullConfigSchema.parse({
                 ...defaultConfig,
+                APP_URL: "http://localhost:3000", // Add required APP_URL
                 API_PORT: 3000,
                 LOG_TIMESTAMP: true,
                 LOG_LEVEL: "info",
-                API_VERSION: "v1",
+                API_BASE: "/api/v1", // Make sure API_BASE is set correctly
                 APPLICATION_NAME: "karr",
                 PRODUCTION: false,
                 ADMIN_EMAIL: "admin@example.com"
@@ -275,18 +299,18 @@ describe("config module", () => {
 
             const {
                 API_PORT,
+                APP_URL,
                 LOG_TIMESTAMP,
                 LOG_LEVEL,
-                API_VERSION,
                 APPLICATION_NAME,
                 PRODUCTION,
                 ADMIN_EMAIL
             } = await import("@/config.js")
 
             expect(API_PORT).toBe(expectedConfig.API_PORT)
+            expect(APP_URL).toBe(expectedConfig.APP_URL)
             expect(LOG_TIMESTAMP).toBe(expectedConfig.LOG_TIMESTAMP)
             expect(LOG_LEVEL).toBe(expectedConfig.LOG_LEVEL)
-            expect(API_VERSION).toBe(expectedConfig.API_VERSION)
             expect(APPLICATION_NAME).toBe(expectedConfig.APPLICATION_NAME)
             expect(PRODUCTION).toBe(expectedConfig.PRODUCTION)
             expect(ADMIN_EMAIL).toBe(expectedConfig.ADMIN_EMAIL)

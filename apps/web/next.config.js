@@ -1,6 +1,6 @@
 import createNextIntlPlugin from "next-intl/plugin"
 
-import { API_BASE, API_VERSION } from "@karr/config"
+import { API_BASE } from "@karr/config"
 
 const withNextIntl = createNextIntlPlugin()
 
@@ -14,7 +14,7 @@ const nextConfig = {
         "/**/*.css": ["src/assets/**/*.css"]
     },
     env: {
-        NEXT_PUBLIC_API_ROUTE: `${API_BASE}/${API_VERSION}`
+        NEXT_PUBLIC_API_ROUTE: `${API_BASE}`
     },
 
     experimental: {

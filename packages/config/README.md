@@ -31,20 +31,8 @@ The file can be either .yaml, .yml, .json5 or .json, in this order of precedence
 - `schema.ts`: Schemas and types for all config
 - `static.ts`: all static config, hard coded, only change on codebase change
 - `utils.ts`: helper utilities
-- `test/`:All tests for config package
+- `test/`: All tests for config package
 
 ## Possible environment variables
 
-- CONFIG_DIR
-- CONFIG_FILE
-- DB_HOST
-- DB_PORT
-- DB_SSL
-- DB_NAME
-- DB_USER
-- DB_PASSWORD
-- DB_PASSWORD_FILE
-- API_PORT
-- LOG_TIMESTAMP
-- LOG_LEVEL
-- ADMIN_EMAIL
+See root `turbo.json` for complete list.
