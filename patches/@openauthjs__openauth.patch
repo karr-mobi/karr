@@ -1,5 +1,18 @@
+diff --git a/dist/esm/client.js b/dist/esm/client.js
+index 3cd7f7020c9fe913c44efa50575e88e8a1333da0..a1202b433d1d8398489eecb543ec6405e432d146 100644
+--- a/dist/esm/client.js
++++ b/dist/esm/client.js
+@@ -23,7 +23,7 @@ function createClient(input) {
+     const cached = issuerCache.get(issuer);
+     if (cached)
+       return cached;
+-    const wellKnown = await (f || fetch)(`${issuer}/.well-known/oauth-authorization-server`).then((r) => r.json());
++    const wellKnown = await (f || fetch)(new URL("/.well-known/oauth-authorization-server", issuer).toString()).then((r) => r.json());
+     issuerCache.set(issuer, wellKnown);
+     return wellKnown;
+   }
 diff --git a/dist/esm/issuer.js b/dist/esm/issuer.js
-index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..138a8d7277615a6a52db400589c67cc9de72f0a2 100644
+index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..b84bc30cf23b92723be7c245e40828c36738962b 100644
 --- a/dist/esm/issuer.js
 +++ b/dist/esm/issuer.js
 @@ -8,7 +8,7 @@ import {
@@ -54,6 +67,15 @@ index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..138a8d7277615a6a52db400589c67cc9
    for (const [name, value] of Object.entries(input.providers)) {
      const route = new Hono;
      route.use(async (c, next) => {
+@@ -236,7 +259,7 @@ function issuer(input) {
+       issuer: iss,
+       authorization_endpoint: `${iss}/authorize`,
+       token_endpoint: `${iss}/token`,
+-      jwks_uri: `${iss}/.well-known/jwks.json`,
++      jwks_uri: new URL("/.well-known/jwks.json", iss).toString(),
+       response_types_supported: ["code", "token"]
+     });
+   });
 @@ -263,7 +286,6 @@ function issuer(input) {
            error_description: "Authorization code has been used or expired"
          }, 400);
@@ -171,10 +193,10 @@ index 35cf467b740150dbf8d1b6c325b2c9a0261ed313..6f12668bd413d34f2e24bbae7ecf710a
              "data-color": "ghost",
              children: [
 diff --git a/dist/types/issuer.d.ts b/dist/types/issuer.d.ts
-index 904bb5a4c84e7ebd410cdcfd2fb43bb30aa93549..74edf947c2cd909ebae88f2c5997405d8222d125 100644
+index 904bb5a4c84e7ebd410cdcfd2fb43bb30aa93549..1f2c8879484997cd7e4e46c8cfd2bde0e18f1fb4 100644
 --- a/dist/types/issuer.d.ts
 +++ b/dist/types/issuer.d.ts
-@@ -180,11 +180,36 @@ import { StorageAdapter } from "./storage/storage.js";
+@@ -180,11 +180,44 @@ import { StorageAdapter } from "./storage/storage.js";
  import { Theme } from "./ui/theme.js";
  /** @internal */
  export declare const aws: <E extends import("hono").Env = import("hono").Env, S extends import("hono").Schema = {}, BasePath extends string = "/">(app: import("hono").Hono<E, S, BasePath>) => ((event: import("hono/aws-lambda").LambdaEvent, lambdaContext?: import("hono/aws-lambda").LambdaContext) => Promise<import("hono/aws-lambda").APIGatewayProxyResult>);
@@ -190,6 +212,14 @@ index 904bb5a4c84e7ebd410cdcfd2fb43bb30aa93549..74edf947c2cd909ebae88f2c5997405d
 +    /**
 +     * With `basePath`, OpenAuth can be mounted on any sub-path of a domain.
 +     * This means OpenAuth can be nested in a larger app.
++     *
++     * :::caution
++     * The Well-Known endpoints still need to be at the root of the domain.
++     * You need to perform a proxy pass to the OpenAuth server for `/.well-known/oauth-authorization-server` and `/.well-known/jwks.json`.
++     *
++     * **Example:**<br/>
++     * If you mount OpenAuth at `/auth`, `/.well-known/oauth-authorization-server` and `/.well-known/jwks.json` need to be proxied to `/auth/.well-known/oauth-authorization-server` and `/auth/.well-known/jwks.json`.
++     * :::
 +     *
 +     * @example
 +     * ```ts title="issuer.ts"
@@ -212,13 +242,13 @@ index 904bb5a4c84e7ebd410cdcfd2fb43bb30aa93549..74edf947c2cd909ebae88f2c5997405d
       * The shape of the subjects that you want to return.
       *
 diff --git a/dist/types/issuer.d.ts.map b/dist/types/issuer.d.ts.map
-index e72cc33edc482b42e58aa0319004430833c97740..20aa737707921d9f8f5e96171feb1072fcd8751c 100644
+index e72cc33edc482b42e58aa0319004430833c97740..eff59daae039e5ec7c4d05a80fef93238b70ef82 100644
 --- a/dist/types/issuer.d.ts.map
 +++ b/dist/types/issuer.d.ts.map
 @@ -1 +1 @@
 -{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"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"}
 \ No newline at end of file
-+{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"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"}
++{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"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"}
 \ No newline at end of file
 diff --git a/dist/types/provider/linkedin.d.ts b/dist/types/provider/linkedin.d.ts
 new file mode 100644
@@ -250,9 +280,22 @@ index 78c4aa2b2ca89bc6b1b7d0e7849dddb9da27409e..0f3b200b6f0c38cf7c8e8d7d28b14450
 \ No newline at end of file
 +{"version":3,"file":"select.d.ts","sourceRoot":"","sources":["../../../src/ui/select.tsx"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,gCAAgC;AAKhC,MAAM,WAAW,WAAW;IAC1B;;;;;;;;;;;;;;OAcG;IACH,SAAS,CAAC,EAAE,MAAM,CAChB,MAAM,EACN;QACE;;;WAGG;QACH,IAAI,CAAC,EAAE,OAAO,CAAA;QACd;;WAEG;QACH,OAAO,CAAC,EAAE,MAAM,CAAA;KACjB,CACF,CAAA;CACF;AAED,wBAAgB,MAAM,CAAC,KAAK,CAAC,EAAE,WAAW,eAE3B,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,QAC3B,OAAO,KACZ,OAAO,CAAC,QAAQ,CAAC,CA6BrB"}
 \ No newline at end of file
+diff --git a/src/client.ts b/src/client.ts
+index c4e282a3cb963a1200ba0fc6e9b98df469ecc0f6..7ef8ee9d33440e80edecaf8f4d1b914986b62166 100644
+--- a/src/client.ts
++++ b/src/client.ts
+@@ -555,7 +555,7 @@ export function createClient(input: ClientInput): Client {
+     const cached = issuerCache.get(issuer!)
+     if (cached) return cached
+     const wellKnown = (await (f || fetch)(
+-      `${issuer}/.well-known/oauth-authorization-server`,
++      new URL("/.well-known/oauth-authorization-server", issuer).toString(),
+     ).then((r) => r.json())) as WellKnown
+     issuerCache.set(issuer!, wellKnown)
+     return wellKnown
 diff --git a/src/dist/esm/client.js b/src/dist/esm/client.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..3cd7f7020c9fe913c44efa50575e88e8a1333da0
+index 0000000000000000000000000000000000000000..a1202b433d1d8398489eecb543ec6405e432d146
 --- /dev/null
 +++ b/src/dist/esm/client.js
 @@ -0,0 +1,186 @@
@@ -281,7 +324,7 @@ index 0000000000000000000000000000000000000000..3cd7f7020c9fe913c44efa50575e88e8
 +    const cached = issuerCache.get(issuer);
 +    if (cached)
 +      return cached;
-+    const wellKnown = await (f || fetch)(`${issuer}/.well-known/oauth-authorization-server`).then((r) => r.json());
++    const wellKnown = await (f || fetch)(new URL("/.well-known/oauth-authorization-server", issuer).toString()).then((r) => r.json());
 +    issuerCache.set(issuer, wellKnown);
 +    return wellKnown;
 +  }
@@ -546,7 +589,7 @@ index 0000000000000000000000000000000000000000..0aea78214b56d7e1900c1d82c81b33f6
 +};
 diff --git a/src/dist/esm/issuer.js b/src/dist/esm/issuer.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..138a8d7277615a6a52db400589c67cc9de72f0a2
+index 0000000000000000000000000000000000000000..b84bc30cf23b92723be7c245e40828c36738962b
 --- /dev/null
 +++ b/src/dist/esm/issuer.js
 @@ -0,0 +1,508 @@
@@ -811,7 +854,7 @@ index 0000000000000000000000000000000000000000..138a8d7277615a6a52db400589c67cc9
 +      issuer: iss,
 +      authorization_endpoint: `${iss}/authorize`,
 +      token_endpoint: `${iss}/token`,
-+      jwks_uri: `${iss}/.well-known/jwks.json`,
++      jwks_uri: new URL("/.well-known/jwks.json", iss).toString(),
 +      response_types_supported: ["code", "token"]
 +    });
 +  });
@@ -4650,10 +4693,10 @@ index 0000000000000000000000000000000000000000..26ae8fd7e58908e794f6267e5ca3ae31
 \ No newline at end of file
 diff --git a/src/dist/types/issuer.d.ts b/src/dist/types/issuer.d.ts
 new file mode 100644
-index 0000000000000000000000000000000000000000..74edf947c2cd909ebae88f2c5997405d8222d125
+index 0000000000000000000000000000000000000000..1f2c8879484997cd7e4e46c8cfd2bde0e18f1fb4
 --- /dev/null
 +++ b/src/dist/types/issuer.d.ts
-@@ -0,0 +1,438 @@
+@@ -0,0 +1,446 @@
 +/**
 + * The `issuer` create an OpentAuth server, a [Hono](https://hono.dev) app that's
 + * designed to run anywhere.
@@ -4848,6 +4891,14 @@ index 0000000000000000000000000000000000000000..74edf947c2cd909ebae88f2c5997405d
 +    /**
 +     * With `basePath`, OpenAuth can be mounted on any sub-path of a domain.
 +     * This means OpenAuth can be nested in a larger app.
++     *
++     * :::caution
++     * The Well-Known endpoints still need to be at the root of the domain.
++     * You need to perform a proxy pass to the OpenAuth server for `/.well-known/oauth-authorization-server` and `/.well-known/jwks.json`.
++     *
++     * **Example:**<br/>
++     * If you mount OpenAuth at `/auth`, `/.well-known/oauth-authorization-server` and `/.well-known/jwks.json` need to be proxied to `/auth/.well-known/oauth-authorization-server` and `/auth/.well-known/jwks.json`.
++     * :::
 +     *
 +     * @example
 +     * ```ts title="issuer.ts"
@@ -5095,11 +5146,11 @@ index 0000000000000000000000000000000000000000..74edf947c2cd909ebae88f2c5997405d
 \ No newline at end of file
 diff --git a/src/dist/types/issuer.d.ts.map b/src/dist/types/issuer.d.ts.map
 new file mode 100644
-index 0000000000000000000000000000000000000000..20aa737707921d9f8f5e96171feb1072fcd8751c
+index 0000000000000000000000000000000000000000..eff59daae039e5ec7c4d05a80fef93238b70ef82
 --- /dev/null
 +++ b/src/dist/types/issuer.d.ts.map
 @@ -0,0 +1 @@
-+{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"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"}
++{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"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"}
 \ No newline at end of file
 diff --git a/src/dist/types/jwt.d.ts b/src/dist/types/jwt.d.ts
 new file mode 100644
@@ -7879,7 +7930,7 @@ index 0000000000000000000000000000000000000000..f01369f5f2f412c2b3bc6a1c461910f7
 +{"version":3,"file":"util.d.ts","sourceRoot":"","sources":["../../src/util.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,MAAM,CAAA;AAEnC,MAAM,MAAM,QAAQ,CAAC,CAAC,IAAI;KACvB,CAAC,IAAI,MAAM,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;CACrB,CAAA;AAED,wBAAgB,cAAc,CAAC,GAAG,EAAE,OAAO,EAAE,IAAI,EAAE,MAAM,UAMxD;AAuBD,wBAAgB,aAAa,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,GAAG,OAAO,CAY3D;AAED,wBAAgB,IAAI,CAAC,CAAC,EAAE,EAAE,EAAE,MAAM,CAAC,GAAG,MAAM,CAAC,CAQ5C"}
 \ No newline at end of file
 diff --git a/src/issuer.ts b/src/issuer.ts
-index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..295c5e4db840e6adc1f12537060d48a17d554356 100644
+index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7e7824bf1 100644
 --- a/src/issuer.ts
 +++ b/src/issuer.ts
 @@ -130,6 +130,7 @@ import { Hono } from "hono/tiny"
@@ -7916,13 +7967,21 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..295c5e4db840e6adc1f12537060d48a1
  export interface IssuerInput<
    Providers extends Record<string, Provider<any>>,
    Subjects extends SubjectSchema,
-@@ -216,6 +223,27 @@ export interface IssuerInput<
+@@ -216,6 +223,35 @@ export interface IssuerInput<
      >
    }[keyof Providers],
  > {
 +  /**
 +   * With `basePath`, OpenAuth can be mounted on any sub-path of a domain.
 +   * This means OpenAuth can be nested in a larger app.
++   *
++   * :::caution
++   * The Well-Known endpoints still need to be at the root of the domain.
++   * You need to perform a proxy pass to the OpenAuth server for `/.well-known/oauth-authorization-server` and `/.well-known/jwks.json`.
++   *
++   * **Example:**<br/>
++   * If you mount OpenAuth at `/auth`, `/.well-known/oauth-authorization-server` and `/.well-known/jwks.json` need to be proxied to `/auth/.well-known/oauth-authorization-server` and `/auth/.well-known/jwks.json`.
++   * :::
 +   *
 +   * @example
 +   * ```ts title="issuer.ts"
@@ -7944,7 +8003,7 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..295c5e4db840e6adc1f12537060d48a1
    /**
     * The shape of the subjects that you want to return.
     *
-@@ -451,6 +479,8 @@ export function issuer<
+@@ -451,6 +487,8 @@ export function issuer<
      >
    }[keyof Providers],
  >(input: IssuerInput<Providers, Subjects, Result>) {
@@ -7953,7 +8012,7 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..295c5e4db840e6adc1f12537060d48a1
    const error =
      input.error ??
      function (err) {
-@@ -721,7 +751,12 @@ export function issuer<
+@@ -721,7 +759,12 @@ export function issuer<
    }
  
    function issuer(ctx: Context) {
@@ -7967,7 +8026,7 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..295c5e4db840e6adc1f12537060d48a1
    }
  
    const app = new Hono<{
-@@ -730,6 +765,29 @@ export function issuer<
+@@ -730,6 +773,29 @@ export function issuer<
      }
    }>().use(logger())
  
@@ -7997,7 +8056,16 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..295c5e4db840e6adc1f12537060d48a1
    for (const [name, value] of Object.entries(input.providers)) {
      const route = new Hono<any>()
      route.use(async (c, next) => {
-@@ -829,7 +887,6 @@ export function issuer<
+@@ -779,7 +845,7 @@ export function issuer<
+         issuer: iss,
+         authorization_endpoint: `${iss}/authorize`,
+         token_endpoint: `${iss}/token`,
+-        jwks_uri: `${iss}/.well-known/jwks.json`,
++        jwks_uri: new URL("/.well-known/jwks.json", iss).toString(),
+         response_types_supported: ["code", "token"],
+       })
+     },
+@@ -829,7 +895,6 @@ export function issuer<
              400,
            )
          }
@@ -8005,7 +8073,7 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..295c5e4db840e6adc1f12537060d48a1
          if (payload.redirectURI !== form.get("redirect_uri")) {
            return c.json(
              {
-@@ -878,6 +935,7 @@ export function issuer<
+@@ -878,6 +943,7 @@ export function issuer<
            }
          }
          const tokens = await generateTokens(c, payload)
@@ -8013,7 +8081,7 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..295c5e4db840e6adc1f12537060d48a1
          return c.json({
            access_token: tokens.access,
            expires_in: tokens.expiresIn,
-@@ -1078,6 +1136,63 @@ export function issuer<
+@@ -1078,6 +1144,63 @@ export function issuer<
      )
    })
  
