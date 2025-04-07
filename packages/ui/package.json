@@ -25,7 +25,7 @@
         "class-variance-authority": "catalog:",
         "clsx": "catalog:",
         "date-fns": "catalog:",
-        "framer-motion": "catalog:",
+        "motion": "catalog:",
         "lucide-react": "catalog:",
         "next": "catalog:",
         "next-intl": "catalog:",

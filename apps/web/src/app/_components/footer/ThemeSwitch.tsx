@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useId, useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 import { Moon as IconMoon, Sun as IconSun } from "lucide-react"
 import { useTheme } from "next-themes"
 

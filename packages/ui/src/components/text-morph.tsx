@@ -1,7 +1,7 @@
 "use client"
 
 import { useId, useMemo } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "motion/react"
 
 import { cn } from "@karr/ui/lib/utils"
 

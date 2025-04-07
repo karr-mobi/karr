@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
-import { motion } from "framer-motion"
+import { motion } from "motion/react"
 import { CheckIcon, ChevronRightIcon, Dot as DotIcon } from "lucide-react"
 
 import { cn } from "@karr/ui/lib/utils"
