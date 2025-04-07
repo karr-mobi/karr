@@ -76,7 +76,7 @@ catalogs:
       specifier: ^0.6.1
       version: 0.6.1
     esbuild:
-      specifier: ^0.25.1
+      specifier: ^0.25.2
       version: 0.25.2
     framer-motion:
       specifier: ^12.5.0
