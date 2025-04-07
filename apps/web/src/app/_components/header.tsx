@@ -7,7 +7,7 @@ import logo from "@/assets/logo-tmp.jpg"
 
 import LoginAccount from "./header/LoginAccount"
 import { DesktopNavMenu, MobileNavMenu } from "./header/NavMenu"
-import { auth } from "@/app/auth/actions"
+import { auth } from "~/auth/actions"
 
 const MemoizedAppName = memo(
     () => <h5>{APPLICATION_NAME}</h5>,

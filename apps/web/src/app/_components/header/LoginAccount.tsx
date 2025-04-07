@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server"
 import { Button } from "@karr/ui/components/button"
 
 import { Link } from "@/i18n/routing"
-import { auth, login } from "@/app/auth/actions"
+import { auth, login } from "~/auth/actions"
 import { LogIn as IconLogIn } from "lucide-react"
 
 export default async function LoginAccount() {

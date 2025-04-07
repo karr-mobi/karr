@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl"
 
 import { Button } from "@karr/ui/components/button"
 
-import { logout } from "@/app/auth/actions"
+import { logout } from "~/auth/actions"
 
 export default function Logout() {
     const t = useTranslations("auth")
