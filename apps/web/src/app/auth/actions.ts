@@ -35,7 +35,12 @@ export async function auth() {
     return verified.subject
 }
 
-export async function login() {
+export async function login(returnTo: string | FormData = "/") {
+    // If returnTo is a FormData object, extract the value from it
+    if (returnTo instanceof FormData) {
+        returnTo = returnTo.get("returnTo") as string
+    }
+
     const locale = await getLocale()
     const jar = await cookies()
     const accessToken = jar.get("access_token")
@@ -50,7 +55,7 @@ export async function login() {
         })
         if (!verified.err && verified.tokens) {
             await setTokens(verified.tokens)
-            redirect({ href: "/", locale })
+            redirect({ href: returnTo, locale })
         }
     }
 

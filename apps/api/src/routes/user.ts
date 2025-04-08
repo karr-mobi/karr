@@ -47,9 +47,16 @@ hono.get("/", async (c) => {
  */
 hono.put("/nickname", async (c) => {
     // TODO(@finxol): Add validation for nickname
-    // get the user ID from the validated headers
-    //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("cookie")
+
+    // Get the subject from the context
+    const subject = c.get("userSubject")
+
+    // Middleware should prevent this, but good practice to check
+    if (!subject?.properties?.userID) {
+        logger.error("User subject missing in context for GET /user")
+        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+    }
+
     const { nickname } = await c.req.json()
 
     // check the nickname is a valid string
@@ -58,7 +65,9 @@ hono.put("/nickname", async (c) => {
     }
 
     // update the user's nickname in the database
-    return await handleRequest<boolean>(c, () => updateNickname(id, nickname))
+    return await handleRequest<boolean>(c, () =>
+        updateNickname(subject.properties.userID, nickname)
+    )
 })
 
 /**
@@ -119,9 +128,7 @@ hono.delete("/bookings/:id", (c) => {
 hono.get(
     "/profile/:id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}",
     async (c) => {
-        // get the user ID from the validated headers
-        //@ts-expect-error valid does take in a parameter
-        const { id } = c.req.valid("cookie")
+        const id = c.req.param("id")
 
         // get the user from the database and send it back
         return await handleRequest(c, () => selectUserProfileById(id))
