@@ -1,5 +1,33 @@
 # Changelog
 
+## v0.9.9
+
+[compare changes](https://github.com/finxol/karr/compare/v0.9.8...v0.9.9)
+
+### 🚀 Enhancements
+
+- Add marquee animation ([d796615](https://github.com/finxol/karr/commit/d796615))
+
+### 🩹 Fixes
+
+- Spec compliance for openauth patch ([9635383](https://github.com/finxol/karr/commit/9635383))
+- Compress logo ([514d311](https://github.com/finxol/karr/commit/514d311))
+- Auth middleware redirect ([#104](https://github.com/finxol/karr/pull/104))
+- Improve @karr/config import rule ([856e10d](https://github.com/finxol/karr/commit/856e10d))
+- **ui:** Adjust fluid type scale ([176ce62](https://github.com/finxol/karr/commit/176ce62))
+
+### 🏡 Chore
+
+- Change `framer-motion` to `motion` ([4331598](https://github.com/finxol/karr/commit/4331598))
+- Upgrade deps ([f84ad74](https://github.com/finxol/karr/commit/f84ad74))
+- Add path alias ([c8fa75b](https://github.com/finxol/karr/commit/c8fa75b))
+- Update `drizzle-zod` ([b7069ee](https://github.com/finxol/karr/commit/b7069ee))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](https://github.com/finxol))
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+
 ## v0.9.8
 
 [compare changes](https://github.com/finxol/karr/compare/v0.9.7...v0.9.8)
