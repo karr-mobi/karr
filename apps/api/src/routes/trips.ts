@@ -5,12 +5,12 @@ import { NewTrip, NewTripSchema, Trip } from "@karr/db/schemas/trips.js"
 import logger from "@karr/util/logger"
 
 import { handleRequest, responseErrorObject } from "@/lib/helpers"
-import type { DataResponse } from "@/lib/types.d.ts"
+import type { AppVariables, DataResponse } from "@/lib/types.d.ts"
 import { addTrip, deleteTrip, getTrips } from "@/db/trips"
 
 import { getFederatedTrips } from "./federation/helpers"
 
-const hono = new Hono()
+const hono = new Hono<{ Variables: AppVariables }>()
 
 /**
  * Search for a trip locally and on federated servers
@@ -81,11 +81,18 @@ hono.get("/search", (c) => {
  * @returns The trip id and name
  */
 hono.post("/add", async (c) => {
-    //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("cookie")
+    // Get the subject from the context
+    const subject = c.get("userSubject")
+
+    // Middleware should prevent this, but good practice to check
+    if (!subject?.properties?.userID) {
+        logger.error("User subject missing in context for GET /user")
+        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+    }
 
     const t = await c.req.json<NewTrip>()
-    t.account = id
+    t.account = subject.properties.userID
+    logger.debug(`Adding trip: ${subject.properties.userID}`, t)
     const trip = NewTripSchema.safeParse(t)
 
     if (!trip.success) {
@@ -118,13 +125,19 @@ hono.post("/add", async (c) => {
  * @returns The trip
  */
 hono.delete("/:id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}", (c) => {
-    //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("cookie")
+    // Get the subject from the context
+    const subject = c.get("userSubject")
+
+    // Middleware should prevent this, but good practice to check
+    if (!subject?.properties?.userID) {
+        logger.error("User subject missing in context for GET /user")
+        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+    }
 
     const tripId: string = c.req.param("id")
 
-    logger.debug(`Deleting trip: ${id}`)
-    return handleRequest(c, () => deleteTrip(tripId, id))
+    logger.debug(`Deleting trip: ${subject.properties.userID} ${tripId}`)
+    return handleRequest(c, () => deleteTrip(tripId, subject.properties.userID))
 })
 
 /**

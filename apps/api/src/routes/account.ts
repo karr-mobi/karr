@@ -3,10 +3,10 @@ import { Hono } from "hono"
 import logger from "@karr/util/logger"
 
 import { handleRequest, responseErrorObject } from "@/lib/helpers"
-import type { AccountVerified, DataResponse } from "@/lib/types.d.ts"
+import type { AccountVerified, AppVariables, DataResponse } from "@/lib/types.d.ts"
 import { isVerified, updateEmail } from "@/db/accounts"
 
-const hono = new Hono()
+const hono = new Hono<{ Variables: AppVariables }>()
 
 hono.get("/", (c) => {
     logger.debug("Getting user")
@@ -23,9 +23,15 @@ hono.get("/", (c) => {
  * @returns DataResponse if update was successful, ErrorResponse if not
  */
 hono.put("/email", async (c) => {
-    // get the user ID from the validated headers
-    //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("cookie")
+    // Get the subject from the context
+    const subject = c.get("userSubject")
+
+    // Middleware should prevent this, but good practice to check
+    if (!subject?.properties?.userID) {
+        logger.error("User subject missing in context for GET /user")
+        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+    }
+
     const { email } = await c.req.json()
 
     // check the nickname is a valid string
@@ -34,19 +40,28 @@ hono.put("/email", async (c) => {
     }
 
     // Change the email in the database
-    return await handleRequest<boolean>(c, () => updateEmail(id, email))
+    return await handleRequest<boolean>(c, () =>
+        updateEmail(subject.properties.userID, email)
+    )
 })
 
 /**
  * Check if a user is verified
  */
 hono.get("/verified", async (c) => {
-    // get the user ID from the validated headers
-    //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("cookie")
+    // Get the subject from the context
+    const subject = c.get("userSubject")
+
+    // Middleware should prevent this, but good practice to check
+    if (!subject?.properties?.userID) {
+        logger.error("User subject missing in context for GET /user")
+        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+    }
 
     // Check if the user is verified
-    return await handleRequest<AccountVerified>(c, () => isVerified(id))
+    return await handleRequest<AccountVerified>(c, () =>
+        isVerified(subject.properties.userID)
+    )
 })
 
 hono.post("/verify", (c) => c.text("TODO")) // TODO(@finxol)
@@ -57,10 +72,16 @@ hono.post("/verify", (c) => c.text("TODO")) // TODO(@finxol)
  * @returns {Response} Data response if update was successful, ErrorResponse if not
  */
 hono.delete("/", async (c) => {
-    // get the user ID from the validated headers
-    //@ts-expect-error valid does take in a parameter
-    const { id } = c.req.valid("cookie")
-    logger.debug(`Deleting user ${id}`)
+    // Get the subject from the context
+    const subject = c.get("userSubject")
+
+    // Middleware should prevent this, but good practice to check
+    if (!subject?.properties?.userID) {
+        logger.error("User subject missing in context for GET /user")
+        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+    }
+
+    logger.debug(`Deleting user ${subject.properties.userID}`)
 
     // delete the user's account from the database
     return await handleRequest<boolean>(c, async () => {
