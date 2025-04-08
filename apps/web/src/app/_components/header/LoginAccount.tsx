@@ -15,10 +15,9 @@ export default async function LoginAccount() {
     return (
         <>
             {isAuthenticated ? (
-                <Button asChild>
+                <Button asChild size="icon" className="mr-0.75">
                     <Link href="/account">
                         <IconUser />
-                        <span className="hidden sm:block">{t("Account.title")}</span>
                     </Link>
                 </Button>
             ) : (
