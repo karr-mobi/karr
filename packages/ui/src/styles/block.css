@@ -16,27 +16,27 @@ h6 {
 }
 
 h1 {
-    font-size: var(--size-step-5);
+    font-size: var(--text-4xl);
 }
 
 h2 {
-    font-size: var(--size-step-4);
+    font-size: var(--text-3xl);
 }
 
 h3 {
-    font-size: var(--size-step-3);
+    font-size: var(--text-2xl);
 }
 
 h4 {
-    font-size: var(--size-step-2);
+    font-size: var(--text-xl);
 }
 
 h5 {
-    font-size: var(--size-step-1);
+    font-size: var(--text-lg);
 }
 
 h6 {
-    font-size: var(--size-step-0);
+    font-size: var(--text-base);
 }
 
 p,
@@ -53,12 +53,12 @@ h3 {
 
 blockquote:not([class]) {
     font-famtly: var(--font-serif);
-    font-size: var(--size-step-2);
+    font-size: var(--text-xl);
 }
 
 blockquote:not([class]) p:last-of-type {
     font-family: var(--font-base);
-    font-size: var(--stze-step-1);
+    font-size: var(--text-lg);
     font-weight: normal;
 }
 

@@ -84,7 +84,7 @@ function ShowUserData({ data: { data: user } }: { data: any }) {
                     <p>{user.email}</p>
                 </div>
             </section>
-            <details className="mt-12">
+            <details className="mt-12 text-sm">
                 <summary className="text-gray-300 dark:text-gray-700">See raw</summary>
                 <pre>{JSON.stringify(user, null, 2)}</pre>
             </details>
