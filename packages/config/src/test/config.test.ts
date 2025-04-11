@@ -66,7 +66,7 @@ describe("config module", () => {
         // Reset mocks to default values
         const tmp = {
             ...defaultConfig,
-            APP_URL: "http://localhost:3000" // Add APP_URL which is now required
+            APP_URL: "http://example.org/" // Add APP_URL which is now required
         }
 
         vi.mocked(loadFullConfig).mockReturnValue(FullConfigSchema.parse(tmp))
@@ -103,7 +103,7 @@ describe("config module", () => {
             API_PORT: defaultConfig.API_PORT,
             LOG_LEVEL: defaultConfig.LOG_LEVEL,
             LOG_TIMESTAMP: defaultConfig.LOG_TIMESTAMP,
-            APP_URL: "http://localhost:3000", // Now we expect APP_URL to be present
+            APP_URL: "http://example.org/", // Now we expect APP_URL to be present
             PRODUCTION: false
         })
 
@@ -113,7 +113,7 @@ describe("config module", () => {
     it("should load and merge custom config file values", async () => {
         const customConfig = {
             ...defaultConfig,
-            APP_URL: "http://localhost:4000", // Add required APP_URL
+            APP_URL: "http://localhost/", // Add required APP_URL
             API_PORT: 4000,
             LOG_LEVEL: "debug"
         }
@@ -124,17 +124,17 @@ describe("config module", () => {
 
         expect(config.API_PORT).toBe(4000)
         expect(config.LOG_LEVEL).toBe("debug")
-        expect(config.APP_URL).toBe("http://localhost:4000")
+        expect(config.APP_URL).toBe("http://localhost/")
     })
 
     it("env-defineable fields should be overridden by env vars", async () => {
         process.env.API_PORT = "1337"
         process.env.LOG_LEVEL = "warn"
-        process.env.APP_URL = "http://localhost:1337"
+        process.env.APP_URL = "http://localhost/"
 
         const customConfig = {
             ...defaultConfig,
-            APP_URL: "http://localhost:1337",
+            APP_URL: "http://localhost/",
             API_PORT: 1337,
             LOG_LEVEL: "warn"
         }
@@ -145,7 +145,7 @@ describe("config module", () => {
 
         expect(config.API_PORT).toBe(1337)
         expect(config.LOG_LEVEL).toBe("warn")
-        expect(config.APP_URL).toBe("http://localhost:1337")
+        expect(config.APP_URL).toBe("http://localhost/")
     })
 
     describe("getDbConfig", () => {
@@ -285,7 +285,7 @@ describe("config module", () => {
         it("should export individual config values", async () => {
             const expectedConfig = FullConfigSchema.parse({
                 ...defaultConfig,
-                APP_URL: "http://localhost:3000", // Add required APP_URL
+                APP_URL: "http://localhost/", // Add required APP_URL
                 API_PORT: 3000,
                 LOG_TIMESTAMP: true,
                 LOG_LEVEL: "info",

@@ -1,5 +1,5 @@
 {
-    "APP_URL": "http://localhost",
+    "APP_URL": "http://example.org/",
     "API_PORT": 1993,
     "LOG_TIMESTAMP": true,
     "LOG_LEVEL": "debug",

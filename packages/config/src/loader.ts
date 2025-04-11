@@ -136,8 +136,6 @@ function readConfig(): ConfigFile {
 
     const userConfig = Object.assign(defaultConfig, parseFile(path))
 
-    console.log(userConfig)
-
     const parsed = ConfigFileSchema.safeParse(userConfig)
 
     if (!parsed.success) {
@@ -212,7 +210,7 @@ export function loadFullConfig(): FullConfig {
         )
     }
 
-    config.API_BASE += config.API_BASE?.endsWith("/") ? "" : "/" + API_VERSION
+    config.API_BASE += "/" + API_VERSION
 
     const parsed = FullConfigSchema.safeParse(config)
 
