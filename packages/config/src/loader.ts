@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { isAbsolute, join } from "node:path"
 import { parseJSON, parseJSON5, parseYAML } from "confbox"
 import c from "tinyrainbow"
+import * as z from "zod"
 
 import defaultConfig from "./default_config.json" with { type: "json" }
 import {
@@ -14,7 +15,6 @@ import {
 } from "./schema.js"
 import { toInt } from "./utils.js"
 import { API_VERSION } from "./static.js"
-import { ZodIssue } from "zod"
 
 const CONFIG_DIR =
     process.env.CONFIG_DIR ||
@@ -136,10 +136,12 @@ function readConfig(): ConfigFile {
 
     const userConfig = Object.assign(defaultConfig, parseFile(path))
 
+    console.log(userConfig)
+
     const parsed = ConfigFileSchema.safeParse(userConfig)
 
     if (!parsed.success) {
-        handleConfigError(parsed.error.issues)
+        handleConfigError(parsed.error)
         process.exit(1)
     }
 
@@ -152,7 +154,7 @@ export function loadDbConfig(): ConfigFile {
     const parsed = ConfigFileSchema.safeParse(config)
 
     if (!parsed.success) {
-        handleConfigError(parsed.error.issues)
+        handleConfigError(parsed.error)
         process.exit(1)
     }
 
@@ -186,7 +188,7 @@ export function loadFullConfig(): FullConfig {
         const parsed = LogLevelSchema.safeParse(process.env.LOG_LEVEL)
 
         if (!parsed.success) {
-            handleConfigError(parsed.error.issues)
+            handleConfigError(parsed.error)
             process.exit(1)
         }
 
@@ -215,7 +217,7 @@ export function loadFullConfig(): FullConfig {
     const parsed = FullConfigSchema.safeParse(config)
 
     if (!parsed.success) {
-        handleConfigError(parsed.error.issues)
+        handleConfigError(parsed.error)
         process.exit(1)
     }
 
@@ -237,35 +239,38 @@ export function getDbPasswordFromFile(path: string | undefined): string | null {
     return null
 }
 
-export function handleConfigError(errors: ZodIssue[]) {
+export function handleConfigError(error: z.core.$ZodError) {
+    const errors = error.issues
     const numErrors = errors.length
-    const fields = errors.map((error) => error.path.join("."))
     console.error(
         c.inverse(c.red(" Configuration error ")),
         c.red(`(${numErrors} issue${numErrors > 1 ? "s" : ""})`)
     )
     console.log()
-    console.log(c.gray(c.bold("Fields:")), c.bold(fields.join(", ")))
+
+    const fields = errors.map((error) => error.path.join("."))
+    console.log(c.gray(c.bold("Fields:")))
+    for (const field of fields) {
+        const required: boolean = requiredKeys.includes(field)
+
+        console.log(
+            "    -",
+            c.bold(field),
+            required ? c.inverse(c.red("\t REQUIRED ")) : ""
+        )
+    }
 
     console.log()
 
     for (const e of errors) {
         const required: boolean = requiredKeys.includes(e.path.join("."))
         console.log(
-            c.bgWhiteBright(c.black(c.bold(` ${e.code.toUpperCase()} `))),
+            c.bgWhiteBright(c.black(c.bold(` ${e.code?.toUpperCase()} `))),
             c.bold(e.path.join(".")),
             "-",
             e.message,
             required ? c.inverse(c.red(" REQUIRED ")) : ""
         )
-
-        //@ts-expect-error - expected and received are not always present
-        if (e.expected && e.received) {
-            //@ts-expect-error - expected and received are not always present
-            console.log("\t", "+ Expected:", c.green(e.expected))
-            //@ts-expect-error - expected and received are not always present
-            console.log("\t", "- Received:", c.red(e.received))
-        }
 
         console.log()
     }

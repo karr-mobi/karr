@@ -78,7 +78,7 @@ export function getDbConfig(): DbConfig {
     })
 
     if (!parsed.success) {
-        handleConfigError(parsed.error.issues)
+        handleConfigError(parsed.error)
         process.exit(1)
     }
 
