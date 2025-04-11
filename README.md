@@ -15,9 +15,9 @@ Built with:
   ([Docker package](https://github.com/users/finxol/packages/container/package/karr-web))
 - `@karr/caddy`: Caddy server
   ([Docker package](https://github.com/users/finxol/packages/container/package/karr-caddy))
-- `@karr/auth`: Ory Kratos + Oathkeeper (or OpenAuth)
+- `@karr/auth`: OpenAuth
 
-Documentation: [docs.karr.finxol.io](https://docs.karr.finxol.io/)
+Documentation: [docs.karr.finxol.io](https://docs.karr.mobi/)
 
 ## Roadmap
 
@@ -28,30 +28,11 @@ Documentation: [docs.karr.finxol.io](https://docs.karr.finxol.io/)
 
 ## TODO
 
-- [x] Get deployment working
-
-    - [x] Get Tailwind included working in production build
-    - [x] Get automatic build working
-    - [ ] Deploy automatically
-          ([Directly in GH actions](https://github.com/marketplace/actions/docker-stack-deploy-action),
-          inspired from
-          [Zenstats](https://github.com/dreamsofcode-io/zenstats/blob/main/.github/workflows/pipeline.yaml))
-    - [ ] Add versioning ([Changesets](https://github.com/changesets/changesets))
-
 - [ ] Add zod validation in Hono
       ([Hono docs](https://github.com/honojs/middleware/tree/main/packages/zod-validator))
 
-    - [ ] Env type-safety [T3 env](https://env.t3.gg/docs/nextjs)
-
-- [x] Add mock login
-    - [x] Add i18n
-          [info in Nextjs docs](https://nextjs.org/docs/app/building-your-application/routing/internationalization)
-- [x] Add trip search route that gives fake, not-searched data
-- [x] Add demo client for PoC
-
-- [x] Minify API Docker container
-
-- [ ] Get auth server running (using Ory Kratos/Oathkeeper, with JWT)
+- [x] Get auth server running (using OpenAuth)
+- [ ] Actually persist user info
 - [ ] Build proper auth frontend
 
 - Add tests
