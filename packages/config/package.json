@@ -7,7 +7,8 @@
         "dev": "tsc --watch",
         "build": "tsc",
         "check-types": "tsc --noEmit",
-        "test": "vitest"
+        "test": "vitest",
+        "schema:write": "tsx src/export-schema.ts"
     },
     "exports": {
         ".": {
