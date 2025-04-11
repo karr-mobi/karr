@@ -98,7 +98,7 @@ hono.post("/add", async (c) => {
     if (!trip.success) {
         return responseErrorObject(
             c,
-            { message: "Invalid trip data", cause: trip.error.errors },
+            { message: "Invalid trip data", cause: trip.error },
             400
         )
     }

@@ -1,0 +1,24 @@
+{
+    "$schema": "../packages/config/config.schema.json",
+    "APPLICATION_NAME": "Karr dev",
+    "APP_URL": "http://localhost/",
+    "API_PORT": 1993,
+    "API_BASE": "/api",
+    "LOG_TIMESTAMP": true,
+    "LOG_LEVEL": "debug",
+    "ADMIN_EMAIL": "foo@bar.com",
+    "FEDERATION": true,
+    "FEDERATION_TARGETS": [
+        {
+            "name": "Karr Live",
+            "url": "https://karr.mobi"
+        }
+    ],
+    "DB_CONFIG": {
+        "host": "localhost",
+        "port": 5432,
+        "user": "karr",
+        "password": "karr",
+        "db_name": "karr"
+    }
+}
