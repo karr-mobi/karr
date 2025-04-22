@@ -70,8 +70,8 @@ catalogs:
       specifier: ^0.30.5
       version: 0.30.6
     drizzle-orm:
-      specifier: ^0.41.0
-      version: 0.41.0
+      specifier: ^0.42.0
+      version: 0.42.0
     drizzle-zod:
       specifier: ^0.7.1
       version: 0.7.1
@@ -137,7 +137,7 @@ catalogs:
       version: 1.15.0
     zod:
       specifier: next
-      version: 4.0.0-beta.20250411T005215
+      version: 4.0.0-beta.20250420T053007
   tooling:
     '@biomejs/biome':
       specifier: 1.9.4
@@ -272,16 +272,16 @@ importers:
         version: 0.4.3(patch_hash=2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2)(arctic@2.3.4)(hono@4.7.5)
       db0:
         specifier: 'catalog:'
-        version: 0.3.1(drizzle-orm@0.41.0(gel@2.0.1)(postgres@3.4.5))
+        version: 0.3.1(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5))
       drizzle-kit:
         specifier: 'catalog:'
         version: 0.30.6
       drizzle-orm:
         specifier: 'catalog:'
-        version: 0.41.0(gel@2.0.1)(postgres@3.4.5)
+        version: 0.42.0(gel@2.0.1)(postgres@3.4.5)
       drizzle-zod:
         specifier: 'catalog:'
-        version: 0.7.1(drizzle-orm@0.41.0(gel@2.0.1)(postgres@3.4.5))(zod@4.0.0-beta.20250411T005215)
+        version: 0.7.1(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5))(zod@4.0.0-beta.20250420T053007)
       hono:
         specifier: 'catalog:'
         version: 4.7.5
@@ -293,10 +293,10 @@ importers:
         version: 1.4.1
       unstorage:
         specifier: 'catalog:'
-        version: 1.15.0(patch_hash=96447cda99e755e55f17c8a5bbbde79973f25c16d5223a793abac6811309b778)(aws4fetch@1.0.20)(db0@0.3.1(drizzle-orm@0.41.0(gel@2.0.1)(postgres@3.4.5)))
+        version: 1.15.0(patch_hash=96447cda99e755e55f17c8a5bbbde79973f25c16d5223a793abac6811309b778)(aws4fetch@1.0.20)(db0@0.3.1(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5)))
       zod:
         specifier: 'catalog:'
-        version: 4.0.0-beta.20250411T005215
+        version: 4.0.0-beta.20250420T053007
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -420,7 +420,7 @@ importers:
         version: 0.4.3(patch_hash=2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2)(arctic@2.3.4)(hono@4.7.5)
       zod:
         specifier: 'catalog:'
-        version: 4.0.0-beta.20250411T005215
+        version: 4.0.0-beta.20250420T053007
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -454,7 +454,7 @@ importers:
         version: 2.0.0
       zod:
         specifier: 'catalog:'
-        version: 4.0.0-beta.20250411T005215
+        version: 4.0.0-beta.20250420T053007
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -491,13 +491,13 @@ importers:
         version: 0.30.6
       drizzle-orm:
         specifier: 'catalog:'
-        version: 0.41.0(gel@2.0.1)(postgres@3.4.5)
+        version: 0.42.0(gel@2.0.1)(postgres@3.4.5)
       postgres:
         specifier: 'catalog:'
         version: 3.4.5
       zod:
         specifier: 'catalog:'
-        version: 4.0.0-beta.20250411T005215
+        version: 4.0.0-beta.20250420T053007
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -531,10 +531,10 @@ importers:
         version: 0.30.6
       drizzle-orm:
         specifier: 'catalog:'
-        version: 0.41.0(gel@2.0.1)(postgres@3.4.5)
+        version: 0.42.0(gel@2.0.1)(postgres@3.4.5)
       drizzle-zod:
         specifier: 'catalog:'
-        version: 0.7.1(drizzle-orm@0.41.0(gel@2.0.1)(postgres@3.4.5))(zod@4.0.0-beta.20250411T005215)
+        version: 0.7.1(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5))(zod@4.0.0-beta.20250420T053007)
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -628,7 +628,7 @@ importers:
         version: 1.0.7(tailwindcss@4.0.14)
       zod:
         specifier: 'catalog:'
-        version: 4.0.0-beta.20250411T005215
+        version: 4.0.0-beta.20250420T053007
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -2360,8 +2360,8 @@ packages:
   '@vitest/utils@3.0.9':
     resolution: {integrity: sha512-ilHM5fHhZ89MCp5aAaM9uhfl1c2JdxVxl3McqsdVyVNN6JffnEen8UMCdRTzOhGXNQGo5GNL9QugHrz727Wnng==}
 
-  '@zod/core@0.3.3':
-    resolution: {integrity: sha512-zXp0/K9zynk8ZP5hdUN2i0xePJ6uULX5rvBC/54bWNF4FL9YHxTjQg/zPFNj+WE8g0QTKX+fty7n073bgp6wNw==}
+  '@zod/core@0.8.1':
+    resolution: {integrity: sha512-djj8hPhxIHcG8ptxITaw/Bout5HJZ9NyRbKr95Eilqwt9R0kvITwUQGDU+n+MVdsBIka5KwztmZSLti22F+P0A==}
 
   JSONStream@1.3.5:
     resolution: {integrity: sha512-E+iruNOY8VV9s4JEbe1aNEm6MiszPRr/UfcHMz0TQh1BXSxHK+ASV1R6W4HpjBhSeS+54PIsAMCBmwD06LLsqQ==}
@@ -2900,8 +2900,8 @@ packages:
     resolution: {integrity: sha512-U4wWit0fyZuGuP7iNmRleQyK2V8wCuv57vf5l3MnG4z4fzNTjY/U13M8owyQ5RavqvqxBifWORaR3wIUzlN64g==}
     hasBin: true
 
-  drizzle-orm@0.41.0:
-    resolution: {integrity: sha512-7A4ZxhHk9gdlXmTdPj/lREtP+3u8KvZ4yEN6MYVxBzZGex5Wtdc+CWSbu7btgF6TB0N+MNPrvW7RKBbxJchs/Q==}
+  drizzle-orm@0.42.0:
+    resolution: {integrity: sha512-pS8nNJm2kBNZwrOjTHJfdKkaU+KuUQmV/vk5D57NojDq4FG+0uAYGMulXtYT///HfgsMF0hnFFvu1ezI3OwOkg==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -2911,7 +2911,7 @@ packages:
       '@neondatabase/serverless': '>=0.10.0'
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
-      '@planetscale/database': '>=1'
+      '@planetscale/database': '>=1.13'
       '@prisma/client': '*'
       '@tidbcloud/serverless': '*'
       '@types/better-sqlite3': '*'
@@ -5161,8 +5161,8 @@ packages:
     resolution: {integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==}
     engines: {node: '>=12.20'}
 
-  zod@4.0.0-beta.20250411T005215:
-    resolution: {integrity: sha512-FgvuS7Gb0kzI9Rsd1ihOulGSFT9LVj0JdejbkvjXIski9F/DheDIBV9uZkbAIiS6bOsthAMWHFtSsM1o+hmhig==}
+  zod@4.0.0-beta.20250420T053007:
+    resolution: {integrity: sha512-5pp8Q0PNDaNcUptGiBE9akyioJh3RJpagIxrLtAVMR9IxwcSZiOsJD/1/98CyhItdTlI2H91MfhhLzRlU+fifA==}
 
 snapshots:
 
@@ -6581,7 +6581,7 @@ snapshots:
       loupe: 3.1.3
       tinyrainbow: 2.0.0
 
-  '@zod/core@0.3.3': {}
+  '@zod/core@0.8.1': {}
 
   JSONStream@1.3.5:
     dependencies:
@@ -7057,9 +7057,9 @@ snapshots:
 
   date-fns@4.1.0: {}
 
-  db0@0.3.1(drizzle-orm@0.41.0(gel@2.0.1)(postgres@3.4.5)):
+  db0@0.3.1(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5)):
     optionalDependencies:
-      drizzle-orm: 0.41.0(gel@2.0.1)(postgres@3.4.5)
+      drizzle-orm: 0.42.0(gel@2.0.1)(postgres@3.4.5)
 
   debug@4.4.0:
     dependencies:
@@ -7155,15 +7155,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.41.0(gel@2.0.1)(postgres@3.4.5):
+  drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5):
     optionalDependencies:
       gel: 2.0.1
       postgres: 3.4.5
 
-  drizzle-zod@0.7.1(drizzle-orm@0.41.0(gel@2.0.1)(postgres@3.4.5))(zod@4.0.0-beta.20250411T005215):
+  drizzle-zod@0.7.1(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5))(zod@4.0.0-beta.20250420T053007):
     dependencies:
-      drizzle-orm: 0.41.0(gel@2.0.1)(postgres@3.4.5)
-      zod: 4.0.0-beta.20250411T005215
+      drizzle-orm: 0.42.0(gel@2.0.1)(postgres@3.4.5)
+      zod: 4.0.0-beta.20250420T053007
 
   dunder-proto@1.0.1:
     dependencies:
@@ -9329,7 +9329,7 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  unstorage@1.15.0(patch_hash=96447cda99e755e55f17c8a5bbbde79973f25c16d5223a793abac6811309b778)(aws4fetch@1.0.20)(db0@0.3.1(drizzle-orm@0.41.0(gel@2.0.1)(postgres@3.4.5))):
+  unstorage@1.15.0(patch_hash=96447cda99e755e55f17c8a5bbbde79973f25c16d5223a793abac6811309b778)(aws4fetch@1.0.20)(db0@0.3.1(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5))):
     dependencies:
       anymatch: 3.1.3
       chokidar: 4.0.3
@@ -9341,7 +9341,7 @@ snapshots:
       ufo: 1.5.4
     optionalDependencies:
       aws4fetch: 1.0.20
-      db0: 0.3.1(drizzle-orm@0.41.0(gel@2.0.1)(postgres@3.4.5))
+      db0: 0.3.1(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5))
 
   update-check@1.5.4:
     dependencies:
@@ -9573,6 +9573,6 @@ snapshots:
 
   yocto-queue@1.2.1: {}
 
-  zod@4.0.0-beta.20250411T005215:
+  zod@4.0.0-beta.20250420T053007:
     dependencies:
-      '@zod/core': 0.3.3
+      '@zod/core': 0.8.1
