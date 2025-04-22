@@ -23,14 +23,9 @@ import { toast } from "@karr/ui/components/sonner"
 
 import { apiFetch } from "@/util/apifetch"
 import Loading from "@/components/Loading"
-import { QueryProvider } from "@/components/QueryProvider"
 
 export default function TripList({ userid }: { userid: string }) {
-    return (
-        <QueryProvider>
-            <FetchTrips userid={userid} />
-        </QueryProvider>
-    )
+    return <FetchTrips userid={userid} />
 }
 
 function FetchTrips({ userid }: { userid: string }) {

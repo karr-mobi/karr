@@ -6,14 +6,9 @@ import { useTranslations } from "next-intl"
 import { Badge } from "@karr/ui/components/badge"
 
 import { apiFetch } from "@/util/apifetch"
-import { QueryProvider } from "@/components/QueryProvider"
 
 export default function UserInfo({ userid }: { userid: string }) {
-    return (
-        <QueryProvider>
-            <FetchUserData userid={userid} />
-        </QueryProvider>
-    )
+    return <FetchUserData userid={userid} />
 }
 
 function FetchUserData({ userid }: { userid: string }) {

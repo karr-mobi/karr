@@ -6,14 +6,14 @@ import { getMessages } from "next-intl/server"
 
 import { Toaster } from "@karr/ui/components/sonner"
 
-import "@/assets/globals.css"
-
 import { routing } from "@/i18n/routing"
 import { APPLICATION_NAME } from "@/util/appname"
+import "@/assets/globals.css"
+import { Locale } from "@/../global"
 
-import Footer from "../_components/footer"
-import Header from "../_components/header"
-import ThemeProvider from "../_components/ThemeProvider"
+import { Footer } from "~/_components/footer"
+import { Header } from "~/_components/header"
+import { Providers } from "~/_components/Providers"
 
 const geistSans = localFont({
     src: "../../assets/fonts/GeistVF.woff",
@@ -36,12 +36,12 @@ export default async function RootLayout({
     params
 }: Readonly<{
     children: React.ReactNode
-    params: Promise<{ locale: string }>
+    params: Promise<{ locale: Locale }>
 }>) {
     const { locale } = await params
 
     // Ensure that the incoming `locale` is valid
-    if (!routing.locales.includes(locale as "en" | "fr")) {
+    if (!routing.locales.includes(locale)) {
         notFound()
     }
 
@@ -59,12 +59,7 @@ export default async function RootLayout({
                 {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js" async /> */}
             </head>
             <body>
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange
-                >
+                <Providers>
                     <NextIntlClientProvider messages={messages}>
                         <div className="grid h-screen grid-cols-1 grid-rows-[auto_1fr]">
                             <Header />
@@ -75,7 +70,7 @@ export default async function RootLayout({
                         </div>
                         <Toaster richColors />
                     </NextIntlClientProvider>
-                </ThemeProvider>
+                </Providers>
             </body>
         </html>
     )

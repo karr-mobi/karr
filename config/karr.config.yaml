@@ -10,7 +10,7 @@ ADMIN_EMAIL: foo@bar.com
 FEDERATION: true
 FEDERATION_TARGETS:
     - name: Karr Live
-      url: https://karr.mobi
+      url: https://karr2.finxol.io
 DB_CONFIG:
     host: localhost
     port: 5432

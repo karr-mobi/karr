@@ -6,7 +6,7 @@ import { LocaleSwitcher } from "./footer/LocaleSwitcher"
 import { ThemeSwitch } from "./footer/ThemeSwitch"
 import { isProduction, version } from "./footer/version"
 
-export default function Footer() {
+export function Footer() {
     return (
         <footer className="flex w-full flex-col items-center justify-between px-4 py-2">
             <Separator />

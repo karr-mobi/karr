@@ -14,7 +14,7 @@ const MemoizedAppName = memo(
     () => false // Never update
 )
 
-export default async function Header() {
+export async function Header() {
     const isAuthenticated = await auth()
 
     return (
