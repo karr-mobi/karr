@@ -1,6 +1,6 @@
 import { Spinner } from "@karr/ui/components/spinner"
 
-export default function Loading() {
+export function Loading() {
     return (
         <div className="flex flex-row items-center justify-center gap-4">
             <Spinner variant="ring" />
@@ -8,3 +8,5 @@ export default function Loading() {
         </div>
     )
 }
+
+export default Loading
