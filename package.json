@@ -28,7 +28,7 @@
         "turbo": "catalog:tooling",
         "typescript": "catalog:tooling"
     },
-    "packageManager": "pnpm@10.8.0",
+    "packageManager": "pnpm@10.9.0",
     "engines": {
         "node": ">=22"
     },
@@ -50,7 +50,9 @@
         "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
             "biome format --write --no-errors-on-unmatched"
         ],
-        "*": ["biome format --write --no-errors-on-unmatched --files-ignore-unknown=true"]
+        "*": [
+            "biome format --write --no-errors-on-unmatched --files-ignore-unknown=true"
+        ]
     },
     "changelog": {
         "repo": "finxol/karr",
