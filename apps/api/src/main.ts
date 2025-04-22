@@ -15,7 +15,9 @@ if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
     )
 }
 
-logger.info(`Starting server in ${PRODUCTION ? "production" : "development"} mode`)
+logger.info(
+    `Starting server in ${PRODUCTION ? "production" : "development"} mode`
+)
 logger.info(`TZ=${Intl.DateTimeFormat().resolvedOptions().timeZone}`)
 
 // Run the server!

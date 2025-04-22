@@ -71,7 +71,10 @@ function ShowUserData({ data: { data: user } }: { data: any }) {
 
                     {!hasSpecialStatus && (
                         <Badge variant="destructive">
-                            <p>{user.SpecialStatus?.name || t("no-special-status")}</p>
+                            <p>
+                                {user.SpecialStatus?.name ||
+                                    t("no-special-status")}
+                            </p>
                         </Badge>
                     )}
                 </aside>
@@ -85,7 +88,9 @@ function ShowUserData({ data: { data: user } }: { data: any }) {
                 </div>
             </section>
             <details className="mt-12 text-sm">
-                <summary className="text-gray-300 dark:text-gray-700">See raw</summary>
+                <summary className="text-gray-300 dark:text-gray-700">
+                    See raw
+                </summary>
                 <pre>{JSON.stringify(user, null, 2)}</pre>
             </details>
         </div>

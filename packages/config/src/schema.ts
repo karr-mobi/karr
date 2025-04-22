@@ -86,7 +86,9 @@ export const FullConfigSchema = z.object({
     ),
     LOG_TIMESTAMP: z.boolean(),
     LOG_LEVEL: LogLevelSchema.default(
-        !(process.env.NODE_ENV === "production" || process.env.DOCKER) ? "trace" : "info"
+        !(process.env.NODE_ENV === "production" || process.env.DOCKER)
+            ? "trace"
+            : "info"
     ),
     ADMIN_EMAIL: z.email().optional(),
     FEDERATION: z.boolean(),

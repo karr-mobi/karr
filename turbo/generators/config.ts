@@ -24,15 +24,20 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
             // Handle template (.hbs) files
             {
                 type: "addMany",
-                destination: "{{ turbo.paths.root }}/packages/{{ dashCase name }}",
+                destination:
+                    "{{ turbo.paths.root }}/packages/{{ dashCase name }}",
                 templateFiles: "templates/package/**/*.hbs",
                 base: "templates/package"
             },
             // Handle non-template files
             {
                 type: "addMany",
-                destination: "{{ turbo.paths.root }}/packages/{{ dashCase name }}",
-                templateFiles: ["templates/package/**/*", "!templates/package/**/*.hbs"],
+                destination:
+                    "{{ turbo.paths.root }}/packages/{{ dashCase name }}",
+                templateFiles: [
+                    "templates/package/**/*",
+                    "!templates/package/**/*.hbs"
+                ],
                 base: "templates/package",
                 globOptions: {
                     dot: true // Include dotfiles

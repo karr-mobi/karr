@@ -62,7 +62,11 @@ export const Calendar = ({
             }}
             components={{
                 Chevron: ({ className, orientation = "left", ...props }) => (
-                    <Chevron className={className} orientation={orientation} {...props} />
+                    <Chevron
+                        className={className}
+                        orientation={orientation}
+                        {...props}
+                    />
                 )
             }}
             {...props}

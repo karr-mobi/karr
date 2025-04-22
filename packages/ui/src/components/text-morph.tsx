@@ -35,7 +35,11 @@ export function TextMorph({
     }, [children, uniqueId])
 
     return (
-        <Component className={cn(className)} aria-label={children} style={style}>
+        <Component
+            className={cn(className)}
+            aria-label={children}
+            style={style}
+        >
             <AnimatePresence mode="popLayout" initial={false}>
                 {characters.map((character) => (
                     <motion.span

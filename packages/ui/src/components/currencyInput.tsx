@@ -18,7 +18,8 @@ export function CurrencyInput({
     onBlur // Add this
 }: CurrencyInputProps) {
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const newValue = event.target.value === "" ? 0 : parseFloat(event.target.value)
+        const newValue =
+            event.target.value === "" ? 0 : parseFloat(event.target.value)
         onChange(newValue)
     }
 

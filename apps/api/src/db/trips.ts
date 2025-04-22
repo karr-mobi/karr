@@ -77,7 +77,10 @@ export async function addTrip(trip: NewTrip) {
     return ok(insertedTrip.data)
 }
 
-export async function deleteTrip(tripId: string, userId: string): Promise<boolean> {
+export async function deleteTrip(
+    tripId: string,
+    userId: string
+): Promise<boolean> {
     await drizzle
         .delete(tripsTable)
         .where(and(eq(tripsTable.id, tripId), eq(tripsTable.account, userId)))

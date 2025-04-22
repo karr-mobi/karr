@@ -59,7 +59,9 @@ function resolveConfigPath(): string | undefined {
 
     const fileWithoutExt = resolvePath(CONFIG_DIR, CONFIG_FILENAME)
 
-    const ext = acceptedExtensions.find((ext) => existsSync(`${fileWithoutExt}.${ext}`))
+    const ext = acceptedExtensions.find((ext) =>
+        existsSync(`${fileWithoutExt}.${ext}`)
+    )
 
     if (ext) {
         const file = `${fileWithoutExt}.${ext}`
@@ -202,12 +204,12 @@ export function loadFullConfig(): FullConfig {
     }
 
     if (process.env.FEDERATION_TARGETS) {
-        config.FEDERATION_TARGETS = process.env.FEDERATION_TARGETS.split(",").map(
-            (target) => ({
-                name: target,
-                url: target
-            })
-        )
+        config.FEDERATION_TARGETS = process.env.FEDERATION_TARGETS.split(
+            ","
+        ).map((target) => ({
+            name: target,
+            url: target
+        }))
     }
 
     config.API_BASE += "/" + API_VERSION

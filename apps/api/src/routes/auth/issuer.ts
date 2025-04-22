@@ -134,7 +134,8 @@ app.get("/callback", async (ctx) => {
             cause: ctx.req.query("error_description")
         })
 
-    if (!code) return responseErrorObject(ctx, { message: "No code provided" }, 400)
+    if (!code)
+        return responseErrorObject(ctx, { message: "No code provided" }, 400)
 
     const exchanged = await client.exchange(code, callbackUrl)
 

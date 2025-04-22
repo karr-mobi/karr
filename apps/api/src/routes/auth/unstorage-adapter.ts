@@ -33,13 +33,19 @@
  *
  * @packageDocumentation
  */
-import { joinKey, splitKey, StorageAdapter } from "@openauthjs/openauth/storage/storage"
+import {
+    joinKey,
+    splitKey,
+    StorageAdapter
+} from "@openauthjs/openauth/storage/storage"
 import { createStorage, type Driver as UnstorageDriver } from "unstorage"
 
 //eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Entry = { value: Record<string, any> | undefined; expiry?: number }
 
-export function UnStorage({ driver }: { driver?: UnstorageDriver } = {}): StorageAdapter {
+export function UnStorage({
+    driver
+}: { driver?: UnstorageDriver } = {}): StorageAdapter {
     const store = createStorage<Entry>({
         driver: driver
     })

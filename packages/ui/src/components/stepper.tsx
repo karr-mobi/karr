@@ -85,17 +85,24 @@ const Stepper = ({
     }
 
     return (
-        <div className={cn("flex flex-col items-center justify-center gap-8", className)}>
+        <div
+            className={cn(
+                "flex flex-col items-center justify-center gap-8",
+                className
+            )}
+        >
             <div className="flex items-center gap-6 relative">
-                {Array.from({ length: steps }).map((_dot: unknown, index: number) => (
-                    <div
-                        key={index}
-                        className={cn(
-                            "size-2 rounded-full relative z-10",
-                            index < step ? "bg-white" : "bg-gray-300"
-                        )}
-                    />
-                ))}
+                {Array.from({ length: steps }).map(
+                    (_dot: unknown, index: number) => (
+                        <div
+                            key={index}
+                            className={cn(
+                                "size-2 rounded-full relative z-10",
+                                index < step ? "bg-white" : "bg-gray-300"
+                            )}
+                        />
+                    )
+                )}
 
                 {/* Green progress overlay */}
                 <motion.div
@@ -124,7 +131,12 @@ const Stepper = ({
                             key={index}
                             initial={{ x: index === 0 ? 0 : 300, opacity: 0 }}
                             animate={{
-                                x: index + 1 === step ? 0 : index + 1 < step ? -300 : 300,
+                                x:
+                                    index + 1 === step
+                                        ? 0
+                                        : index + 1 < step
+                                          ? -300
+                                          : 300,
                                 opacity: index + 1 === step ? 1 : 0
                             }}
                             transition={{
@@ -182,7 +194,9 @@ const Stepper = ({
                         </motion.div>
                     )}
 
-                    <TextMorph>{step === steps ? t("submit") : t("next")}</TextMorph>
+                    <TextMorph>
+                        {step === steps ? t("submit") : t("next")}
+                    </TextMorph>
 
                     {/* Next step icon */}
                     {step !== steps && (

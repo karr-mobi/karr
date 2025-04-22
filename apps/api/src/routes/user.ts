@@ -25,7 +25,11 @@ hono.get("/", async (c) => {
     // Middleware should prevent this, but good practice to check
     if (!subject?.properties?.userID) {
         logger.error("User subject missing in context for GET /user")
-        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+        return responseErrorObject(
+            c,
+            "Internal Server Error: Subject missing",
+            500
+        )
     }
 
     // get the user from the database and send it back
@@ -54,7 +58,11 @@ hono.put("/nickname", async (c) => {
     // Middleware should prevent this, but good practice to check
     if (!subject?.properties?.userID) {
         logger.error("User subject missing in context for GET /user")
-        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+        return responseErrorObject(
+            c,
+            "Internal Server Error: Subject missing",
+            500
+        )
     }
 
     const { nickname } = await c.req.json()

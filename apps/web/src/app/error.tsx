@@ -3,7 +3,9 @@
 // Error components must be client components
 import { Link } from "@/i18n/routing"
 
-export default function Error({ error }: { error: Error & { digest?: string } }) {
+export default function Error({
+    error
+}: { error: Error & { digest?: string } }) {
     console.error(error)
 
     return (

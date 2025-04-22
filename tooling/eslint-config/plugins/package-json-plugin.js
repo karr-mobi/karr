@@ -49,7 +49,10 @@ export default {
                                             !version.startsWith("catalog:")
                                         ) {
                                             // Check for broad version specs
-                                            if (version === "*" || version === "latest") {
+                                            if (
+                                                version === "*" ||
+                                                version === "latest"
+                                            ) {
                                                 context.report({
                                                     node: dep,
                                                     message: `Broad version specification for "${depName}" is not allowed. Please specify a specific version.`

@@ -21,11 +21,19 @@ const Pinwheel = ({ className, ...props }: SpinnerVariantProps) => (
     <LoaderPinwheelIcon className={cn("animate-spin", className)} {...props} />
 )
 
-const CircleFilled = ({ className, size = 24, ...props }: SpinnerVariantProps) => (
+const CircleFilled = ({
+    className,
+    size = 24,
+    ...props
+}: SpinnerVariantProps) => (
     <div className="relative" style={{ width: size, height: size }}>
         <div className="absolute inset-0 rotate-180">
             <LoaderCircleIcon
-                className={cn("animate-spin", className, "text-foreground opacity-20")}
+                className={cn(
+                    "animate-spin",
+                    className,
+                    "text-foreground opacity-20"
+                )}
                 size={size}
                 {...props}
             />

@@ -6,7 +6,9 @@ import defaultConfig from "@/default_config.json" with { type: "json" }
 import { loadDbConfig, loadFullConfig } from "@/loader.js"
 import { ConfigFileSchema, FullConfigSchema } from "@/schema.js"
 import staticConfig from "@/static.js"
-import sampleConfigJson from "@/test/fixtures/sample_config.json" with { type: "json" }
+import sampleConfigJson from "@/test/fixtures/sample_config.json" with {
+    type: "json"
+}
 
 defaultConfig.API_BASE += "/" + staticConfig.API_VERSION
 
@@ -118,7 +120,9 @@ describe("config module", () => {
             LOG_LEVEL: "debug"
         }
 
-        vi.mocked(loadFullConfig).mockReturnValue(FullConfigSchema.parse(customConfig))
+        vi.mocked(loadFullConfig).mockReturnValue(
+            FullConfigSchema.parse(customConfig)
+        )
 
         const { default: config } = await import("@/config.js")
 
@@ -139,7 +143,9 @@ describe("config module", () => {
             LOG_LEVEL: "warn"
         }
 
-        vi.mocked(loadFullConfig).mockReturnValue(FullConfigSchema.parse(customConfig))
+        vi.mocked(loadFullConfig).mockReturnValue(
+            FullConfigSchema.parse(customConfig)
+        )
 
         const { default: config } = await import("@/config.js")
 
@@ -256,13 +262,17 @@ describe("config module", () => {
             // existsSync should return true when checking for the password file
             // but false when checking for the config file
             vi.mocked(existsSync).mockImplementation((path) => {
-                return normalize(path.toString()).endsWith(normalize(passwordFile))
+                return normalize(path.toString()).endsWith(
+                    normalize(passwordFile)
+                )
             })
 
             // readFileSync should return the password when checking for the password file
             // but return the config file contents when checking for the config file
             vi.mocked(readFileSync).mockImplementation((path) => {
-                if (normalize(path.toString()).endsWith(normalize(passwordFile))) {
+                if (
+                    normalize(path.toString()).endsWith(normalize(passwordFile))
+                ) {
                     return password
                 }
                 return readFileSync("./fixtures/sample_config.yaml")
@@ -272,7 +282,9 @@ describe("config module", () => {
             const dbConfig = getDbConfig()
 
             expect(dbConfig.password).toBe(password)
-            expect(existsSync).toHaveBeenCalledWith(join(process.cwd(), passwordFile))
+            expect(existsSync).toHaveBeenCalledWith(
+                join(process.cwd(), passwordFile)
+            )
 
             // Verify the connection string
             expect(dbConfig.connStr).toBe(

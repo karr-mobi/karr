@@ -12,7 +12,10 @@ import { tryCatch } from "@karr/util"
  */
 export async function updateEmail(id: string, email: string) {
     const success = await tryCatch(
-        drizzle.update(accountsTable).set({ email }).where(eq(accountsTable.id, id))
+        drizzle
+            .update(accountsTable)
+            .set({ email })
+            .where(eq(accountsTable.id, id))
     )
 
     if (success.error) {

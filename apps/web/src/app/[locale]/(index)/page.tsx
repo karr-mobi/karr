@@ -33,7 +33,10 @@ export default function Home() {
                         placeholder="blur"
                     />
                     <Button className="mt-4" asChild>
-                        <Link href="https://github.com/finxol/karr" target="_blank">
+                        <Link
+                            href="https://github.com/finxol/karr"
+                            target="_blank"
+                        >
                             GitHub live
                         </Link>
                     </Button>

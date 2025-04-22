@@ -39,7 +39,9 @@ export async function getCallbackUrl() {
     const issuerUrl = authBaseUrl(API_BASE, APP_URL)
 
     if (!issuerUrl) {
-        logger.error("Issuer URL must be provided at runtime to getCallbackUrl.")
+        logger.error(
+            "Issuer URL must be provided at runtime to getCallbackUrl."
+        )
         return ""
     }
     const callbackUrl = `${issuerUrl.replace(/\/$/, "")}${callbackPath}`

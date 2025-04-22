@@ -45,7 +45,10 @@ export async function selectUserById(id: string) {
 export async function updateNickname(id: string, nickname: string) {
     logger.debug(`Updating nickname for user ${id} to ${nickname}`)
     const { error } = await tryCatch(
-        drizzle.update(usersTable).set({ nickname }).where(eq(usersTable.id, id))
+        drizzle
+            .update(usersTable)
+            .set({ nickname })
+            .where(eq(usersTable.id, id))
     )
     if (error) {
         logger.error(`Failed to update nickname for user ${id}: ${error}`)
@@ -69,7 +72,9 @@ export async function selectUserProfileById(id: string) {
     )
 
     if (users.error) {
-        logger.error(`Failed to get user profile for user ${id}: ${users.error}`)
+        logger.error(
+            `Failed to get user profile for user ${id}: ${users.error}`
+        )
         return err("Failed to get user profile")
     }
 

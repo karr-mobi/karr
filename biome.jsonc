@@ -9,7 +9,7 @@
         "indentStyle": "space",
         "indentWidth": 4,
         "lineEnding": "lf",
-        "lineWidth": 90,
+        "lineWidth": 80,
         "attributePosition": "auto",
         "bracketSpacing": true,
         "ignore": ["**/pnpm-lock.yaml", "**/migrations/**/*"]

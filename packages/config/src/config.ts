@@ -62,13 +62,16 @@ export function getDbConfig(): DbConfig {
 
     const parsed = DbConfigSchema.safeParse(<DbConfig>{
         host: process.env.DB_HOST || fileConfig.DB_CONFIG?.host || "localhost",
-        port: toInt(process.env.DB_PORT || fileConfig.DB_CONFIG?.port || "5432"),
+        port: toInt(
+            process.env.DB_PORT || fileConfig.DB_CONFIG?.port || "5432"
+        ),
         ssl: process.env.DB_SSL || fileConfig.DB_CONFIG?.ssl || false,
         name: process.env.DB_NAME || fileConfig.DB_CONFIG?.db_name || "karr",
         user: process.env.DB_USER || fileConfig.DB_CONFIG?.user || "postgres",
         password:
             getDbPasswordFromFile(
-                process.env.DB_PASSWORD_FILE || fileConfig.DB_CONFIG?.password_file
+                process.env.DB_PASSWORD_FILE ||
+                    fileConfig.DB_CONFIG?.password_file
             ) ||
             process.env.DB_PASSWORD ||
             fileConfig.DB_CONFIG?.password,

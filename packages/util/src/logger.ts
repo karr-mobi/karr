@@ -190,7 +190,10 @@ export const logger = {
      */
     debug: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug"].includes(LOG_LEVEL)) {
-            console.debug(magenta(`${prefix()}🐞 ${underline("DEBUG")} >`), title)
+            console.debug(
+                magenta(`${prefix()}🐞 ${underline("DEBUG")} >`),
+                title
+            )
             args.forEach((arg) => {
                 formatArg(arg)
                     .split("\n")

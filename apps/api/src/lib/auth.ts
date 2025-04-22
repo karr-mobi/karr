@@ -31,7 +31,10 @@ export async function authenticate(email: string, password: string) {
         return err("Invalid email or password")
     }
 
-    const hashedPassword = crypto.createHash("sha256").update(password).digest("hex")
+    const hashedPassword = crypto
+        .createHash("sha256")
+        .update(password)
+        .digest("hex")
 
     if (hashedPassword !== user.value[0].password) {
         return err("Invalid email or password")
@@ -62,7 +65,11 @@ export async function login(email: string, password: string) {
             .returning({ token: accountsTable.token })
     )
 
-    if (saved.error || saved.value.length === 0 || saved.value[0] === undefined) {
+    if (
+        saved.error ||
+        saved.value.length === 0 ||
+        saved.value[0] === undefined
+    ) {
         logger.error(`Failed to save token: ${token}`)
         return err("An error occurred while saving the token")
     }
@@ -76,7 +83,10 @@ export async function register(email: string, password: string) {
             .insert(accountsTable)
             .values({
                 email,
-                password: crypto.createHash("sha256").update(password).digest("hex"),
+                password: crypto
+                    .createHash("sha256")
+                    .update(password)
+                    .digest("hex"),
                 blocked: false,
                 verified: true
             })
@@ -141,7 +151,11 @@ export async function getAccount(token: string) {
             .limit(1)
     )
 
-    if (account.error || account.value.length === 0 || account.value[0] === undefined) {
+    if (
+        account.error ||
+        account.value.length === 0 ||
+        account.value[0] === undefined
+    ) {
         return err("Invalid authorization token")
     }
 

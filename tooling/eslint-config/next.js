@@ -78,7 +78,8 @@ export const nextJsConfig = [
         },
         rules: {
             // ENABLE the custom rule HERE
-            "server-only-karr-config/enforce-server-only-for-karr-config": "error",
+            "server-only-karr-config/enforce-server-only-for-karr-config":
+                "error",
 
             // Keep your existing no-restricted-imports rule
             "no-restricted-imports": [
@@ -88,7 +89,8 @@ export const nextJsConfig = [
                         // Consistently import navigation APIs from `@/i18n/routing`
                         {
                             name: "next/link",
-                            message: "Please import Link from `@/i18n/routing` instead."
+                            message:
+                                "Please import Link from `@/i18n/routing` instead."
                         },
                         {
                             name: "next/navigation",
@@ -98,7 +100,8 @@ export const nextJsConfig = [
                                 "useRouter",
                                 "usePathname"
                             ],
-                            message: "Please import from `@/i18n/routing` instead."
+                            message:
+                                "Please import from `@/i18n/routing` instead."
                         }
                     ]
                 }

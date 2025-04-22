@@ -87,7 +87,11 @@ hono.post("/add", async (c) => {
     // Middleware should prevent this, but good practice to check
     if (!subject?.properties?.userID) {
         logger.error("User subject missing in context for GET /user")
-        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+        return responseErrorObject(
+            c,
+            "Internal Server Error: Subject missing",
+            500
+        )
     }
 
     const t = await c.req.json<NewTrip>()
@@ -124,21 +128,30 @@ hono.post("/add", async (c) => {
  * @param id The ID of the trip
  * @returns The trip
  */
-hono.delete("/:id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}", (c) => {
-    // Get the subject from the context
-    const subject = c.get("userSubject")
+hono.delete(
+    "/:id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}",
+    (c) => {
+        // Get the subject from the context
+        const subject = c.get("userSubject")
 
-    // Middleware should prevent this, but good practice to check
-    if (!subject?.properties?.userID) {
-        logger.error("User subject missing in context for GET /user")
-        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+        // Middleware should prevent this, but good practice to check
+        if (!subject?.properties?.userID) {
+            logger.error("User subject missing in context for GET /user")
+            return responseErrorObject(
+                c,
+                "Internal Server Error: Subject missing",
+                500
+            )
+        }
+
+        const tripId: string = c.req.param("id")
+
+        logger.debug(`Deleting trip: ${subject.properties.userID} ${tripId}`)
+        return handleRequest(c, () =>
+            deleteTrip(tripId, subject.properties.userID)
+        )
     }
-
-    const tripId: string = c.req.param("id")
-
-    logger.debug(`Deleting trip: ${subject.properties.userID} ${tripId}`)
-    return handleRequest(c, () => deleteTrip(tripId, subject.properties.userID))
-})
+)
 
 /**
  * Get a trip by ID

@@ -7,7 +7,10 @@ import { CalendarDays as IconCalendarDays } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useForm } from "react-hook-form"
 
-import { NewTripInputSchema, type NewTripInput } from "@karr/db/schemas/trips.js"
+import {
+    NewTripInputSchema,
+    type NewTripInput
+} from "@karr/db/schemas/trips.js"
 import { Button } from "@karr/ui/components/button"
 import { Calendar } from "@karr/ui/components/calendar"
 import { CurrencyInput } from "@karr/ui/components/currencyInput"
@@ -21,7 +24,11 @@ import {
     FormMessage
 } from "@karr/ui/components/form"
 import { Input } from "@karr/ui/components/input"
-import { Popover, PopoverContent, PopoverTrigger } from "@karr/ui/components/popover"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger
+} from "@karr/ui/components/popover"
 import { toast } from "@karr/ui/components/sonner"
 import { cn } from "@karr/ui/lib/utils"
 
@@ -95,7 +102,9 @@ export default function NewTripForm() {
                                 <Input placeholder="Rennes" {...field} />
                             </FormControl>
                             <FormDescription />
-                            <FormMessage>{form.formState.errors.to?.message}</FormMessage>
+                            <FormMessage>
+                                {form.formState.errors.to?.message}
+                            </FormMessage>
                         </FormItem>
                     )}
                 />
@@ -112,11 +121,15 @@ export default function NewTripForm() {
                                             variant={"outline"}
                                             className={cn(
                                                 "pl-3 text-left font-normal w-full",
-                                                !field.value && "text-muted-foreground"
+                                                !field.value &&
+                                                    "text-muted-foreground"
                                             )}
                                         >
                                             {mounted && field.value ? (
-                                                format(field.value, "dd/MM/yyyy")
+                                                format(
+                                                    field.value,
+                                                    "dd/MM/yyyy"
+                                                )
                                             ) : (
                                                 <span>{t("pick-date")}</span>
                                             )}

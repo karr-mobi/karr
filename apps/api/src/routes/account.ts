@@ -3,7 +3,11 @@ import { Hono } from "hono"
 import logger from "@karr/util/logger"
 
 import { handleRequest, responseErrorObject } from "@/lib/helpers"
-import type { AccountVerified, AppVariables, DataResponse } from "@/lib/types.d.ts"
+import type {
+    AccountVerified,
+    AppVariables,
+    DataResponse
+} from "@/lib/types.d.ts"
 import { isVerified, updateEmail } from "@/db/accounts"
 
 const hono = new Hono<{ Variables: AppVariables }>()
@@ -29,7 +33,11 @@ hono.put("/email", async (c) => {
     // Middleware should prevent this, but good practice to check
     if (!subject?.properties?.userID) {
         logger.error("User subject missing in context for GET /user")
-        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+        return responseErrorObject(
+            c,
+            "Internal Server Error: Subject missing",
+            500
+        )
     }
 
     const { email } = await c.req.json()
@@ -55,7 +63,11 @@ hono.get("/verified", async (c) => {
     // Middleware should prevent this, but good practice to check
     if (!subject?.properties?.userID) {
         logger.error("User subject missing in context for GET /user")
-        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+        return responseErrorObject(
+            c,
+            "Internal Server Error: Subject missing",
+            500
+        )
     }
 
     // Check if the user is verified
@@ -78,7 +90,11 @@ hono.delete("/", async (c) => {
     // Middleware should prevent this, but good practice to check
     if (!subject?.properties?.userID) {
         logger.error("User subject missing in context for GET /user")
-        return responseErrorObject(c, "Internal Server Error: Subject missing", 500)
+        return responseErrorObject(
+            c,
+            "Internal Server Error: Subject missing",
+            500
+        )
     }
 
     logger.debug(`Deleting user ${subject.properties.userID}`)

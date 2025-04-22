@@ -55,9 +55,14 @@ export function DesktopNavMenu() {
             <nav className="flex items-center space-x-4">
                 <Separator orientation="vertical" className="h-8" />
                 {menuItems.map((cat, index) => (
-                    <DropdownMenu key={`desktop-menu-category-${index}-${cat.label}`}>
+                    <DropdownMenu
+                        key={`desktop-menu-category-${index}-${cat.label}`}
+                    >
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="flex items-center gap-2">
+                            <Button
+                                variant="ghost"
+                                className="flex items-center gap-2"
+                            >
                                 {cat.icon ? (
                                     <cat.icon
                                         size={16}
@@ -95,8 +100,11 @@ export function DesktopNavMenu() {
                                                     aria-hidden="true"
                                                 />
                                             ) : (
-                                                cat.items.filter((it) => it.icon).length >
-                                                    0 && <div className="w-4"></div>
+                                                cat.items.filter(
+                                                    (it) => it.icon
+                                                ).length > 0 && (
+                                                    <div className="w-4"></div>
+                                                )
                                             )}
                                             {t(item.label)}
                                         </Link>
@@ -130,7 +138,9 @@ export function MobileNavMenu() {
                 <DropdownMenuContent>
                     {menuItems.map((cat, index) => (
                         <Fragment key={`menu-category-${index}-${cat.label}`}>
-                            <DropdownMenuLabel>{t(cat.label)}</DropdownMenuLabel>
+                            <DropdownMenuLabel>
+                                {t(cat.label)}
+                            </DropdownMenuLabel>
                             <DropdownMenuGroup>
                                 {cat.items.map((item) => (
                                     <DropdownMenuItem
@@ -156,9 +166,10 @@ export function MobileNavMenu() {
                                     </DropdownMenuItem>
                                 ))}
                             </DropdownMenuGroup>
-                            {menuItems.length > 1 && menuItems.at(-1) !== cat && (
-                                <DropdownMenuSeparator />
-                            )}
+                            {menuItems.length > 1 &&
+                                menuItems.at(-1) !== cat && (
+                                    <DropdownMenuSeparator />
+                                )}
                         </Fragment>
                     ))}
                 </DropdownMenuContent>

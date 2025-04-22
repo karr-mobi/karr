@@ -59,12 +59,14 @@ export default {
                                     karrConfigImportNodes.length > 0 &&
                                     !hasServerOnlyImport
                                 ) {
-                                    karrConfigImportNodes.forEach((importSourceNode) => {
-                                        context.report({
-                                            node: importSourceNode,
-                                            messageId: "restricted"
-                                        })
-                                    })
+                                    karrConfigImportNodes.forEach(
+                                        (importSourceNode) => {
+                                            context.report({
+                                                node: importSourceNode,
+                                                messageId: "restricted"
+                                            })
+                                        }
+                                    )
                                 }
 
                                 hasServerOnlyImport = false

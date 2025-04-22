@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from "react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { Earth as IconEarth, House as IconHouse, Trash as IconTrash } from "lucide-react"
+import {
+    Earth as IconEarth,
+    House as IconHouse,
+    Trash as IconTrash
+} from "lucide-react"
 
 import { TripSchema, type Trip } from "@karr/db/schemas/trips.js"
 import { Badge } from "@karr/ui/components/badge"
@@ -197,7 +201,10 @@ function TripCard({
                             {trip.from} – {trip.to}
                         </p>
                         {!trip.origin && (
-                            <Button variant="outline" onClick={() => onDelete(trip.id)}>
+                            <Button
+                                variant="outline"
+                                onClick={() => onDelete(trip.id)}
+                            >
                                 <IconTrash />
                             </Button>
                         )}
