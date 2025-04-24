@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.10.1
+
+[compare changes](https://github.com/finxol/karr/compare/v0.10.0...v0.10.1)
+
+### 📦 Build
+
+- Fix Dockerfile env var ([fd351b3](https://github.com/finxol/karr/commit/fd351b3))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.10.0
 
 [compare changes](https://github.com/finxol/karr/compare/v0.9.9...v0.10.0)
