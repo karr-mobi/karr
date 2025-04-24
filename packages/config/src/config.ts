@@ -6,17 +6,7 @@ import {
     loadDbConfig,
     loadFullConfig
 } from "./loader.js"
-import { toInt } from "./utils.js"
-
-export function lazy<T>(getter: () => T): { value: T } {
-    return {
-        get value() {
-            const value = getter()
-            Object.defineProperty(this, "value", { value })
-            return value
-        }
-    }
-}
+import { lazy, toInt } from "@karr/util"
 
 const config = lazy(() => loadFullConfig())
 

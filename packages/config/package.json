@@ -21,6 +21,7 @@
         }
     },
     "dependencies": {
+        "@karr/util": "workspace:*",
         "confbox": "catalog:",
         "tinyrainbow": "catalog:",
         "zod": "catalog:"
