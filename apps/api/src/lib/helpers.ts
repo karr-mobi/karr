@@ -54,7 +54,7 @@ export function responseErrorObject(
 export async function handleRequest<T>(c: Context, fn: () => Promise<T>) {
     const out = await tryCatch(fn())
 
-    if (out.error) {
+    if (!out.success) {
         logger.error(out.error)
         return responseErrorObject(
             c,

@@ -11,14 +11,14 @@ import { tryCatch } from "@karr/util/trycatch"
  * @returns Whether the update was successful
  */
 export async function updateEmail(id: string, email: string) {
-    const success = await tryCatch(
+    const { success } = await tryCatch(
         drizzle
             .update(accountsTable)
             .set({ email })
             .where(eq(accountsTable.id, id))
     )
 
-    if (success.error) {
+    if (!success) {
         return false
     }
 
@@ -41,7 +41,7 @@ export async function isVerified(id: string) {
             .limit(1)
     )
 
-    if (accounts.error) {
+    if (!accounts.success) {
         return {
             verified: false
         }
