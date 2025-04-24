@@ -19,6 +19,7 @@ export const {
     LOG_TIMESTAMP,
     LOG_LEVEL,
     ADMIN_EMAIL,
+    AUTH_PROVIDERS,
     FEDERATION,
     FEDERATION_TARGETS,
     APPLICATION_NAME,
@@ -26,6 +27,7 @@ export const {
 } = config.value
 
 export { logLevels } from "./schema.js"
+export type { AuthProvider } from "./schema.js"
 
 // ====================================================================
 // Database config

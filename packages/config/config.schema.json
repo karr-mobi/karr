@@ -90,6 +90,99 @@
                 }
             ]
         },
+        "AUTH_PROVIDERS": {
+            "oneOf": [
+                {
+                    "minItems": 1,
+                    "maxItems": 18,
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "oneOf": [
+                                            {
+                                                "enum": ["password"]
+                                            },
+                                            {
+                                                "enum": ["code"]
+                                            }
+                                        ]
+                                    }
+                                },
+                                "required": ["name"]
+                            },
+                            {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "oneOf": [
+                                            {
+                                                "enum": ["github"]
+                                            }
+                                        ]
+                                    },
+                                    "clientID": {
+                                        "type": "string"
+                                    },
+                                    "clientSecret": {
+                                        "type": "string"
+                                    },
+                                    "pkce": {
+                                        "oneOf": [
+                                            {
+                                                "type": "boolean"
+                                            },
+                                            {
+                                                "type": "null"
+                                            }
+                                        ]
+                                    },
+                                    "query": {
+                                        "oneOf": [
+                                            {
+                                                "type": "object",
+                                                "propertyNames": {
+                                                    "type": "string"
+                                                },
+                                                "additionalProperties": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            {
+                                                "type": "null"
+                                            }
+                                        ]
+                                    },
+                                    "trusted": {
+                                        "oneOf": [
+                                            {
+                                                "type": "boolean"
+                                            },
+                                            {
+                                                "type": "null"
+                                            }
+                                        ],
+                                        "default": false
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "clientID",
+                                    "clientSecret",
+                                    "trusted"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
         "FEDERATION_TARGETS": {
             "oneOf": [
                 {

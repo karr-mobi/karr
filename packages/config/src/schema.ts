@@ -27,6 +27,119 @@ export const apiBaseSchema = z
         error: "API base must only be a pathname, without a trailing slash"
     })
 
+export const authProvidersSchema = z
+    .array(
+        z.discriminatedUnion([
+            // Password and code auth
+            z.object({
+                name: z.union([z.literal("password"), z.literal("code")])
+            }),
+            // TODO: Generic OIDC provider
+            /* z.object({
+                name: z.literal("oidc"),
+                clientID: z.string(),
+                issuer: z.string(),
+                query: z.record(z.string(), z.string()).optional(),
+                scopes: z.array(z.string()).optional()
+            }), */
+            // TODO: Generic OAuth2 provider
+            /* z.object({
+                name: z.literal("oauth2"),
+                clientID: z.string(),
+                clientSecret: z.string(),
+                endpoint: z.object({
+                    authorization: z.string(),
+                    jwks: z.string().optional(),
+                    token: z.string()
+                }),
+                pkce: z.boolean().optional(),
+                query: z.record(z.string(), z.string()).optional(),
+                scopes: z.array(z.string())
+            }), */
+            // TODO: Apple OAuth2 provider
+            /* z.object({
+                name: z.literal("apple"),
+                clientID: z.string(),
+                clientSecret: z.string(),
+                pkce: z.boolean().optional(),
+                query: z.record(z.string(), z.string()).optional(),
+                response_mode: z.union([
+                    z.literal("query"),
+                    z.literal("form_post")
+                ]),
+                scopes: z.array(z.string())
+            }), */
+            // TODO: Slack OAuth2 provider
+            /* z.object({
+                name: z.literal("slack"),
+                clientID: z.string(),
+                clientSecret: z.string(),
+                pkce: z.boolean().optional(),
+                query: z.record(z.string(), z.string()).optional(),
+                scopes: z.array(
+                    z.union([
+                        z.literal("email"),
+                        z.literal("profile"),
+                        z.literal("openid")
+                    ])
+                ),
+                team: z.string()
+            }), */
+            // TODO: Cognito OAuth2 provider
+            /* z.object({
+                name: z.literal("cognito"),
+                clientID: z.string(),
+                clientSecret: z.string(),
+                domain: z.string(),
+                pkce: z.boolean().optional(),
+                query: z.record(z.string(), z.string()).optional(),
+                region: z.string(),
+                scopes: z.array(z.string())
+            }), */
+            // TODO: Keycloak OAuth2 provider
+            /* z.object({
+                name: z.literal("keycloak"),
+                baseUrl: z.string(),
+                clientID: z.string(),
+                clientSecret: z.string(),
+                pkce: z.boolean().optional(),
+                query: z.record(z.string(), z.string()).optional(),
+                realm: z.string(),
+                scopes: z.array(z.string())
+            }), */
+            // TODO: Microsoft OAuth2 provider
+            /* z.object({
+                name: z.literal("microsoft"),
+                clientID: z.string(),
+                clientSecret: z.string(),
+                pkce: z.boolean().optional(),
+                query: z.record(z.string(), z.string()).optional(),
+                scopes: z.array(z.string()),
+                tenant: z.string()
+            }), */
+            // Other built-in OAuth2 providers
+            z.object({
+                name: z.union([
+                    z.literal("github")
+                    // TODO: z.literal("google"),
+                    // TODO: z.literal("yahoo"),
+                    // TODO: z.literal("twitch"),
+                    // TODO: z.literal("facebook"),
+                    // TODO: z.literal("jumpcloud")
+                ]),
+                clientID: z.string(),
+                clientSecret: z.string(),
+                pkce: z.boolean().optional(),
+                query: z.record(z.string(), z.string()).optional(),
+                trusted: z.boolean().optional().default(false)
+            })
+        ])
+    )
+    .min(1)
+    .max(18)
+
+export type AuthProvider = z.infer<typeof authProvidersSchema>[number]
+
 export const ConfigFileSchema = z.object({
     APPLICATION_NAME: z.string().optional(),
     APP_URL: appUrlSchema.optional(),
@@ -36,6 +149,7 @@ export const ConfigFileSchema = z.object({
     LOG_LEVEL: LogLevelSchema.optional(),
     ADMIN_EMAIL: z.email().optional(),
     FEDERATION: z.boolean().optional(),
+    AUTH_PROVIDERS: authProvidersSchema.optional(),
     FEDERATION_TARGETS: z
         .array(
             z.object({
@@ -92,7 +206,8 @@ export const FullConfigSchema = z.object({
     ),
     ADMIN_EMAIL: z.email().optional(),
     FEDERATION: z.boolean(),
-    // TODO: move this to settings to be editable via the UI
+    AUTH_PROVIDERS: authProvidersSchema,
+    // TODO: move federation targets to settings to be editable via the UI
     FEDERATION_TARGETS: z.array(
         z.object({
             name: z.string(),

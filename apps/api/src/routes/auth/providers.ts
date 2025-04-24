@@ -1,4 +1,4 @@
-import { AUTH_PROVIDERS, type AuthProviders } from "@karr/config"
+import { AUTH_PROVIDERS, type AuthProvider } from "@karr/config"
 import logger from "@karr/logger"
 
 import { PasswordProvider } from "@openauthjs/openauth/provider/password"
@@ -6,22 +6,36 @@ import { CodeProvider } from "@openauthjs/openauth/provider/code"
 import { PasswordUI } from "@openauthjs/openauth/ui/password"
 import { CodeUI } from "@openauthjs/openauth/ui/code"
 import { OidcProvider } from "@openauthjs/openauth/provider/oidc"
-import { Oauth2Provider } from "@openauthjs/openauth/provider/oauth2"
-import { AppleProvider } from "@openauthjs/openauth/provider/apple"
-import { SlackProvider } from "@openauthjs/openauth/provider/slack"
-import { CognitoProvider } from "@openauthjs/openauth/provider/cognito"
-import { KeycloakProvider } from "@openauthjs/openauth/provider/keycloak"
-import { MicrosoftProvider } from "@openauthjs/openauth/provider/microsoft"
 import { GithubProvider } from "@openauthjs/openauth/provider/github"
-import { GoogleProvider } from "@openauthjs/openauth/provider/google"
-import { YahooProvider } from "@openauthjs/openauth/provider/yahoo"
-import { TwitchProvider } from "@openauthjs/openauth/provider/twitch"
-import { FacebookProvider } from "@openauthjs/openauth/provider/facebook"
-import { JumpCloudProvider } from "@openauthjs/openauth/provider/jumpcloud"
 import { Provider } from "@openauthjs/openauth/provider/provider"
 import { Prettify } from "@karr/util"
 
-export type Providers = AuthProviders[number]["name"]
+export type Providers = AuthProvider["name"]
+
+export const oauthProviders = [
+    // "oauth2",
+    // "apple",
+    // "slack",
+    // "cognito",
+    // "keycloak",
+    // "microsoft",
+    "github"
+    // "google",
+    // "yahoo",
+    // "twitch",
+    // "facebook",
+    // "jumpcloud"
+] as const
+export type OAuth2Provider = (typeof oauthProviders)[number]
+
+export const oidcProviders = [
+    "oidc"
+    // "apple",
+    // "facebook",
+    // "google",
+    // "microsoft"
+] as const
+export type OidcProvider = (typeof oidcProviders)[number]
 
 /**
  * Returns the auth providers configured in the application.
@@ -30,7 +44,7 @@ export type Providers = AuthProviders[number]["name"]
 function getProviders() {
     const providers: Prettify<Partial<Record<Providers, Provider>>> = {}
 
-    AUTH_PROVIDERS.forEach((provider) => {
+    AUTH_PROVIDERS.forEach((provider: AuthProvider) => {
         let providerConfig = null
         if (provider.name === "password") {
             providerConfig = PasswordProvider(
@@ -56,6 +70,13 @@ function getProviders() {
                         console.log(claims.email, code)
                 })
             )
+        } else if (provider.name === "github") {
+            const { name: _name, ...config } = provider
+            providerConfig = GithubProvider({
+                scopes: ["read:user", "user:email"],
+                ...config
+            })
+            /*
         } else if (provider.name === "oidc") {
             const { name: _name, ...config } = provider
             providerConfig = OidcProvider(config)
@@ -77,9 +98,6 @@ function getProviders() {
         } else if (provider.name === "microsoft") {
             const { name: _name, ...config } = provider
             providerConfig = MicrosoftProvider(config)
-        } else if (provider.name === "github") {
-            const { name: _name, ...config } = provider
-            providerConfig = GithubProvider(config)
         } else if (provider.name === "google") {
             const { name: _name, ...config } = provider
             providerConfig = GoogleProvider(config)
@@ -95,6 +113,7 @@ function getProviders() {
         } else if (provider.name === "jumpcloud") {
             const { name: _name, ...config } = provider
             providerConfig = JumpCloudProvider(config)
+         */
         } else {
             throw new Error(`Unknown auth provider: ${provider.name}`)
         }
