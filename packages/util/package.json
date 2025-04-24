@@ -19,9 +19,7 @@
             "default": "./dist/logger.js"
         }
     },
-    "dependencies": {
-        "@karr/config": "workspace:*"
-    },
+    "dependencies": {},
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
