@@ -22,8 +22,10 @@ hono.get("/", async (c) => {
     // Get the subject from the context
     const subject = c.get("userSubject")
 
+    logger.debug("User subject", subject)
+
     // Middleware should prevent this, but good practice to check
-    if (!subject?.properties?.userID) {
+    if (!subject?.properties?.id) {
         logger.error("User subject missing in context for GET /user")
         return responseErrorObject(
             c,
@@ -36,8 +38,8 @@ hono.get("/", async (c) => {
     return await handleRequest<unknown>(
         c,
         async () => ({
-            id: subject.properties.userID,
-            email: "test@example.org",
+            id: subject.properties.id,
+            email: subject.properties.name,
             blocked: false,
             verified: false
         })
@@ -56,7 +58,7 @@ hono.put("/nickname", async (c) => {
     const subject = c.get("userSubject")
 
     // Middleware should prevent this, but good practice to check
-    if (!subject?.properties?.userID) {
+    if (!subject?.properties?.id) {
         logger.error("User subject missing in context for GET /user")
         return responseErrorObject(
             c,
@@ -74,7 +76,7 @@ hono.put("/nickname", async (c) => {
 
     // update the user's nickname in the database
     return await handleRequest<boolean>(c, () =>
-        updateNickname(subject.properties.userID, nickname)
+        updateNickname(subject.properties.id, nickname)
     )
 })
 

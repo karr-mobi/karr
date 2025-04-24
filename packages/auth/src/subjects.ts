@@ -3,6 +3,10 @@ import { z } from "zod"
 
 export const subjects = createSubjects({
     user: z.object({
-        userID: z.string()
+        id: z.string(),
+        avatar: z.url().optional(),
+        name: z.string()
     })
 })
+
+export type UserSubject = z.infer<typeof subjects.user>

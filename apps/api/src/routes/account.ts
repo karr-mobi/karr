@@ -31,7 +31,7 @@ hono.put("/email", async (c) => {
     const subject = c.get("userSubject")
 
     // Middleware should prevent this, but good practice to check
-    if (!subject?.properties?.userID) {
+    if (!subject?.properties?.id) {
         logger.error("User subject missing in context for GET /user")
         return responseErrorObject(
             c,
@@ -49,7 +49,7 @@ hono.put("/email", async (c) => {
 
     // Change the email in the database
     return await handleRequest<boolean>(c, () =>
-        updateEmail(subject.properties.userID, email)
+        updateEmail(subject.properties.id, email)
     )
 })
 
@@ -61,7 +61,7 @@ hono.get("/verified", async (c) => {
     const subject = c.get("userSubject")
 
     // Middleware should prevent this, but good practice to check
-    if (!subject?.properties?.userID) {
+    if (!subject?.properties?.id) {
         logger.error("User subject missing in context for GET /user")
         return responseErrorObject(
             c,
@@ -72,7 +72,7 @@ hono.get("/verified", async (c) => {
 
     // Check if the user is verified
     return await handleRequest<AccountVerified>(c, () =>
-        isVerified(subject.properties.userID)
+        isVerified(subject.properties.id)
     )
 })
 
@@ -88,7 +88,7 @@ hono.delete("/", async (c) => {
     const subject = c.get("userSubject")
 
     // Middleware should prevent this, but good practice to check
-    if (!subject?.properties?.userID) {
+    if (!subject?.properties?.id) {
         logger.error("User subject missing in context for GET /user")
         return responseErrorObject(
             c,
@@ -97,7 +97,7 @@ hono.delete("/", async (c) => {
         )
     }
 
-    logger.debug(`Deleting user ${subject.properties.userID}`)
+    logger.debug(`Deleting user ${subject.properties.id}`)
 
     // delete the user's account from the database
     return await handleRequest<boolean>(c, async () => {

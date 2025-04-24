@@ -85,7 +85,7 @@ hono.post("/add", async (c) => {
     const subject = c.get("userSubject")
 
     // Middleware should prevent this, but good practice to check
-    if (!subject?.properties?.userID) {
+    if (!subject?.properties?.id) {
         logger.error("User subject missing in context for GET /user")
         return responseErrorObject(
             c,
@@ -95,8 +95,8 @@ hono.post("/add", async (c) => {
     }
 
     const t = await c.req.json<NewTrip>()
-    t.account = subject.properties.userID
-    logger.debug(`Adding trip: ${subject.properties.userID}`, t)
+    t.account = subject.properties.id
+    logger.debug(`Adding trip: ${subject.properties.id}`, t)
     const trip = NewTripSchema.safeParse(t)
 
     if (!trip.success) {
@@ -135,7 +135,7 @@ hono.delete(
         const subject = c.get("userSubject")
 
         // Middleware should prevent this, but good practice to check
-        if (!subject?.properties?.userID) {
+        if (!subject?.properties?.id) {
             logger.error("User subject missing in context for GET /user")
             return responseErrorObject(
                 c,
@@ -146,10 +146,8 @@ hono.delete(
 
         const tripId: string = c.req.param("id")
 
-        logger.debug(`Deleting trip: ${subject.properties.userID} ${tripId}`)
-        return handleRequest(c, () =>
-            deleteTrip(tripId, subject.properties.userID)
-        )
+        logger.debug(`Deleting trip: ${subject.properties.id} ${tripId}`)
+        return handleRequest(c, () => deleteTrip(tripId, subject.properties.id))
     }
 )
 
