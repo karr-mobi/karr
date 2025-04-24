@@ -50,3 +50,6 @@ logs
 # Caddy dev files
 apps/caddy/data
 apps/caddy/config
+
+# Application config files (contains auth secrets)
+config/karr.config.*
