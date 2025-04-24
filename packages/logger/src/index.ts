@@ -16,7 +16,7 @@ const getCallerFileAndLine = (): string | null => {
         // Skip the first two lines (Error message and this function)
         for (let i = 2; i < stackLines.length; i++) {
             const line = stackLines[i]
-            if (line && !line.includes("logger.js")) {
+            if (line && !line.includes("logger")) {
                 // Extract file, line, and column
                 const regex = /\s+at\s+(?:.*\s+)?\(?(.+):(\d+):(\d+)\)?/
                 const match = line.match(regex)

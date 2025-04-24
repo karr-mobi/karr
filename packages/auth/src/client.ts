@@ -15,9 +15,9 @@ export const callbackPath = "/callback"
 export const clientID = "karr"
 
 /**
- * Constructs the full issuer URL based on the app URL and API base path.
- * @param appUrl - The base URL of the app (e.g., http://localhost:3000)
+ * Constructs the full issuer path based on the app API base path and APP URL if provided.
  * @param apiBase - The base path of the API (e.g., /api/v1)
+ * @param appUrl - The base URL of the app (e.g., http://localhost:3000)
  * @returns The full issuer URL
  */
 export const authBaseUrl = (apiBase: string, appUrl?: string) => {
