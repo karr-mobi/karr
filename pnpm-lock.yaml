@@ -555,6 +555,37 @@ importers:
         specifier: catalog:vitest
         version: 3.0.9(@types/node@22.13.14)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)(yaml@2.7.1)
 
+  packages/logger:
+    dependencies:
+      '@karr/config':
+        specifier: workspace:*
+        version: link:../config
+      tinyrainbow:
+        specifier: 'catalog:'
+        version: 2.0.0
+    devDependencies:
+      '@karr/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint-config
+      '@karr/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/typescript-config
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.13.14
+      eslint:
+        specifier: catalog:tooling
+        version: 9.23.0(jiti@2.4.2)
+      typescript:
+        specifier: catalog:tooling
+        version: 5.8.2
+      vite-tsconfig-paths:
+        specifier: catalog:vitest
+        version: 5.1.4(typescript@5.8.2)(vite@6.2.3(@types/node@22.13.14)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)(yaml@2.7.1))
+      vitest:
+        specifier: catalog:vitest
+        version: 3.0.9(@types/node@22.13.14)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.3)(yaml@2.7.1)
+
   packages/settings:
     dependencies:
       '@karr/db':
