@@ -1,5 +1,42 @@
 # Changelog
 
+## v0.10.0
+
+[compare changes](https://github.com/finxol/karr/compare/v0.9.9...v0.10.0)
+
+### 🚀 Enhancements
+
+- Upgrade zod to v4 beta ([#105](https://github.com/finxol/karr/pull/105))
+- Add root loading boundary ([fd37be9](https://github.com/finxol/karr/commit/fd37be9))
+- ⚠️  Move logger to separate package ([#120](https://github.com/finxol/karr/pull/120))
+- ⚠️  Allow auth method customisation ([#121](https://github.com/finxol/karr/pull/121))
+
+### 🩹 Fixes
+
+- Move react query provider to root layout ([920a3b0](https://github.com/finxol/karr/commit/920a3b0))
+
+### 💅 Refactors
+
+- **formatting:** Change line width to 80 ([a1b5a6b](https://github.com/finxol/karr/commit/a1b5a6b))
+
+### 🏡 Chore
+
+- Update README ([856deab](https://github.com/finxol/karr/commit/856deab))
+- Update deps ([fa29fd1](https://github.com/finxol/karr/commit/fa29fd1))
+- Update deps ([ceeb754](https://github.com/finxol/karr/commit/ceeb754))
+- Update deps ([18338b2](https://github.com/finxol/karr/commit/18338b2))
+- Ignore config file ([c4466df](https://github.com/finxol/karr/commit/c4466df))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Move logger to separate package ([#120](https://github.com/finxol/karr/pull/120))
+- ⚠️  Allow auth method customisation ([#121](https://github.com/finxol/karr/pull/121))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](https://github.com/finxol))
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+
 ## v0.9.9
 
 [compare changes](https://github.com/finxol/karr/compare/v0.9.8...v0.9.9)
