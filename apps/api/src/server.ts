@@ -5,7 +5,7 @@ import { secureHeaders } from "hono/secure-headers"
 import { createMiddleware } from "hono/factory"
 
 import { API_BASE, APP_URL, FEDERATION, PRODUCTION } from "@karr/config"
-import logger from "@karr/util/logger"
+import logger from "@karr/logger"
 
 import { isAuthenticated } from "@/lib/auth"
 import { responseErrorObject } from "@/lib/helpers"
