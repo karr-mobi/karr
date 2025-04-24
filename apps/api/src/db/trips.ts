@@ -10,7 +10,7 @@ import {
     tripsTable,
     type NewTrip
 } from "@karr/db/schemas/trips.js"
-import logger from "@karr/util/logger"
+import logger from "@karr/logger"
 
 export async function getTrips() {
     const trips = await drizzle

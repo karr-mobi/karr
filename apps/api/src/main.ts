@@ -2,7 +2,7 @@ import { serve } from "@hono/node-server"
 
 import { API_PORT, LOG_LEVEL, logLevels, PRODUCTION } from "@karr/config"
 import { drizzleMigrate } from "@karr/db/migrate"
-import logger from "@karr/util/logger"
+import logger from "@karr/logger"
 
 import { build } from "@/server"
 

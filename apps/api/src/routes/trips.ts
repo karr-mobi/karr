@@ -2,7 +2,7 @@ import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 
 import { NewTrip, NewTripSchema, Trip } from "@karr/db/schemas/trips.js"
-import logger from "@karr/util/logger"
+import logger from "@karr/logger"
 
 import { handleRequest, responseErrorObject } from "@/lib/helpers"
 import type { AppVariables, DataResponse } from "@/lib/types.d.ts"

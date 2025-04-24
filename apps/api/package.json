@@ -19,6 +19,7 @@
         "@karr/auth": "workspace:*",
         "@karr/config": "workspace:*",
         "@karr/db": "workspace:*",
+        "@karr/logger": "workspace:*",
         "@karr/util": "workspace:*",
         "@openauthjs/openauth": "catalog:",
         "db0": "catalog:",

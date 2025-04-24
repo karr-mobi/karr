@@ -26,7 +26,7 @@
     },
     "dependencies": {
         "@karr/config": "workspace:*",
-        "@karr/util": "workspace:*",
+        "@karr/logger": "workspace:*",
         "drizzle-orm": "catalog:",
         "drizzle-kit": "catalog:",
         "postgres": "catalog:",

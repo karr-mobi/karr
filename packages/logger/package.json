@@ -1,5 +1,5 @@
 {
-    "name": "@karr/util",
+    "name": "@karr/logger",
     "private": true,
     "type": "module",
     "scripts": {
@@ -11,11 +11,14 @@
     },
     "exports": {
         ".": {
-            "types": "./src/utilities.ts",
-            "default": "./dist/utilities.js"
+            "types": "./src/index.ts",
+            "default": "./dist/index.js"
         }
     },
-    "dependencies": {},
+    "dependencies": {
+        "@karr/config": "workspace:*",
+        "tinyrainbow": "catalog:"
+    },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
