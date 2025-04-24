@@ -13,7 +13,7 @@ import {
     LogLevelSchema,
     requiredKeys
 } from "./schema.js"
-import { toInt } from "./utils.js"
+import { toInt } from "@karr/util"
 import { API_VERSION } from "./static.js"
 
 const CONFIG_DIR =

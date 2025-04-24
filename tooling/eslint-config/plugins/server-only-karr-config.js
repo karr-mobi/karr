@@ -17,7 +17,6 @@ function importExportHandler(context, node) {
         )
     }
 }
-
 /** @type {import('eslint').Rule.RuleModule} */
 export default {
     rules: {

@@ -1,16 +1,3 @@
-// Types for the result object with discriminated union
-export type Success<T> = {
-    value: T
-    error: null
-}
-
-export type Failure<E> = {
-    value: null
-    error: E
-}
-
-export type Result<T, E = Error> = Success<T> | Failure<E>
-
 /**
  * Wraps a promise in a try/catch block and returns a Result object
  * @param promise The promise to wrap
@@ -18,11 +5,22 @@ export type Result<T, E = Error> = Success<T> | Failure<E>
  */
 export async function tryCatch<T, E = Error>(
     promise: Promise<T>
-): Promise<Result<T, E>> {
+): Promise<
+    | {
+          success: true
+          value: T
+          error: null
+      }
+    | {
+          success: false
+          value: null
+          error: E
+      }
+> {
     try {
         const value = await promise
-        return { value, error: null }
+        return { success: true, value, error: null }
     } catch (error) {
-        return { value: null, error: error as E }
+        return { success: false, value: null, error: error as E }
     }
 }

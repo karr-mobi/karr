@@ -6,17 +6,7 @@ import {
     loadDbConfig,
     loadFullConfig
 } from "./loader.js"
-import { toInt } from "./utils.js"
-
-export function lazy<T>(getter: () => T): { value: T } {
-    return {
-        get value() {
-            const value = getter()
-            Object.defineProperty(this, "value", { value })
-            return value
-        }
-    }
-}
+import { lazy, toInt } from "@karr/util"
 
 const config = lazy(() => loadFullConfig())
 
@@ -29,6 +19,7 @@ export const {
     LOG_TIMESTAMP,
     LOG_LEVEL,
     ADMIN_EMAIL,
+    AUTH_PROVIDERS,
     FEDERATION,
     FEDERATION_TARGETS,
     APPLICATION_NAME,
@@ -36,6 +27,7 @@ export const {
 } = config.value
 
 export { logLevels } from "./schema.js"
+export type { AuthProvider } from "./schema.js"
 
 // ====================================================================
 // Database config

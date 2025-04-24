@@ -1,29 +1,57 @@
 import { issuer } from "@openauthjs/openauth"
-import { GithubProvider } from "@openauthjs/openauth/provider/github"
-import { PasswordProvider } from "@openauthjs/openauth/provider/password"
-import { PasswordUI } from "@openauthjs/openauth/ui/password"
 import { Select } from "@openauthjs/openauth/ui/select"
 import type { Theme } from "@openauthjs/openauth/ui/theme"
-import { Tokens } from "@openauthjs/openauth/client"
+import type { Tokens } from "@openauthjs/openauth/client"
 import { setCookie } from "hono/cookie"
-import { Context } from "hono"
+import type { Context } from "hono"
 import { createDatabase } from "db0"
 import sqlite from "db0/connectors/node-sqlite"
 import dbDriver from "unstorage/drivers/db0"
 
-import { subjects } from "@karr/auth/subjects"
-import { API_BASE, APP_URL } from "@karr/config"
+import { subjects, type UserSubject } from "@karr/auth/subjects"
+import { authBaseUrl } from "@karr/auth/client"
+import { API_BASE } from "@karr/config"
 import { logger } from "@karr/logger"
 
 import { callbackUrl, client } from "@/lib/auth-client"
 import { responseErrorObject } from "@/lib/helpers"
 import { UnStorage } from "./unstorage-adapter"
-import { authBaseUrl } from "@karr/auth/client"
+import { providers } from "./providers"
+import type { SuccessValues } from "./sucess"
+import { getGithubUserData } from "./profile-fetchers/github"
+import { type ProfileData, isOAuth2ProfileData } from "./profile-fetchers"
 
-async function getUser(provider: string, email: string) {
-    console.log(provider, email)
+async function getUser(data: ProfileData) {
+    logger.debug(data)
     // Get user from database and return user ID
-    return "123"
+
+    if (data.provider === "password") {
+        // Check if user exists
+        return {
+            id: data.email,
+            name: data.email.split("@")[0],
+            avatar: "https://example.com/avatar.jpg"
+        } as UserSubject
+    } else if (data.provider === "code") {
+        // Check if user exists
+        return {
+            id: data.email,
+            name: data.email.split("@")[0],
+            avatar: "https://profiles.cache.lol/finxol/picture?v=1743626159"
+        } as UserSubject
+    } else if (isOAuth2ProfileData(data)) {
+        // Check if user exists, if not, create it
+        // return the local user ID
+        return {
+            id: data.remoteId,
+            name: data.name,
+            avatar: data.avatar
+        } as UserSubject
+    }
+
+    // Should never happen
+    logger.debug("Unknown provider", data)
+    throw new Error("Unknown provider")
 }
 
 const database = createDatabase(
@@ -32,7 +60,7 @@ const database = createDatabase(
     })
 )
 
-const THEME_OPENAUTH: Theme = {
+const theme: Theme = {
     title: "Karr Auth",
     logo: "/logo-tmp.jpg",
     background: {
@@ -46,38 +74,17 @@ const THEME_OPENAUTH: Theme = {
     font: {
         family: "Varela Round, sans-serif"
     },
-    css: ``
+    css: `
+        html {
+            --border-radius: 2.8 !important;
+        }
+    `
 }
 
 const app = issuer({
     basePath: authBaseUrl(API_BASE),
-    select: Select({
-        providers: {
-            github: {
-                display: "GitHub"
-            },
-            password: {
-                display: "a password"
-            }
-        }
-    }),
-    providers: {
-        github: GithubProvider({
-            clientSecret: "fc0f07b9daf343cd160226990cb55519c5cfb728",
-            clientID: "Ov23lic9kjugi9TMB1oj",
-            scopes: ["email"]
-        }),
-        password: PasswordProvider(
-            PasswordUI({
-                copy: {
-                    error_email_taken: "This email is already taken."
-                },
-                sendCode: async (email, code) => {
-                    console.log(email, code)
-                }
-            })
-        )
-    },
+    select: Select({}),
+    providers,
     storage: UnStorage({
         driver: dbDriver({
             database,
@@ -85,41 +92,44 @@ const app = issuer({
         })
     }),
     subjects,
-    theme: THEME_OPENAUTH,
+    theme,
     async allow(input, _req) {
-        console.log("Allow check:", {
-            audience: input.audience,
-            clientID: input.clientID,
-            redirectURI: input.redirectURI
-        })
-
-        return true // TODO: restrict. For testing, allow all
+        return input.redirectURI === callbackUrl && input.clientID === "karr"
     },
-    async success(ctx, value) {
-        logger.info("Success", value)
-        if (value.provider === "github") {
-            console.log(value.tokenset.access)
-            return ctx.subject("user", {
-                userID: "test"
+    async success(ctx, value: SuccessValues) {
+        logger.debug("Success", value)
+
+        let subjectData: UserSubject
+        if (value.provider === "password") {
+            subjectData = await getUser({
+                provider: value.provider,
+                email: value.email
             })
-        } else if (value.provider === "password") {
-            const userID = await getUser(value.provider, value.email)
-            return ctx.subject("user", {
-                userID
+        } else if (value.provider === "code") {
+            subjectData = await getUser({
+                email: value.claims.email,
+                provider: value.provider
             })
+        } else if (value.provider === "github") {
+            console.log(value.tokenset.raw)
+            // get the user data from github
+            const userData = await getGithubUserData(value.tokenset.access)
+
+            if (userData.isErr()) {
+                throw new Error(userData.error)
+            }
+
+            // save the user data to the database, and return the jwt payload
+            subjectData = await getUser(userData.value)
+        } else {
+            // should never happen
+            logger.debug("Unknown provider", value)
+            throw new Error("Invalid provider")
         }
 
-        throw new Error("Invalid provider")
+        logger.debug("User data", subjectData)
+        return ctx.subject("user", subjectData)
     }
-})
-
-app.get("/test", async (ctx) => {
-    logger.debug("Test route", ctx.req.url)
-    logger.debug("callbackUrl", callbackUrl)
-    logger.debug("app url", APP_URL)
-    logger.debug("auth base", authBaseUrl(API_BASE))
-    logger.debug("auth base with app url", authBaseUrl(API_BASE, APP_URL))
-    return ctx.json({ message: "Hello, world!" })
 })
 
 app.get("/callback", async (ctx) => {

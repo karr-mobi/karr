@@ -4,7 +4,7 @@ import { err, ok } from "neverthrow"
 import drizzle from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
 import { usersTable } from "@karr/db/schemas/users.js"
-import { tryCatch } from "@karr/util"
+import { tryCatch } from "@karr/util/trycatch"
 import logger from "@karr/logger"
 
 import type { UserWithPrefsAndStatus as _UserWithPrefsAndStatus } from "@/lib/types.d.ts"
@@ -34,7 +34,7 @@ export async function selectUserById(id: string) {
             .limit(1)
     )
 
-    if (users.error) {
+    if (!users.success) {
         logger.error(`Failed to get user ${id}: ${users.error}`)
         return err("Failed to get user")
     }
@@ -44,13 +44,13 @@ export async function selectUserById(id: string) {
 
 export async function updateNickname(id: string, nickname: string) {
     logger.debug(`Updating nickname for user ${id} to ${nickname}`)
-    const { error } = await tryCatch(
+    const { success, error } = await tryCatch(
         drizzle
             .update(usersTable)
             .set({ nickname })
             .where(eq(usersTable.id, id))
     )
-    if (error) {
+    if (!success) {
         logger.error(`Failed to update nickname for user ${id}: ${error}`)
         return false
     }
@@ -71,7 +71,7 @@ export async function selectUserProfileById(id: string) {
             .limit(1)
     )
 
-    if (users.error) {
+    if (!users.success) {
         logger.error(
             `Failed to get user profile for user ${id}: ${users.error}`
         )

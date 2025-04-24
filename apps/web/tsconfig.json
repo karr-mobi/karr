@@ -3,6 +3,8 @@
     "compilerOptions": {
         "baseUrl": "src/",
         "rootDir": "./",
+        "moduleResolution": "bundler",
+        "module": "ESNext",
         "paths": {
             "@/*": ["./*"],
             "~/*": ["./app/*"]

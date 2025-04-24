@@ -13,6 +13,10 @@
         ".": {
             "types": "./src/utilities.ts",
             "default": "./dist/utilities.js"
+        },
+        "./trycatch": {
+            "types": "./src/trycatch.ts",
+            "default": "./dist/trycatch.js"
         }
     },
     "dependencies": {},

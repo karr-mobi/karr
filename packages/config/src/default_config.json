@@ -10,6 +10,11 @@
     "API_BASE": "/api",
     "LOG_LEVEL": "info",
     "LOG_TIMESTAMP": true,
+    "AUTH_PROVIDERS": [
+        {
+            "name": "password"
+        }
+    ],
     "FEDERATION": true,
     "FEDERATION_TARGETS": []
 }

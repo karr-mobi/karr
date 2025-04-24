@@ -3,9 +3,9 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "lint": "eslint . --max-warnings 0",
-        "dev": "tsc --watch",
-        "build": "tsc",
+        "lint": "pnpm run --filter '@karr/util' build && eslint . --max-warnings 0",
+        "dev": "pnpm run --filter '@karr/util' build && tsc --watch",
+        "build": "pnpm run --filter '@karr/util' build && tsc",
         "check-types": "tsc --noEmit",
         "test": "vitest",
         "schema:write": "tsx src/export-schema.ts"
@@ -21,6 +21,7 @@
         }
     },
     "dependencies": {
+        "@karr/util": "workspace:*",
         "confbox": "catalog:",
         "tinyrainbow": "catalog:",
         "zod": "catalog:"

@@ -6,7 +6,7 @@ import { err, ok } from "neverthrow"
 
 import db from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
-import { tryCatch } from "@karr/util"
+import { tryCatch } from "@karr/util/trycatch"
 import logger from "@karr/logger"
 import { subjects } from "@karr/auth/subjects"
 import { setTokens } from "@/routes/auth/issuer"
@@ -27,7 +27,11 @@ export async function authenticate(email: string, password: string) {
             .limit(1)
     )
 
-    if (user.error || user.value.length === 0 || user.value[0] === undefined) {
+    if (
+        !user.success ||
+        user.value.length === 0 ||
+        user.value[0] === undefined
+    ) {
         return err("Invalid email or password")
     }
 
@@ -66,7 +70,7 @@ export async function login(email: string, password: string) {
     )
 
     if (
-        saved.error ||
+        !saved.success ||
         saved.value.length === 0 ||
         saved.value[0] === undefined
     ) {
@@ -93,7 +97,11 @@ export async function register(email: string, password: string) {
             .returning({ insertedId: accountsTable.id })
     )
 
-    if (user.error || user.value.length === 0 || user.value[0] === undefined) {
+    if (
+        !user.success ||
+        user.value.length === 0 ||
+        user.value[0] === undefined
+    ) {
         return err("An error occurred while creating the user")
     }
 

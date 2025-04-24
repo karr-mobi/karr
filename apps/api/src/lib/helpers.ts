@@ -2,7 +2,7 @@ import type { Context } from "hono"
 import { ContentfulStatusCode } from "hono/utils/http-status"
 
 import { ADMIN_EMAIL } from "@karr/config"
-import { tryCatch } from "@karr/util"
+import { tryCatch } from "@karr/util/trycatch"
 import logger from "@karr/logger"
 
 /**
@@ -54,7 +54,7 @@ export function responseErrorObject(
 export async function handleRequest<T>(c: Context, fn: () => Promise<T>) {
     const out = await tryCatch(fn())
 
-    if (out.error) {
+    if (!out.success) {
         logger.error(out.error)
         return responseErrorObject(
             c,
