@@ -13,7 +13,7 @@ import dbDriver from "unstorage/drivers/db0"
 
 import { subjects } from "@karr/auth/subjects"
 import { API_BASE, APP_URL } from "@karr/config"
-import { logger } from "@karr/util/logger"
+import { logger } from "@karr/logger"
 
 import { callbackUrl, client } from "@/lib/auth-client"
 import { responseErrorObject } from "@/lib/helpers"
