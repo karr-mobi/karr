@@ -3,9 +3,9 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "lint": "pnpm run --filter '@karr/config' build && eslint . --max-warnings 0",
-        "dev": "pnpm run --filter '@karr/config' build && tsc --watch",
-        "build": "tsc",
+        "lint": "pnpm run --filter '@karr/util' build && eslint . --max-warnings 0",
+        "dev": "pnpm run --filter '@karr/util' build && tsc --watch",
+        "build": "pnpm run --filter '@karr/util' build && tsc",
         "check-types": "tsc --noEmit",
         "test": "vitest",
         "schema:write": "tsx src/export-schema.ts"
