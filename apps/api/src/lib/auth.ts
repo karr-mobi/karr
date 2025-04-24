@@ -6,7 +6,7 @@ import { err, ok } from "neverthrow"
 
 import db from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
-import { tryCatch } from "@karr/util"
+import { tryCatch } from "@karr/util/trycatch"
 import logger from "@karr/logger"
 import { subjects } from "@karr/auth/subjects"
 import { setTokens } from "@/routes/auth/issuer"

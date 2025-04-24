@@ -114,7 +114,8 @@ export const build = (): Hono<{ Variables: AppVariables }> => {
         return responseErrorObject(ctx, "Not Found", 404)
     })
 
-    if (!PRODUCTION) showRoutes(hono, { verbose: true })
+    const printRoutes = true
+    if (!PRODUCTION && printRoutes) showRoutes(hono, { verbose: true })
 
     return hono
 }

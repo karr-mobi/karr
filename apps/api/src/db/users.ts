@@ -4,7 +4,7 @@ import { err, ok } from "neverthrow"
 import drizzle from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
 import { usersTable } from "@karr/db/schemas/users.js"
-import { tryCatch } from "@karr/util"
+import { tryCatch } from "@karr/util/trycatch"
 import logger from "@karr/logger"
 
 import type { UserWithPrefsAndStatus as _UserWithPrefsAndStatus } from "@/lib/types.d.ts"

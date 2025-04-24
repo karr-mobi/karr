@@ -1,5 +1,3 @@
-export { tryCatch } from "./trycatch"
-
 /**
  * Utility type that expands complex types (like intersections or mapped types)
  * into a simpler, more readable structure in tooltips and error messages.

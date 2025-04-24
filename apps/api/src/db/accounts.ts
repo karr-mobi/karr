@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm"
 
 import drizzle from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
-import { tryCatch } from "@karr/util"
+import { tryCatch } from "@karr/util/trycatch"
 
 /**
  * Change an account's email address
