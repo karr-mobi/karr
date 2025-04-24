@@ -13,10 +13,6 @@
         ".": {
             "types": "./src/utilities.ts",
             "default": "./dist/utilities.js"
-        },
-        "./logger": {
-            "types": "./src/logger.ts",
-            "default": "./dist/logger.js"
         }
     },
     "dependencies": {},

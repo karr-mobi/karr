@@ -264,6 +264,9 @@ importers:
       '@karr/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@karr/logger':
+        specifier: workspace:*
+        version: link:../../packages/logger
       '@karr/util':
         specifier: workspace:*
         version: link:../../packages/util
@@ -412,9 +415,9 @@ importers:
       '@karr/config':
         specifier: workspace:*
         version: link:../config
-      '@karr/util':
+      '@karr/logger':
         specifier: workspace:*
-        version: link:../util
+        version: link:../logger
       '@openauthjs/openauth':
         specifier: 'catalog:'
         version: 0.4.3(patch_hash=2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2)(arctic@2.3.4)(hono@4.7.5)
@@ -483,9 +486,9 @@ importers:
       '@karr/config':
         specifier: workspace:*
         version: link:../config
-      '@karr/util':
+      '@karr/logger':
         specifier: workspace:*
-        version: link:../util
+        version: link:../logger
       drizzle-kit:
         specifier: 'catalog:'
         version: 0.30.6

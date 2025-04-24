@@ -1,6 +1,6 @@
 import { Hono } from "hono"
 
-import logger from "@karr/util/logger"
+import logger from "@karr/logger"
 
 import { handleRequest, responseErrorObject } from "@/lib/helpers"
 import type {

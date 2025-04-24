@@ -5,7 +5,7 @@ import db from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
 import { userPrefsTable } from "@karr/db/schemas/userprefs.js"
 import { usersTable } from "@karr/db/schemas/users.js"
-import logger from "@karr/util/logger"
+import logger from "@karr/logger"
 
 const initUsersTable = async () => {
     // check if test user already exists

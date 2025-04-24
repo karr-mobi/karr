@@ -3,7 +3,7 @@ import { ContentfulStatusCode } from "hono/utils/http-status"
 
 import { ADMIN_EMAIL } from "@karr/config"
 import { tryCatch } from "@karr/util"
-import logger from "@karr/util/logger"
+import logger from "@karr/logger"
 
 /**
  * Template for a function that returns a response object

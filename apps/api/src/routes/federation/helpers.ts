@@ -2,7 +2,7 @@ import { FetchError, ofetch } from "ofetch"
 
 import { FEDERATION_TARGETS } from "@karr/config"
 import { Trip } from "@karr/db/schemas/trips.js"
-import logger from "@karr/util/logger"
+import logger from "@karr/logger"
 
 import { DataResponse } from "@/lib/types"
 
