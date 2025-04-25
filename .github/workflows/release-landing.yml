@@ -1,4 +1,4 @@
-name: Karr Release
+name: Karr Landing Release
 
 on:
     push:
