@@ -1,0 +1,7 @@
+h2 {
+    max-width: unset !important;
+}
+
+html {
+    scroll-behavior: smooth;
+}
