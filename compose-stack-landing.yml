@@ -1,7 +1,7 @@
 services:
     landing:
         image: ghcr.io/finxol/karr-landing:latest
-        env_file: "/src/http/karr/.env"
+        env_file: ".env"
         networks:
             - karr_network
         environment:

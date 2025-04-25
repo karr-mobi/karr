@@ -18,6 +18,8 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         })
     }, [])
 
+    console.log("PostHogProvider: ", process.env.NEXT_PUBLIC_POSTHOG_KEY)
+
     return (
         <PHProvider client={posthog}>
             <SuspendedPostHogPageView />
