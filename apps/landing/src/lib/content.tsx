@@ -56,7 +56,7 @@ export const footer = {
 }
 
 export const hero = {
-    badge: "Nouveau",
+    badge: "Bientôt en beta",
     title: "Le Covoiturage d'Entreprise Simplifié",
     description: `Connectez vos employés, réduisez les coûts de trajet et
         diminuez l'empreinte carbone de votre entreprise
