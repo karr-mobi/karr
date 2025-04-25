@@ -46,11 +46,9 @@ services:
         networks:
             - karr_network
         ports:
-            - "80:80"
-            - "443:443"
-            - "443:443/udp"
+            - "3444:3444"
         environment:
-            - SITE_ADDRESS=demo.karr.mobi
+            - SITE_ADDRESS=:3444
             - API_PORT=1993
             - WEB_PORT=3000
         volumes:
