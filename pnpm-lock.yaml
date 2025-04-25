@@ -193,8 +193,8 @@ catalogs:
       specifier: ^3.0.2
       version: 3.0.2
     tailwindcss:
-      specifier: 4.0.14
-      version: 4.0.14
+      specifier: ^4.1.4
+      version: 4.1.4
     tailwindcss-animate:
       specifier: ^1.0.7
       version: 1.0.7
@@ -521,7 +521,7 @@ importers:
         version: 3.0.2
       tailwindcss-animate:
         specifier: 'catalog:'
-        version: 1.0.7(tailwindcss@4.0.14)
+        version: 1.0.7(tailwindcss@4.1.4)
       zod:
         specifier: 'catalog:'
         version: 4.0.0-beta.20250424T163858
@@ -546,7 +546,7 @@ importers:
         version: 19.1.2(@types/react@19.0.10)
       tailwindcss:
         specifier: 'catalog:'
-        version: 4.0.14
+        version: 4.1.4
       typescript:
         specifier: catalog:tooling
         version: 5.8.2
@@ -594,7 +594,7 @@ importers:
         version: 15.3.0(babel-plugin-react-compiler@19.0.0-beta-decd7b8-20250118)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-intl:
         specifier: 'catalog:'
-        version: 4.0.3(next@15.3.0(babel-plugin-react-compiler@19.0.0-beta-decd7b8-20250118)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.2)
+        version: 4.0.3(next@15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.2)
       next-themes:
         specifier: 'catalog:'
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -612,7 +612,7 @@ importers:
         version: 7.55.0(react@19.1.0)
       tailwindcss:
         specifier: 'catalog:'
-        version: 4.0.14
+        version: 4.1.4
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -864,7 +864,7 @@ importers:
         version: 15.3.0(babel-plugin-react-compiler@19.0.0-beta-decd7b8-20250118)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-intl:
         specifier: 'catalog:'
-        version: 4.0.3(next@15.3.0(babel-plugin-react-compiler@19.0.0-beta-decd7b8-20250118)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.2)
+        version: 4.0.3(next@15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.2)
       next-themes:
         specifier: 'catalog:'
         version: 0.4.6(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -888,7 +888,7 @@ importers:
         version: 3.0.2
       tailwindcss-animate:
         specifier: 'catalog:'
-        version: 1.0.7(tailwindcss@4.0.14)
+        version: 1.0.7(tailwindcss@4.1.4)
       zod:
         specifier: 'catalog:'
         version: 4.0.0-beta.20250424T163858
@@ -919,7 +919,7 @@ importers:
         version: 9.23.0(jiti@2.4.2)
       tailwindcss:
         specifier: 'catalog:'
-        version: 4.0.14
+        version: 4.1.4
       typescript:
         specifier: catalog:tooling
         version: 5.8.2
@@ -5412,6 +5412,9 @@ packages:
   tailwindcss@4.0.14:
     resolution: {integrity: sha512-92YT2dpt671tFiHH/e1ok9D987N9fHD5VWoly1CdPD/Cd1HMglvZwP3nx2yTj2lbXDAHt8QssZkxTLCCTNL+xw==}
 
+  tailwindcss@4.1.4:
+    resolution: {integrity: sha512-1ZIUqtPITFbv/DxRmDr5/agPqJwF69d24m9qmM1939TJehgY539CtzeZRjbLt5G6fSy/7YqqYsfvoTEw9xUI2A==}
+
   tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
     engines: {node: '>=6'}
@@ -9551,7 +9554,7 @@ snapshots:
     optionalDependencies:
       '@rollup/rollup-linux-x64-gnu': 4.38.0
 
-  next-intl@4.0.3(next@15.3.0(babel-plugin-react-compiler@19.0.0-beta-decd7b8-20250118)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.2):
+  next-intl@4.0.3(next@15.3.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(typescript@5.8.2):
     dependencies:
       '@formatjs/intl-localematcher': 0.5.10
       negotiator: 1.0.0
@@ -10365,11 +10368,13 @@ snapshots:
 
   tailwind-merge@3.0.2: {}
 
-  tailwindcss-animate@1.0.7(tailwindcss@4.0.14):
+  tailwindcss-animate@1.0.7(tailwindcss@4.1.4):
     dependencies:
-      tailwindcss: 4.0.14
+      tailwindcss: 4.1.4
 
   tailwindcss@4.0.14: {}
+
+  tailwindcss@4.1.4: {}
 
   tapable@2.2.1: {}
 

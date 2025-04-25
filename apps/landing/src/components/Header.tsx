@@ -28,16 +28,12 @@ export default function Header() {
     return (
         <motion.header
             className={`sticky top-0 z-50 w-full px-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-200 ${scrolled ? "shadow-sm" : ""}`}
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
             transition={{ type: "spring", stiffness: 100, damping: 20 }}
         >
             <div className="container flex h-16 items-center justify-between">
                 <Link href="#">
                     <motion.div
                         className="flex items-center gap-4"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
                         transition={{ duration: 0.5 }}
                     >
                         <Image
@@ -51,60 +47,56 @@ export default function Header() {
                     </motion.div>
                 </Link>
 
-                {isMobile ? (
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                <Button
+                    className="block md:hidden"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                    {isMenuOpen ? (
+                        <X className="h-6 w-6" />
+                    ) : (
+                        <Menu className="h-6 w-6" />
+                    )}
+                </Button>
+                <motion.nav
+                    className="hidden md:flex items-center gap-6"
+                    transition={{ delay: 0.2, duration: 0.5 }}
+                >
+                    <motion.div
+                        key={github.name}
+                        whileHover={{ scale: 1.2, rotate: 5 }}
                     >
-                        {isMenuOpen ? (
-                            <X className="h-6 w-6" />
-                        ) : (
-                            <Menu className="h-6 w-6" />
-                        )}
-                    </Button>
-                ) : (
-                    <motion.nav
-                        className="flex items-center gap-6"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2, duration: 0.5 }}
+                        <Link
+                            href={github.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-muted-foreground hover:text-foreground"
+                        >
+                            {<github.icon className="h-5 w-5" />}
+                            <span className="sr-only">{github.name}</span>
+                        </Link>
+                    </motion.div>
+                    {header.links.map((link) => (
+                        <Link
+                            key={link.name}
+                            href={link.href}
+                            className="text-sm font-medium hover:underline underline-offset-4"
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                    <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                     >
-                        <motion.div
-                            key={github.name}
-                            whileHover={{ scale: 1.2, rotate: 5 }}
-                        >
-                            <Link
-                                href={github.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-muted-foreground hover:text-foreground"
-                            >
-                                {<github.icon className="h-5 w-5" />}
-                                <span className="sr-only">{github.name}</span>
+                        <Button asChild>
+                            <Link href={header.cta.href}>
+                                {header.cta.name}
                             </Link>
-                        </motion.div>
-                        {header.links.map((link) => (
-                            <Link
-                                key={link.name}
-                                href={link.href}
-                                className="text-sm font-medium hover:underline underline-offset-4"
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
-                        <motion.div
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                        >
-                            <Button asChild>
-                                <Link href={header.cta.href}>
-                                    {header.cta.name}
-                                </Link>
-                            </Button>
-                        </motion.div>
-                    </motion.nav>
-                )}
+                        </Button>
+                    </motion.div>
+                </motion.nav>
             </div>
 
             {isMobile && isMenuOpen && (
