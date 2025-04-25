@@ -68,7 +68,7 @@ export const hero = {
         },
         {
             name: "Voir la Démo",
-            href: "https://karr.mobi"
+            href: "https://demo.karr.mobi"
         }
     ],
     subtext: "Solution open-source, hébergée par vos soins."
@@ -203,7 +203,7 @@ export const cta = {
         },
         {
             name: "Voir la Démo",
-            href: "https://karr.mobi",
+            href: "https://demo.karr.mobi",
             variant: "outline"
         }
     ],
