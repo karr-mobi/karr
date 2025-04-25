@@ -50,7 +50,7 @@ services:
             - "443:443"
             - "443:443/udp"
         environment:
-            - SITE_ADDRESS=karr.mobi
+            - SITE_ADDRESS=demo.karr.mobi
             - API_PORT=1993
             - WEB_PORT=3000
         volumes:

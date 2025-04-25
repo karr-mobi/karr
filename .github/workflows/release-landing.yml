@@ -1,0 +1,53 @@
+name: Karr Release
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - 'apps/landing/**'
+            - '.github/workflows/release-landing.yml'
+
+
+permissions:
+    contents: read
+
+env:
+    TURBO_TELEMETRY_DISABLED: 1
+    # You can leverage Vercel Remote Caching with Turbo to speed up your builds
+    # @link https://turborepo.org/docs/core-concepts/remote-caching#remote-caching-on-vercel-builds
+    TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+    TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    HUSKY: 0
+
+jobs:
+    checks:
+        uses: ./.github/workflows/checks.yml
+        secrets: inherit
+
+    build-landing:
+        needs: checks
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
+        steps:
+            - name: Git Checkout
+              uses: actions/checkout@v4
+
+            - name: Log in to the Container registry
+              uses: docker/login-action@v3
+              with:
+                  registry: https://ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Build and push API Docker image
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  file: ./apps/landing/Dockerfile
+                  push: true
+                  tags: |
+                      ghcr.io/finxol/karr-landing:latest
+                      ghcr.io/finxol/karr-landing:${{ github.sha }}

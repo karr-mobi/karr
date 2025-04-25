@@ -56,3 +56,8 @@
 .flow-inline > * + * {
     margin-inline-start: var(--flow-space, 1em);
 }
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+}

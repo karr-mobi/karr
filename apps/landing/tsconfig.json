@@ -1,0 +1,26 @@
+{
+    "extends": "@karr/tsconfig/nextjs.json",
+    "compilerOptions": {
+        "baseUrl": "src/",
+        "rootDir": "./",
+        "moduleResolution": "bundler",
+        "module": "ESNext",
+        "paths": {
+            "@/*": ["./*"],
+            "~/*": ["./app/*"]
+        },
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ]
+    },
+    "include": [
+        "**/*.ts",
+        "**/*.tsx",
+        "next-env.d.ts",
+        "next.config.js",
+        ".next/types/**/*.ts"
+    ],
+    "exclude": ["node_modules"]
+}
