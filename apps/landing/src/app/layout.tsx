@@ -1,5 +1,8 @@
 import type { Metadata } from "next"
 import localFont from "next/font/local"
+
+import { PostHogProvider } from "./providers"
+
 import "@karr/ui/globals.css"
 import "./styles.css"
 
@@ -29,7 +32,9 @@ export default function RootLayout({
             lang="en"
             className={`${geistSans.variable} ${baskervville.variable}`}
         >
-            <body>{children}</body>
+            <body>
+                <PostHogProvider>{children}</PostHogProvider>
+            </body>
         </html>
     )
 }

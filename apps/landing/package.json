@@ -42,16 +42,17 @@
         "class-variance-authority": "catalog:",
         "clsx": "catalog:",
         "lucide-react": "catalog:",
+        "motion": "catalog:",
         "next": "catalog:",
         "next-themes": "catalog:",
+        "posthog-js": "^1.236.6",
         "react": "catalog:",
         "react-dom": "catalog:",
         "react-intersection-observer": "catalog:",
         "sonner": "catalog:",
         "tailwind-merge": "catalog:",
         "tailwindcss-animate": "catalog:",
-        "zod": "catalog:",
-        "motion": "catalog:"
+        "zod": "catalog:"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
