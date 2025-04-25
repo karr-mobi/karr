@@ -1,0 +1,28 @@
+services:
+    landing:
+        build:
+            context: .
+            dockerfile: ./apps/landing/Dockerfile
+        env_file: ".env"
+        networks:
+            - karr_network
+        environment:
+            - PORT=3495
+
+    caddy:
+        image: caddy:2
+        networks:
+            - karr_network
+        ports:
+            - "3496:3496"
+        volumes:
+            - ./apps/landing/caddy:/etc/caddy
+            - caddy_data:/data
+            - caddy_config:/config
+
+volumes:
+    caddy_data:
+    caddy_config:
+
+networks:
+    karr_network:

@@ -52,3 +52,6 @@ jobs:
                   tags: |
                       ghcr.io/finxol/karr-landing:latest
                       ghcr.io/finxol/karr-landing:${{ github.sha }}
+                  build-args: |
+                      NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
+                      NEXT_PUBLIC_POSTHOG_HOST=${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}

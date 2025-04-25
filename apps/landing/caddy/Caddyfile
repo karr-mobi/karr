@@ -1,0 +1,3 @@
+:3496 {
+        reverse_proxy http://landing:3495
+}
