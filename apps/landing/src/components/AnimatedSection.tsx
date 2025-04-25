@@ -2,14 +2,14 @@
 
 import type React from "react"
 
-import { motion } from "motion/react"
+import { motion, type Variants } from "motion/react"
 import { useInView } from "react-intersection-observer"
 import { fadeIn } from "@/lib/animation-variants"
 
 interface AnimatedSectionProps {
     children: React.ReactNode
     className?: string
-    variants?: any
+    variants?: Variants | undefined
     id?: string
 }
 

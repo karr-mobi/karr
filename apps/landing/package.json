@@ -1,10 +1,11 @@
 {
-    "name": "landing-page",
+    "name": "@karr/landing",
+    "type": "module",
     "version": "0.0.1",
     "private": true,
     "scripts": {
-        "dev": "next dev",
-        "build": "next build",
+        "dev": "next dev --turbo",
+        "build": "next build --turbo",
         "start": "next start",
         "lint": "next lint"
     },
@@ -45,6 +46,7 @@
         "next-themes": "catalog:",
         "react": "catalog:",
         "react-dom": "catalog:",
+        "react-intersection-observer": "catalog:",
         "sonner": "catalog:",
         "tailwind-merge": "catalog:",
         "tailwindcss-animate": "catalog:",
