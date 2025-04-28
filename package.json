@@ -28,9 +28,10 @@
         "turbo": "catalog:tooling",
         "typescript": "catalog:tooling"
     },
-    "packageManager": "pnpm@10.9.0",
+    "packageManager": "pnpm@10.10.0",
     "engines": {
-        "node": ">=22"
+        "node": ">=22",
+        "pnpm": ">=10"
     },
     "pnpm": {
         "requiredScripts": ["lint", "format"],
