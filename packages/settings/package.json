@@ -17,17 +17,17 @@
     },
     "dependencies": {
         "@karr/db": "workspace:*",
-        "drizzle-orm": "catalog:",
-        "drizzle-kit": "catalog:",
-        "drizzle-zod": "catalog:"
+        "drizzle-orm": "catalog:api",
+        "drizzle-kit": "catalog:api",
+        "drizzle-zod": "catalog:api"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
-        "@types/node": "catalog:",
-        "eslint": "catalog:tooling",
-        "typescript": "catalog:tooling",
-        "vitest": "catalog:vitest",
-        "vite-tsconfig-paths": "catalog:vitest"
+        "@types/node": "catalog:types",
+        "eslint": "catalog:lint",
+        "typescript": "catalog:devtools",
+        "vitest": "catalog:test",
+        "vite-tsconfig-paths": "catalog:test"
     }
 }

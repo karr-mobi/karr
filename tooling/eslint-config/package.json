@@ -9,18 +9,18 @@
         "./react-internal": "./react-internal.js"
     },
     "devDependencies": {
-        "@eslint/js": "catalog:tooling",
-        "@next/eslint-plugin-next": "catalog:tooling",
-        "@tanstack/eslint-plugin-query": "catalog:tooling",
-        "@typescript-eslint/eslint-plugin": "catalog:tooling",
-        "@typescript-eslint/parser": "catalog:tooling",
-        "eslint": "catalog:tooling",
-        "eslint-plugin-react": "catalog:tooling",
-        "eslint-plugin-react-hooks": "catalog:tooling",
-        "eslint-plugin-turbo": "catalog:tooling",
-        "globals": "catalog:tooling",
-        "typescript": "catalog:tooling",
-        "typescript-eslint": "catalog:tooling"
+        "@eslint/js": "catalog:lint",
+        "@next/eslint-plugin-next": "catalog:lint",
+        "@tanstack/eslint-plugin-query": "catalog:lint",
+        "@typescript-eslint/eslint-plugin": "catalog:lint",
+        "@typescript-eslint/parser": "catalog:lint",
+        "eslint": "catalog:lint",
+        "eslint-plugin-react": "catalog:lint",
+        "eslint-plugin-react-hooks": "catalog:lint",
+        "eslint-plugin-turbo": "catalog:lint",
+        "globals": "catalog:devtools",
+        "typescript": "catalog:devtools",
+        "typescript-eslint": "catalog:lint"
     },
     "dependencies": {
         "jsonc-eslint-parser": "^2.4.0"
