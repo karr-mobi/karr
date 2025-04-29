@@ -7,7 +7,7 @@
         "dev": "env $(cat ../../.env) next dev --turbo",
         "build": "next build --turbo",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "eslint . --max-warnings 0"
     },
     "dependencies": {
         "@icons-pack/react-simple-icons": "catalog:ui",
@@ -45,7 +45,7 @@
         "motion": "catalog:ui",
         "next": "catalog:web",
         "next-themes": "catalog:web",
-        "posthog-js": "^1.236.6",
+        "posthog-js": "catalog:web",
         "react": "catalog:web",
         "react-dom": "catalog:web",
         "react-intersection-observer": "catalog:ui",
@@ -61,6 +61,7 @@
         "@types/node": "catalog:types",
         "@types/react": "catalog:types",
         "@types/react-dom": "catalog:types",
+        "eslint": "catalog:lint",
         "tailwindcss": "catalog:ui",
         "typescript": "catalog:devtools"
     }

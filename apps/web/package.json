@@ -7,7 +7,7 @@
         "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",
-        "lint": "pnpm run --filter '@karr/config' build && next lint --max-warnings 0",
+        "lint": "pnpm run --filter '@karr/config' build && eslint . --max-warnings 0",
         "check-types": "tsc --noEmit"
     },
     "dependencies": {
