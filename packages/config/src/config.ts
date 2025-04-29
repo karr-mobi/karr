@@ -52,7 +52,7 @@ export type DbConfig = z.infer<typeof DbConfigSchema>
 export function getDbConfig(): DbConfig {
     const fileConfig = loadDbConfig()
 
-    const parsed = DbConfigSchema.safeParse(<DbConfig>{
+    const parsed = DbConfigSchema.safeParse({
         host: process.env.DB_HOST || fileConfig.DB_CONFIG?.host || "localhost",
         port: toInt(
             process.env.DB_PORT || fileConfig.DB_CONFIG?.port || "5432"
@@ -70,7 +70,7 @@ export function getDbConfig(): DbConfig {
         get connStr(): string {
             return `postgres://${this.user}:${this.password}@${this.host}:${this.port}/${this.name}`
         }
-    })
+    } as DbConfig)
 
     if (!parsed.success) {
         handleConfigError(parsed.error)
