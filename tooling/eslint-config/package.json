@@ -15,14 +15,12 @@
         "@typescript-eslint/eslint-plugin": "catalog:lint",
         "@typescript-eslint/parser": "catalog:lint",
         "eslint": "catalog:lint",
+        "eslint-plugin-pnpm": "catalog:devtools",
         "eslint-plugin-react": "catalog:lint",
         "eslint-plugin-react-hooks": "catalog:lint",
         "eslint-plugin-turbo": "catalog:lint",
         "globals": "catalog:devtools",
         "typescript": "catalog:devtools",
         "typescript-eslint": "catalog:lint"
-    },
-    "dependencies": {
-        "jsonc-eslint-parser": "^2.4.0"
     }
 }
