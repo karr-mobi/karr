@@ -14,12 +14,12 @@ const hono = new Hono<{ Variables: AppVariables }>()
 
 hono.get("/", (c) => {
     logger.debug("Getting user")
-    return c.json(<DataResponse<object>>{
+    return c.json({
         data: {
             name: "John Doe",
             email: "johndoe@example.com"
         }
-    })
+    } satisfies DataResponse<object>)
 })
 
 /**

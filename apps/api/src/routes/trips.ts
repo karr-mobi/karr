@@ -115,12 +115,12 @@ hono.post("/add", async (c) => {
 
     logger.debug(`Added trip:`, createdTrip)
 
-    return c.json(<DataResponse<object>>{
+    return c.json({
         data: {
             id: createdTrip.value.id,
             name: "Test Trip"
         }
-    })
+    } satisfies DataResponse<object>)
 })
 
 /**
@@ -160,12 +160,12 @@ hono.get("/:id", (c) => {
     const id: string = c.req.param("id")
     logger.debug(`Getting trip by ID: ${id}`)
     logger.warn('"/:id"', "Are you sure this is the route you wanted to hit?")
-    return c.json(<DataResponse<object>>{
+    return c.json({
         data: {
             id: id,
             name: "Test Trip"
         }
-    })
+    } satisfies DataResponse<object>)
 })
 
 export default hono

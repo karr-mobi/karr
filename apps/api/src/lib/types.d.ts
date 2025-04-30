@@ -5,6 +5,7 @@ import type { specialStatusTable } from "@/db/schemas/specialstatus"
 import type { userPrefsTable } from "@/db/schemas/userprefs"
 import type { usersTable } from "@/db/schemas/users"
 import type { UserSubject as Sub } from "@karr/auth/subjects"
+import { Prettify } from "@karr/util"
 
 export type UserSubject = {
     type: "user"
@@ -16,7 +17,7 @@ export type AppVariables = {
     // Add other context variables here if needed
 }
 
-export interface DataResponse<T> {
+export type DataResponse<T> = {
     timestamp?: number
     data: T
 }
@@ -30,7 +31,7 @@ export interface ErrorResponse {
     }
 }
 
-export type Response<T> = DataResponse<T | object> | ErrorResponse
+export type Response<T> = Prettify<DataResponse<T | object> | ErrorResponse>
 
 export type SpecialStatus = InferSelectModel<typeof specialStatusTable>
 export type SpecialStatusInsert = Omit<
