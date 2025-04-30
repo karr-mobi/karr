@@ -6,7 +6,7 @@
         "lint": "eslint . --max-warnings 0",
         "dev": "tsc --watch",
         "build": "tsc",
-        "check-types": "tsc--noEmit",
+        "check-types": "tsc --noEmit",
         "test": "vitest"
     },
     "exports": {
@@ -19,9 +19,10 @@
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
-        "@types/node": "catalog:",
-        "typescript": "catalog:tooling",
-        "vitest": "catalog:vitest",
-        "vite-tsconfig-paths": "catalog:vitest"
+        "@types/node": "catalog:types",
+        "eslint": "catalog:lint",
+        "typescript": "catalog:devtools",
+        "vitest": "catalog:test",
+        "vite-tsconfig-paths": "catalog:test"
     }
 }

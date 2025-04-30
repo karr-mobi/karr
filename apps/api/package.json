@@ -15,30 +15,30 @@
         "localinit": "pnpm run build:localinit && node out/db/local_dev_init.mjs"
     },
     "dependencies": {
-        "@hono/node-server": "catalog:",
+        "@hono/node-server": "catalog:api",
         "@karr/auth": "workspace:*",
         "@karr/config": "workspace:*",
         "@karr/db": "workspace:*",
         "@karr/logger": "workspace:*",
         "@karr/util": "workspace:*",
-        "@openauthjs/openauth": "catalog:",
-        "db0": "catalog:",
-        "drizzle-kit": "catalog:",
-        "drizzle-orm": "catalog:",
-        "drizzle-zod": "catalog:",
-        "hono": "catalog:",
-        "neverthrow": "catalog:",
-        "ofetch": "catalog:",
-        "unstorage": "catalog:",
-        "zod": "catalog:"
+        "@openauthjs/openauth": "catalog:api",
+        "db0": "catalog:api",
+        "drizzle-kit": "catalog:api",
+        "drizzle-orm": "catalog:api",
+        "drizzle-zod": "catalog:api",
+        "hono": "catalog:api",
+        "neverthrow": "catalog:utils",
+        "ofetch": "catalog:utils",
+        "unstorage": "catalog:api",
+        "zod": "catalog:utils"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
-        "@types/node": "catalog:",
-        "esbuild": "catalog:",
-        "eslint": "catalog:tooling",
-        "tsx": "catalog:tooling",
-        "typescript": "catalog:tooling"
+        "@types/node": "catalog:types",
+        "esbuild": "catalog:utils",
+        "eslint": "catalog:lint",
+        "tsx": "catalog:devtools",
+        "typescript": "catalog:devtools"
     }
 }

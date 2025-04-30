@@ -18,15 +18,17 @@
     },
     "workspaces": ["apps/*", "packages/*", "tooling/*"],
     "devDependencies": {
-        "@biomejs/biome": "catalog:tooling",
-        "@commitlint/cli": "catalog:tooling",
-        "@commitlint/config-conventional": "catalog:tooling",
-        "@turbo/gen": "catalog:tooling",
-        "changelogen": "catalog:tooling",
-        "husky": "catalog:tooling",
-        "lint-staged": "catalog:tooling",
-        "turbo": "catalog:tooling",
-        "typescript": "catalog:tooling"
+        "@antfu/nip": "^0.1.0",
+        "@biomejs/biome": "catalog:lint",
+        "@commitlint/cli": "catalog:lint",
+        "@commitlint/config-conventional": "catalog:lint",
+        "@turbo/gen": "catalog:devtools",
+        "changelogen": "catalog:devtools",
+        "husky": "catalog:devtools",
+        "lint-staged": "catalog:lint",
+        "taze": "catalog:devtools",
+        "turbo": "catalog:devtools",
+        "typescript": "catalog:devtools"
     },
     "packageManager": "pnpm@10.10.0",
     "engines": {
