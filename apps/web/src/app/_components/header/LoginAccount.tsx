@@ -1,5 +1,6 @@
 import { User as IconUser } from "lucide-react"
 import { getTranslations } from "next-intl/server"
+import Image from "next/image"
 
 import { Button } from "@karr/ui/components/button"
 
@@ -10,14 +11,29 @@ import { LogIn as IconLogIn } from "lucide-react"
 export default async function LoginAccount() {
     const t = await getTranslations("auth")
 
-    const isAuthenticated = await auth()
+    const authState = await auth()
 
     return (
         <>
-            {isAuthenticated ? (
-                <Button asChild size="icon" className="mr-0.75">
+            {authState ? (
+                <Button
+                    variant="link"
+                    size="icon"
+                    className="mr-0.75 size-10"
+                    asChild
+                >
                     <Link href="/account">
-                        <IconUser />
+                        {authState.avatar ? (
+                            <Image
+                                src={authState.avatar}
+                                width={32}
+                                height={32}
+                                alt="Avatar"
+                                className="rounded-full size-10"
+                            />
+                        ) : (
+                            <IconUser />
+                        )}
                     </Link>
                 </Button>
             ) : (

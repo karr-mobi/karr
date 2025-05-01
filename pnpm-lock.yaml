@@ -592,6 +592,9 @@ importers:
       '@karr/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@karr/util':
+        specifier: workspace:*
+        version: link:../../packages/util
       '@openauthjs/openauth':
         specifier: catalog:api
         version: 0.4.3(patch_hash=2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2)(arctic@2.3.4)(hono@4.7.8)
