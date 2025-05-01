@@ -6,7 +6,8 @@
     "scripts": {
         "build": "turbo build",
         "start": "turbo start",
-        "dev": "turbo dev",
+        "dev": "turbo dev --filter='!@karr/landing'",
+        "dev:landing": "turbo dev --filter=@karr/landing",
         "lint": "turbo lint",
         "check-types": "turbo check-types",
         "format": "biome format --write .",
