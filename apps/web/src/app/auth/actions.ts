@@ -32,7 +32,7 @@ export async function auth() {
         await setTokens(verified.tokens)
     }
 
-    return verified.subject
+    return verified.subject.properties
 }
 
 export async function login(returnTo: string | FormData = "/") {

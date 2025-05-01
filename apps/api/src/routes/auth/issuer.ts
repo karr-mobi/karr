@@ -15,13 +15,14 @@ import { logger } from "@karr/logger"
 
 import { callbackUrl, client } from "@/lib/auth-client"
 import { responseErrorObject } from "@/lib/helpers"
+
 import { UnStorage } from "./unstorage-adapter"
 import { providers } from "./providers"
 import type { SuccessValues } from "./sucess"
-import { getGithubUserData } from "./profile-fetchers/github"
 import { type ProfileData, isOAuth2ProfileData } from "./profile-fetchers"
+import { getGithubUserData } from "./profile-fetchers/github"
 
-async function getUser(data: ProfileData) {
+async function getOrInsertUser(data: ProfileData) {
     logger.debug(data)
     // Get user from database and return user ID
 
@@ -30,14 +31,14 @@ async function getUser(data: ProfileData) {
         return {
             id: data.email,
             name: data.email.split("@")[0],
-            avatar: "https://example.com/avatar.jpg"
+            avatar: "https://profiles.cache.lol/finxol/picture?v=1743626159"
         } as UserSubject
     } else if (data.provider === "code") {
         // Check if user exists
         return {
             id: data.email,
             name: data.email.split("@")[0],
-            avatar: "https://profiles.cache.lol/finxol/picture?v=1743626159"
+            avatar: "https://example.com/avatar.jpg"
         } as UserSubject
     } else if (isOAuth2ProfileData(data)) {
         // Check if user exists, if not, create it
@@ -101,14 +102,14 @@ const app = issuer({
 
         let subjectData: UserSubject
         if (value.provider === "password") {
-            subjectData = await getUser({
+            subjectData = await getOrInsertUser({
                 provider: value.provider,
                 email: value.email
             })
         } else if (value.provider === "code") {
-            subjectData = await getUser({
-                email: value.claims.email,
-                provider: value.provider
+            subjectData = await getOrInsertUser({
+                provider: value.provider,
+                email: value.claims.email
             })
         } else if (value.provider === "github") {
             console.log(value.tokenset.raw)
@@ -120,7 +121,7 @@ const app = issuer({
             }
 
             // save the user data to the database, and return the jwt payload
-            subjectData = await getUser(userData.value)
+            subjectData = await getOrInsertUser(userData.value)
         } else {
             // should never happen
             logger.debug("Unknown provider", value)

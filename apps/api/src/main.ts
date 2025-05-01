@@ -11,13 +11,10 @@ if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
         `Log level is set to '${LOG_LEVEL}' in a production environment.`,
         "This may result in an excessive amount of logs.",
         "/!\\ It may also log sensitive infornmation",
-        "Consider setting LOG_LEVEL to 'info' or 'warn' in .env"
+        "Consider setting LOG_LEVEL to 'info' or 'warn' in .env or config"
     )
 }
 
-logger.info(
-    `Starting server in ${PRODUCTION ? "production" : "development"} mode`
-)
 logger.info(`TZ=${Intl.DateTimeFormat().resolvedOptions().timeZone}`)
 
 // Run the server!
@@ -34,7 +31,9 @@ try {
         port: API_PORT
     })
 
-    logger.success(`Server listening on port ${API_PORT}`)
+    logger.success(
+        `Server listening on port ${API_PORT} in ${PRODUCTION ? "production" : "dev"} mode`
+    )
 } catch (err) {
     logger.error(err)
     process.exit(1)
