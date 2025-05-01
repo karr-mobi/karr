@@ -1,4 +1,18 @@
 {
+    "Errors": {
+        "401": {
+            "title": "Unauthorized",
+            "message": "Please sign in before accessing this page."
+        },
+        "404": {
+            "title": "Page not found",
+            "message": "The page you are looking for does not exist."
+        },
+        "500": {
+            "title": "Internal server error {name}",
+            "message": "An unexpected error occurred. Please try again later."
+        }
+    },
     "HomePage": {
         "slogan": "The federated carpool platform."
     },
