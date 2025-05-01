@@ -299,7 +299,7 @@ patchedDependencies:
     hash: 2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2
     path: patches/@openauthjs__openauth.patch
   unstorage:
-    hash: 96447cda99e755e55f17c8a5bbbde79973f25c16d5223a793abac6811309b778
+    hash: a647269f5426b04b76019d5a621c73e1a4f9e1f7ec76d99ea644de1d628ca386
     path: patches/unstorage.patch
 
 importers:
@@ -386,7 +386,7 @@ importers:
         version: 1.4.1
       unstorage:
         specifier: catalog:api
-        version: 1.16.0(patch_hash=96447cda99e755e55f17c8a5bbbde79973f25c16d5223a793abac6811309b778)(aws4fetch@1.0.20)(db0@0.3.2(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5)))
+        version: 1.16.0(patch_hash=a647269f5426b04b76019d5a621c73e1a4f9e1f7ec76d99ea644de1d628ca386)(aws4fetch@1.0.20)(db0@0.3.2(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5)))
       zod:
         specifier: catalog:utils
         version: 4.0.0-beta.20250424T163858
@@ -10395,7 +10395,7 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  unstorage@1.16.0(patch_hash=96447cda99e755e55f17c8a5bbbde79973f25c16d5223a793abac6811309b778)(aws4fetch@1.0.20)(db0@0.3.2(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5))):
+  unstorage@1.16.0(patch_hash=a647269f5426b04b76019d5a621c73e1a4f9e1f7ec76d99ea644de1d628ca386)(aws4fetch@1.0.20)(db0@0.3.2(drizzle-orm@0.42.0(gel@2.0.1)(postgres@3.4.5))):
     dependencies:
       anymatch: 3.1.3
       chokidar: 4.0.3
