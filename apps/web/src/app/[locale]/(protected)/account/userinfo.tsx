@@ -7,23 +7,18 @@ import { Badge } from "@karr/ui/components/badge"
 
 import { apiFetch } from "@/util/apifetch"
 
-export default function UserInfo({ userid }: { userid: string }) {
-    return <FetchUserData userid={userid} />
+export default function UserInfo() {
+    return <FetchUserData />
 }
 
-function FetchUserData({ userid }: { userid: string }) {
+function FetchUserData() {
     // Access the client
     const _queryClient = useQueryClient()
 
     const { data, isLoading, isError, error } = useQuery({
-        queryKey: ["user", userid],
+        queryKey: ["user"],
         retry: false,
-        queryFn: async () =>
-            apiFetch("/user", {
-                headers: {
-                    authorization: userid
-                }
-            })
+        queryFn: async () => apiFetch("/user")
     })
 
     if (isLoading) {
