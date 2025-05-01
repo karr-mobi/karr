@@ -1,19 +1,25 @@
 import { Suspense } from "react"
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
+import { unauthorized } from "next/navigation"
 
 import Loading from "@/components/Loading"
+import { auth } from "~/auth/actions"
 
 import Logout from "./logout"
 import UserInfo from "./userinfo"
 
-export default function AccountPage() {
-    const t = useTranslations("auth.Account")
+export default async function AccountPage() {
+    const t = await getTranslations("auth.Account")
+
+    const authState = await auth()
+    if (!authState) unauthorized()
 
     return (
         <div className="flex flex-col gap-4 items-start max-w-screen overflow-scroll">
             <h1>{t("title")}</h1>
+            <pre>{JSON.stringify(authState, null, 2)}</pre>
             <Suspense fallback={<Loading />}>
-                <UserInfo userid="4e5c65fc-fa9d-4f9e-baee-c4d5914cec93" />
+                <UserInfo />
             </Suspense>
             <Logout />
         </div>
