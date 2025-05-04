@@ -37,8 +37,7 @@ async function getOrInsertUser(data: ProfileData) {
         // Check if user exists
         return {
             id: data.email,
-            name: data.email.split("@")[0],
-            avatar: "https://example.com/avatar.jpg"
+            name: data.email.split("@")[0]
         } as UserSubject
     } else if (isOAuth2ProfileData(data)) {
         // Check if user exists, if not, create it

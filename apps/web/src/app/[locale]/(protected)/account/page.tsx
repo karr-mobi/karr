@@ -5,7 +5,6 @@ import { unauthorized } from "next/navigation"
 import Loading from "@/components/Loading"
 import { auth } from "~/auth/actions"
 
-import Logout from "./logout"
 import UserInfo from "./userinfo"
 
 export default async function AccountPage() {
@@ -21,7 +20,6 @@ export default async function AccountPage() {
             <Suspense fallback={<Loading />}>
                 <UserInfo />
             </Suspense>
-            <Logout />
         </div>
     )
 }

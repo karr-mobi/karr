@@ -67,6 +67,9 @@
         "Logout": {
             "title": "Logout"
         },
+        "Dropdown": {
+            "title": "My Account"
+        },
         "Account": {
             "title": "Account",
             "blocked": "Account blocked",

@@ -67,6 +67,9 @@
         "Logout": {
             "title": "Se déconnecter"
         },
+        "Dropdown": {
+            "title": "Mon Compte"
+        },
         "Account": {
             "title": "Compte",
             "blocked": "Compte bloqué",

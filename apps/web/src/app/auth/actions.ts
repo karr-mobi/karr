@@ -26,6 +26,8 @@ export async function auth() {
 
     if (verified.err) {
         console.log("Invalid token:", verified.err)
+        jar.delete("access_token")
+        jar.delete("refresh_token")
         return false
     }
     if (verified.tokens) {
