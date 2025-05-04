@@ -17,8 +17,16 @@ const nextConfig = {
         NEXT_PUBLIC_API_BASE: API_BASE
     },
 
+    images: {
+        remotePatterns: [
+            new URL("https://example.com/*"),
+            new URL("https://profiles.cache.lol/finxol/picture?v=1743626159")
+        ]
+    },
+
     experimental: {
-        reactCompiler: true
+        reactCompiler: true,
+        authInterrupts: true
     },
 
     /** We already do linting and typechecking as separate tasks in CI */

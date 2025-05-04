@@ -16,6 +16,7 @@
         "@karr/config": "workspace:*",
         "@karr/db": "workspace:*",
         "@karr/ui": "workspace:*",
+        "@karr/util": "workspace:*",
         "@openauthjs/openauth": "catalog:api",
         "@tailwindcss/postcss": "catalog:ui",
         "@tanstack/react-query": "catalog:web",

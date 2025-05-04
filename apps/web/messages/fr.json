@@ -1,4 +1,18 @@
 {
+    "Errors": {
+        "401": {
+            "title": "Non autorisé",
+            "message": "Veuillez vous connecter avant d'accéder à cette page."
+        },
+        "404": {
+            "title": "Page non trouvée",
+            "message": "La page que vous recherchez n'existe pas."
+        },
+        "500": {
+            "title": "Erreur interne du serveur {name}",
+            "message": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
+        }
+    },
     "HomePage": {
         "slogan": "La plateforme de covoiturage fédérée."
     },
@@ -52,6 +66,9 @@
         },
         "Logout": {
             "title": "Se déconnecter"
+        },
+        "Dropdown": {
+            "title": "Mon Compte"
         },
         "Account": {
             "title": "Compte",

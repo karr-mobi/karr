@@ -25,14 +25,16 @@ export async function auth() {
     })
 
     if (verified.err) {
-        console.error("Error verifying token:", verified.err)
+        console.log("Invalid token:", verified.err)
+        jar.delete("access_token")
+        jar.delete("refresh_token")
         return false
     }
     if (verified.tokens) {
         await setTokens(verified.tokens)
     }
 
-    return verified.subject
+    return verified.subject.properties
 }
 
 export async function login(returnTo: string | FormData = "/") {
