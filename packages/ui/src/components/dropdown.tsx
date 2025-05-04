@@ -7,6 +7,15 @@ import { motion } from "motion/react"
 
 import { cn } from "@karr/ui/lib/utils"
 
+type PointerDownEvent = Parameters<
+    NonNullable<DropdownMenuPrimitive.DropdownMenuContentProps["onPointerDown"]>
+>[0]
+type PointerDownOutsideEvent = Parameters<
+    NonNullable<
+        DropdownMenuPrimitive.DropdownMenuContentProps["onPointerDownOutside"]
+    >
+>[0]
+
 const DropdownMenu = DropdownMenuPrimitive.Root
 
 const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
