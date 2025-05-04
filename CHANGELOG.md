@@ -1,5 +1,44 @@
 # Changelog
 
+## v0.10.2
+
+[compare changes](https://github.com/finxol/karr/compare/v0.10.1...v0.10.2)
+
+### 🚀 Enhancements
+
+- Create landing page ([#122](https://github.com/finxol/karr/pull/122))
+- Add posthog to landing page ([a4b4ba0](https://github.com/finxol/karr/commit/a4b4ba0))
+- Improve auth handling ([#130](https://github.com/finxol/karr/pull/130))
+
+### 🩹 Fixes
+
+- Hopefully get posthog working ([39064cf](https://github.com/finxol/karr/commit/39064cf))
+- Passing posthog values (hopefully) ([5143443](https://github.com/finxol/karr/commit/5143443))
+- Content and ui tweaks ([#123](https://github.com/finxol/karr/pull/123))
+- Restore header background ([a5f5d3c](https://github.com/finxol/karr/commit/a5f5d3c))
+
+### 📦 Build
+
+- Run caddy behind another Caddy ([83d80da](https://github.com/finxol/karr/commit/83d80da))
+- **pnpm:** Enforce catalog use + add utils ([#129](https://github.com/finxol/karr/pull/129))
+- Adjust turbo config ([b404291](https://github.com/finxol/karr/commit/b404291))
+
+### 🏡 Chore
+
+- Add public dir to avoid errors ([5e60a0d](https://github.com/finxol/karr/commit/5e60a0d))
+- Change file in public dir ([8c5c746](https://github.com/finxol/karr/commit/8c5c746))
+- Move  dir ([d7adf02](https://github.com/finxol/karr/commit/d7adf02))
+- Change demo url ([b3e9326](https://github.com/finxol/karr/commit/b3e9326))
+- Update deps ([c6bfacb](https://github.com/finxol/karr/commit/c6bfacb))
+- Update turbo ([b1481f8](https://github.com/finxol/karr/commit/b1481f8))
+- Update unstorage patch ([777a06e](https://github.com/finxol/karr/commit/777a06e))
+- Pin caddy version to 2 ([6a29201](https://github.com/finxol/karr/commit/6a29201))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.10.1
 
 [compare changes](https://github.com/finxol/karr/compare/v0.10.0...v0.10.1)
