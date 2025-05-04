@@ -1,12 +1,16 @@
 import { Suspense } from "react"
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 
 import Loading from "@/components/Loading"
+import { auth } from "~/auth/actions"
 
 import TripList from "./trips"
 
-export default function Search() {
-    const t = useTranslations("trips")
+export default async function Search() {
+    const t = await getTranslations("trips")
+
+    const authState = await auth()
+    if (!authState) unauthorized()
 
     return (
         <article className="my-6 max-w-full w-2xl mx-auto">
