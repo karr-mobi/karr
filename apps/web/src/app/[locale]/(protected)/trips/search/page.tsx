@@ -1,5 +1,6 @@
 import { Suspense } from "react"
 import { getTranslations } from "next-intl/server"
+import { unauthorized } from "next/navigation"
 
 import Loading from "@/components/Loading"
 import { auth } from "~/auth/actions"

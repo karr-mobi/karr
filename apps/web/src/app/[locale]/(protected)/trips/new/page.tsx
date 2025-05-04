@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server"
 import { auth } from "~/auth/actions"
+import { unauthorized } from "next/navigation"
 
 import NewTripForm from "./newTripForm"
 
