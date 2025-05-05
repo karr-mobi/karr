@@ -117,35 +117,21 @@ export async function getGithubUserData(token: string) {
         )
     ])
 
-    if (!profileResult.success) {
+    if (!profileResult.success || profileResult.value === null) {
         logger.error("Failed to fetch user profile", profileResult.error)
         return err("Failed to fetch user profile")
     }
 
-    if (!emailsResult.success) {
+    if (!emailsResult.success || emailsResult.value === null) {
         logger.error("Failed to fetch user emails", emailsResult.error)
         return err("Failed to fetch user emails")
     }
 
     const profile = profileResult.value
-    const emails = emailsResult.value
-
-    if (profile === null) {
-        logger.error(
-            "Fetched user profile is null, though the request succeeded."
-        )
-        return err("Fetched user profile is null")
-    }
-    if (emails === null) {
-        logger.error(
-            "Fetched user emails is null, though the request succeeded."
-        )
-        return err("Fetched user emails is null")
-    }
 
     const profileData: ProfileData = {
         provider: "github",
-        email: emails.find((email) => email.primary)?.email ?? "",
+        email: emailsResult.value.find((email) => email.primary)?.email ?? "",
         remoteId: profile.id.toString(),
         avatar: profile.avatar_url,
         name: profile.name ?? profile.login
