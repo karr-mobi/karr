@@ -37,7 +37,7 @@ export async function isVerified(id: string) {
                 verified: accountsTable.verified
             })
             .from(accountsTable)
-            .where(eq(accountsTable.user, id))
+            .where(eq(accountsTable.profile, id))
             .limit(1)
     )
 

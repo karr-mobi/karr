@@ -1,8 +1,6 @@
-import crypto from "node:crypto"
 import { eq } from "drizzle-orm"
 
 import db from "@karr/db"
-import { accountsTable } from "@karr/db/schemas/accounts.js"
 import { userPrefsTable } from "@karr/db/schemas/userprefs.js"
 import { usersTable } from "@karr/db/schemas/users.js"
 import logger from "@karr/logger"
@@ -34,11 +32,6 @@ const initUsersTable = async () => {
         .returning({ insertedId: usersTable.id })
 
     // create a test user in the accounts table
-    await db.insert(accountsTable).values({
-        email: "test@example.org",
-        password: crypto.createHash("sha256").update("password").digest("hex"),
-        user: user[0]!.insertedId
-    })
 
     logger.info("Test user created", { id: user[0]?.insertedId })
 }
