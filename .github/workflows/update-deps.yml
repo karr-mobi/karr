@@ -47,7 +47,7 @@ jobs:
         run: pnpm install --frozen-lockfile=false # Allow lockfile updates
 
       - name: Create Pull Request if changes exist
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           # Use the default GITHUB_TOKEN
           token: ${{ secrets.GITHUB_TOKEN }}
