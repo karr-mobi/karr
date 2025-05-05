@@ -49,9 +49,13 @@ jobs:
       - name: Format everything
         run: pnpm run format
 
-      - name: Run checks
+  run-checks:
         uses: ./.github/workflows/checks.yml
+        secrets: inherit # Pass through secrets if needed
 
+  create-pull-request:
+    runs-on: ubuntu-latest
+    steps:
       - name: Create Pull Request if changes exist
         uses: peter-evans/create-pull-request@v7
         with:
