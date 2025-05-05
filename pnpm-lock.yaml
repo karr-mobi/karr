@@ -226,8 +226,8 @@ catalogs:
       specifier: ^0.503.0
       version: 0.503.0
     motion:
-      specifier: ^12.9.4
-      version: 12.9.4
+      specifier: ^12.9.5
+      version: 12.9.5
     react-day-picker:
       specifier: ^9.6.7
       version: 9.6.7
@@ -293,6 +293,9 @@ catalogs:
     react-dom:
       specifier: ^19.1.0
       version: 19.1.0
+
+overrides:
+  next>safe-buffer: npm:@socketregistry/safe-buffer@1.0.7
 
 patchedDependencies:
   '@openauthjs/openauth':
@@ -515,7 +518,7 @@ importers:
         version: 0.503.0(react@19.1.0)
       motion:
         specifier: catalog:ui
-        version: 12.9.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.9.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next:
         specifier: catalog:web
         version: 15.3.1(babel-plugin-react-compiler@19.1.0-rc.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -615,7 +618,7 @@ importers:
         version: 0.503.0(react@19.1.0)
       motion:
         specifier: catalog:ui
-        version: 12.9.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.9.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next:
         specifier: catalog:web
         version: 15.3.1(babel-plugin-react-compiler@19.1.0-rc.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -885,7 +888,7 @@ importers:
         version: 0.503.0(react@19.1.0)
       motion:
         specifier: catalog:ui
-        version: 12.9.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 12.9.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next:
         specifier: catalog:web
         version: 15.3.1(babel-plugin-react-compiler@19.1.0-rc.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -3918,8 +3921,8 @@ packages:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
     engines: {node: '>= 0.6'}
 
-  framer-motion@12.9.4:
-    resolution: {integrity: sha512-yaeGDmGQ3eCQEwZ95/pRQMaSh/Q4E2CK6JYOclG/PdjyQad0MULJ+JFVV8911Fl5a6tF6o0wgW8Dpl5Qx4Adjg==}
+  framer-motion@12.9.5:
+    resolution: {integrity: sha512-GeRN4aX3g+pdGVTLRU0yC5SYeKY1DigyrnJjcyST2dKp/OA9sNusW5DUImZF96S/eBnGW3mNGRt7PteDJuT4Bg==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -4677,8 +4680,8 @@ packages:
   motion-utils@12.9.4:
     resolution: {integrity: sha512-BW3I65zeM76CMsfh3kHid9ansEJk9Qvl+K5cu4DVHKGsI52n76OJ4z2CUJUV+Mn3uEP9k1JJA3tClG0ggSrRcg==}
 
-  motion@12.9.4:
-    resolution: {integrity: sha512-ZMKNnhWylaIbtFmU+scDxdldk//3Rn/8B+dcDhIpGlixAl7yhiLx1WXyGD4TSJZf3sDU6yrnu3L3FWGFo4fTEQ==}
+  motion@12.9.5:
+    resolution: {integrity: sha512-GQ3m6d0lG+sXfJ9z2A8cp0wchdThQyW7JwdF0msLcYKGnjABk7rCVrNN2rl7NoYfN49Eh21UZP2t6vJgdki37Q==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
       react: ^18.0.0 || ^19.0.0
@@ -8918,7 +8921,7 @@ snapshots:
 
   forwarded@0.2.0: {}
 
-  framer-motion@12.9.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  framer-motion@12.9.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       motion-dom: 12.9.4
       motion-utils: 12.9.4
@@ -9672,9 +9675,9 @@ snapshots:
 
   motion-utils@12.9.4: {}
 
-  motion@12.9.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  motion@12.9.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
-      framer-motion: 12.9.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      framer-motion: 12.9.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       tslib: 2.8.1
     optionalDependencies:
       react: 19.1.0
