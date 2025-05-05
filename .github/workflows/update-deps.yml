@@ -15,6 +15,9 @@ permissions:
 env:
   # Disable Husky hooks during automated updates
   HUSKY: 0
+  TURBO_TELEMETRY_DISABLED: 1
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
   # Set timezone for git commits if needed (optional, defaults to UTC)
   TZ: 'Europe/Paris'
 
@@ -46,18 +49,19 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile=false # Allow lockfile updates
 
-      - name: Format everything
-        run: pnpm run format
+      - name: Format package.json
+        run: pnpm biome format ./package.json
 
-  run-checks:
-    needs: update-dependencies
-    uses: ./.github/workflows/checks.yml
-    secrets: inherit # Pass through secrets if needed
+      # Run essential checks
+      - name: Run check types
+        run: pnpm run check-types
 
-  create-pull-request:
-    needs: run-checks
-    runs-on: ubuntu-latest
-    steps:
+      - name: Run Lint Checks
+        run: pnpm run lint
+
+      - name: Run Tests
+        run: pnpm run test
+
       - name: Create Pull Request if changes exist
         uses: peter-evans/create-pull-request@v7
         with:
