@@ -62,7 +62,7 @@ jobs:
             Automated dependency updates via [`taze`](https://github.com/antfu-collective/taze).
 
             This PR updates project dependencies to their latest compatible versions.
-          branch: chore/update-dependencies # Name of the branch to create
+          branch: deps/autoupdate # Name of the branch to create
           delete-branch: true # Delete the branch once the PR is merged/closed
           # Assignee and labels
           assignees: finxol
