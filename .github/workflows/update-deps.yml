@@ -50,7 +50,7 @@ jobs:
         run: pnpm install --frozen-lockfile=false # Allow lockfile updates
 
       - name: Format package.json
-        run: pnpm biome format ./package.json
+        run: pnpm biome format ./package.json --write
 
       # Run essential checks
       - name: Run check types
