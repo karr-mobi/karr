@@ -2,12 +2,12 @@
     /* Define a coherent green theme for shadcn/ui */
 
     :root {
-        --background: hsl(140 20% 97%);
+        --background: hsl(140 10% 98%);
         --foreground: hsl(132 5% 10%);
         --header-background: hsl(132, 28%, 90%);
         --card: hsl(132, 28%, 99%);
         --card-foreground: hsl(132 5% 15%);
-        --popover: hsl(132 30% 97%);
+        --popover: hsl(132 15% 97%);
         --popover-foreground: hsl(132 95% 10%);
         --primary: hsl(132 64% 32%);
         --primary-foreground: hsl(0 0% 100%);
@@ -26,24 +26,24 @@
     }
 
     .dark {
-        --background: hsl(132 2% 10%);
+        --background: hsl(132 2% 7%);
         --foreground: hsl(132 5% 90%);
         --header-background: hsl(132 15% 15%);
         --card: hsl(132 15% 5%);
         --card-foreground: hsl(132 5% 90%);
-        --popover: hsl(132 30% 6%);
+        --popover: hsl(132 15% 6%);
         --popover-foreground: hsl(132 5% 90%);
         --primary: hsl(132 74% 32%);
         --primary-foreground: hsl(0 0% 100%);
         --secondary: hsl(132 30% 20%);
         --secondary-foreground: hsl(0 0% 100%);
-        --muted: hsl(94 30% 25%);
+        --muted: hsl(94 15% 25%);
         --muted-foreground: hsl(132 5% 65%);
         --accent: hsl(94 15% 15%);
         --accent-foreground: hsl(132 5% 90%);
         --destructive: hsl(0 50% 50%);
         --destructive-foreground: hsl(132 5% 90%);
-        --border: hsl(132 15% 30%);
+        --border: hsl(132 15% 20%);
         --input: hsl(132 30% 15%);
         --ring: hsl(132 74% 32%);
     }
