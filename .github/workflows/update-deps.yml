@@ -50,10 +50,12 @@ jobs:
         run: pnpm run format
 
   run-checks:
-        uses: ./.github/workflows/checks.yml
-        secrets: inherit # Pass through secrets if needed
+    needs: update-dependencies
+    uses: ./.github/workflows/checks.yml
+    secrets: inherit # Pass through secrets if needed
 
   create-pull-request:
+    needs: run-checks
     runs-on: ubuntu-latest
     steps:
       - name: Create Pull Request if changes exist
