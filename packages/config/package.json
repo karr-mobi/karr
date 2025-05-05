@@ -7,7 +7,7 @@
         "dev": "pnpm run --filter '@karr/util' build && tsc --watch",
         "build": "pnpm run --filter '@karr/util' build && tsc",
         "check-types": "tsc --noEmit",
-        "test": "vitest",
+        "test": "pnpm run --filter '@karr/util' build && vitest",
         "schema:write": "tsx src/export-schema.ts"
     },
     "exports": {

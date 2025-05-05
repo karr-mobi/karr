@@ -4,13 +4,7 @@ import type { accountsTable } from "@/db/schemas/accounts"
 import type { specialStatusTable } from "@/db/schemas/specialstatus"
 import type { userPrefsTable } from "@/db/schemas/userprefs"
 import type { usersTable } from "@/db/schemas/users"
-import type { UserSubject as Sub } from "@karr/auth/subjects"
 import { Prettify } from "@karr/util"
-
-export type UserSubject = {
-    type: "user"
-    properties: Sub
-}
 
 export type AppVariables = {
     userSubject?: UserSubject

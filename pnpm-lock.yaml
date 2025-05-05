@@ -674,6 +674,9 @@ importers:
       '@karr/logger':
         specifier: workspace:*
         version: link:../logger
+      '@karr/util':
+        specifier: workspace:*
+        version: link:../util
       '@openauthjs/openauth':
         specifier: catalog:api
         version: 0.4.3(patch_hash=2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2)(arctic@2.3.4)(hono@4.7.8)
@@ -754,6 +757,9 @@ importers:
       drizzle-orm:
         specifier: catalog:api
         version: 0.43.1(gel@2.0.1)(postgres@3.4.5)
+      drizzle-zod:
+        specifier: catalog:api
+        version: 0.7.1(drizzle-orm@0.43.1(gel@2.0.1)(postgres@3.4.5))(zod@4.0.0-beta.20250424T163858)
       postgres:
         specifier: catalog:api
         version: 3.4.5

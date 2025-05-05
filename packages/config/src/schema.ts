@@ -32,7 +32,8 @@ export const authProvidersSchema = z
         z.discriminatedUnion([
             // Password and code auth
             z.object({
-                name: z.union([z.literal("password"), z.literal("code")])
+                name: z.union([z.literal("password"), z.literal("code")]),
+                trusted: z.boolean().optional().default(false)
             }),
             // TODO: Generic OIDC provider
             /* z.object({

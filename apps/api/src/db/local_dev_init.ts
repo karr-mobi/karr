@@ -1,18 +1,16 @@
-import crypto from "node:crypto"
 import { eq } from "drizzle-orm"
 
 import db from "@karr/db"
-import { accountsTable } from "@karr/db/schemas/accounts.js"
 import { userPrefsTable } from "@karr/db/schemas/userprefs.js"
-import { usersTable } from "@karr/db/schemas/users.js"
+import { profileTable } from "@karr/db/schemas/profile.js"
 import logger from "@karr/logger"
 
 const initUsersTable = async () => {
     // check if test user already exists
     const existingUser = await db
         .select()
-        .from(usersTable)
-        .where(eq(usersTable.firstName, "Test"))
+        .from(profileTable)
+        .where(eq(profileTable.firstName, "Test"))
     if (existingUser.length > 0) {
         logger.info("Test user already exists", { id: existingUser[0]?.id })
         process.exit(0)
@@ -25,20 +23,15 @@ const initUsersTable = async () => {
 
     // create a test user in the users table
     const user = await db
-        .insert(usersTable)
+        .insert(profileTable)
         .values({
             firstName: "Test",
             lastName: "User",
             prefs: prefs[0]!.insertedId
         })
-        .returning({ insertedId: usersTable.id })
+        .returning({ insertedId: profileTable.id })
 
     // create a test user in the accounts table
-    await db.insert(accountsTable).values({
-        email: "test@example.org",
-        password: crypto.createHash("sha256").update("password").digest("hex"),
-        user: user[0]!.insertedId
-    })
 
     logger.info("Test user created", { id: user[0]?.insertedId })
 }

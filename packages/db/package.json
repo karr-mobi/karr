@@ -29,6 +29,7 @@
         "@karr/logger": "workspace:*",
         "drizzle-orm": "catalog:api",
         "drizzle-kit": "catalog:api",
+        "drizzle-zod": "catalog:api",
         "postgres": "catalog:api",
         "zod": "catalog:utils"
     },

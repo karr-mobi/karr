@@ -5,7 +5,11 @@ import type {
     UserWithPrefsAndStatus as _UserWithPrefsAndStatus,
     AppVariables
 } from "@/lib/types.d.ts"
-import { selectUserProfileById, updateNickname } from "@/db/users"
+import {
+    selectUserById,
+    selectUserProfileById,
+    updateNickname
+} from "@/db/users"
 import logger from "@karr/logger"
 
 const hono = new Hono<{ Variables: AppVariables }>()
@@ -35,16 +39,20 @@ hono.get("/", async (c) => {
     }
 
     // get the user from the database and send it back
-    return await handleRequest<unknown>(
-        c,
-        async () => ({
-            id: subject.properties.id,
-            email: subject.properties.name,
-            blocked: false,
-            verified: false
-        })
-        //selectUserById(subject.properties.userID)
-    )
+    const user = await selectUserById(subject.properties.id)
+
+    if (user.isErr()) {
+        return responseErrorObject(c, user.error, 500)
+    }
+
+    if (!user.value) {
+        return responseErrorObject(c, "User not found", 404)
+    }
+
+    return c.json({
+        timestamp: new Date().getTime(),
+        data: user.value
+    })
 })
 
 /**

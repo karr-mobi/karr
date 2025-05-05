@@ -20,11 +20,14 @@ import {
 } from "@karr/ui/components/dropdown"
 import { logout } from "~/auth/actions"
 import { Link } from "@/i18n/routing"
+import { UserProperties } from "@karr/auth/subjects"
 
 export function AccountDropdown({
-    children
+    children,
+    userdata
 }: {
     children?: React.ReactNode
+    userdata: UserProperties
 }) {
     const t = useTranslations("auth")
 
@@ -40,7 +43,11 @@ export function AccountDropdown({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>{t("Dropdown.title")}</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                    {userdata.firstName
+                        ? userdata.firstName + " " + userdata.lastName
+                        : t("Dropdown.title")}
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
