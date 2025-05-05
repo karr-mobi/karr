@@ -49,6 +49,9 @@ jobs:
       - name: Format everything
         run: pnpm run format
 
+      - name: Run checks
+        uses: ./.github/workflows/checks.yml
+
       - name: Create Pull Request if changes exist
         uses: peter-evans/create-pull-request@v7
         with:
@@ -62,6 +65,8 @@ jobs:
             Automated dependency updates via [`taze`](https://github.com/antfu-collective/taze).
 
             This PR updates project dependencies to their latest compatible versions.
+
+            ✅ All checks passed.
           branch: deps/autoupdate # Name of the branch to create
           delete-branch: true # Delete the branch once the PR is merged/closed
           # Assignee and labels
