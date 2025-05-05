@@ -13,7 +13,7 @@ export default async function LoginAccount() {
     const authState = await auth()
 
     return authState ? (
-        <AccountDropdown>
+        <AccountDropdown userdata={authState}>
             <Button
                 variant={authState.avatar ? "link" : "default"}
                 size="icon"
