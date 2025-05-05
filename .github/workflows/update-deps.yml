@@ -1,0 +1,67 @@
+name: Update Dependencies
+
+on:
+  workflow_dispatch: # Allows manual triggering
+  schedule:
+    # Runs every Monday at 9:00 AM UTC
+    # Use https://crontab.guru/ to help generate cron schedules
+    - cron: '0 9 * * MON'
+
+# Need permissions to create a branch, commit, and create a PR
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  # Disable Husky hooks during automated updates
+  HUSKY: 0
+  # Set timezone for git commits if needed (optional, defaults to UTC)
+  TZ: 'Europe/Paris'
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        # Fetch depth 0 is often recommended for create-pull-request
+        # to ensure it can correctly determine changes, though not always strictly necessary.
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Update dependencies using taze
+        run: pnpm dlx taze@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile=false # Allow lockfile updates
+
+      - name: Create Pull Request if changes exist
+        uses: peter-evans/create-pull-request@v6
+        with:
+          # Use the default GITHUB_TOKEN
+          token: ${{ secrets.GITHUB_TOKEN }}
+          sign-commits: true
+          # PR details
+          commit-message: 'chore(deps): update dependencies'
+          title: 'chore(deps): update dependencies'
+          body: |
+            Automated dependency updates via [`taze`](https://github.com/antfu-collective/taze).
+
+            This PR updates project dependencies to their latest compatible versions.
+          branch: chore/update-dependencies # Name of the branch to create
+          delete-branch: true # Delete the branch once the PR is merged/closed
+          # Assignee and labels
+          assignees: finxol
+          reviewers: finxol
+          labels: dependencies
