@@ -1,15 +1,20 @@
 import { boolean, pgTable, text, uuid } from "drizzle-orm/pg-core"
+import { createSelectSchema, createInsertSchema } from "drizzle-zod"
 
-import { usersTable } from "./users"
+import { profileTable } from "./profile"
 
 export const accountsTable = pgTable("Accounts", {
     id: uuid().primaryKey().defaultRandom(),
+    provider: text().notNull(),
+    remoteId: text(),
     email: text().unique().notNull(),
-    password: text().notNull(),
-    token: text(),
     blocked: boolean().default(false),
     verified: boolean().default(false),
-    user: uuid()
-        // .notNull()
-        .references(() => usersTable.id)
+    profile: uuid()
+        .notNull()
+        .references(() => profileTable.id)
 })
+
+export const accountsSelectSchema = createSelectSchema(accountsTable)
+
+export const accountsInsertSchema = createInsertSchema(accountsTable)

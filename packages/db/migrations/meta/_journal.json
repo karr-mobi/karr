@@ -43,6 +43,20 @@
       "when": 1737401522935,
       "tag": "0005_lonely_warhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1746483658102,
+      "tag": "0006_fat_black_cat",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1746488137847,
+      "tag": "0007_cuddly_catseye",
+      "breakpoints": true
     }
   ]
 }

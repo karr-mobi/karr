@@ -3,7 +3,7 @@ import { err, ok } from "neverthrow"
 
 import drizzle from "@karr/db"
 import { accountsTable } from "@karr/db/schemas/accounts.js"
-import { usersTable } from "@karr/db/schemas/users.js"
+import { profileTable } from "@karr/db/schemas/profile.js"
 import { tryCatch } from "@karr/util/trycatch"
 import logger from "@karr/logger"
 
@@ -46,9 +46,9 @@ export async function updateNickname(id: string, nickname: string) {
     logger.debug(`Updating nickname for user ${id} to ${nickname}`)
     const { success, error } = await tryCatch(
         drizzle
-            .update(usersTable)
+            .update(profileTable)
             .set({ nickname })
-            .where(eq(usersTable.id, id))
+            .where(eq(profileTable.id, id))
     )
     if (!success) {
         logger.error(`Failed to update nickname for user ${id}: ${error}`)
@@ -61,13 +61,13 @@ export async function selectUserProfileById(id: string) {
     const users = await tryCatch(
         drizzle
             .select({
-                firstName: usersTable.firstName,
-                nickname: usersTable.nickname,
-                bio: usersTable.bio,
-                specialStatus: usersTable.specialStatus
+                firstName: profileTable.firstName,
+                nickname: profileTable.nickname,
+                bio: profileTable.bio,
+                specialStatus: profileTable.specialStatus
             })
-            .from(usersTable)
-            .where(eq(usersTable.id, id))
+            .from(profileTable)
+            .where(eq(profileTable.id, id))
             .limit(1)
     )
 
