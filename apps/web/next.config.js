@@ -20,7 +20,13 @@ const nextConfig = {
     images: {
         remotePatterns: [
             new URL("https://example.com/*"),
-            new URL("https://profiles.cache.lol/finxol/picture?v=1743626159")
+            new URL("https://profiles.cache.lol/finxol/picture?v=1743626159"),
+            {
+                protocol: "https",
+                hostname: "avatars.githubusercontent.com",
+                port: "",
+                pathname: "/u/*"
+            }
         ]
     },
 
