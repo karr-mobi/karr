@@ -8,7 +8,7 @@ import { createDatabase } from "db0"
 import sqlite from "db0/connectors/node-sqlite"
 import dbDriver from "unstorage/drivers/db0"
 
-import { subjects, type UserSubject } from "@karr/auth/subjects"
+import { subjects } from "@karr/auth/subjects"
 import { authBaseUrl } from "@karr/auth/client"
 import { API_BASE } from "@karr/config"
 import { logger } from "@karr/logger"
@@ -19,40 +19,8 @@ import { responseErrorObject } from "@/lib/helpers"
 import { UnStorage } from "./unstorage-adapter"
 import { providers } from "./providers"
 import type { SuccessValues } from "./sucess"
-import { type ProfileData, isOAuth2ProfileData } from "./profile-fetchers"
 import { getGithubUserData } from "./profile-fetchers/github"
-
-async function getOrInsertUser(data: ProfileData) {
-    logger.debug(data)
-    // Get user from database and return user ID
-
-    if (data.provider === "password") {
-        // Check if user exists
-        return {
-            id: data.email,
-            name: data.email.split("@")[0],
-            avatar: "https://profiles.cache.lol/finxol/picture?v=1743626159"
-        } as UserSubject
-    } else if (data.provider === "code") {
-        // Check if user exists
-        return {
-            id: data.email,
-            name: data.email.split("@")[0]
-        } as UserSubject
-    } else if (isOAuth2ProfileData(data)) {
-        // Check if user exists, if not, create it
-        // return the local user ID
-        return {
-            id: data.remoteId,
-            name: data.name,
-            avatar: data.avatar
-        } as UserSubject
-    }
-
-    // Should never happen
-    logger.debug("Unknown provider", data)
-    throw new Error("Unknown provider")
-}
+import { getOrInsertUser } from "./persistance"
 
 const database = createDatabase(
     sqlite({
@@ -99,7 +67,7 @@ const app = issuer({
     async success(ctx, value: SuccessValues) {
         logger.debug("Success", value)
 
-        let subjectData: UserSubject
+        let subjectData
         if (value.provider === "password") {
             subjectData = await getOrInsertUser({
                 provider: value.provider,
@@ -128,7 +96,12 @@ const app = issuer({
         }
 
         logger.debug("User data", subjectData)
-        return ctx.subject("user", subjectData)
+
+        if (subjectData.isErr()) {
+            throw new Error(subjectData.error)
+        }
+
+        return ctx.subject("user", subjectData.value)
     }
 })
 
@@ -138,14 +111,16 @@ app.get("/callback", async (ctx) => {
     const error = ctx.req.query("error")
     const next = ctx.req.query("next") ?? `${url.origin}/`
 
-    if (error)
+    if (error) {
         return responseErrorObject(ctx, {
             message: error,
             cause: ctx.req.query("error_description")
         })
+    }
 
-    if (!code)
+    if (!code) {
         return responseErrorObject(ctx, { message: "No code provided" }, 400)
+    }
 
     const exchanged = await client.exchange(code, callbackUrl)
 
