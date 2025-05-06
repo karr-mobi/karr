@@ -1,7 +1,7 @@
 import "server-only"
 
-import packageJson from "../../../../../../package.json" with { type: "json" }
 import { PRODUCTION } from "@karr/config"
+import { APP_VERSION } from "@karr/util/version"
 
-export const version = packageJson.version
+export const version = APP_VERSION
 export const isProduction = PRODUCTION

@@ -8,7 +8,7 @@ import {
     Trash as IconTrash
 } from "lucide-react"
 
-import { TripSchema, type Trip } from "@karr/db/schemas/trips.js"
+import { TripSchema, type Trip } from "@karr/api/db/trips"
 import { Badge } from "@karr/ui/components/badge"
 import { Button } from "@karr/ui/components/button"
 import {

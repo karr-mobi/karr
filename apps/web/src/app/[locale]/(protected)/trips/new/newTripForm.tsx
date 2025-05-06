@@ -7,10 +7,7 @@ import { CalendarDays as IconCalendarDays } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useForm } from "react-hook-form"
 
-import {
-    NewTripInputSchema,
-    type NewTripInput
-} from "@karr/db/schemas/trips.js"
+import { NewTripInputSchema, type NewTripInput } from "@karr/api/db/trips"
 import { Button } from "@karr/ui/components/button"
 import { Calendar } from "@karr/ui/components/calendar"
 import { CurrencyInput } from "@karr/ui/components/currencyInput"

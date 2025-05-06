@@ -2,14 +2,14 @@ import { and, eq, getTableColumns } from "drizzle-orm"
 import { err, ok } from "neverthrow"
 import { z } from "zod"
 
-import drizzle from "@karr/db"
-import { accountsTable } from "@karr/db/schemas/accounts.js"
+import drizzle from "@/db"
+import { accountsTable } from "@/db/schemas/accounts"
 import {
     NewTripSchema,
     TripSchema,
     tripsTable,
     type NewTrip
-} from "@karr/db/schemas/trips.js"
+} from "@/db/schemas/trips"
 import logger from "@karr/logger"
 
 export async function getTrips() {

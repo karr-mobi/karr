@@ -3,10 +3,10 @@ import { eq, and } from "drizzle-orm"
 
 import logger from "@karr/logger"
 import { UserProperties } from "@karr/auth/subjects"
-import { db } from "@karr/db"
-import { accountsTable } from "@karr/db/schemas/accounts.js"
-import { profileTable } from "@karr/db/schemas/profile.js"
-import { userPrefsTable } from "@karr/db/schemas/userprefs.js"
+import { db } from "@/db"
+import { accountsTable } from "@/db/schemas/accounts"
+import { profileTable } from "@/db/schemas/profile"
+import { userPrefsTable } from "@/db/schemas/userprefs"
 
 import { type ProfileData, isOAuth2ProfileData } from "./profile-fetchers"
 import { Providers } from "./providers"
@@ -53,6 +53,7 @@ async function initUser(data: UserInitData) {
             id: profileTable.id,
             firstName: profileTable.firstName,
             lastName: profileTable.lastName,
+            nickname: profileTable.nickname,
             avatar: profileTable.avatar
         })
 
@@ -81,6 +82,7 @@ async function initUser(data: UserInitData) {
         id: account[0].id,
         firstName: profile[0].firstName,
         lastName: profile[0].lastName,
+        nickname: profile[0].nickname,
         avatar: profile[0].avatar
     } satisfies UserProperties)
 }
@@ -122,6 +124,7 @@ export async function getOrInsertUser(data: ProfileData) {
                 id: user[0].Profile.id,
                 firstName: user[0].Profile.firstName,
                 lastName: user[0].Profile.lastName,
+                nickname: user[0].Profile.nickname,
                 avatar: user[0].Profile.avatar
             } satisfies UserProperties)
         } else if (user.length === 0) {
@@ -174,6 +177,7 @@ export async function getOrInsertUser(data: ProfileData) {
                 id: user[0].Profile.id,
                 firstName: user[0].Profile.firstName,
                 lastName: user[0].Profile.lastName,
+                nickname: user[0].Profile.nickname,
                 avatar: user[0].Profile.avatar
             } satisfies UserProperties)
         } else if (user.length === 0) {
@@ -248,6 +252,7 @@ export async function getOrInsertUser(data: ProfileData) {
                 id: user[0].Profile.id,
                 firstName: user[0].Profile.firstName,
                 lastName: user[0].Profile.lastName,
+                nickname: user[0].Profile.nickname,
                 avatar: avatar
             } satisfies UserProperties)
         } else if (user.length === 0) {

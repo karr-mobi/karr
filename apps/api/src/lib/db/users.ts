@@ -1,13 +1,15 @@
 import { eq } from "drizzle-orm"
 import { err, ok } from "neverthrow"
 
-import drizzle from "@karr/db"
-import { accountsTable } from "@karr/db/schemas/accounts.js"
-import { profileTable } from "@karr/db/schemas/profile.js"
+import drizzle from "@/db"
+import { accountsTable } from "@/db/schemas/accounts"
+import { profileTable } from "@/db/schemas/profile"
 import { tryCatch } from "@karr/util/trycatch"
 import logger from "@karr/logger"
 
-import type { UserWithPrefsAndStatus as _UserWithPrefsAndStatus } from "@/lib/types.d.ts"
+import type { UserWithPrefsAndStatus as _UserWithPrefsAndStatus } from "@/lib/types"
+import { userPrefsTable } from "@/db/schemas/userprefs"
+import { specialStatusTable } from "@/db/schemas/specialstatus"
 
 /**
  * Select a user by their ID
@@ -15,22 +17,34 @@ import type { UserWithPrefsAndStatus as _UserWithPrefsAndStatus } from "@/lib/ty
  * @returns The user with the given ID
  */
 export async function selectUserById(id: string) {
-    // TODO: move back to Users table, not Accounts!!
+    logger.debug(`Selecting user by ID: ${id}`)
+
     const users = await tryCatch(
         drizzle
             .select({
-                id: accountsTable.id,
+                id: profileTable.id,
+                phone: profileTable.phone,
+                bio: profileTable.bio,
+                provider: accountsTable.provider,
                 email: accountsTable.email,
-                blocked: accountsTable.blocked,
-                verified: accountsTable.verified
+                verified: accountsTable.verified,
+                autoBook: userPrefsTable.autoBook,
+                defaultPlaces: userPrefsTable.defaultPlaces,
+                smoke: userPrefsTable.smoke,
+                music: userPrefsTable.music,
+                pets: userPrefsTable.pets
             })
-            .from(accountsTable)
-            .where(eq(accountsTable.id, id))
-            // .leftJoin(userPrefsTable, eq(usersTable.prefs, userPrefsTable.id))
-            // .leftJoin(
-            //     specialStatusTable,
-            //     eq(usersTable.specialStatus, specialStatusTable.title)
-            // )
+            .from(profileTable)
+            .where(eq(profileTable.id, id))
+            .innerJoin(
+                accountsTable,
+                eq(profileTable.id, accountsTable.profile)
+            )
+            .leftJoin(userPrefsTable, eq(profileTable.prefs, userPrefsTable.id))
+            .leftJoin(
+                specialStatusTable,
+                eq(profileTable.specialStatus, specialStatusTable.title)
+            )
             .limit(1)
     )
 

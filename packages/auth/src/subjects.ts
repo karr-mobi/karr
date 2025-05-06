@@ -6,7 +6,8 @@ const user = z.object({
     id: z.string(),
     avatar: z.url().optional().nullable(),
     firstName: z.string(),
-    lastName: z.string()
+    lastName: z.string(),
+    nickname: z.string().nullable()
 })
 
 export const subjects = createSubjects({
