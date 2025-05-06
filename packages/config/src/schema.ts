@@ -33,7 +33,7 @@ export const authProvidersSchema = z
             // Password and code auth
             z.object({
                 name: z.union([z.literal("password"), z.literal("code")]),
-                trusted: z.boolean().optional().default(false)
+                trusted: z.boolean().default(false).optional()
             }),
             // TODO: Generic OIDC provider
             /* z.object({
@@ -118,6 +118,13 @@ export const authProvidersSchema = z
                 scopes: z.array(z.string()),
                 tenant: z.string()
             }), */
+            // Google OIDC provider
+            z.object({
+                name: z.literal("google"),
+                clientID: z.string(),
+                query: z.record(z.string(), z.string()).optional(),
+                trusted: z.boolean().default(false).optional()
+            }),
             // Other built-in OAuth2 providers
             z.object({
                 name: z.union([
@@ -132,7 +139,7 @@ export const authProvidersSchema = z
                 clientSecret: z.string(),
                 pkce: z.boolean().optional(),
                 query: z.record(z.string(), z.string()).optional(),
-                trusted: z.boolean().optional().default(false)
+                trusted: z.boolean().default(false).optional()
             })
         ])
     )

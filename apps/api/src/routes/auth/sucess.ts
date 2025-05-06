@@ -1,11 +1,11 @@
 import type { Prettify } from "@karr/util"
-import { type OAuth2Provider, type OidcProvider } from "./providers"
+import { type OAuth2Provider } from "./providers"
 import type { JWTPayload } from "hono/utils/jwt/types"
 
 export type SuccessValues = Prettify<
     | CodeSuccessValue
     | PasswordSuccessValue
-    // | OidcSuccessValue
+    | GoogleSuccessValue
     | OAuth2SuccessValue
     // | ArcticSuccessValue
 >
@@ -20,9 +20,24 @@ type PasswordSuccessValue = {
     email: string
 }
 
-type _OidcSuccessValue = {
-    provider: OidcProvider
-    id: JWTPayload
+export type GoogleSuccessValue = {
+    provider: "google"
+    id: Prettify<
+        JWTPayload & {
+            iss: string
+            azp: string
+            aud: string
+            sub: string
+            email: string
+            email_verified: boolean
+            nonce: string
+            name: string
+            picture: string
+            given_name: string
+            family_name: string
+            jti: string
+        }
+    >
     clientID: string
 }
 

@@ -11,6 +11,7 @@ import {
     updateNickname
 } from "@/lib/db/users"
 import logger from "@karr/logger"
+import { getUserSub } from "@/util/subject"
 
 const hono = new Hono<{ Variables: AppVariables }>()
 
@@ -23,27 +24,19 @@ const hono = new Hono<{ Variables: AppVariables }>()
      * @returns Object containing user info
      */
     .get("/", async (c) => {
-        // Get the subject from the context
-        const subject = c.get("userSubject")
+        const subject = getUserSub(c)
 
-        logger.debug("User subject", subject)
-
-        // Middleware should prevent this, but good practice to check
-        if (!subject?.properties?.id) {
-            logger.error("User subject missing in context for GET /user")
+        if (!subject) {
             return responseErrorObject(
                 c,
-                "Internal Server Error: Subject missing",
+                "User subject missing in context",
                 500
             )
         }
 
-        logger.debug("User subject properties", subject.properties)
-
         logger.debug(`hit route /user`)
 
-        // get the user from the database and send it back
-        const user = await selectUserById(subject.properties.id)
+        const user = await selectUserById(subject.id)
 
         if (user.isErr()) {
             return responseErrorObject(c, user.error, 500)

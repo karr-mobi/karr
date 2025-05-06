@@ -2,291 +2,170 @@
     "type": "object",
     "properties": {
         "APPLICATION_NAME": {
-            "oneOf": [
-                {
-                    "type": "string"
-                },
-                {
-                    "type": "null"
-                }
-            ]
+            "type": "string"
         },
         "APP_URL": {
-            "oneOf": [
+            "anyOf": [
                 {
-                    "oneOf": [
-                        {
-                            "type": "string",
-                            "format": "uri"
-                        },
-                        {
-                            "enum": ["http://localhost/"]
-                        }
-                    ]
+                    "type": "string",
+                    "format": "uri"
                 },
                 {
-                    "type": "null"
+                    "const": "http://localhost/"
                 }
             ]
         },
         "API_PORT": {
-            "oneOf": [
-                {
-                    "type": "number"
-                },
-                {
-                    "type": "null"
-                }
-            ]
+            "type": "number"
         },
         "API_BASE": {
-            "oneOf": [
-                {
-                    "type": "string"
-                },
-                {
-                    "type": "null"
-                }
-            ]
+            "type": "string"
         },
         "LOG_TIMESTAMP": {
-            "oneOf": [
-                {
-                    "type": "boolean"
-                },
-                {
-                    "type": "null"
-                }
-            ]
+            "type": "boolean"
         },
         "LOG_LEVEL": {
-            "oneOf": [
-                {
-                    "enum": ["trace", "debug", "info", "warn", "error"]
-                },
-                {
-                    "type": "null"
-                }
-            ]
+            "enum": ["trace", "debug", "info", "warn", "error"]
         },
         "ADMIN_EMAIL": {
-            "oneOf": [
-                {
-                    "type": "string",
-                    "format": "email"
-                },
-                {
-                    "type": "null"
-                }
-            ]
+            "type": "string",
+            "format": "email",
+            "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
         },
         "FEDERATION": {
-            "oneOf": [
-                {
-                    "type": "boolean"
-                },
-                {
-                    "type": "null"
-                }
-            ]
+            "type": "boolean"
         },
         "AUTH_PROVIDERS": {
-            "oneOf": [
-                {
-                    "minItems": 1,
-                    "maxItems": 18,
-                    "type": "array",
-                    "items": {
-                        "oneOf": [
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "oneOf": [
-                                            {
-                                                "enum": ["password"]
-                                            },
-                                            {
-                                                "enum": ["code"]
-                                            }
-                                        ]
-                                    }
-                                },
-                                "required": ["name"]
-                            },
-                            {
-                                "type": "object",
-                                "properties": {
-                                    "name": {
-                                        "oneOf": [
-                                            {
-                                                "enum": ["github"]
-                                            }
-                                        ]
-                                    },
-                                    "clientID": {
-                                        "type": "string"
-                                    },
-                                    "clientSecret": {
-                                        "type": "string"
-                                    },
-                                    "pkce": {
-                                        "oneOf": [
-                                            {
-                                                "type": "boolean"
-                                            },
-                                            {
-                                                "type": "null"
-                                            }
-                                        ]
-                                    },
-                                    "query": {
-                                        "oneOf": [
-                                            {
-                                                "type": "object",
-                                                "propertyNames": {
-                                                    "type": "string"
-                                                },
-                                                "additionalProperties": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            {
-                                                "type": "null"
-                                            }
-                                        ]
-                                    },
-                                    "trusted": {
-                                        "oneOf": [
-                                            {
-                                                "type": "boolean"
-                                            },
-                                            {
-                                                "type": "null"
-                                            }
-                                        ],
-                                        "default": false
-                                    }
-                                },
-                                "required": [
-                                    "name",
-                                    "clientID",
-                                    "clientSecret",
-                                    "trusted"
-                                ]
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "null"
-                }
-            ]
-        },
-        "FEDERATION_TARGETS": {
-            "oneOf": [
-                {
-                    "type": "array",
-                    "items": {
+            "minItems": 1,
+            "maxItems": 18,
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
                         "type": "object",
                         "properties": {
                             "name": {
-                                "type": "string"
+                                "anyOf": [
+                                    {
+                                        "const": "password"
+                                    },
+                                    {
+                                        "const": "code"
+                                    }
+                                ]
                             },
-                            "url": {
-                                "type": "string"
+                            "trusted": {
+                                "type": "boolean",
+                                "default": false
                             }
                         },
-                        "required": ["name", "url"]
+                        "required": ["name"]
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "const": "google"
+                            },
+                            "clientID": {
+                                "type": "string"
+                            },
+                            "query": {
+                                "type": "object",
+                                "propertyNames": {
+                                    "type": "string"
+                                },
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "required": ["name", "clientID"]
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "anyOf": [
+                                    {
+                                        "const": "github"
+                                    }
+                                ]
+                            },
+                            "clientID": {
+                                "type": "string"
+                            },
+                            "clientSecret": {
+                                "type": "string"
+                            },
+                            "pkce": {
+                                "type": "boolean"
+                            },
+                            "query": {
+                                "type": "object",
+                                "propertyNames": {
+                                    "type": "string"
+                                },
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            },
+                            "trusted": {
+                                "default": false,
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "name",
+                            "clientID",
+                            "clientSecret",
+                            "trusted"
+                        ]
+                    }
+                ]
+            }
+        },
+        "FEDERATION_TARGETS": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
                     }
                 },
-                {
-                    "type": "null"
-                }
-            ]
+                "required": ["name", "url"]
+            }
         },
         "DB_CONFIG": {
-            "oneOf": [
-                {
-                    "type": "object",
-                    "properties": {
-                        "host": {
-                            "oneOf": [
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ]
-                        },
-                        "port": {
-                            "oneOf": [
-                                {
-                                    "type": "number"
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ]
-                        },
-                        "user": {
-                            "oneOf": [
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ]
-                        },
-                        "password": {
-                            "oneOf": [
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ]
-                        },
-                        "password_file": {
-                            "oneOf": [
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ]
-                        },
-                        "db_name": {
-                            "oneOf": [
-                                {
-                                    "type": "string"
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ]
-                        },
-                        "ssl": {
-                            "oneOf": [
-                                {
-                                    "type": "boolean"
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ]
-                        }
-                    },
-                    "required": []
+            "type": "object",
+            "properties": {
+                "host": {
+                    "type": "string"
                 },
-                {
-                    "type": "null"
+                "port": {
+                    "type": "number"
+                },
+                "user": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "password_file": {
+                    "type": "string"
+                },
+                "db_name": {
+                    "type": "string"
+                },
+                "ssl": {
+                    "type": "boolean"
                 }
-            ]
+            },
+            "required": []
         }
     },
     "required": []

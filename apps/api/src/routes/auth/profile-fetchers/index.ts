@@ -9,12 +9,25 @@ export type OAuthProfileData = {
     name: string
 }
 
+export type LocalAuthProfileData = {
+    provider: "password" | "code"
+    email: string
+}
+
+export type GoogleAuthProfileData = {
+    provider: "google"
+    email: string
+    emailVerified: boolean
+    remoteId: string
+    avatar?: string
+    firstName: string
+    lastName: string
+}
+
 export type ProfileData =
+    | Prettify<LocalAuthProfileData>
     | Prettify<OAuthProfileData>
-    | {
-          provider: "password" | "code"
-          email: string
-      }
+    | Prettify<GoogleAuthProfileData>
 
 export function isOAuth2ProfileData(
     data: ProfileData
