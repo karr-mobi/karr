@@ -44,9 +44,10 @@ export function AccountDropdown({
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>
-                    {userdata.firstName
-                        ? userdata.firstName + " " + userdata.lastName
-                        : t("Dropdown.title")}
+                    {userdata.nickname ||
+                        (userdata.firstName
+                            ? userdata.firstName + " " + userdata.lastName
+                            : t("Dropdown.title"))}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
