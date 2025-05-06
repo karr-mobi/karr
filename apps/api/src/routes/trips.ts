@@ -1,12 +1,12 @@
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
 
-import { NewTrip, NewTripSchema, Trip } from "@karr/db/schemas/trips.js"
+import { NewTrip, NewTripSchema, Trip } from "@/db/schemas/trips"
 import logger from "@karr/logger"
 
 import { handleRequest, responseErrorObject } from "@/lib/helpers"
 import type { AppVariables, DataResponse } from "@/lib/types.d.ts"
-import { addTrip, deleteTrip, getTrips } from "@/db/trips"
+import { addTrip, deleteTrip, getTrips } from "@/lib/db/trips"
 
 import { getFederatedTrips } from "./federation/helpers"
 

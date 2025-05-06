@@ -27,9 +27,6 @@ catalogs:
     hono:
       specifier: ^4.7.8
       version: 4.7.8
-    postgres:
-      specifier: ^3.4.5
-      version: 3.4.5
     unstorage:
       specifier: ^1.16.0
       version: 1.16.0
@@ -354,9 +351,6 @@ importers:
       '@karr/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@karr/db':
-        specifier: workspace:*
-        version: link:../../packages/db
       '@karr/logger':
         specifier: workspace:*
         version: link:../../packages/logger
@@ -583,15 +577,15 @@ importers:
       '@hookform/resolvers':
         specifier: catalog:ui
         version: 5.0.1(react-hook-form@7.56.2(react@19.1.0))
+      '@karr/api':
+        specifier: workspace:*
+        version: link:../api
       '@karr/auth':
         specifier: workspace:*
         version: link:../../packages/auth
       '@karr/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@karr/db':
-        specifier: workspace:*
-        version: link:../../packages/db
       '@karr/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -743,52 +737,6 @@ importers:
         specifier: catalog:test
         version: 3.1.3(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.4)(yaml@2.7.1)
 
-  packages/db:
-    dependencies:
-      '@karr/config':
-        specifier: workspace:*
-        version: link:../config
-      '@karr/logger':
-        specifier: workspace:*
-        version: link:../logger
-      drizzle-kit:
-        specifier: catalog:api
-        version: 0.31.1
-      drizzle-orm:
-        specifier: catalog:api
-        version: 0.43.1(gel@2.0.1)(postgres@3.4.5)
-      drizzle-zod:
-        specifier: catalog:api
-        version: 0.7.1(drizzle-orm@0.43.1(gel@2.0.1)(postgres@3.4.5))(zod@4.0.0-beta.20250424T163858)
-      postgres:
-        specifier: catalog:api
-        version: 3.4.5
-      zod:
-        specifier: catalog:utils
-        version: 4.0.0-beta.20250424T163858
-    devDependencies:
-      '@karr/eslint-config':
-        specifier: workspace:*
-        version: link:../../tooling/eslint-config
-      '@karr/tsconfig':
-        specifier: workspace:*
-        version: link:../../tooling/typescript-config
-      '@types/node':
-        specifier: catalog:types
-        version: 22.15.3
-      eslint:
-        specifier: catalog:lint
-        version: 9.26.0(jiti@2.4.2)
-      typescript:
-        specifier: catalog:devtools
-        version: 5.8.3
-      vite-tsconfig-paths:
-        specifier: catalog:test
-        version: 5.1.4(typescript@5.8.3)(vite@6.2.3(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.4)(yaml@2.7.1))
-      vitest:
-        specifier: catalog:test
-        version: 3.1.3(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.4)(yaml@2.7.1)
-
   packages/logger:
     dependencies:
       '@karr/config':
@@ -797,43 +745,6 @@ importers:
       tinyrainbow:
         specifier: catalog:utils
         version: 2.0.0
-    devDependencies:
-      '@karr/eslint-config':
-        specifier: workspace:*
-        version: link:../../tooling/eslint-config
-      '@karr/tsconfig':
-        specifier: workspace:*
-        version: link:../../tooling/typescript-config
-      '@types/node':
-        specifier: catalog:types
-        version: 22.15.3
-      eslint:
-        specifier: catalog:lint
-        version: 9.26.0(jiti@2.4.2)
-      typescript:
-        specifier: catalog:devtools
-        version: 5.8.3
-      vite-tsconfig-paths:
-        specifier: catalog:test
-        version: 5.1.4(typescript@5.8.3)(vite@6.2.3(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.4)(yaml@2.7.1))
-      vitest:
-        specifier: catalog:test
-        version: 3.1.3(@types/node@22.15.3)(jiti@2.4.2)(lightningcss@1.29.2)(tsx@4.19.4)(yaml@2.7.1)
-
-  packages/settings:
-    dependencies:
-      '@karr/db':
-        specifier: workspace:*
-        version: link:../db
-      drizzle-kit:
-        specifier: catalog:api
-        version: 0.31.1
-      drizzle-orm:
-        specifier: catalog:api
-        version: 0.43.1(gel@2.0.1)(postgres@3.4.5)
-      drizzle-zod:
-        specifier: catalog:api
-        version: 0.7.1(drizzle-orm@0.43.1(gel@2.0.1)(postgres@3.4.5))(zod@4.0.0-beta.20250424T163858)
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -9790,7 +9701,8 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  postgres@3.4.5: {}
+  postgres@3.4.5:
+    optional: true
 
   posthog-js@1.239.1:
     dependencies:

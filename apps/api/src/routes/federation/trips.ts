@@ -3,7 +3,7 @@ import { Hono } from "hono"
 import logger from "@karr/logger"
 
 import { handleRequest } from "@/lib/helpers"
-import { getTrips } from "@/db/trips"
+import { getTrips } from "@/lib/db/trips"
 
 /**
  * Federation trips endpoint

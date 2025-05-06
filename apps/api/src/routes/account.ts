@@ -8,7 +8,7 @@ import type {
     AppVariables,
     DataResponse
 } from "@/lib/types.d.ts"
-import { isVerified, updateEmail } from "@/db/accounts"
+import { isVerified, updateEmail } from "@/lib/db/accounts"
 
 const hono = new Hono<{ Variables: AppVariables }>()
     .get("/", (c) => {

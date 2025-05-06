@@ -1,15 +1,15 @@
 import { eq } from "drizzle-orm"
 import { err, ok } from "neverthrow"
 
-import drizzle from "@karr/db"
-import { accountsTable } from "@karr/db/schemas/accounts.js"
-import { profileTable } from "@karr/db/schemas/profile.js"
+import drizzle from "@/db"
+import { accountsTable } from "@/db/schemas/accounts"
+import { profileTable } from "@/db/schemas/profile"
 import { tryCatch } from "@karr/util/trycatch"
 import logger from "@karr/logger"
 
-import type { UserWithPrefsAndStatus as _UserWithPrefsAndStatus } from "@/lib/types.d.ts"
-import { userPrefsTable } from "@karr/db/schemas/userprefs.js"
-import { specialStatusTable } from "@karr/db/schemas/specialstatus.js"
+import type { UserWithPrefsAndStatus as _UserWithPrefsAndStatus } from "@/lib/types"
+import { userPrefsTable } from "@/db/schemas/userprefs"
+import { specialStatusTable } from "@/db/schemas/specialstatus"
 
 /**
  * Select a user by their ID

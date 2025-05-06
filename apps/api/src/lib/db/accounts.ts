@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm"
 
-import drizzle from "@karr/db"
-import { accountsTable } from "@karr/db/schemas/accounts.js"
+import drizzle from "@/db"
+import { accountsTable } from "@/db/schemas/accounts"
 import { tryCatch } from "@karr/util/trycatch"
 
 /**

@@ -9,7 +9,7 @@ import {
     selectUserById,
     selectUserProfileById,
     updateNickname
-} from "@/db/users"
+} from "@/lib/db/users"
 import logger from "@karr/logger"
 
 const hono = new Hono<{ Variables: AppVariables }>()
