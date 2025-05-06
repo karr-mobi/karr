@@ -8,7 +8,7 @@ import { createDatabase } from "db0"
 import sqlite from "db0/connectors/node-sqlite"
 import dbDriver from "unstorage/drivers/db0"
 
-import { subjects } from "@karr/auth/subjects"
+import { subjects, UserProperties } from "@karr/auth/subjects"
 import { authBaseUrl } from "@karr/auth/client"
 import { API_BASE } from "@karr/config"
 import { logger } from "@karr/logger"
@@ -20,7 +20,9 @@ import { UnStorage } from "./unstorage-adapter"
 import { providers } from "./providers"
 import type { SuccessValues } from "./sucess"
 import { getGithubUserData } from "./profile-fetchers/github"
-import { getOrInsertUser } from "./persistance"
+import { getGoogleUserData } from "./profile-fetchers/google"
+import { getOrInsertUser } from "./persistence"
+import { Result } from "neverthrow"
 
 const database = createDatabase(
     sqlite({
@@ -67,7 +69,7 @@ const app = issuer({
     async success(ctx, value: SuccessValues) {
         logger.debug("Success", value)
 
-        let subjectData
+        let subjectData: Result<UserProperties, string>
         if (value.provider === "password") {
             subjectData = await getOrInsertUser({
                 provider: value.provider,
@@ -86,6 +88,13 @@ const app = issuer({
             if (userData.isErr()) {
                 throw new Error(userData.error)
             }
+
+            // save the user data to the database, and return the jwt payload
+            subjectData = await getOrInsertUser(userData.value)
+        } else if (value.provider === "google") {
+            console.log(value)
+            // extract the user data
+            const userData = await getGoogleUserData(value.id)
 
             // save the user data to the database, and return the jwt payload
             subjectData = await getOrInsertUser(userData.value)

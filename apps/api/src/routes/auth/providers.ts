@@ -5,8 +5,8 @@ import { PasswordProvider } from "@openauthjs/openauth/provider/password"
 import { CodeProvider } from "@openauthjs/openauth/provider/code"
 import { PasswordUI } from "@openauthjs/openauth/ui/password"
 import { CodeUI } from "@openauthjs/openauth/ui/code"
-import { OidcProvider } from "@openauthjs/openauth/provider/oidc"
 import { GithubProvider } from "@openauthjs/openauth/provider/github"
+import { GoogleOidcProvider } from "@openauthjs/openauth/provider/google"
 import { Provider } from "@openauthjs/openauth/provider/provider"
 import { Prettify } from "@karr/util"
 
@@ -29,10 +29,10 @@ export const oauthProviders = [
 export type OAuth2Provider = (typeof oauthProviders)[number]
 
 export const oidcProviders = [
-    "oidc"
+    // "oidc"
     // "apple",
     // "facebook",
-    // "google",
+    "google"
     // "microsoft"
 ] as const
 export type OidcProvider = (typeof oidcProviders)[number]
@@ -71,10 +71,16 @@ function getProviders() {
                 })
             )
         } else if (provider.name === "github") {
-            const { name: _name, ...config } = provider
+            const { name: _name, trusted: _trusted, ...config } = provider
             providerConfig = GithubProvider({
                 scopes: ["read:user", "user:email"],
                 ...config
+            })
+        } else if (provider.name === "google") {
+            const { name: _name, trusted: _trusted, ...config } = provider
+            providerConfig = GoogleOidcProvider({
+                ...config,
+                scopes: ["openid", "profile", "email"]
             })
             /*
         } else if (provider.name === "oidc") {
@@ -98,9 +104,6 @@ function getProviders() {
         } else if (provider.name === "microsoft") {
             const { name: _name, ...config } = provider
             providerConfig = MicrosoftProvider(config)
-        } else if (provider.name === "google") {
-            const { name: _name, ...config } = provider
-            providerConfig = GoogleProvider(config)
         } else if (provider.name === "yahoo") {
             const { name: _name, ...config } = provider
             providerConfig = YahooProvider(config)
