@@ -4,7 +4,7 @@ import { API_PORT, LOG_LEVEL, logLevels, PRODUCTION } from "@karr/config"
 import { drizzleMigrate } from "@karr/db/migrate"
 import logger from "@karr/logger"
 
-import { build } from "@/server"
+import { app } from "@/server"
 
 if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
     logger.warn(
@@ -21,9 +21,6 @@ logger.info(`TZ=${Intl.DateTimeFormat().resolvedOptions().timeZone}`)
 try {
     // Run database migrations
     await drizzleMigrate()
-
-    // Build the server
-    const app = build()
 
     // Start the server
     serve({
