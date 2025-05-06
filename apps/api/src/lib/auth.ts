@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
-import { Context } from "hono"
-import { getCookie } from "hono/cookie"
+import type { Context } from "hono"
+import { getCookie, deleteCookie } from "hono/cookie"
 import { err, ok } from "neverthrow"
 
 import db from "@karr/db"
@@ -29,6 +29,8 @@ export async function isAuthenticated(ctx: Context) {
 
     if (verified.err) {
         console.error("Error verifying token:", verified.err)
+        deleteCookie(ctx, "access_token")
+        deleteCookie(ctx, "refresh_token")
         return false
     }
     if (verified.tokens) {
