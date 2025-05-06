@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.11.1
+
+[compare changes](https://github.com/finxol/karr/compare/v0.11.0...v0.11.1)
+
+### 🚀 Enhancements
+
+- Add Google auth provider ([#139](https://github.com/finxol/karr/pull/139))
+
+### 🩹 Fixes
+
+- Add nickname to jwt sub + refactor packages ([#138](https://github.com/finxol/karr/pull/138))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+
 ## v0.11.0
 
 [compare changes](https://github.com/finxol/karr/compare/v0.10.2...v0.11.0)
