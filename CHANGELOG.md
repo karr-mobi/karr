@@ -1,5 +1,43 @@
 # Changelog
 
+## v0.11.0
+
+[compare changes](https://github.com/finxol/karr/compare/v0.10.2...v0.11.0)
+
+### 🚀 Enhancements
+
+- ⚠️  Persist user data to db ([#137](https://github.com/finxol/karr/pull/137))
+
+### 🩹 Fixes
+
+- Add github avatar url to image remotePatterns ([12f6f1f](https://github.com/finxol/karr/commit/12f6f1f))
+- Adjust theme colours ([ebb102d](https://github.com/finxol/karr/commit/ebb102d))
+
+### 📦 Build
+
+- Automate deps update with custom action ([ac636e5](https://github.com/finxol/karr/commit/ac636e5))
+
+### 🏡 Chore
+
+- Update deps + add socket.dev override ([7122a48](https://github.com/finxol/karr/commit/7122a48))
+- Use latest `create-pull-request` version ([3719604](https://github.com/finxol/karr/commit/3719604))
+- Add formatting step ([e391099](https://github.com/finxol/karr/commit/e391099))
+- Change triggers ([ebf09e6](https://github.com/finxol/karr/commit/ebf09e6))
+- Run checks after updating deps ([66f08a0](https://github.com/finxol/karr/commit/66f08a0))
+- Make checks separate step ([e14cc9d](https://github.com/finxol/karr/commit/e14cc9d))
+- Add step `needs` ([182fa4b](https://github.com/finxol/karr/commit/182fa4b))
+- Move back to single step ([112f819](https://github.com/finxol/karr/commit/112f819))
+- Write formatting ([7200497](https://github.com/finxol/karr/commit/7200497))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Persist user data to db ([#137](https://github.com/finxol/karr/pull/137))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.10.2
 
 [compare changes](https://github.com/finxol/karr/compare/v0.10.1...v0.10.2)
