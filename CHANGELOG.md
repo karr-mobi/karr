@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.11.2
+
+[compare changes](https://github.com/finxol/karr/compare/v0.11.1...v0.11.2)
+
+### 🩹 Fixes
+
+- Change migrations folder location ([c2c056c](https://github.com/finxol/karr/commit/c2c056c))
+- Add pnpm patches ([8d61c80](https://github.com/finxol/karr/commit/8d61c80))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.11.1
 
 [compare changes](https://github.com/finxol/karr/compare/v0.11.0...v0.11.1)
