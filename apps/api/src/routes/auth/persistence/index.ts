@@ -81,7 +81,7 @@ export async function initUser(data: UserInitData) {
     }
 
     return ok({
-        id: account[0].id,
+        id: profile[0].id,
         firstName: profile[0].firstName,
         lastName: profile[0].lastName,
         nickname: profile[0].nickname,
