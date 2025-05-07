@@ -79,7 +79,7 @@ USER runner
 
 COPY --from=builder --chown=runner:runner /app/apps/api/out/index.min.mjs ./index.min.mjs
 # Copy migration files
-COPY --from=builder --chown=runner:runner /app/packages/db/migrations ./migrations
+COPY --from=builder --chown=runner:runner /app/apps/api/src/db/migrations ./migrations
 
 ENV NODE_ENV=production
 ENV DOCKER=1
