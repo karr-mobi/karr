@@ -122,6 +122,6 @@ catalogs:
     globals: ^16.0.0
     husky: ^9.1.7
     taze: ^19.0.4
-    turbo: ^2.5.2
+    turbo: ^2.5.3
     tsx: ^4.19.4
     typescript: ^5.8.3
