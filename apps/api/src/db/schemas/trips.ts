@@ -1,7 +1,7 @@
 import { date, integer, pgTable, text, uuid } from "drizzle-orm/pg-core"
 import { z } from "zod"
 
-import { accountsTable } from "./accounts"
+import { profileTable } from "./profile"
 
 export const tripsTable = pgTable("Trips", {
     id: uuid().primaryKey().defaultRandom(),
@@ -12,7 +12,7 @@ export const tripsTable = pgTable("Trips", {
     createdAt: date().defaultNow(),
     updatedAt: date().defaultNow(),
     account: uuid()
-        .references(() => accountsTable.id)
+        .references(() => profileTable.id)
         .notNull()
 })
 
@@ -26,7 +26,9 @@ export const TripSchema = z.object({
     createdAt: z.string().optional().nullable(),
     updatedAt: z.string().optional().nullable(),
     account: z.uuid(),
-    email: z.email().nullable()
+    nickname: z.email().nullable(),
+    firstName: z.string().nullable(),
+    lastName: z.string().nullable()
 })
 
 export type Trip = z.infer<typeof TripSchema>
@@ -44,7 +46,7 @@ export type NewTrip = z.infer<typeof NewTripSchema>
 export const NewTripInputSchema = z.object({
     from: z.string().min(1),
     to: z.string().min(1),
-    departure: z.date(),
+    departure: z.iso.datetime(),
     price: z.number().min(0)
 })
 

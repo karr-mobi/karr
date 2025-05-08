@@ -11,6 +11,7 @@ import { NewTripInputSchema, type NewTripInput } from "@karr/api/db/trips"
 import { Button } from "@karr/ui/components/button"
 import { Calendar } from "@karr/ui/components/calendar"
 import { CurrencyInput } from "@karr/ui/components/currencyInput"
+import { tryCatch } from "@karr/util/trycatch"
 import {
     Form,
     FormControl,
@@ -28,9 +29,9 @@ import {
 } from "@karr/ui/components/popover"
 import { toast } from "@karr/ui/components/sonner"
 import { cn } from "@karr/ui/lib/utils"
+import { client } from "@karr/api/client"
 
 import { useRouter } from "@/i18n/routing"
-import { apiFetch } from "@/util/apifetch"
 
 export default function NewTripForm() {
     const t = useTranslations("trips.Create")
@@ -46,7 +47,7 @@ export default function NewTripForm() {
     const form = useForm<NewTripInput>({
         resolver: zodResolver(NewTripInputSchema),
         defaultValues: {
-            departure: new Date(Date.now()),
+            departure: new Date(Date.now()).toISOString(),
             from: "",
             to: "",
             price: 6
@@ -55,18 +56,19 @@ export default function NewTripForm() {
     })
 
     const onSubmit = async (data: NewTripInput) => {
-        try {
-            const _res = await apiFetch("/trips/add", {
-                method: "POST",
-                body: data
+        const res = await tryCatch(
+            client.trips.add.$post({
+                json: {
+                    ...data
+                }
             })
-            toast.success(t("added"))
-
-            router.push("/trips/search")
-        } catch (err) {
-            console.error(err)
+        )
+        if (!res.success) {
+            console.error(res.error)
             toast.error("Something went wrong")
-            return
+        } else {
+            toast.success(t("added"))
+            router.push("/trips/search")
         }
     }
 
@@ -137,7 +139,7 @@ export default function NewTripForm() {
                                 <PopoverContent>
                                     <Calendar
                                         mode="single"
-                                        selected={field.value}
+                                        selected={new Date(field.value)}
                                         onSelect={field.onChange}
                                         autoFocus
                                     />
