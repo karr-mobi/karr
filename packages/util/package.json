@@ -23,7 +23,9 @@
             "default": "./dist/version.js"
         }
     },
-    "dependencies": {},
+    "dependencies": {
+        "@std/text": "catalog:utils"
+    },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",

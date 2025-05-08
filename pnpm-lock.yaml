@@ -247,6 +247,9 @@ catalogs:
       specifier: ^1.0.7
       version: 1.0.7
   utils:
+    '@std/text':
+      specifier: jsr:^1.0.13
+      version: 1.0.13
     confbox:
       specifier: ^0.2.2
       version: 0.2.2
@@ -872,6 +875,10 @@ importers:
         version: 5.8.3
 
   packages/util:
+    dependencies:
+      '@std/text':
+        specifier: catalog:utils
+        version: '@jsr/std__text@1.0.13'
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -1630,6 +1637,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
+  '@jsr/std__text@1.0.13':
+    resolution: {integrity: sha512-QKDHC9yzM4g0RpbVhJpt97ZU5tunlVsjEd/nLkkL/dCFY5EoFHftu5qw5C5Ck56JJ8Zv0hNKRaDiBrWWLoDwPA==, tarball: https://npm.jsr.io/~/11/@jsr/std__text/1.0.13.tgz}
 
   '@modelcontextprotocol/sdk@1.11.0':
     resolution: {integrity: sha512-k/1pb70eD638anoi0e8wUGAlbMJXyvdV4p62Ko+EZ7eBe1xMx8Uhak1R5DgfoofsK5IBBnRwsYGTaLZl+6/+RQ==}
@@ -6361,6 +6371,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@jsr/std__text@1.0.13': {}
 
   '@modelcontextprotocol/sdk@1.11.0':
     dependencies:

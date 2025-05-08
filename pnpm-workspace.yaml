@@ -33,6 +33,7 @@ catalogs:
     unstorage: ^1.16.0
 
   utils:
+    "@std/text": "jsr:^1.0.13"
     confbox: ^0.2.2
     esbuild: ^0.25.3
     neverthrow: ^8.2.0

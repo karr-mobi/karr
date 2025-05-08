@@ -1,3 +1,5 @@
+export { toCamelCase } from "@std/text"
+
 /**
  * Utility type that expands complex types (like intersections or mapped types)
  * into a simpler, more readable structure in tooltips and error messages.
@@ -24,23 +26,6 @@ export type Prettify<T> = {
 } & {}
 
 /**
- * Convert a snake_case string to camelCase
- * @param str - A string in snake_case
- * @returns The string in camelCase
- */
-export function toCamelCase(str: string): string {
-    // If the string is already in camelCase, return it as is
-    if (/^[a-z][a-zA-Z0-9]*$/.test(str)) {
-        return str
-    }
-
-    // Handle space/underscore separated and PascalCase strings
-    return str
-        .replace(/^[A-Z]/, (c) => c.toLowerCase()) // Convert first char to lowercase
-        .replace(/[_\s](\w)/g, (_, c) => c.toUpperCase()) // Handle spaces and underscores
-}
-
-/**
  * Convert a string or number to an integer
  * @param value - The value to convert
  * @returns The integer value or undefined if the value is not a number
@@ -48,14 +33,16 @@ export function toCamelCase(str: string): string {
  */
 export function toInt(value: number | string): number {
     if (typeof value === "number") {
-        return value
+        return Number.isInteger(value) ? value : Math.floor(value)
     }
+
     const parsed = parseInt(value, 10)
     if (isNaN(parsed)) {
         throw new Error(
             `${value} is not a number \n \t\t\tHINT: likely an invalid environment variable`
         )
     }
+
     return parsed
 }
 
