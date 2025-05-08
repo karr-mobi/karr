@@ -1,7 +1,5 @@
 import type { Context } from "hono"
-import { ContentfulStatusCode } from "hono/utils/http-status"
 
-import { ADMIN_EMAIL } from "@karr/config"
 import { tryCatch } from "@karr/util/trycatch"
 import logger from "@karr/logger"
 
@@ -11,35 +9,16 @@ import logger from "@karr/logger"
  * @returns The response object
  */
 export function tmpResponse(c: Context) {
-    c.status(418)
-    return c.json({
-        // get timestamp from the current time using Date
-        timestamp: new Date().getTime(),
-        data: {
-            message: "I'm a teapot",
-            img: "https://http.cat/images/418.jpg"
-        }
-    })
-}
-
-/**
- * Helper function to create a response object
- * @param message The error message
- * @param args Any additional arguments
- * @returns The error response object
- */
-export function responseErrorObject(
-    c: Context,
-    error: Error | string | { cause?: string | unknown; message: string },
-    code: ContentfulStatusCode = 500
-) {
     return c.json(
         {
+            // get timestamp from the current time using Date
             timestamp: new Date().getTime(),
-            contact: ADMIN_EMAIL,
-            error
+            data: {
+                message: "I'm a teapot",
+                img: "https://http.cat/images/418.jpg"
+            }
         },
-        code
+        418
     )
 }
 
@@ -56,15 +35,14 @@ export async function handleRequest<T>(c: Context, fn: () => Promise<T>) {
 
     if (!out.success) {
         logger.error(out.error)
-        return responseErrorObject(
-            c,
+        return c.json(
             { message: "Internal server error", cause: out.error },
             500
         )
     }
 
     if (!out.value) {
-        return responseErrorObject(c, { message: "Resource not found" }, 404)
+        return c.json({ error: "No data found" }, 404)
     }
 
     return c.json({
@@ -81,10 +59,11 @@ export async function handleRequest<T>(c: Context, fn: () => Promise<T>) {
  */
 export function checkContentType(c: Context, done: () => void) {
     if (c.req.header("content-type") !== "application/json") {
-        c.status(400)
-        return responseErrorObject(
-            c,
-            new Error("Invalid content type. Must be application/json"),
+        return c.json(
+            {
+                message: "Invalid content type",
+                cause: "Content type must be application/json"
+            },
             400
         )
     } else {
