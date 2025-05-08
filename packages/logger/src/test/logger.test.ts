@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 import c from "tinyrainbow"
 
 const { cyan, green, red, yellow, blue, magenta, gray, underline } = c
@@ -156,6 +156,32 @@ describe("logger", () => {
             })
         })
 
+        it("should properly format objects with functions", () => {
+            const title = "Object with function"
+            const data = {
+                id: 123,
+                calculate: function () {
+                    return this.id * 2
+                }
+            }
+            logger.success(title, data)
+
+            expect(mockConsole.log).toHaveBeenCalledWith(
+                green(`${prefix()}✅ ${underline("SUCCESS")} >`),
+                title
+            )
+
+            // First lines should contain regular properties
+            expect(mockConsole.log).toHaveBeenCalledWith("   ", "{")
+            expect(mockConsole.log).toHaveBeenCalledWith("   ", '  "id": 123,')
+
+            // Function should be included as a string
+            expect(mockConsole.log).toHaveBeenCalledWith(
+                "   ",
+                expect.stringContaining('"calculate": "function')
+            )
+        })
+
         it("should log at all log levels", () => {
             const levels = ["trace", "debug", "info", "warn", "error"]
 
@@ -191,6 +217,32 @@ describe("logger", () => {
 
             // Check that error was logged as JSON (Error objects stringify to '{}')
             expect(mockConsole.error).toHaveBeenCalledWith("   ", "{}")
+        })
+
+        it("should properly format errors with added function properties", () => {
+            const title = "Error with function"
+            //eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const error: any = new Error("Test error")
+            // Add a custom function to the error
+            error.customHandler = function () {
+                return "Handled error"
+            }
+
+            logger.error(title, error)
+
+            expect(mockConsole.error).toHaveBeenCalledWith(
+                red(`${prefix()}⚠️ ${underline("ERROR")} >`),
+                title
+            )
+
+            // First line should be the opening brace
+            expect(mockConsole.error).toHaveBeenCalledWith("   ", "{")
+
+            // Function should be included as a string
+            expect(mockConsole.error).toHaveBeenCalledWith(
+                "   ",
+                expect.stringContaining('"customHandler": "function')
+            )
         })
 
         it("should log at all log levels", () => {
@@ -352,6 +404,35 @@ describe("logger", () => {
                 logger.debug("Test")
                 expect(mockConsole.debug).toHaveBeenCalled()
             }
+        })
+
+        it("should properly handle objects with arrow functions", () => {
+            mockConfig.LOG_LEVEL = "debug"
+            const title = "Debug with arrow functions"
+            const data = {
+                id: 456,
+                calculate: () => "calculated value",
+                process: (x: number) => x * 2
+            }
+
+            logger.debug(title, data)
+
+            expect(mockConsole.debug).toHaveBeenCalledWith(
+                magenta(`${prefix()}🐞 ${underline("DEBUG")} >`),
+                title
+            )
+
+            // Check for arrow functions being stringified
+            expect(mockConsole.debug).toHaveBeenCalledWith(
+                "   ",
+                expect.stringContaining(
+                    '"calculate": "() => \\"calculated value\\""'
+                )
+            )
+            expect(mockConsole.debug).toHaveBeenCalledWith(
+                "   ",
+                expect.stringContaining('"process": "(x) => x * 2"')
+            )
         })
     })
 

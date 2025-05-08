@@ -56,7 +56,17 @@ export const prefix = () => {
 
 const formatArg = (arg: unknown): string => {
     if (typeof arg === "object" && arg !== null) {
-        return JSON.stringify(arg, null, 2) // Pretty-print objects
+        // Use a custom replacer to include functions in the output
+        return JSON.stringify(
+            arg,
+            (key, value) => {
+                if (typeof value === "function") {
+                    return String(value) // Convert functions to string
+                }
+                return value
+            },
+            2
+        ) // Pretty-print objects
     }
     return String(arg) // Convert other types to string
 }
