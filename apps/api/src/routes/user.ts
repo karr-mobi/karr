@@ -1,16 +1,12 @@
 import { Hono } from "hono"
 
-import { handleRequest, responseErrorObject, tmpResponse } from "@/lib/helpers"
-import type {
-    UserWithPrefsAndStatus as _UserWithPrefsAndStatus,
-    AppVariables
-} from "@/lib/types.d.ts"
+import { handleRequest, tmpResponse } from "@/lib/helpers"
+import type { AppVariables, ErrorResponse } from "@/lib/types.d.ts"
 import {
     selectUserById,
     selectUserProfileById,
     updateNickname
 } from "@/lib/db/users"
-import logger from "@karr/logger"
 import { getUserSub } from "@/util/subject"
 
 const hono = new Hono<{ Variables: AppVariables }>()
@@ -23,33 +19,39 @@ const hono = new Hono<{ Variables: AppVariables }>()
      * Get logged in user's info
      * @returns Object containing user info
      */
-    .get("/", async (c) => {
+    .get("/info", async (c) => {
         const subject = getUserSub(c)
 
         if (!subject) {
-            return responseErrorObject(
-                c,
-                "User subject missing in context",
+            return c.json(
+                {
+                    message: "User subject missing in context"
+                } satisfies ErrorResponse,
                 500
             )
         }
 
-        logger.debug(`hit route /user`)
-
         const user = await selectUserById(subject.id)
 
         if (user.isErr()) {
-            return responseErrorObject(c, user.error, 500)
+            return c.json(
+                {
+                    message: user.error
+                } satisfies ErrorResponse,
+                500
+            )
         }
 
         if (!user.value) {
-            return responseErrorObject(c, "User not found", 404)
+            return c.json(
+                {
+                    message: "User not found"
+                } satisfies ErrorResponse,
+                404
+            )
         }
 
-        return c.json({
-            timestamp: new Date().getTime(),
-            data: user.value
-        })
+        return c.json(user.value, 200)
     })
 
     /**
@@ -59,15 +61,13 @@ const hono = new Hono<{ Variables: AppVariables }>()
     .put("/nickname", async (c) => {
         // TODO(@finxol): Add validation for nickname
 
-        // Get the subject from the context
-        const subject = c.get("userSubject")
+        const subject = getUserSub(c)
 
-        // Middleware should prevent this, but good practice to check
-        if (!subject?.properties?.id) {
-            logger.error("User subject missing in context for GET /user")
-            return responseErrorObject(
-                c,
-                "Internal Server Error: Subject missing",
+        if (!subject) {
+            return c.json(
+                {
+                    message: "User subject missing in context"
+                } satisfies ErrorResponse,
                 500
             )
         }
@@ -76,23 +76,18 @@ const hono = new Hono<{ Variables: AppVariables }>()
 
         // check the nickname is a valid string
         if (typeof nickname !== "string" || nickname.length < 1) {
-            return responseErrorObject(c, new Error("Invalid nickname"), 400)
+            return c.json(
+                {
+                    message: "Invalid nickname"
+                } satisfies ErrorResponse,
+                400
+            )
         }
 
         // update the user's nickname in the database
         return await handleRequest<boolean>(c, () =>
-            updateNickname(subject.properties.id, nickname)
+            updateNickname(subject.id, nickname)
         )
-    })
-
-    /**
-     * Update the logged in user's preferences
-     * __Not implemented yet__
-     * @returns {Response} DataResponse if update was successful, ErrorResponse if not
-     */
-    .put("/preferences", (c) => {
-        // TODO(@finxol): Implement this
-        return tmpResponse(c)
     })
 
     /**
@@ -101,36 +96,6 @@ const hono = new Hono<{ Variables: AppVariables }>()
      * @returns {object} - Object containing list of trips
      */
     .get("/trips", (c) => {
-        // TODO(@finxol): Implement this
-        return tmpResponse(c)
-    })
-
-    /**
-     * Get all bookings for the logged in user
-     * __Not implemented yet__
-     * @returns {Response} DataResponse if fetch was successful, ErrorResponse if not
-     */
-    .get("/bookings", (c) => {
-        // TODO(@finxol): Implement this
-        return tmpResponse(c)
-    })
-
-    /**
-     * Get specific booking details. The logged in user must be concerned with the booking
-     * __Not implemented yet__
-     * @returns {Response} DataResponse if fetch was successful, ErrorResponse if not
-     */
-    .get("/bookings/:id", (c) => {
-        // TODO(@finxol): Implement this
-        return tmpResponse(c)
-    })
-
-    /**
-     * Delete a specific booking. The logged in user must be concerned with the booking
-     * __Not implemented yet__
-     * @returns {Response} DataResponse if deletion was successful, ErrorResponse if not
-     */
-    .delete("/bookings/:id", (c) => {
         // TODO(@finxol): Implement this
         return tmpResponse(c)
     })

@@ -124,7 +124,11 @@ function getProviders() {
         providers[provider.name] = providerConfig
     })
 
-    logger.debug("auth providers", providers)
+    const providerNames = Object.keys(providers)
+    logger.debug(
+        `${providerNames.length} providers enabled`,
+        `[${providerNames.join(", ")}]`
+    )
 
     return providers
 }

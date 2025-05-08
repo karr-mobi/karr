@@ -14,7 +14,6 @@ import { API_BASE } from "@karr/config"
 import { logger } from "@karr/logger"
 
 import { callbackUrl, client } from "@/lib/auth-client"
-import { responseErrorObject } from "@/lib/helpers"
 
 import { UnStorage } from "./unstorage-adapter"
 import { providers } from "./providers"
@@ -23,6 +22,7 @@ import { getGithubUserData } from "./profile-fetchers/github"
 import { getGoogleUserData } from "./profile-fetchers/google"
 import { getOrInsertUser } from "./persistence"
 import { Result } from "neverthrow"
+import { ErrorResponse } from "@/lib/types"
 
 const database = createDatabase(
     sqlite({
@@ -121,21 +121,28 @@ app.get("/callback", async (ctx) => {
     const next = ctx.req.query("next") ?? `${url.origin}/`
 
     if (error) {
-        return responseErrorObject(ctx, {
-            message: error,
-            cause: ctx.req.query("error_description")
-        })
+        return ctx.json(
+            {
+                message: error,
+                cause: ctx.req.query("error_description")
+            } satisfies ErrorResponse,
+            500
+        )
     }
 
     if (!code) {
-        return responseErrorObject(ctx, { message: "No code provided" }, 400)
+        return ctx.json(
+            {
+                message: "Missing code"
+            } satisfies ErrorResponse,
+            400
+        )
     }
 
     const exchanged = await client.exchange(code, callbackUrl)
 
-    if (exchanged.err) return ctx.json(exchanged.err, 400)
-
-    logger.debug("Exchanged tokens", exchanged.tokens)
+    if (exchanged.err)
+        return ctx.json(exchanged.err satisfies ErrorResponse, 400)
 
     setTokens(ctx, exchanged.tokens)
 
