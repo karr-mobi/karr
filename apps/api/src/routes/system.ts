@@ -17,13 +17,6 @@ const hono = new Hono()
     })
 
     /**
-     * Disallow all bots from accessing the API
-     */
-    .get("/robots.txt", (c) => {
-        return c.text("User-agent: *\nDisallow: /")
-    })
-
-    /**
      * Get the available API versions
      * @returns Object containing the best version and available versions
      * @example
@@ -49,14 +42,12 @@ const hono = new Hono()
      * ```
      * GET /health
      * {
-     *   "dbInitialised": true,
      *   "status": "ok"
      * }
      */
     .get("/health", (c) => {
         const dbInitialised = true
         return c.json({
-            dbInitialised,
             status: dbInitialised ? "ok" : "error"
         })
     })

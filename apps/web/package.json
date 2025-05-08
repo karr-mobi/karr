@@ -8,13 +8,14 @@
         "build": "next build",
         "start": "next start",
         "lint": "pnpm run --filter '@karr/config' build && eslint . --max-warnings 0",
-        "check-types": "tsc --noEmit"
+        "check-types": "pnpm run --filter '@karr/config' build && pnpm run --filter '@karr/api' build:tsc && tsc --noEmit"
     },
     "dependencies": {
         "@hookform/resolvers": "catalog:ui",
         "@karr/api": "workspace:*",
         "@karr/auth": "workspace:*",
         "@karr/config": "workspace:*",
+        "@karr/logger": "workspace:*",
         "@karr/ui": "workspace:*",
         "@karr/util": "workspace:*",
         "@openauthjs/openauth": "catalog:api",

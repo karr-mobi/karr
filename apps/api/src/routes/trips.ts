@@ -1,12 +1,18 @@
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
+import { zValidator } from "@hono/zod-validator"
 
-import { NewTrip, NewTripSchema, Trip } from "@/db/schemas/trips"
 import logger from "@karr/logger"
 
-import { handleRequest, responseErrorObject } from "@/lib/helpers"
-import type { AppVariables, DataResponse } from "@/lib/types.d.ts"
+import { NewTripInputSchema, Trip } from "@/db/schemas/trips"
+import { handleRequest } from "@/lib/helpers"
+import type {
+    AppVariables,
+    DataResponse,
+    ErrorResponse
+} from "@/lib/types.d.ts"
 import { addTrip, deleteTrip, getTrips } from "@/lib/db/trips"
+import { getUserSub } from "@/util/subject"
 
 import { getFederatedTrips } from "./federation/helpers"
 
@@ -80,48 +86,58 @@ const hono = new Hono<{ Variables: AppVariables }>()
      * @param id The ID of the account that is adding the trip
      * @returns The trip id and name
      */
-    .post("/add", async (c) => {
-        // Get the subject from the context
-        const subject = c.get("userSubject")
-
-        // Middleware should prevent this, but good practice to check
-        if (!subject?.properties?.id) {
-            logger.error("User subject missing in context for GET /user")
-            return responseErrorObject(
-                c,
-                "Internal Server Error: Subject missing",
-                500
-            )
-        }
-
-        const t = await c.req.json<NewTrip>()
-        t.account = subject.properties.id
-        logger.debug(`Adding trip: ${subject.properties.id}`, t)
-        const trip = NewTripSchema.safeParse(t)
-
-        if (!trip.success) {
-            return responseErrorObject(
-                c,
-                { message: "Invalid trip data", cause: trip.error },
-                400
-            )
-        }
-
-        const createdTrip = await addTrip(trip.data)
-
-        if (createdTrip.isErr()) {
-            return responseErrorObject(c, createdTrip.error, 400)
-        }
-
-        logger.debug(`Added trip:`, createdTrip)
-
-        return c.json({
-            data: {
-                id: createdTrip.value.id,
-                name: "Test Trip"
+    .post(
+        "/add",
+        zValidator("json", NewTripInputSchema, (result, c) => {
+            if (!result.success) {
+                return c.json(
+                    {
+                        message: "Invalid request body",
+                        cause: result.error
+                    } satisfies ErrorResponse,
+                    400
+                )
             }
-        } satisfies DataResponse<object>)
-    })
+        }),
+        async (c) => {
+            const subject = getUserSub(c)
+
+            if (!subject) {
+                return c.json(
+                    {
+                        message: "User subject missing in context"
+                    } satisfies ErrorResponse,
+                    500
+                )
+            }
+
+            const t = c.req.valid("json")
+
+            logger.debug(`Adding trip: ${subject.id}`, t)
+
+            const createdTrip = await addTrip({
+                ...t,
+                account: subject.id
+            })
+
+            if (createdTrip.isErr()) {
+                return c.json(
+                    {
+                        message: "Error adding trip",
+                        cause: createdTrip.error
+                    } satisfies ErrorResponse,
+                    500
+                )
+            }
+
+            return c.json({
+                data: {
+                    id: createdTrip.value.id,
+                    name: "Test Trip"
+                }
+            } satisfies DataResponse<object>)
+        }
+    )
 
     /**
      * Delete a trip by ID
@@ -131,46 +147,22 @@ const hono = new Hono<{ Variables: AppVariables }>()
     .delete(
         "/:id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}",
         (c) => {
-            // Get the subject from the context
-            const subject = c.get("userSubject")
+            const subject = getUserSub(c)
 
-            // Middleware should prevent this, but good practice to check
-            if (!subject?.properties?.id) {
-                logger.error("User subject missing in context for GET /user")
-                return responseErrorObject(
-                    c,
-                    "Internal Server Error: Subject missing",
+            if (!subject) {
+                return c.json(
+                    {
+                        message: "User subject missing in context"
+                    } satisfies ErrorResponse,
                     500
                 )
             }
 
             const tripId: string = c.req.param("id")
 
-            logger.debug(`Deleting trip: ${subject.properties.id} ${tripId}`)
-            return handleRequest(c, () =>
-                deleteTrip(tripId, subject.properties.id)
-            )
+            logger.debug(`Deleting trip: ${subject.id} ${tripId}`)
+            return handleRequest(c, () => deleteTrip(tripId, subject.id))
         }
     )
-
-    /**
-     * Get a trip by ID
-     * @param id The ID of the trip
-     * @returns The trip
-     */
-    .get("/:id", (c) => {
-        const id: string = c.req.param("id")
-        logger.debug(`Getting trip by ID: ${id}`)
-        logger.warn(
-            '"/:id"',
-            "Are you sure this is the route you wanted to hit?"
-        )
-        return c.json({
-            data: {
-                id: id,
-                name: "Test Trip"
-            }
-        } satisfies DataResponse<object>)
-    })
 
 export default hono

@@ -3,7 +3,6 @@ import { err, ok } from "neverthrow"
 import { z } from "zod"
 
 import drizzle from "@/db"
-import { accountsTable } from "@/db/schemas/accounts"
 import {
     NewTripSchema,
     TripSchema,
@@ -11,15 +10,18 @@ import {
     type NewTrip
 } from "@/db/schemas/trips"
 import logger from "@karr/logger"
+import { profileTable } from "@/db/schemas/profile"
 
 export async function getTrips() {
     const trips = await drizzle
         .select({
             ...getTableColumns(tripsTable),
-            email: accountsTable.email
+            firstName: profileTable.firstName,
+            lastName: profileTable.lastName,
+            nickname: profileTable.nickname
         })
         .from(tripsTable)
-        .leftJoin(accountsTable, eq(tripsTable.account, accountsTable.id))
+        .leftJoin(profileTable, eq(tripsTable.account, profileTable.id))
 
     const t = TripSchema.array().safeParse(trips)
     if (!t.success) {
@@ -45,7 +47,7 @@ export async function getUserTrips(userId: string) {
     return ok(u.data)
 }
 
-export async function addTrip(trip: NewTrip) {
+export async function addTrip(trip: NewTrip | { departure: Date }) {
     const t = NewTripSchema.safeParse(trip)
 
     if (!t.success) {

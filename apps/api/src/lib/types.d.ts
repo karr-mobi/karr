@@ -17,12 +17,8 @@ export type DataResponse<T> = {
 }
 
 export interface ErrorResponse {
-    timestamp?: number
-    contact?: string
-    error: {
-        message: string
-        details?: unknown[]
-    }
+    message: string
+    cause?: string | unknown
 }
 
 export type Response<T> = Prettify<DataResponse<T | object> | ErrorResponse>

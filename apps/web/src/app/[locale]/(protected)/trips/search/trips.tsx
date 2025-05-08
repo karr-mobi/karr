@@ -24,12 +24,7 @@ import { toast } from "@karr/ui/components/sonner"
 import { apiFetch } from "@/util/apifetch"
 import Loading from "@/components/Loading"
 
-export default function TripList({ userid }: { userid: string }) {
-    return <FetchTrips userid={userid} />
-}
-
-function FetchTrips({ userid }: { userid: string }) {
-    // Access the client
+export default function FetchTrips() {
     const queryClient = useQueryClient()
     const [trips, setTrips] = useState<Trip[]>([])
     const [loading, setLoading] = useState(false)
@@ -153,7 +148,7 @@ function FetchTrips({ userid }: { userid: string }) {
     useEffect(() => {
         // Clear trips when component mounts or userid changes
         setTrips([])
-    }, [userid])
+    }, [])
 
     if (isLoading) {
         return <Loading />
@@ -229,7 +224,11 @@ function TripCard({
                         <IconHouse className="my-0.5" />
                     </Badge>
                 )}
-                <p>{trip.email?.split("@")[0] || trip.account.split("-")[0]}</p>
+                <p>
+                    {trip.nickname ||
+                        trip.firstName + " " + trip.lastName ||
+                        trip.account.split("-")[0]}
+                </p>
             </CardFooter>
         </Card>
     )

@@ -1,20 +1,20 @@
-import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
+import * as React from "react"
 
 import { cn } from "@karr/ui/lib/utils"
 
 const badgeVariants = cva(
-    "inline-flex items-center rounded-md border border-border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+    "inline-flex items-center gap-1 justify-center rounded-full border px-2 text-xs font-medium leading-normal transition-colors outline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70",
     {
         variants: {
             variant: {
                 default:
-                    "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
+                    "border-transparent bg-primary text-primary-foreground",
                 secondary:
-                    "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+                    "border-transparent bg-secondary text-secondary-foreground",
                 destructive:
-                    "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
-                outline: "text-foreground bg-background"
+                    "border-transparent bg-destructive text-destructive-foreground",
+                outline: "text-foreground"
             }
         },
         defaultVariants: {

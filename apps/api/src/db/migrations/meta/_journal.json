@@ -57,6 +57,13 @@
       "when": 1746488137847,
       "tag": "0007_cuddly_catseye",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1746728773197,
+      "tag": "0008_dapper_leader",
+      "breakpoints": true
     }
   ]
 }
