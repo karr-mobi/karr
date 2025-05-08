@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.12.1
+
+[compare changes](https://github.com/finxol/karr/compare/v0.12.0...v0.12.1)
+
+### 🩹 Fixes
+
+- Script orders and names ([5ac08b0](https://github.com/finxol/karr/commit/5ac08b0))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.12.0
 
 [compare changes](https://github.com/finxol/karr/compare/v0.11.2...v0.12.0)
