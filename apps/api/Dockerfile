@@ -54,7 +54,7 @@ RUN pnpm install
 COPY --from=installer /app/out/full/ .
 
 # Build the project
-RUN pnpm run build
+RUN pnpm turbo run build:bundle
 
 ####################
 ### RUNNER STAGE ###

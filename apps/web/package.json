@@ -8,7 +8,7 @@
         "build": "next build",
         "start": "next start",
         "lint": "pnpm run --filter '@karr/config' build && eslint . --max-warnings 0",
-        "check-types": "pnpm run --filter '@karr/config' build && pnpm run --filter '@karr/api' build:tsc && tsc --noEmit"
+        "check-types": "pnpm run --filter '@karr/config' build && pnpm run --filter '@karr/api' build && tsc --noEmit"
     },
     "dependencies": {
         "@hookform/resolvers": "catalog:ui",
