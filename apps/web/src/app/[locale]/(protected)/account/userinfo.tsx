@@ -1,70 +1,69 @@
 "use client"
 
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { useTranslations } from "next-intl"
+import { CheckIcon, OctagonXIcon } from "lucide-react"
 
 import { Badge } from "@karr/ui/components/badge"
+import { client, InferResponseType } from "@karr/api/client"
+import Loading from "@/components/Loading"
 
-import { apiFetch } from "@/util/apifetch"
-
-export default function UserInfo() {
-    return <FetchUserData />
-}
-
-function FetchUserData() {
-    // Access the client
-    const _queryClient = useQueryClient()
-
-    const { data, isLoading, isError, error } = useQuery({
+export default function FetchUserData() {
+    const { data, isError, isLoading, error } = useQuery({
         queryKey: ["user"],
-        retry: false,
-        queryFn: async () => apiFetch("/user")
+        queryFn: async () => {
+            const res = await client.user.info.$get()
+            if (res.status !== 200) {
+                throw new Error("Failed to fetch user data", {
+                    cause: await res.json()
+                })
+            }
+            return res.json()
+        }
     })
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <Loading />
     }
 
-    if (isError) {
-        return <div>Error: {error.message}</div>
+    if (isError || !data) {
+        console.error("Error loading user data", error)
+        return <p>Error loading user data</p>
     }
 
-    return <ShowUserData data={data} />
+    return <ShowUserData user={data} />
 }
 
 // TODO: add user type
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function ShowUserData({ data: { data: user } }: { data: any }) {
+function ShowUserData({
+    user
+}: { user: InferResponseType<typeof client.user.info.$get, 200> }) {
     const t = useTranslations("auth.Account")
 
-    const hasSpecialStatus = user.SpecialStatus?.id || false
+    console.log("user", user)
+    console.log("user.verified", user.verified)
 
-    console.log(user)
+    const hasSpecialStatus = false
 
     return (
         <div>
             <section className="flow">
                 <aside className="flex flex-row gap-4">
-                    {user.blocked ? (
-                        <Badge variant="destructive">
-                            <p>⚠️ {t("blocked")}</p>
-                        </Badge>
-                    ) : user.verified ? (
+                    {user.verified ? (
                         <Badge variant="default">
-                            <p>✔︎ {t("verified")}</p>
+                            <CheckIcon aria-hidden="true" />
+                            {t("verified")}
                         </Badge>
                     ) : (
                         <Badge variant="destructive">
-                            <p>❌ {t("not-verified")}</p>
+                            <OctagonXIcon aria-hidden="true" />
+                            {t("not-verified")}
                         </Badge>
                     )}
 
                     {!hasSpecialStatus && (
-                        <Badge variant="destructive">
-                            <p>
-                                {user.SpecialStatus?.name ||
-                                    t("no-special-status")}
-                            </p>
+                        <Badge variant="outline">
+                            <p>{user?.bio || t("no-special-status")}</p>
                         </Badge>
                     )}
                 </aside>

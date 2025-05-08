@@ -3,12 +3,12 @@ import { cors } from "hono/cors"
 import { showRoutes } from "hono/dev"
 import { secureHeaders } from "hono/secure-headers"
 import { createMiddleware } from "hono/factory"
+import { trimTrailingSlash } from "hono/trailing-slash"
 
 import { API_BASE, APP_URL, PRODUCTION } from "@karr/config"
 import logger from "@karr/logger"
 
 import { isAuthenticated } from "@/lib/auth"
-import { responseErrorObject } from "@/lib/helpers"
 import account from "@/routes/account"
 import auth from "@/routes/auth/issuer"
 import system from "@/routes/system"
@@ -24,7 +24,7 @@ const unprotectedRoutes = new Hono().route("/", system).route("/auth", auth)
 // ============================
 // ====== Regular routes ======
 // ============================
-const protectedRoutes = new Hono<{ Variables: AppVariables }>()
+export const protectedRoutes = new Hono<{ Variables: AppVariables }>()
 
     // auth check middleware
     .use(
@@ -32,13 +32,18 @@ const protectedRoutes = new Hono<{ Variables: AppVariables }>()
             const subject = await isAuthenticated(c)
 
             if (!subject) {
-                logger.warn("Unauthorized request attempt blocked") // Use warn or debug
-                return responseErrorObject(c, "Unauthorized", 401)
+                logger.debug("Unauthorized request attempt blocked")
+                return c.json(
+                    {
+                        error: "Unauthorized"
+                    },
+                    401
+                )
             }
 
             // Set the subject in the context
             c.set("userSubject", subject)
-            logger.debug("User subject set in context", subject) // Use debug or trace
+            logger.debug("User subject set in context", subject)
             await next()
         })
     )
@@ -49,6 +54,7 @@ const protectedRoutes = new Hono<{ Variables: AppVariables }>()
 
 export const app = new Hono<{ Variables: AppVariables }>()
     .basePath(API_BASE)
+    .use(trimTrailingSlash())
 
     // Add CORS middleware
     .use(
@@ -74,11 +80,6 @@ export const app = new Hono<{ Variables: AppVariables }>()
 
     .route("/", unprotectedRoutes)
     .route("/", protectedRoutes)
-
-    .notFound((ctx) => {
-        logger.debug(`Not Found: ${ctx.req.path}`)
-        return responseErrorObject(ctx, "Not Found", 404)
-    })
 
 const printRoutes = false
 if (!PRODUCTION && printRoutes) showRoutes(app, { verbose: printRoutes })

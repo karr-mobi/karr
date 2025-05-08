@@ -5,6 +5,8 @@
         "rootDir": "src",
         "moduleResolution": "bundler",
         "module": "ESNext",
+        "declaration": true,
+        "declarationMap": true,
         "paths": {
             "@/*": ["./src/*"]
         }
