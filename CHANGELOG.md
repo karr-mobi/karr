@@ -1,5 +1,27 @@
 # Changelog
 
+## v0.12.0
+
+[compare changes](https://github.com/finxol/karr/compare/v0.11.2...v0.12.0)
+
+### 🚀 Enhancements
+
+- ⚠️  Add tests + get Hono RPC working ([#140](https://github.com/finxol/karr/pull/140))
+
+### 🩹 Fixes
+
+- Return profile id instead of account id for jwt ([f37bf5f](https://github.com/finxol/karr/commit/f37bf5f))
+- Center loading indicator boundary ([a09475a](https://github.com/finxol/karr/commit/a09475a))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Add tests + get Hono RPC working ([#140](https://github.com/finxol/karr/pull/140))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.11.2
 
 [compare changes](https://github.com/finxol/karr/compare/v0.11.1...v0.11.2)
