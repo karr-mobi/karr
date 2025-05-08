@@ -178,7 +178,7 @@ describe("logger", () => {
             // Function should be included as a string
             expect(mockConsole.log).toHaveBeenCalledWith(
                 "   ",
-                expect.stringContaining('"calculate": "function')
+                expect.stringContaining('"calculate": "[Function: calculate]"')
             )
         })
 
@@ -241,7 +241,7 @@ describe("logger", () => {
             // Function should be included as a string
             expect(mockConsole.error).toHaveBeenCalledWith(
                 "   ",
-                expect.stringContaining('"customHandler": "function')
+                expect.stringContaining('"customHandler": "[Function: ]"')
             )
         })
 
@@ -425,13 +425,11 @@ describe("logger", () => {
             // Check for arrow functions being stringified
             expect(mockConsole.debug).toHaveBeenCalledWith(
                 "   ",
-                expect.stringContaining(
-                    '"calculate": "() => \\"calculated value\\""'
-                )
+                expect.stringContaining('"calculate": "[Function: calculate]"')
             )
             expect(mockConsole.debug).toHaveBeenCalledWith(
                 "   ",
-                expect.stringContaining('"process": "(x) => x * 2"')
+                expect.stringContaining('"process": "[Function: process]"')
             )
         })
     })

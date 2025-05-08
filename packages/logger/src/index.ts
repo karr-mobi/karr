@@ -61,7 +61,7 @@ const formatArg = (arg: unknown): string => {
             arg,
             (key, value) => {
                 if (typeof value === "function") {
-                    return String(value) // Convert functions to string
+                    return `[Function: ${value.name}]`
                 }
                 return value
             },
