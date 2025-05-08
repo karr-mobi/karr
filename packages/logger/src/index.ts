@@ -21,11 +21,12 @@ const getCallerFileAndLine = (): string | null => {
                 const regex = /\s+at\s+(?:.*\s+)?\(?(.+):(\d+):(\d+)\)?/
                 const match = line.match(regex)
                 if (match && match[1]) {
-                    const filepath = match[1]
-                    const file = filepath.split("/").pop()
+                    const filepath = match[1].split("/")
+                    const file = filepath.pop()
+                    const dirname = filepath.pop()
                     const lineNumber = match[2]
                     const columnNumber = match[3]
-                    return `${file}:${lineNumber}:${columnNumber}`
+                    return `${dirname}/${file}:${lineNumber}:${columnNumber}`
                 }
             }
         }
@@ -38,7 +39,7 @@ const getCallerFileAndLine = (): string | null => {
  * Can include the timestamp and the file and line number of the calling function
  * @returns The prefix for the log message
  */
-const prefix = () => {
+export const prefix = () => {
     const now = new Date().toLocaleString("en-GB", {
         hour: "numeric",
         minute: "numeric",
