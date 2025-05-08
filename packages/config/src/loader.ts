@@ -37,7 +37,7 @@ const CONFIG_FILENAME = process.env.CONFIG_FILE || "karr.config"
  * ```
  * @throws {Error} If the base path starts with anythinng other than "/", "." or a character
  */
-function resolvePath(base: string, file: string): string {
+export function resolvePath(base: string, file: string): string {
     if (isAbsolute(base)) {
         return join(base, file)
     }
