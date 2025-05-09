@@ -5,7 +5,8 @@ import { useTranslations } from "next-intl"
 import { CheckIcon, OctagonXIcon } from "lucide-react"
 
 import { Badge } from "@karr/ui/components/badge"
-import { client, InferResponseType } from "@karr/api/client"
+import { InferResponseType } from "@karr/api/client"
+import { client } from "@/util/apifetch"
 import Loading from "@/components/Loading"
 
 export default function FetchUserData() {

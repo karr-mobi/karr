@@ -29,7 +29,7 @@ import {
 } from "@karr/ui/components/popover"
 import { toast } from "@karr/ui/components/sonner"
 import { cn } from "@karr/ui/lib/utils"
-import { client } from "@karr/api/client"
+import { client } from "@/util/apifetch"
 
 import { useRouter } from "@/i18n/routing"
 
