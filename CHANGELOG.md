@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.12.3
+
+[compare changes](https://github.com/finxol/karr/compare/v0.12.2...v0.12.3)
+
+### 🩹 Fixes
+
+- Google user data types ([2501273](https://github.com/finxol/karr/commit/2501273))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.12.2
 
 [compare changes](https://github.com/finxol/karr/compare/v0.12.1...v0.12.2)
