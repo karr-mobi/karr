@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.12.2
+
+[compare changes](https://github.com/finxol/karr/compare/v0.12.1...v0.12.2)
+
+### 🩹 Fixes
+
+- Move hono client creation to next ([5f7fe4c](https://github.com/finxol/karr/commit/5f7fe4c))
+
+### ❤️ Contributors
+
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.12.1
 
 [compare changes](https://github.com/finxol/karr/compare/v0.12.0...v0.12.1)
