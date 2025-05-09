@@ -33,8 +33,8 @@ export type GoogleSuccessValue = {
             nonce: string
             name: string
             picture: string
-            given_name: string
-            family_name: string
+            given_name?: string
+            family_name?: string
             jti: string
         }
     >

@@ -15,8 +15,8 @@ export async function getGoogleUserData(data: GoogleSuccessValue["id"]) {
         emailVerified: data.email_verified,
         remoteId: data.sub,
         avatar: data.picture,
-        firstName: data.given_name,
-        lastName: data.family_name
+        firstName: data.given_name ?? "",
+        lastName: data.family_name ?? ""
     }
 
     return ok(profileData)
