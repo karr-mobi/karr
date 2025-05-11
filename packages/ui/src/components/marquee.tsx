@@ -1,73 +1,74 @@
-"use client"
-
-import { useRef } from "react"
-import {
-    motion,
-    useScroll,
-    useSpring,
-    useTransform,
-    useMotionValue,
-    useVelocity,
-    useAnimationFrame,
-    wrap
-} from "motion/react"
+import { HTMLAttributes, ReactNode } from "react"
 import { cn } from "@karr/ui/lib/utils"
 
-type MarqueeAnimationProps = {
-    children: string
-    className?: string
-    direction?: "left" | "right"
-    baseVelocity: number
+import "./marquee.css"
+
+export type MarqueeProps = HTMLAttributes<HTMLDivElement> & {
+    children: ReactNode
+    direction?: "left" | "up"
+    pauseOnHover?: boolean
+    reverse?: boolean
+    fade?: boolean
+    innerClassName?: string
+    numberOfCopies?: number
+    speed?: "slow" | "normal" | "fast"
 }
 
 export function Marquee({
     children,
-    className,
     direction = "left",
-    baseVelocity = 10
-}: MarqueeAnimationProps) {
-    const baseX = useMotionValue(0)
-    const { scrollY } = useScroll()
-    const scrollVelocity = useVelocity(scrollY)
-    const smoothVelocity = useSpring(scrollVelocity, {
-        damping: 50,
-        stiffness: 400
-    })
-    const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 0], {
-        clamp: false
-    })
-
-    const x = useTransform(baseX, (v) => `${wrap(-20, -45, v)}%`)
-
-    const directionFactor = useRef<number>(1)
-    useAnimationFrame((t, delta) => {
-        let moveBy = directionFactor.current * baseVelocity * (delta / 1000)
-
-        if (direction == "left") {
-            directionFactor.current = 1
-        } else if (direction == "right") {
-            directionFactor.current = -1
-        }
-
-        moveBy += directionFactor.current * moveBy * velocityFactor.get()
-
-        baseX.set(baseX.get() + moveBy)
-    })
-
+    pauseOnHover = false,
+    reverse = false,
+    fade = false,
+    className,
+    innerClassName,
+    numberOfCopies = 2,
+    speed = "normal",
+    ...rest
+}: MarqueeProps) {
     return (
-        <div className="overflow-hidden max-w-[100vw] text-nowrap flex-nowrap flex relative">
-            <motion.div
-                className={cn(
-                    "font-bold uppercase text-5xl flex flex-nowrap text-nowrap *:block *:me-10",
-                    className
-                )}
-                style={{ x }}
-            >
-                <span>{children}</span>
-                <span>{children}</span>
-                <span>{children}</span>
-                <span>{children}</span>
-            </motion.div>
+        <div
+            className={cn(
+                "group flex gap-[1rem] max-w-[100vw] overflow-hidden",
+                direction === "left" ? "flex-row" : "flex-col",
+                className
+            )}
+            style={{
+                maskImage: fade
+                    ? `linear-gradient(${
+                          direction === "left" ? "to right" : "to bottom"
+                      }, transparent 0%, rgba(0, 0, 0, 1.0) 10%, rgba(0, 0, 0, 1.0) 90%, transparent 100%)`
+                    : undefined,
+                WebkitMaskImage: fade
+                    ? `linear-gradient(${
+                          direction === "left" ? "to right" : "to bottom"
+                      }, transparent 0%, rgba(0, 0, 0, 1.0) 10%, rgba(0, 0, 0, 1.0) 90%, transparent 100%)`
+                    : undefined
+            }}
+            {...rest}
+        >
+            {Array(numberOfCopies)
+                .fill(0)
+                .map((_, i) => (
+                    <div
+                        key={i}
+                        className={cn(
+                            "flex justify-around gap-[1rem] [--gap:1rem] shrink-0",
+                            direction === "left"
+                                ? "animate-marquee-left flex-row"
+                                : "animate-marquee-up flex-col",
+                            pauseOnHover &&
+                                "group-hover:[animation-play-state:paused]",
+                            reverse && "direction-reverse",
+                            speed === "slow" && "[--duration:20s]",
+                            speed === "normal" && "[--duration:10s]",
+                            speed === "fast" && "[--duration:5s]",
+                            innerClassName
+                        )}
+                    >
+                        {children}
+                    </div>
+                ))}
         </div>
     )
 }

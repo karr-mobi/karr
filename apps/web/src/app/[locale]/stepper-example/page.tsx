@@ -5,12 +5,13 @@ import Loading from "@/components/Loading"
 
 export default function StepperExample() {
     return (
-        <div className="mt-12 ">
-            <Loading />
+        <>
+            <div className="mt-10 h-4">
+                <Loading />
+            </div>
 
-            <div className="flex flex-col gap-4 my-4">
+            <div className="full-width flex flex-col gap-4 my-4">
                 <Marquee
-                    baseVelocity={-3}
                     direction="left"
                     className="bg-green-500 text-white py-2"
                 >
@@ -18,8 +19,7 @@ export default function StepperExample() {
                 </Marquee>
 
                 <Marquee
-                    baseVelocity={-3}
-                    direction="right"
+                    direction="left"
                     className="bg-purple-500 text-white py-2"
                 >
                     It's made by finxol
@@ -32,7 +32,7 @@ export default function StepperExample() {
                 <div>
                     Super wide step
                     <br />
-                    Steeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeooeeeeeeeeeeeeeeeeeeeeeeeep
+                    Ste{"e".repeat(100)}ep
                     <br />
                     Step 3
                 </div>
@@ -47,6 +47,6 @@ export default function StepperExample() {
                 <div>Step 7</div>
                 <div>Step 8</div>
             </Stepper>
-        </div>
+        </>
     )
 }
