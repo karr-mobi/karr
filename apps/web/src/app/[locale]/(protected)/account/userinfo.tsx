@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl"
 import { CheckIcon, OctagonXIcon } from "lucide-react"
 
 import { Badge } from "@karr/ui/components/badge"
+import { Marquee } from "@karr/ui/components/marquee"
 import { InferResponseType } from "@karr/api/client"
 import { client } from "@/util/apifetch"
 import Loading from "@/components/Loading"
@@ -41,33 +42,40 @@ function ShowUserData({
 }: { user: InferResponseType<typeof client.user.info.$get, 200> }) {
     const t = useTranslations("auth.Account")
 
-    console.log("user", user)
-    console.log("user.verified", user.verified)
-
     const hasSpecialStatus = false
 
     return (
-        <div>
-            <section className="flow">
-                <aside className="flex flex-row gap-4">
-                    {user.verified ? (
-                        <Badge variant="default">
-                            <CheckIcon aria-hidden="true" />
-                            {t("verified")}
-                        </Badge>
-                    ) : (
-                        <Badge variant="destructive">
-                            <OctagonXIcon aria-hidden="true" />
-                            {t("not-verified")}
-                        </Badge>
-                    )}
+        <>
+            <div className="full-width">
+                <Marquee
+                    numberOfCopies={10}
+                    direction="left"
+                    speed="fast"
+                    className="bg-green-500 text-white py-2 uppercase font-bold text-3xl"
+                >
+                    You rock, {user.nickname || user.firstName}!
+                </Marquee>
+            </div>
+            <aside className="flex flex-row gap-4">
+                {user.verified ? (
+                    <Badge variant="default">
+                        <CheckIcon aria-hidden="true" />
+                        {t("verified")}
+                    </Badge>
+                ) : (
+                    <Badge variant="destructive">
+                        <OctagonXIcon aria-hidden="true" />
+                        {t("not-verified")}
+                    </Badge>
+                )}
 
-                    {!hasSpecialStatus && (
-                        <Badge variant="outline">
-                            <p>{user?.bio || t("no-special-status")}</p>
-                        </Badge>
-                    )}
-                </aside>
+                {!hasSpecialStatus && (
+                    <Badge variant="outline">
+                        <p>{user?.bio || t("no-special-status")}</p>
+                    </Badge>
+                )}
+            </aside>
+            <section className="flow">
                 <div className="flex flex-row gap-6">
                     <b>{t("user-id")}</b>
                     <p>{user.id.split("-")[0]}</p>
@@ -83,6 +91,6 @@ function ShowUserData({
                 </summary>
                 <pre>{JSON.stringify(user, null, 2)}</pre>
             </details>
-        </div>
+        </>
     )
 }
