@@ -229,7 +229,7 @@ export function loadFullConfig(): FullConfig {
  * @param path The path to the file
  * @returns The password, or null if the file does not exist
  */
-export function getDbPasswordFromFile(path: string | undefined): string | null {
+export function getDbPasswordFromFile(path: string | undefined) {
     if (!path) return null
 
     const filepath = resolvePath(path, "")
@@ -263,15 +263,22 @@ export function handleConfigError(error: z.core.$ZodError) {
     console.log()
 
     for (const e of errors) {
-        const required: boolean = requiredKeys.includes(e.path.join("."))
         console.log(
             c.bgWhiteBright(c.black(c.bold(` ${e.code?.toUpperCase()} `))),
             c.bold(e.path.join(".")),
             "-",
-            e.message,
-            required ? c.inverse(c.red(" REQUIRED ")) : ""
+            e.message
         )
 
         console.log()
     }
+
+    console.log(
+        "Please visit",
+        c.underline(
+            "https://docs.karr.mobi/getting-started/configuration-reference"
+        ),
+        "for more information."
+    )
+    console.log()
 }

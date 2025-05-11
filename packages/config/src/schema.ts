@@ -129,7 +129,6 @@ export const authProvidersSchema = z
             z.object({
                 name: z.union([
                     z.literal("github")
-                    // TODO: z.literal("google"),
                     // TODO: z.literal("yahoo"),
                     // TODO: z.literal("twitch"),
                     // TODO: z.literal("facebook"),
