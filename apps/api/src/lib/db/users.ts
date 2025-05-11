@@ -23,6 +23,9 @@ export async function selectUserById(id: string) {
         drizzle
             .select({
                 id: profileTable.id,
+                firstName: profileTable.firstName,
+                nickname: profileTable.nickname,
+                lastName: profileTable.lastName,
                 phone: profileTable.phone,
                 bio: profileTable.bio,
                 provider: accountsTable.provider,
