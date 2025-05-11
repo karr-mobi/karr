@@ -67,8 +67,6 @@ const app = issuer({
         return input.redirectURI === callbackUrl && input.clientID === "karr"
     },
     async success(ctx, value: SuccessValues) {
-        logger.debug("Success", value)
-
         let subjectData: Result<UserProperties, string>
         if (value.provider === "password") {
             subjectData = await getOrInsertUser({
@@ -81,7 +79,6 @@ const app = issuer({
                 email: value.claims.email
             })
         } else if (value.provider === "github") {
-            console.log(value.tokenset.raw)
             // get the user data from github
             const userData = await getGithubUserData(value.tokenset.access)
 
@@ -92,7 +89,6 @@ const app = issuer({
             // save the user data to the database, and return the jwt payload
             subjectData = await getOrInsertUser(userData.value)
         } else if (value.provider === "google") {
-            console.log(value)
             // extract the user data
             const userData = await getGoogleUserData(value.id)
 
@@ -103,8 +99,6 @@ const app = issuer({
             logger.debug("Unknown provider", value)
             throw new Error("Invalid provider")
         }
-
-        logger.debug("User data", subjectData)
 
         if (subjectData.isErr()) {
             throw new Error(subjectData.error)

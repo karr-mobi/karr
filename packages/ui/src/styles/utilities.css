@@ -49,7 +49,7 @@
     --text-4xl: var(--size-step-5);
 }
 
-.flow > * {
+.flow > * + * {
     margin-block-start: var(--flow-space, 1em);
 }
 
