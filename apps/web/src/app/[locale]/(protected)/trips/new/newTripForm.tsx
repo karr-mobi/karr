@@ -11,7 +11,7 @@ import { NewTripInputSchema, type NewTripInput } from "@karr/api/db/trips"
 import { Button } from "@karr/ui/components/button"
 import { Calendar } from "@karr/ui/components/calendar"
 import { CurrencyInput } from "@karr/ui/components/currencyInput"
-import { tryCatch } from "@karr/util/trycatch"
+import { tryCatch } from "@karr/util"
 import {
     Form,
     FormControl,

@@ -4,7 +4,7 @@ import { err, ok } from "neverthrow"
 import drizzle from "@/db"
 import { accountsTable } from "@/db/schemas/accounts"
 import { profileTable } from "@/db/schemas/profile"
-import { tryCatch } from "@karr/util/trycatch"
+import { tryCatch } from "@karr/util"
 import logger from "@karr/logger"
 
 import type { UserWithPrefsAndStatus as _UserWithPrefsAndStatus } from "@/lib/types"

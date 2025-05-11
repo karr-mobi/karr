@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { tryCatch } from "@/trycatch.js"
+import { tryCatch } from "@/utilities.js"
 
 describe("tryCatch", () => {
     it("should return success result with value when promise resolves", async () => {

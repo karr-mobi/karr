@@ -14,10 +14,6 @@
             "types": "./src/utilities.ts",
             "default": "./dist/utilities.js"
         },
-        "./trycatch": {
-            "types": "./src/trycatch.ts",
-            "default": "./dist/trycatch.js"
-        },
         "./version": {
             "types": "./src/version.ts",
             "default": "./dist/version.js"

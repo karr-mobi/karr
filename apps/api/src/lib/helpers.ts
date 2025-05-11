@@ -1,6 +1,6 @@
 import type { Context } from "hono"
 
-import { tryCatch } from "@karr/util/trycatch"
+import { tryCatch } from "@karr/util"
 import logger from "@karr/logger"
 
 /**

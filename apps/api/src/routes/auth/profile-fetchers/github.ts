@@ -1,4 +1,4 @@
-import { tryCatch } from "@karr/util/trycatch"
+import { tryCatch } from "@karr/util"
 import { ofetch } from "ofetch"
 import { err, ok } from "neverthrow"
 import logger from "@karr/logger"
