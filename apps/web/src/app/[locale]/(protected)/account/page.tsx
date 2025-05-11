@@ -14,12 +14,12 @@ export default async function AccountPage() {
     if (!authState) unauthorized()
 
     return (
-        <div className="flex flex-col gap-4 items-start max-w-screen overflow-scroll">
+        <>
             <h1>{t("title")}</h1>
-            <pre>{JSON.stringify(authState, null, 2)}</pre>
+            <code>{JSON.stringify(authState, null, 2)}</code>
             <Suspense fallback={<Loading />}>
                 <UserInfo />
             </Suspense>
-        </div>
+        </>
     )
 }

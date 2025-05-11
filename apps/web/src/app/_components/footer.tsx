@@ -1,4 +1,5 @@
 import { Separator } from "@karr/ui/components/separator"
+import { cn } from "@karr/ui/lib/utils"
 
 import { Link } from "@/i18n/routing"
 
@@ -6,9 +7,18 @@ import { LocaleSwitcher } from "./footer/LocaleSwitcher"
 import { ThemeSwitch } from "./footer/ThemeSwitch"
 import { isProduction, version } from "./footer/version"
 
-export function Footer() {
+export function Footer({
+    className
+}: Readonly<{
+    className?: string
+}>) {
     return (
-        <footer className="flex w-full flex-col items-center justify-between px-4 py-2">
+        <footer
+            className={cn(
+                className,
+                "flex w-full flex-col items-center justify-between lg:px-4 py-2"
+            )}
+        >
             <Separator />
             <div className="bg-background/50 px-4 flex h-16 w-full flex-row items-center justify-between rounded-b-md">
                 <div className="flex flex-row items-end justify-start gap-2">

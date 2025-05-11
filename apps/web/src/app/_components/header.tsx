@@ -1,6 +1,8 @@
 import { memo } from "react"
 import Image from "next/image"
 
+import { cn } from "@karr/ui/lib/utils"
+
 import { Link } from "@/i18n/routing"
 import { APPLICATION_NAME } from "@/util/appname"
 import logo from "@/assets/logo-tmp.jpg"
@@ -14,11 +16,20 @@ const MemoizedAppName = memo(
     () => false // Never update
 )
 
-export async function Header() {
+export async function Header({
+    className
+}: Readonly<{
+    className?: string
+}>) {
     const isAuthenticated = await auth()
 
     return (
-        <header className="bg-transparent w-full sticky top-0 z-50 px-2">
+        <header
+            className={cn(
+                className,
+                "bg-transparent w-full sticky top-0 z-50 px-2"
+            )}
+        >
             <div className="flex flex-row items-center justify-between mx-auto mt-2 p-2 max-w-[60rem] bg-header-background w-full rounded-md">
                 <div className="flow-inline flex flex-row items-center justify-end">
                     <Link

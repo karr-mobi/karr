@@ -14,7 +14,7 @@ export default async function Search() {
     if (!authState) unauthorized()
 
     return (
-        <article className="my-6 max-w-full w-2xl mx-auto">
+        <>
             <h3>{t("Search.title")}</h3>
 
             <div className="my-10">
@@ -22,6 +22,6 @@ export default async function Search() {
                     <TripList />
                 </Suspense>
             </div>
-        </article>
+        </>
     )
 }

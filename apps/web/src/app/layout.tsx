@@ -49,14 +49,12 @@ export default async function RootLayout({
             <body>
                 <Providers>
                     <NextIntlClientProvider messages={messages}>
-                        <div className="grid h-screen grid-cols-1 grid-rows-[auto_1fr]">
+                        <div className="grid h-screen grid-cols-1 grid-rows-[auto_1fr] gap-4">
                             <Header />
-                            <main className="mx-4 mt-4 flex h-full flex-col items-start justify-start">
-                                {children}
-                            </main>
+                            <main className="content-grid">{children}</main>
                             <Footer />
                         </div>
-                        <Toaster richColors />
+                        <Toaster />
                     </NextIntlClientProvider>
                 </Providers>
             </body>

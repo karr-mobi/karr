@@ -9,7 +9,7 @@ export async function generateMetadata() {
     const t = await getTranslations("HomePage")
     return {
         description: t("slogan")
-    } as Metadata
+    } satisfies Metadata
 }
 
 export default async function I18nLayout({
