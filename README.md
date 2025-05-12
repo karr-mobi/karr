@@ -28,17 +28,17 @@ Documentation: [docs.karr.finxol.io](https://docs.karr.mobi/)
 
 ## TODO
 
-- [ ] Add zod validation in Hono
+- [x] Add zod validation in Hono
       ([Hono docs](https://github.com/honojs/middleware/tree/main/packages/zod-validator))
 
 - [x] Get auth server running (using OpenAuth)
-- [ ] Actually persist user info
+- [x] Actually persist user info
 - [ ] Build proper auth frontend
 
 - Add tests
 
     - [x] config
-    - [ ] util
+    - [x] util
     - [ ] api
     - [ ] ui
     - [ ] web
