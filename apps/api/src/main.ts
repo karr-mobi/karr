@@ -1,4 +1,4 @@
-import { serve } from "@hono/node-server"
+import { serve } from "srvx"
 
 import { API_PORT, LOG_LEVEL, logLevels, PRODUCTION } from "@karr/config"
 import { drizzleMigrate } from "@/db/migrate"
@@ -23,14 +23,23 @@ try {
     await drizzleMigrate()
 
     // Start the server
-    serve({
+    const server = serve({
         fetch: app.fetch,
-        port: API_PORT
+        port: API_PORT,
+        silent: true
     })
 
+    await server.ready()
+
     logger.success(
-        `Server listening on port ${API_PORT} in ${PRODUCTION ? "production" : "dev"} mode`
+        `Server listening on ${server.url} in ${PRODUCTION ? "production" : "dev"} mode`
     )
+
+    process.on("SIGINT", async () => {
+        await server.close()
+        logger.info("Server closed")
+        process.exit(0)
+    })
 } catch (err) {
     logger.error(err)
     process.exit(1)

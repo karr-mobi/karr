@@ -15,19 +15,18 @@
     },
     "scripts": {
         "lint": "eslint . --max-warnings 0",
+        "check-types": "tsc --noEmit",
         "dev": "pnpm --filter @karr/api --parallel \"/^dev:.*/\"",
         "dev:run": "tsx watch ./src/main.ts",
         "dev:build": "tsc --watch",
-        "start": "node ./out/index.min.mjs",
-        "build:bundle": "tsc --noEmit && esbuild src/main.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/index.min.mjs --metafile=build-meta.json --external:node:*",
         "build": "tsc",
-        "check-types": "tsc --noEmit",
+        "build:bundle": "tsc --noEmit && esbuild src/main.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/index.min.mjs --metafile=build-meta.json --external:node:*",
+        "start": "node ./out/index.min.mjs",
         "build:localinit": "esbuild src/db/local_dev_init.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/db/local_dev_init.mjs",
         "localinit": "pnpm run build:localinit && node out/db/local_dev_init.mjs",
         "db:migrations-generate": "drizzle-kit generate"
     },
     "dependencies": {
-        "@hono/node-server": "catalog:api",
         "@hono/zod-validator": "catalog:api",
         "@karr/auth": "workspace:*",
         "@karr/config": "workspace:*",
@@ -42,7 +41,8 @@
         "neverthrow": "catalog:utils",
         "ofetch": "catalog:utils",
         "unstorage": "catalog:api",
-        "zod": "catalog:utils"
+        "zod": "catalog:utils",
+        "srvx": "catalog:api"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",

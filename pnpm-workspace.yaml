@@ -22,7 +22,6 @@ catalogs:
     react-dom: ^19.1.0
 
   api:
-    "@hono/node-server": ^1.14.1
     "@hono/zod-validator": ^0.5.0
     "@openauthjs/openauth": ^0.4.3
     db0: ^0.3.2
@@ -31,14 +30,17 @@ catalogs:
     drizzle-zod: ^0.7.1
     hono: ^4.7.9
     postgres: ^3.4.5
+    srvx: ^0.6.0
     unstorage: ^1.16.0
 
   utils:
     "@std/text": "jsr:^1.0.13"
     confbox: ^0.2.2
+    defu: ^6.1.4
     esbuild: ^0.25.4
     neverthrow: ^8.2.0
     ofetch: ^1.4.1
+    std-env: ^3.9.0
     tinyrainbow: ^2.0.0
     zod: next
 
