@@ -1,4 +1,5 @@
 import { serve } from "srvx"
+import { runtime } from "std-env"
 
 import { API_PORT, LOG_LEVEL, logLevels, PRODUCTION } from "@karr/config"
 import { drizzleMigrate } from "@/db/migrate"
@@ -26,6 +27,7 @@ try {
     const server = serve({
         fetch: app.fetch,
         port: API_PORT,
+        hostname: "0.0.0.0",
         silent: true
     })
 
@@ -36,11 +38,12 @@ try {
     )
 
     process.on("SIGINT", async () => {
-        await server.close()
+        logger.info("SIGINT received, closing server...")
+        await server.close(!PRODUCTION)
         logger.info("Server closed")
         process.exit(0)
     })
 } catch (err) {
-    logger.error(err)
+    logger.error(`[${runtime}] Error during server initialization:`, err)
     process.exit(1)
 }

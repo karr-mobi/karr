@@ -21,7 +21,6 @@ export const {
     PRODUCTION
 } = await config.value
 
-export { runtime } from "std-env"
 export { logLevels } from "./schema.js"
 export type { AuthProvider } from "./schema.js"
 
