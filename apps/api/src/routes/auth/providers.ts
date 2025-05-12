@@ -74,6 +74,7 @@ function getProviders() {
             const { name: _name, trusted: _trusted, ...config } = provider
             providerConfig = GithubProvider({
                 scopes: ["read:user", "user:email"],
+                pkce: true,
                 ...config
             })
         } else if (provider.name === "google") {

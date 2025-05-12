@@ -26,9 +26,9 @@ export const TripSchema = z.object({
     createdAt: z.string().optional().nullable(),
     updatedAt: z.string().optional().nullable(),
     account: z.uuid(),
-    nickname: z.email().nullable(),
+    nickname: z.email().nullable().optional(),
     firstName: z.string().nullable(),
-    lastName: z.string().nullable()
+    lastName: z.string().nullable().optional()
 })
 
 export type Trip = z.infer<typeof TripSchema>

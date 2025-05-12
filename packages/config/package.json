@@ -24,7 +24,9 @@
         "@karr/util": "workspace:*",
         "confbox": "catalog:utils",
         "tinyrainbow": "catalog:utils",
-        "zod": "catalog:utils"
+        "zod": "catalog:utils",
+        "std-env": "catalog:utils",
+        "defu": "catalog:utils"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",

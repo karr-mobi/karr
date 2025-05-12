@@ -136,7 +136,6 @@ export const authProvidersSchema = z
                 ]),
                 clientID: z.string(),
                 clientSecret: z.string(),
-                pkce: z.boolean().optional(),
                 query: z.record(z.string(), z.string()).optional(),
                 trusted: z.boolean().default(false).optional()
             })
@@ -226,3 +225,15 @@ export const FullConfigSchema = z.object({
 })
 
 export type FullConfig = z.infer<typeof FullConfigSchema>
+
+export const DbConfigSchema = z.object({
+    host: z.string(),
+    port: z.number(),
+    ssl: z.boolean(),
+    name: z.string(),
+    user: z.string(),
+    password: z.string().optional(),
+    connStr: z.string()
+})
+
+export type DbConfig = z.infer<typeof DbConfigSchema>

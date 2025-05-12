@@ -2,12 +2,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { join } from "node:path"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-import {
-    loadDbConfig,
-    handleConfigError,
-    resolvePath,
-    getDbPasswordFromFile
-} from "@/loader.js"
+import { loadDbConfig, handleConfigError, loadFullConfig } from "@/loader/index"
 import {
     FullConfigSchema,
     LogLevelSchema,
@@ -16,6 +11,7 @@ import {
 } from "@/schema.js"
 import { API_VERSION } from "@/static.js"
 import { ZodError } from "zod"
+import { getDbPasswordFromFile, resolvePath } from "@/loader/file"
 
 // Mock modules
 vi.mock("node:fs", async (importOriginal) => {
@@ -244,40 +240,40 @@ describe("File Format Support", () => {
         delete process.env.CONFIG_FILE
     })
 
-    it("should parse YAML files correctly", () => {
+    it("should parse YAML files correctly", async () => {
         vi.mocked(existsSync).mockImplementation((path) => {
             return path.toString().includes("config.yaml")
         })
 
-        const config = loadDbConfig()
+        const config = await loadFullConfig()
         expect(config.API_PORT).toBe(1993)
         expect(config.APP_URL).toBe("http://example.org/")
     })
 
-    it("should parse JSON files correctly", () => {
+    it("should parse JSON files correctly", async () => {
         vi.mocked(existsSync).mockImplementation((path) => {
             return path.toString().includes("config.json")
         })
 
-        const config = loadDbConfig()
+        const config = await loadFullConfig()
         expect(config.API_PORT).toBe(1993)
         expect(config.APP_URL).toBe("http://example.org/")
     })
 
-    it("should parse JSON5 files correctly", () => {
+    it("should parse JSON5 files correctly", async () => {
         vi.mocked(existsSync).mockImplementation((path) => {
             return path.toString().includes("config.json5")
         })
 
-        const config = loadDbConfig()
+        const config = await loadFullConfig()
         expect(config.API_PORT).toBe(1993)
         expect(config.APP_URL).toBe("http://example.org/")
     })
 
-    it("should respect file extension precedence (yaml > yml > json5 > json)", () => {
+    it("should respect file extension precedence (yaml > yml > json5 > json)", async () => {
         vi.mocked(existsSync).mockImplementation((_path) => true)
 
-        loadDbConfig()
+        await loadDbConfig()
         expect(readFileSync).toHaveBeenCalledWith(
             expect.stringContaining("config.yaml"),
             expect.anything()
