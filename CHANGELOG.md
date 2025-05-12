@@ -1,5 +1,33 @@
 # Changelog
 
+## v0.13.0
+
+[compare changes](https://github.com/finxol/karr/compare/v0.12.3...v0.13.0)
+
+### 🚀 Enhancements
+
+- Add content-grid utility class + other small changes ([#141](https://github.com/finxol/karr/pull/141))
+- Link to docs configuration reference on error ([e721dca](https://github.com/finxol/karr/commit/e721dca))
+- ⚠️  Advance towards runtime agnostic system ([#143](https://github.com/finxol/karr/pull/143))
+
+### 💅 Refactors
+
+- Move `tryCatch` inside `utilities.ts` ([f45d60c](https://github.com/finxol/karr/commit/f45d60c))
+- Add `tryCatch` tsdoc ([a7a442d](https://github.com/finxol/karr/commit/a7a442d))
+
+### 🏡 Chore
+
+- Remove useless file ([34a3325](https://github.com/finxol/karr/commit/34a3325))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Advance towards runtime agnostic system ([#143](https://github.com/finxol/karr/pull/143))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.12.3
 
 [compare changes](https://github.com/finxol/karr/compare/v0.12.2...v0.12.3)
