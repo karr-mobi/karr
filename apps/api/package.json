@@ -20,8 +20,8 @@
         "dev:run": "tsx watch ./src/main.ts",
         "dev:build": "tsc --watch",
         "build": "tsc",
-        "build:bundle": "tsc --noEmit && esbuild src/main.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/index.min.mjs --metafile=build-meta.json --external:node:*",
-        "start": "node ./out/index.min.mjs",
+        "build:bundle": "tsc --noEmit -p tsconfig.bundler.json && node --experimental-strip-types ./script/bundle.ts",
+        "start": "node ./out/main.mjs",
         "build:localinit": "esbuild src/db/local_dev_init.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/db/local_dev_init.mjs",
         "localinit": "pnpm run build:localinit && node out/db/local_dev_init.mjs",
         "db:migrations-generate": "drizzle-kit generate"
@@ -42,7 +42,9 @@
         "ofetch": "catalog:utils",
         "unstorage": "catalog:api",
         "zod": "catalog:utils",
-        "srvx": "catalog:api"
+        "srvx": "catalog:api",
+        "std-env": "catalog:utils",
+        "unplugin": "catalog:utils"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",

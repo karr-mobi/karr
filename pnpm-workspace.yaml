@@ -42,6 +42,7 @@ catalogs:
     ofetch: ^1.4.1
     std-env: ^3.9.0
     tinyrainbow: ^2.0.0
+    unplugin: ^2.3.3
     zod: next
 
   ui:

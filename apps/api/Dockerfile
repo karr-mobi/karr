@@ -38,6 +38,8 @@ RUN apk update
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
+ENV APP_URL="http://build.time/"
+
 # First install the dependencies (as they change less often)
 COPY --from=installer /app/out/json/ .
 
@@ -77,11 +79,11 @@ RUN chown runner:runner /app/.data
 
 USER runner
 
-COPY --from=builder --chown=runner:runner /app/apps/api/out/index.min.mjs ./index.min.mjs
+COPY --from=builder --chown=runner:runner /app/apps/api/out/* .
 # Copy migration files
 COPY --from=builder --chown=runner:runner /app/apps/api/src/db/migrations ./migrations
 
 ENV NODE_ENV=production
 ENV DOCKER=1
 
-CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "node", "index.min.mjs"]
+CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "node", "main.mjs"]
