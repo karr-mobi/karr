@@ -2,19 +2,10 @@ import { existsSync, readFileSync } from "node:fs"
 import { isAbsolute, join } from "node:path"
 import { parseJSON, parseJSON5, parseYAML } from "confbox"
 import c from "tinyrainbow"
-import * as z from "zod"
 
-import defaultConfig from "./default_config.json" with { type: "json" }
-import {
-    ConfigFile,
-    ConfigFileSchema,
-    FullConfig,
-    FullConfigSchema,
-    LogLevelSchema,
-    requiredKeys
-} from "./schema.js"
-import { toInt } from "@karr/util"
-import { API_VERSION } from "./static.js"
+import defaultConfig from "../default_config.json" with { type: "json" }
+import { ConfigFile, ConfigFileSchema } from "../schema.js"
+import { handleConfigError } from "./index.js"
 
 const CONFIG_DIR =
     process.env.CONFIG_DIR ||
@@ -54,7 +45,7 @@ export function resolvePath(base: string, file: string): string {
  * @param base The base path
  * @returns The path to the config file, or undefined if none found
  */
-function resolveConfigPath(): string | undefined {
+export function resolveConfigPath(): string | undefined {
     const acceptedExtensions = ["yaml", "yml", "json5", "json"]
 
     const fileWithoutExt = resolvePath(CONFIG_DIR, CONFIG_FILENAME)
@@ -82,7 +73,7 @@ function resolveConfigPath(): string | undefined {
  * @returns The parsed data
  * @throws {Error} If the file type is invalid, or if the file is not found
  */
-function parseFile(file: string = ".") {
+export function parseFile(file: string = ".") {
     const filetype = file.split(".").pop()
     if (!filetype) {
         throw new Error("Invalid file type")
@@ -118,7 +109,7 @@ function parseFile(file: string = ".") {
  * Reads the config file and returns the parsed data
  * @returns The parsed data
  */
-function readConfig(): ConfigFile {
+export function readConfigFromFile(): ConfigFile {
     const path = resolveConfigPath()
 
     if (!path) {
@@ -148,82 +139,6 @@ function readConfig(): ConfigFile {
     return parsed.data
 }
 
-export function loadDbConfig(): ConfigFile {
-    const config = readConfig()
-
-    const parsed = ConfigFileSchema.safeParse(config)
-
-    if (!parsed.success) {
-        handleConfigError(parsed.error)
-        process.exit(1)
-    }
-
-    return parsed.data
-}
-
-export function loadFullConfig(): FullConfig {
-    const config = readConfig()
-
-    if (process.env.APPLICATION_NAME) {
-        config.APPLICATION_NAME = process.env.APPLICATION_NAME
-    }
-
-    if (process.env.APP_URL) {
-        config.APP_URL = process.env.APP_URL
-    }
-
-    if (process.env.API_PORT) {
-        config.API_PORT = toInt(process.env.API_PORT)
-    }
-
-    if (process.env.API_BASE) {
-        config.API_BASE = process.env.API_BASE
-    }
-
-    if (process.env.LOG_TIMESTAMP) {
-        config.LOG_TIMESTAMP = !(process.env.LOG_TIMESTAMP === "false")
-    }
-
-    if (process.env.LOG_LEVEL) {
-        const parsed = LogLevelSchema.safeParse(process.env.LOG_LEVEL)
-
-        if (!parsed.success) {
-            handleConfigError(parsed.error)
-            process.exit(1)
-        }
-
-        config.LOG_LEVEL = parsed.data
-    }
-
-    if (process.env.ADMIN_EMAIL) {
-        config.ADMIN_EMAIL = process.env.ADMIN_EMAIL
-    }
-
-    if (process.env.FEDERATION) {
-        config.FEDERATION = !(process.env.LOG_TIMESTAMP === "false")
-    }
-
-    if (process.env.FEDERATION_TARGETS) {
-        config.FEDERATION_TARGETS = process.env.FEDERATION_TARGETS.split(
-            ","
-        ).map((target) => ({
-            name: target,
-            url: target
-        }))
-    }
-
-    config.API_BASE += "/" + API_VERSION
-
-    const parsed = FullConfigSchema.safeParse(config)
-
-    if (!parsed.success) {
-        handleConfigError(parsed.error)
-        process.exit(1)
-    }
-
-    return parsed.data
-}
-
 /**
  * Reads the database password from the specified file
  * @param path The path to the file
@@ -237,48 +152,4 @@ export function getDbPasswordFromFile(path: string | undefined) {
         return readFileSync(filepath, { encoding: "utf8", flag: "r" })
     }
     return null
-}
-
-export function handleConfigError(error: z.core.$ZodError) {
-    const errors = error.issues
-    const numErrors = errors.length
-    console.error(
-        c.inverse(c.red(" Configuration error ")),
-        c.red(`(${numErrors} issue${numErrors > 1 ? "s" : ""})`)
-    )
-    console.log()
-
-    const fields = errors.map((error) => error.path.join("."))
-    console.log(c.gray(c.bold("Fields:")))
-    for (const field of fields) {
-        const required: boolean = requiredKeys.includes(field)
-
-        console.log(
-            "    -",
-            c.bold(field),
-            required ? c.inverse(c.red("\t REQUIRED ")) : ""
-        )
-    }
-
-    console.log()
-
-    for (const e of errors) {
-        console.log(
-            c.bgWhiteBright(c.black(c.bold(` ${e.code?.toUpperCase()} `))),
-            c.bold(e.path.join(".")),
-            "-",
-            e.message
-        )
-
-        console.log()
-    }
-
-    console.log(
-        "Please visit",
-        c.underline(
-            "https://docs.karr.mobi/getting-started/configuration-reference"
-        ),
-        "for more information."
-    )
-    console.log()
 }

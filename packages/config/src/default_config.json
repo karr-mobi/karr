@@ -15,6 +15,6 @@
             "name": "password"
         }
     ],
-    "FEDERATION": true,
+    "FEDERATION": false,
     "FEDERATION_TARGETS": []
 }

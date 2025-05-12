@@ -1,16 +1,11 @@
-import { z } from "zod"
+import { lazy } from "@karr/util"
 
-import {
-    getDbPasswordFromFile,
-    handleConfigError,
-    loadDbConfig,
-    loadFullConfig
-} from "./loader.js"
-import { lazy, toInt } from "@karr/util"
+import { loadDbConfig, loadFullConfig } from "./loader/index.js"
+import { DbConfig } from "./schema.js"
 
-const config = lazy(() => loadFullConfig())
+const config = lazy(async () => await loadFullConfig())
 
-export default config.value
+export default await config.value
 
 export const {
     APP_URL,
@@ -24,8 +19,9 @@ export const {
     FEDERATION_TARGETS,
     APPLICATION_NAME,
     PRODUCTION
-} = config.value
+} = await config.value
 
+export { runtime } from "std-env"
 export { logLevels } from "./schema.js"
 export type { AuthProvider } from "./schema.js"
 
@@ -33,49 +29,10 @@ export type { AuthProvider } from "./schema.js"
 // Database config
 // ====================================================================
 
-export const DbConfigSchema = z.object({
-    host: z.string(),
-    port: z.number(),
-    ssl: z.boolean(),
-    name: z.string(),
-    user: z.string(),
-    password: z.string().optional(),
-    connStr: z.string()
-})
-
-export type DbConfig = z.infer<typeof DbConfigSchema>
-
 /**
  * Returns the database config
  * @returns The database config
  */
-export function getDbConfig(): DbConfig {
-    const fileConfig = loadDbConfig()
-
-    const parsed = DbConfigSchema.safeParse({
-        host: process.env.DB_HOST || fileConfig.DB_CONFIG?.host || "localhost",
-        port: toInt(
-            process.env.DB_PORT || fileConfig.DB_CONFIG?.port || "5432"
-        ),
-        ssl: process.env.DB_SSL || fileConfig.DB_CONFIG?.ssl || false,
-        name: process.env.DB_NAME || fileConfig.DB_CONFIG?.db_name || "karr",
-        user: process.env.DB_USER || fileConfig.DB_CONFIG?.user || "postgres",
-        password:
-            getDbPasswordFromFile(
-                process.env.DB_PASSWORD_FILE ||
-                    fileConfig.DB_CONFIG?.password_file
-            ) ||
-            process.env.DB_PASSWORD ||
-            fileConfig.DB_CONFIG?.password,
-        get connStr(): string {
-            return `postgres://${this.user}:${this.password}@${this.host}:${this.port}/${this.name}`
-        }
-    } as DbConfig)
-
-    if (!parsed.success) {
-        handleConfigError(parsed.error)
-        process.exit(1)
-    }
-
-    return parsed.data
+export async function getDbConfig(): Promise<DbConfig> {
+    return loadDbConfig()
 }

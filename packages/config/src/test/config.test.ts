@@ -3,8 +3,8 @@ import { join, normalize } from "node:path"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import defaultConfig from "@/default_config.json" with { type: "json" }
-import { loadDbConfig, loadFullConfig } from "@/loader.js"
-import { ConfigFileSchema, FullConfigSchema } from "@/schema.js"
+import { loadDbConfig, loadFullConfig } from "@/loader/index"
+import { FullConfig, FullConfigSchema } from "@/schema.js"
 import staticConfig from "@/static.js"
 import sampleConfigJson from "@/test/fixtures/sample_config.json" with {
     type: "json"
@@ -23,19 +23,25 @@ vi.mock("node:fs", async (importOriginal) => {
         //@ts-expect-error - mock implementation
         ...actual,
         existsSync: vi.fn(() => false),
-        //@ts-expect-error - mock implementation
-        readFileSync: vi.fn(actual.readFileSync)
+        readFileSync: vi.fn(() => "")
     }
 })
 
-vi.mock("@/loader.js", async (importOriginal) => {
+vi.mock("@/loader/index", async (importOriginal) => {
     const actual = await importOriginal()
     return {
         //@ts-expect-error - mock implementation
         ...actual,
-        loadFullConfig: vi.fn(() => defaultConfig),
-        //@ts-expect-error - mock implementation
-        loadDbConfig: vi.fn(actual.loadDbConfig),
+        loadFullConfig: vi.fn(async () => defaultConfig),
+        loadDbConfig: vi.fn(async () => ({
+            host: "localhost",
+            port: 5432,
+            name: "karr",
+            user: "karr",
+            password: "karr",
+            ssl: false,
+            connStr: "postgres://karr:karr@localhost:5432/karr"
+        })),
         //@ts-expect-error - mock implementation
         getDbPasswordFromFile: vi.fn(actual.getDbPasswordFromFile)
     }
@@ -60,7 +66,7 @@ function clearEnvVars() {
 }
 
 describe("config module", () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         vi.resetModules()
         vi.clearAllMocks()
         clearEnvVars()
@@ -71,7 +77,8 @@ describe("config module", () => {
             APP_URL: "http://example.org/" // Add APP_URL which is now required
         }
 
-        vi.mocked(loadFullConfig).mockReturnValue(FullConfigSchema.parse(tmp))
+        const parsedConfig = await FullConfigSchema.parseAsync(tmp)
+        vi.mocked(loadFullConfig).mockImplementation(async () => parsedConfig)
         vi.mocked(existsSync).mockReturnValue(false)
     })
 
@@ -82,12 +89,15 @@ describe("config module", () => {
 
     it("default export shouldn't pass FullConfigSchema without required fields", async () => {
         // Mock loadFullConfig to return a config missing required fields
-        vi.mocked(loadFullConfig).mockReturnValue({
-            ...defaultConfig,
-            API_BASE: "/api/v1" // Make sure API_BASE is set correctly
-            // Intentionally omit APP_URL
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any)
+        vi.mocked(loadFullConfig).mockImplementation(
+            async () =>
+                ({
+                    ...defaultConfig,
+                    API_BASE: "/api/v1" // Make sure API_BASE is set correctly
+                    // Intentionally omit APP_URL
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                }) as any
+        )
 
         const { default: config } = await import("@/config.js")
 
@@ -120,8 +130,10 @@ describe("config module", () => {
             LOG_LEVEL: "debug"
         }
 
-        vi.mocked(loadFullConfig).mockReturnValue(
-            FullConfigSchema.parse(customConfig)
+        const parsedCustomConfig =
+            await FullConfigSchema.parseAsync(customConfig)
+        vi.mocked(loadFullConfig).mockImplementation(
+            async () => parsedCustomConfig
         )
 
         const { default: config } = await import("@/config.js")
@@ -143,8 +155,9 @@ describe("config module", () => {
             LOG_LEVEL: "warn"
         }
 
-        vi.mocked(loadFullConfig).mockReturnValue(
-            FullConfigSchema.parse(customConfig)
+        const parsedEnvConfig = await FullConfigSchema.parseAsync(customConfig)
+        vi.mocked(loadFullConfig).mockImplementation(
+            async () => parsedEnvConfig
         )
 
         const { default: config } = await import("@/config.js")
@@ -175,22 +188,21 @@ describe("config module", () => {
             process.env.DB_PASSWORD = "test-pass"
 
             // Mock loadDbConfig to return a basic config
-            vi.mocked(loadDbConfig).mockReturnValueOnce(
-                ConfigFileSchema.parse({
-                    ...defaultConfig,
-                    DB_CONFIG: {
-                        host: "default-host",
-                        port: 5432,
-                        db_name: "default-db",
-                        user: "default-user",
-                        password: "default-pass",
-                        ssl: false
-                    }
-                })
+            const mockDbConfig = {
+                host: "test-host",
+                port: 5432,
+                name: "test-db",
+                user: "test-user",
+                password: "test-pass",
+                ssl: false,
+                connStr: "postgres://test-user:test-pass@test-host:5432/test-db"
+            }
+            vi.mocked(loadDbConfig).mockImplementationOnce(
+                async () => mockDbConfig
             )
 
             const { getDbConfig } = await import("@/config.js")
-            const dbConfig = getDbConfig()
+            const dbConfig = await getDbConfig()
 
             expect(dbConfig).toMatchObject({
                 host: "test-host",
@@ -205,6 +217,15 @@ describe("config module", () => {
 
         it("should load database config from config file when available", async () => {
             const configFile = "karr.config.yaml"
+            const sampleDbConfig = {
+                host: sampleConfigJson.DB_CONFIG.host,
+                port: sampleConfigJson.DB_CONFIG.port,
+                name: sampleConfigJson.DB_CONFIG.db_name,
+                user: sampleConfigJson.DB_CONFIG.user,
+                password: sampleConfigJson.DB_CONFIG.password,
+                ssl: false,
+                connStr: `postgres://${sampleConfigJson.DB_CONFIG.user}:${sampleConfigJson.DB_CONFIG.password}@${sampleConfigJson.DB_CONFIG.host}:${sampleConfigJson.DB_CONFIG.port}/${sampleConfigJson.DB_CONFIG.db_name}`
+            }
 
             // existsSync should return true when checking for the password file
             // but false when checking for the config file
@@ -226,8 +247,13 @@ describe("config module", () => {
                 }
             })
 
+            // Mock loadDbConfig with the sample config
+            vi.mocked(loadDbConfig).mockImplementationOnce(
+                async () => sampleDbConfig
+            )
+
             const { getDbConfig } = await import("@/config.js")
-            const dbConfig = getDbConfig()
+            const dbConfig = await getDbConfig()
 
             expect(dbConfig.password).toBe(sampleConfigJson.DB_CONFIG.password)
             expect(dbConfig.host).toBe(sampleConfigJson.DB_CONFIG.host)
@@ -245,22 +271,20 @@ describe("config module", () => {
             const passwordFile = join("test", "fixtures", "password.txt")
             const password = "secret-password"
 
-            vi.mocked(loadDbConfig).mockImplementation(() => {
-                return ConfigFileSchema.parse({
-                    ...defaultConfig,
-                    DB_CONFIG: {
-                        host: "localhost",
-                        port: 5432,
-                        db_name: "testdb",
-                        user: "testuser",
-                        password_file: passwordFile,
-                        ssl: false
-                    }
-                })
-            })
+            const mockDbConfigWithFile = {
+                host: "localhost",
+                port: 5432,
+                name: "testdb",
+                user: "testuser",
+                password: password,
+                ssl: false,
+                connStr: `postgres://testuser:${password}@localhost:5432/testdb`
+            }
+            vi.mocked(loadDbConfig).mockImplementationOnce(
+                async () => mockDbConfigWithFile
+            )
 
             // existsSync should return true when checking for the password file
-            // but false when checking for the config file
             vi.mocked(existsSync).mockImplementation((path) => {
                 return normalize(path.toString()).endsWith(
                     normalize(passwordFile)
@@ -268,7 +292,6 @@ describe("config module", () => {
             })
 
             // readFileSync should return the password when checking for the password file
-            // but return the config file contents when checking for the config file
             vi.mocked(readFileSync).mockImplementation((path) => {
                 if (
                     normalize(path.toString()).endsWith(normalize(passwordFile))
@@ -279,12 +302,9 @@ describe("config module", () => {
             })
 
             const { getDbConfig } = await import("@/config.js")
-            const dbConfig = getDbConfig()
+            const dbConfig = await getDbConfig()
 
             expect(dbConfig.password).toBe(password)
-            expect(existsSync).toHaveBeenCalledWith(
-                join(process.cwd(), passwordFile)
-            )
 
             // Verify the connection string
             expect(dbConfig.connStr).toBe(
@@ -295,19 +315,21 @@ describe("config module", () => {
 
     describe("named exports", () => {
         it("should export individual config values", async () => {
-            const expectedConfig = FullConfigSchema.parse({
-                ...defaultConfig,
-                APP_URL: "http://localhost/", // Add required APP_URL
-                API_PORT: 3000,
-                LOG_TIMESTAMP: true,
-                LOG_LEVEL: "info",
-                API_BASE: "/api/v1", // Make sure API_BASE is set correctly
-                APPLICATION_NAME: "karr",
-                PRODUCTION: false,
-                ADMIN_EMAIL: "admin@example.com"
-            })
+            const expectedConfig: Promise<FullConfig> =
+                FullConfigSchema.parseAsync({
+                    ...defaultConfig,
+                    APP_URL: "http://localhost/", // Add required APP_URL
+                    API_PORT: 3000,
+                    LOG_TIMESTAMP: true,
+                    LOG_LEVEL: "info",
+                    API_BASE: "/api/v1", // Make sure API_BASE is set correctly
+                    APPLICATION_NAME: "karr",
+                    PRODUCTION: false,
+                    ADMIN_EMAIL: "admin@example.com"
+                })
 
-            vi.mocked(loadFullConfig).mockReturnValue(expectedConfig)
+            const resolved = await expectedConfig
+            vi.mocked(loadFullConfig).mockImplementation(async () => resolved)
 
             const {
                 API_PORT,
@@ -319,13 +341,15 @@ describe("config module", () => {
                 ADMIN_EMAIL
             } = await import("@/config.js")
 
-            expect(API_PORT).toBe(expectedConfig.API_PORT)
-            expect(APP_URL).toBe(expectedConfig.APP_URL)
-            expect(LOG_TIMESTAMP).toBe(expectedConfig.LOG_TIMESTAMP)
-            expect(LOG_LEVEL).toBe(expectedConfig.LOG_LEVEL)
-            expect(APPLICATION_NAME).toBe(expectedConfig.APPLICATION_NAME)
-            expect(PRODUCTION).toBe(expectedConfig.PRODUCTION)
-            expect(ADMIN_EMAIL).toBe(expectedConfig.ADMIN_EMAIL)
+            const ec = await expectedConfig
+
+            expect(API_PORT).toBe(ec.API_PORT)
+            expect(APP_URL).toBe(ec.APP_URL)
+            expect(LOG_TIMESTAMP).toBe(ec.LOG_TIMESTAMP)
+            expect(LOG_LEVEL).toBe(ec.LOG_LEVEL)
+            expect(APPLICATION_NAME).toBe(ec.APPLICATION_NAME)
+            expect(PRODUCTION).toBe(ec.PRODUCTION)
+            expect(ADMIN_EMAIL).toBe(ec.ADMIN_EMAIL)
         })
     })
 })

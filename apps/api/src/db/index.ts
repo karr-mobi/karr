@@ -2,7 +2,7 @@ import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js"
 
 import { getDbConfig } from "@karr/config"
 
-const config = getDbConfig()
+const config = await getDbConfig()
 
 const connection = {
     host: config.host, // Postgres ip address[es] or domain name[s]
