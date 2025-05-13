@@ -137,7 +137,7 @@ const logger = {
             console.error(red(`${prefix()}⚠️ ${underline("ERROR")} >`), title)
             for (const arg of args) {
                 for (const line of formatArg(arg).split("\n")) {
-                    console.log("   ", line)
+                    console.error("   ", line)
                 }
             }
         }
@@ -157,7 +157,7 @@ const logger = {
             console.warn(yellow(`${prefix()}⚠ ${underline("WARN")} >`), title)
             for (const arg of args) {
                 for (const line of formatArg(arg).split("\n")) {
-                    console.log("   ", line)
+                    console.warn("   ", line)
                 }
             }
         }
@@ -177,7 +177,7 @@ const logger = {
             console.info(blue(`${prefix()}ℹ ${underline("INFO")} >`), title)
             for (const arg of args) {
                 for (const line of formatArg(arg).split("\n")) {
-                    console.log("   ", line)
+                    console.info("   ", line)
                 }
             }
         }
@@ -200,7 +200,7 @@ const logger = {
             )
             for (const arg of args) {
                 for (const line of formatArg(arg).split("\n")) {
-                    console.log("   ", line)
+                    console.debug("   ", line)
                 }
             }
         }
