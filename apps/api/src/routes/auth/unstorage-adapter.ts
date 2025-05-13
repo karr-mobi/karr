@@ -1,4 +1,3 @@
-/*eslint-disable @typescript-eslint/no-explicit-any*/
 /**
  * Configure OpenAuth to use unstorage as a store.
  *

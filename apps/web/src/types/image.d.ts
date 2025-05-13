@@ -1,5 +1,3 @@
-/*eslint-disable @typescript-eslint/no-explicit-any*/
-
 declare module "*.png" {
     const value: import("next/image").StaticImageData
     export default value

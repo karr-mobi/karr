@@ -1,5 +1,3 @@
-/*eslint-disable @typescript-eslint/no-explicit-any*/
-
 import { describe, expect, it, test, vi } from "vitest"
 
 import { lazy, type Prettify, toCamelCase, toInt } from "@/utilities.js"

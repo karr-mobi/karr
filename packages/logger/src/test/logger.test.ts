@@ -1,4 +1,3 @@
-/*eslint-disable @typescript-eslint/no-explicit-any*/
 //biome-ignore-all lint/style/useNamingConvention: intentional
 
 import c from "tinyrainbow"
