@@ -229,10 +229,10 @@ export type FullConfig = z.infer<typeof FullConfigSchema>
 export const DbConfigSchema = z.object({
     host: z.string(),
     port: z.number(),
-    ssl: z.boolean(),
     name: z.string(),
     user: z.string(),
     password: z.string().optional(),
+    ssl: z.boolean(),
     connStr: z.string()
 })
 
