@@ -19,7 +19,8 @@ export const config = [
             parser: tsParser
         },
         rules: {
-            "turbo/no-undeclared-env-vars": "warn"
+            "turbo/no-undeclared-env-vars": "warn",
+            "@typescript-eslint/no-unused-vars": "off"
         }
     },
     {
