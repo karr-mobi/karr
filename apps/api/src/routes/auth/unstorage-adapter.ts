@@ -45,7 +45,9 @@ type Entry = { value: Record<string, any> | undefined; expiry?: number }
 
 export function UnStorage({
     driver
-}: { driver?: UnstorageDriver } = {}): StorageAdapter {
+}: {
+    driver?: UnstorageDriver
+} = {}): StorageAdapter {
     const store = createStorage<Entry>({
         driver: driver
     })

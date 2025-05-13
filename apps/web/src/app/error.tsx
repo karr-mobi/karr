@@ -5,7 +5,9 @@ import { Link } from "@/i18n/routing"
 
 export default function Error({
     error
-}: { error: Error & { digest?: string } }) {
+}: {
+    error: Error & { digest?: string }
+}) {
     console.error(error)
 
     return (

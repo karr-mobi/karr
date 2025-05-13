@@ -39,7 +39,9 @@ export default function FetchUserData() {
 // TODO: add user type
 function ShowUserData({
     user
-}: { user: InferResponseType<typeof client.user.info.$get, 200> }) {
+}: {
+    user: InferResponseType<typeof client.user.info.$get, 200>
+}) {
     const t = useTranslations("auth.Account")
 
     const hasSpecialStatus = false

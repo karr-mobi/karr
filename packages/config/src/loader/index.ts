@@ -36,8 +36,6 @@ export async function loadDbConfig(): Promise<DbConfig> {
         delete config.DB_CONFIG.password
     }
 
-    console.log("config", config)
-
     const parsed = ConfigFileSchema.safeParse(config)
 
     if (!parsed.success) {
@@ -58,8 +56,6 @@ export async function loadDbConfig(): Promise<DbConfig> {
             return `postgres://${this.user}:${this.password}@${this.host}:${this.port}/${this.name}`
         }
     } satisfies DbConfig)
-
-    console.log("parsedDbConfig", parsedDbConfig.data)
 
     if (!parsedDbConfig.success) {
         handleConfigError(parsedDbConfig.error)

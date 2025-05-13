@@ -17,7 +17,11 @@
         "commitlint": "commitlint --edit",
         "release": "changelogen --release --push"
     },
-    "workspaces": ["apps/*", "packages/*", "tooling/*"],
+    "workspaces": [
+        "apps/*",
+        "packages/*",
+        "tooling/*"
+    ],
     "devDependencies": {
         "@antfu/nip": "^0.1.0",
         "@biomejs/biome": "catalog:lint",
@@ -37,7 +41,10 @@
         "pnpm": ">=10"
     },
     "pnpm": {
-        "requiredScripts": ["lint", "format"],
+        "requiredScripts": [
+            "lint",
+            "format"
+        ],
         "onlyBuiltDependencies": [
             "@biomejs/biome",
             "@tailwindcss/oxide",
