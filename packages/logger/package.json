@@ -3,7 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "lint": "eslint . --max-warnings 0",
+        "lint": "eslint . --max-warnings 0 --fix",
         "dev": "tsc --watch",
         "build": "tsc",
         "check-types": "tsc --noEmit",

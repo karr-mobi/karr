@@ -7,7 +7,7 @@
         "dev": "env $(cat ../../.env) next dev --turbo",
         "build": "next build --turbo",
         "start": "next start",
-        "lint": "eslint . --max-warnings 0"
+        "lint": "eslint . --max-warnings 0 --fix"
     },
     "dependencies": {
         "@icons-pack/react-simple-icons": "catalog:ui",
