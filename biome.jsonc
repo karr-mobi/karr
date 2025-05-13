@@ -42,7 +42,13 @@
                 "noProcessGlobal": "on",
                 "noTsIgnore": "on",
                 "useIterableCallbackReturn": "on",
-                "useSortedClasses": "on"
+                "useSortedClasses": {
+                    "level": "on",
+                    "fix": "safe",
+                    "options": {
+                        "functions": ["cn", "twMerge", "cva"]
+                    }
+                }
             },
             "performance": {
                 "noBarrelFile": "on"
