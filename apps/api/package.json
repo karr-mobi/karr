@@ -14,6 +14,7 @@
         }
     },
     "scripts": {
+        "lint:check": "eslint . --max-warnings 0",
         "lint": "eslint . --max-warnings 0 --fix",
         "check-types": "tsc --noEmit",
         "dev": "pnpm --filter @karr/api --parallel \"/^dev:.*/\"",

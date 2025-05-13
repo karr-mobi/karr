@@ -8,11 +8,15 @@
         "start": "turbo start",
         "dev": "turbo dev --filter='!@karr/landing'",
         "dev:landing": "turbo dev --filter=@karr/landing",
-        "lint": "biome lint --write && turbo lint",
+
+        "lint:biome": "biome check --write --error-on-warnings",
+        "lint:check": "biome ci --error-on-warnings && turbo lint:check",
+        "lint": "pnpm run lint:biome && turbo lint",
+
         "check-types": "turbo check-types",
-        "format": "biome check --write",
-        "format:check": "biome format .",
+        "format": "biome format --write",
         "test": "turbo test",
+
         "prepare": "husky",
         "commitlint": "commitlint --edit",
         "release": "changelogen --release --push"
@@ -41,10 +45,6 @@
         "pnpm": ">=10"
     },
     "pnpm": {
-        "requiredScripts": [
-            "lint",
-            "format"
-        ],
         "onlyBuiltDependencies": [
             "@biomejs/biome",
             "@tailwindcss/oxide",
