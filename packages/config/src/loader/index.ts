@@ -16,7 +16,7 @@ import { API_VERSION } from "../static.js"
 import defaultConfig from "../default_config.json" with { type: "json" }
 import { readConfigFromEnv } from "./env.js"
 
-const fsRuntime = isNode || isBun || isDeno
+const fsRuntime = isBun || isDeno || isNode
 
 export async function loadDbConfig(): Promise<DbConfig> {
     let config = defaultConfig as ConfigFile
@@ -32,6 +32,12 @@ export async function loadDbConfig(): Promise<DbConfig> {
     const envConfig = readConfigFromEnv()
     config = defu(envConfig, config)
 
+    if (config.DB_CONFIG?.password_file) {
+        delete config.DB_CONFIG.password
+    }
+
+    console.log("config", config)
+
     const parsed = ConfigFileSchema.safeParse(config)
 
     if (!parsed.success) {
@@ -41,13 +47,19 @@ export async function loadDbConfig(): Promise<DbConfig> {
 
     const dbConfig = (parsed.data.DB_CONFIG || {}) as DbConfig
 
-    dbConfig.password = await getDbPassword(parsed.data)
-    dbConfig.name =
-        parsed.data.DB_CONFIG?.db_name || defaultConfig.DB_CONFIG.db_name
-    dbConfig.connStr = `postgres://${dbConfig.user}:${dbConfig.password}@${dbConfig.host}:${dbConfig.port}/${dbConfig.name}`
-    dbConfig.ssl = parsed.data.DB_CONFIG?.ssl || false
+    const parsedDbConfig = DbConfigSchema.safeParse({
+        host: dbConfig.host,
+        port: dbConfig.port,
+        name: parsed.data.DB_CONFIG?.db_name || defaultConfig.DB_CONFIG.db_name,
+        user: dbConfig.user,
+        password: await getDbPassword(parsed.data),
+        ssl: parsed.data.DB_CONFIG?.ssl || false,
+        get connStr() {
+            return `postgres://${this.user}:${this.password}@${this.host}:${this.port}/${this.name}`
+        }
+    } satisfies DbConfig)
 
-    const parsedDbConfig = DbConfigSchema.safeParse(dbConfig)
+    console.log("parsedDbConfig", parsedDbConfig.data)
 
     if (!parsedDbConfig.success) {
         handleConfigError(parsedDbConfig.error)

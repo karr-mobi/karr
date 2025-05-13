@@ -1,3 +1,5 @@
+//eslint-disable-next-line
+// @ts-ignore
 import { logger, c } from "@karr/logger"
 import { build } from "esbuild"
 import { esbuildPlugin as fixNodeBuiltins } from "./unplugin-fix-node-builtins.ts"
