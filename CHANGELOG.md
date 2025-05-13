@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.13.1
+
+[compare changes](https://github.com/finxol/karr/compare/v0.13.0...v0.13.1)
+
+### 🩹 Fixes
+
+- Db config loading dedupe ([#144](https://github.com/finxol/karr/pull/144))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+
 ## v0.13.0
 
 [compare changes](https://github.com/finxol/karr/compare/v0.12.3...v0.13.0)
