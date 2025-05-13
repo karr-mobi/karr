@@ -1,13 +1,13 @@
+import { SiGithub as Github } from "@icons-pack/react-simple-icons"
 import {
     ArrowRight,
-    Waypoints,
-    Leaf,
-    ShieldCheck,
-    Server,
+    BadgePlus,
     ClipboardCheck,
-    BadgePlus
+    Leaf,
+    Server,
+    ShieldCheck,
+    Waypoints
 } from "lucide-react"
-import { SiGithub as Github } from "@icons-pack/react-simple-icons"
 
 export const APP_NAME = "Karr"
 

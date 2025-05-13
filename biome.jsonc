@@ -24,7 +24,12 @@
                 "useJsxKeyInIterable": "error"
             },
             "complexity": {
-                "noExcessiveCognitiveComplexity": "on",
+                "noExcessiveCognitiveComplexity": {
+                    "level": "on",
+                    "options": {
+                        "maxAllowedComplexity": 20
+                    }
+                },
                 "noForEach": "on",
                 "noUselessStringConcat": "on"
             },

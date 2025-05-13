@@ -1,22 +1,5 @@
-let hasServerOnlyImport = false
-const karrConfigImportNodes = []
-let foundKarrConfig = false // Track finding the import
-
-function importExportHandler(context, node) {
-    try {
-        if (node.source.value === "server-only") {
-            hasServerOnlyImport = true
-        } else if (node.source.value === "@karr/config") {
-            karrConfigImportNodes.push(node.source)
-            foundKarrConfig = true
-        }
-    } catch (e) {
-        console.error(
-            `[Custom Rule] Error in importExportHandler visitor for ${context.getFilename()}:`,
-            e
-        )
-    }
-}
+// biome-ignore-all lint/suspicious/noConsole: can't import logger
+// biome-ignore-all lint/style/useNamingConvention: defined by eslint
 
 /** @type {import('eslint').Rule.RuleModule} */
 export default {
@@ -86,7 +69,7 @@ export default {
                     },
 
                     // Check the final state when ESLint is done with the file
-                    "Program:exit"(node) {
+                    "Program:exit"(_node) {
                         try {
                             // If karr/config was imported but server-only was not...
                             if (
@@ -94,14 +77,12 @@ export default {
                                 !hasServerOnlyImport
                             ) {
                                 // Report an error for each karr/config import found
-                                karrConfigImportNodes.forEach(
-                                    (importSourceNode) => {
-                                        context.report({
-                                            node: importSourceNode,
-                                            messageId: "restricted"
-                                        })
-                                    }
-                                )
+                                for (const importSourceNode of karrConfigImportNodes) {
+                                    context.report({
+                                        node: importSourceNode,
+                                        messageId: "restricted"
+                                    })
+                                }
                             }
                             // No need to reset state here - it's scoped to `create`
                         } catch (e) {

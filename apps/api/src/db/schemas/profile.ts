@@ -1,5 +1,5 @@
 import { pgTable, text, uuid } from "drizzle-orm/pg-core"
-import { createSelectSchema, createInsertSchema } from "drizzle-zod"
+import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 
 import { specialStatusTable } from "./specialstatus"
 import { userPrefsTable } from "./userprefs"

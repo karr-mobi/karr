@@ -1,9 +1,8 @@
 "use client"
 
-// Error components must be client components
 import { Link } from "@/i18n/routing"
 
-export default function Error({
+export default function ErrorPage({
     error
 }: {
     error: Error & { digest?: string }

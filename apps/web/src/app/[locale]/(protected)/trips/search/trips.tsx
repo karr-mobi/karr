@@ -1,14 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
-import {
-    Earth as IconEarth,
-    House as IconHouse,
-    Trash as IconTrash
-} from "lucide-react"
-
-import { TripSchema, type Trip } from "@karr/api/db/trips"
+import { type Trip, TripSchema } from "@karr/api/db/trips"
 import { Badge } from "@karr/ui/components/badge"
 import { Button } from "@karr/ui/components/button"
 import {
@@ -20,9 +12,15 @@ import {
     CardTitle
 } from "@karr/ui/components/card"
 import { toast } from "@karr/ui/components/sonner"
-
-import { apiFetch } from "@/util/apifetch"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+    Earth as IconEarth,
+    House as IconHouse,
+    Trash as IconTrash
+} from "lucide-react"
+import { useEffect, useState } from "react"
 import Loading from "@/components/Loading"
+import { apiFetch } from "@/util/apifetch"
 
 export default function FetchTrips() {
     const queryClient = useQueryClient()
@@ -72,11 +70,13 @@ export default function FetchTrips() {
         let buffer = ""
         let mounted = true // Add mounted flag
 
+        //biome-ignore lint/complexity/noExcessiveCognitiveComplexity: this is a complex function
         async function processStream() {
             try {
                 setLoading(true)
                 while (mounted) {
                     // Check if still mounted
+                    //biome-ignore lint/nursery/noAwaitInLoop: need to await here
                     const { done, value } = await reader.read()
                     if (done) {
                         setLoading(false)
@@ -91,8 +91,8 @@ export default function FetchTrips() {
 
                     const newTrips = lines
                         .filter((line) => line.startsWith("data: "))
-                        .map((line) => {
-                            line = line.trim()
+                        .map((l) => {
+                            let line = l.trim()
                             try {
                                 line = line.substring(6)
                                 const tripData = JSON.parse(line)
@@ -128,7 +128,7 @@ export default function FetchTrips() {
             }
         }
 
-        processStream()
+        void processStream()
 
         return () => {
             mounted = false // Set mounted to false on cleanup
@@ -183,10 +183,10 @@ function TripCard({
     onDelete: (id: string) => Promise<void>
 }) {
     return (
-        <Card className="max-w-full w-lg">
+        <Card className="w-lg max-w-full">
             <CardHeader>
                 <CardTitle>
-                    <div className="flex flex-row justify-between items-center gap-2">
+                    <div className="flex flex-row items-center justify-between gap-2">
                         <p>
                             {trip.from} – {trip.to}
                         </p>
@@ -211,7 +211,7 @@ function TripCard({
                 {trip.origin ? (
                     <Badge
                         variant="outline"
-                        className="text-sm flex flex-row items-center gap-1"
+                        className="flex flex-row items-center gap-1 text-sm"
                     >
                         <IconEarth />
                         {trip.origin}
@@ -219,14 +219,14 @@ function TripCard({
                 ) : (
                     <Badge
                         variant="outline"
-                        className="text-sm flex flex-row items-center gap-1"
+                        className="flex flex-row items-center gap-1 text-sm"
                     >
                         <IconHouse className="my-0.5" />
                     </Badge>
                 )}
                 <p>
                     {trip.nickname ||
-                        trip.firstName + " " + trip.lastName ||
+                        `${trip.firstName} ${trip.lastName}` ||
                         trip.account.split("-")[0]}
                 </p>
             </CardFooter>

@@ -1,6 +1,6 @@
-import logger from "@karr/logger"
-import { Context } from "hono"
 import type { UserSubject } from "@karr/auth/subjects"
+import logger from "@karr/logger"
+import type { Context } from "hono"
 
 export function getUserSub(c: Context) {
     // Get the subject from the context

@@ -1,19 +1,21 @@
-import c from "tinyrainbow"
-import { z } from "zod"
-import { isNode, isBun, isDeno, env } from "std-env"
-import defu from "defu"
+//biome-ignore-all lint/suspicious/noConsole: can't import logger here
 
+import process from "node:process"
+import defu from "defu"
+import { env, isBun, isDeno, isNode } from "std-env"
+import c from "tinyrainbow"
+import type { z } from "zod"
+import defaultConfig from "../default-config.json" with { type: "json" }
 import {
-    ConfigFile,
+    type ConfigFile,
     ConfigFileSchema,
-    DbConfig,
+    type DbConfig,
     DbConfigSchema,
-    FullConfig,
+    type FullConfig,
     FullConfigSchema,
     requiredKeys
 } from "../schema.js"
 import { API_VERSION } from "../static.js"
-import defaultConfig from "../default_config.json" with { type: "json" }
 import { readConfigFromEnv } from "./env.js"
 
 const fsRuntime = isBun || isDeno || isNode
@@ -73,7 +75,7 @@ export async function loadDbConfig(): Promise<DbConfig> {
 export async function getDbPassword(
     fileConfig: ConfigFile
 ): Promise<string | undefined> {
-    let passFromFile
+    let passFromFile: string | undefined | null
 
     if (fsRuntime) {
         const { getDbPasswordFromFile } = await import("./file.js")
@@ -117,7 +119,7 @@ export async function loadFullConfig(): Promise<FullConfig> {
         config.AUTH_PROVIDERS = authProviders
     }
 
-    config.API_BASE += "/" + API_VERSION
+    config.API_BASE += `/${API_VERSION}`
 
     const parsed = FullConfigSchema.safeParse(config)
 

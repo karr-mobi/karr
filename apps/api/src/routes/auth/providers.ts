@@ -1,14 +1,13 @@
 import { AUTH_PROVIDERS, type AuthProvider } from "@karr/config"
 import logger from "@karr/logger"
-
-import { PasswordProvider } from "@openauthjs/openauth/provider/password"
+import type { Prettify } from "@karr/util"
 import { CodeProvider } from "@openauthjs/openauth/provider/code"
-import { PasswordUI } from "@openauthjs/openauth/ui/password"
-import { CodeUI } from "@openauthjs/openauth/ui/code"
 import { GithubProvider } from "@openauthjs/openauth/provider/github"
 import { GoogleOidcProvider } from "@openauthjs/openauth/provider/google"
-import { Provider } from "@openauthjs/openauth/provider/provider"
-import { Prettify } from "@karr/util"
+import { PasswordProvider } from "@openauthjs/openauth/provider/password"
+import type { Provider } from "@openauthjs/openauth/provider/provider"
+import { CodeUI } from "@openauthjs/openauth/ui/code"
+import { PasswordUI } from "@openauthjs/openauth/ui/password"
 
 export type Providers = AuthProvider["name"]
 
@@ -44,7 +43,7 @@ export type OidcProvider = (typeof oidcProviders)[number]
 function getProviders() {
     const providers: Prettify<Partial<Record<Providers, Provider>>> = {}
 
-    AUTH_PROVIDERS.forEach((provider: AuthProvider) => {
+    for (const provider of AUTH_PROVIDERS) {
         let providerConfig = null
         if (provider.name === "password") {
             providerConfig = PasswordProvider(
@@ -55,9 +54,8 @@ function getProviders() {
                             "This email is already taken. (translate this)",
                         button_continue: "Continue (translate this)"
                     },
-                    sendCode: async (email, code) => {
-                        console.log(email, code)
-                    }
+                    sendCode: async (email, code) =>
+                        logger.info(`Sending code ${code} to ${email}`)
                 })
             )
         } else if (provider.name === "code") {
@@ -67,7 +65,7 @@ function getProviders() {
                         code_info: "We'll send a pin code to your email"
                     },
                     sendCode: async (claims, code) =>
-                        console.log(claims.email, code)
+                        logger.info(`Sending code ${code} to ${claims.email}`)
                 })
             )
         } else if (provider.name === "github") {
@@ -123,7 +121,7 @@ function getProviders() {
         }
 
         providers[provider.name] = providerConfig
-    })
+    }
 
     const providerNames = Object.keys(providers)
     logger.debug(

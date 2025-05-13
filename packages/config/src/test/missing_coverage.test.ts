@@ -1,17 +1,19 @@
+//biome-ignore-all lint/style/useNamingConvention: intentional
+
 import { existsSync, readFileSync } from "node:fs"
 import { join } from "node:path"
+import process from "node:process"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-
-import { loadDbConfig, handleConfigError, loadFullConfig } from "@/loader/index"
+import type { ZodError } from "zod"
+import { getDbPasswordFromFile, resolvePath } from "@/loader/file"
+import { handleConfigError, loadDbConfig, loadFullConfig } from "@/loader/index"
 import {
-    FullConfigSchema,
-    LogLevelSchema,
     authProvidersSchema,
-    ConfigFileSchema
+    ConfigFileSchema,
+    FullConfigSchema,
+    LogLevelSchema
 } from "@/schema.js"
 import { API_VERSION } from "@/static.js"
-import { ZodError } from "zod"
-import { getDbPasswordFromFile, resolvePath } from "@/loader/file"
 
 // Mock modules
 vi.mock("node:fs", async (importOriginal) => {
@@ -221,9 +223,11 @@ describe("File Format Support", () => {
         vi.mocked(readFileSync).mockImplementation((path) => {
             if (path.toString().includes(".yaml")) {
                 return "APP_URL: http://example.org/\nAPI_PORT: 1993"
-            } else if (path.toString().includes(".json")) {
+            }
+            if (path.toString().includes(".json")) {
                 return '{"APP_URL": "http://example.org/", "API_PORT": 1993}'
-            } else if (path.toString().includes(".json5")) {
+            }
+            if (path.toString().includes(".json5")) {
                 return '{"APP_URL": "http://example.org/", "API_PORT": 1993, /* comment */ }'
             }
             return ""
@@ -338,7 +342,7 @@ describe("API_BASE Validation", () => {
         const config = {
             APP_URL: "http://example.org/",
             API_PORT: 1993,
-            API_BASE: "api/" + API_VERSION, // Missing leading slash
+            API_BASE: `api/${API_VERSION}`, // Missing leading slash
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
             FEDERATION: true,
@@ -355,7 +359,7 @@ describe("API_BASE Validation", () => {
         const config = {
             APP_URL: "http://example.org/",
             API_PORT: 1993,
-            API_BASE: "/api/" + API_VERSION + "/", // Has trailing slash
+            API_BASE: `/api/${API_VERSION}/`, // Has trailing slash
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
             FEDERATION: true,
@@ -372,19 +376,19 @@ describe("API_BASE Validation", () => {
 describe("LogLevelSchema Validation", () => {
     it("should validate valid log levels", () => {
         const validLevels = ["trace", "debug", "info", "warn", "error"]
-        validLevels.forEach((level) => {
+        for (const level of validLevels) {
             const result = LogLevelSchema.safeParse(level)
             expect(result.success).toBe(true)
             expect(result.data).toBe(level)
-        })
+        }
     })
 
     it("should reject invalid log levels", () => {
         const invalidLevels = ["fatal", "critical", "log", "verbose"]
-        invalidLevels.forEach((level) => {
+        for (const level of invalidLevels) {
             const result = LogLevelSchema.safeParse(level)
             expect(result.success).toBe(false)
-        })
+        }
     })
 })
 
@@ -394,9 +398,11 @@ describe("Error Handling", () => {
         // Spy on console methods
         const consoleErrorSpy = vi
             .spyOn(console, "error")
+            //biome-ignore lint/suspicious/noEmptyBlockStatements: intentionald
             .mockImplementation(() => {})
         const consoleLogSpy = vi
             .spyOn(console, "log")
+            //biome-ignore lint/suspicious/noEmptyBlockStatements: intentionald
             .mockImplementation(() => {})
 
         // Create a Zod error to pass to the handler
@@ -433,7 +439,7 @@ describe("Edge Cases", () => {
         const config = {
             APP_URL: "http://example.org/", // Valid: has trailing slash
             API_PORT: 1993,
-            API_BASE: "/api/" + API_VERSION,
+            API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
             FEDERATION: true,
@@ -449,7 +455,7 @@ describe("Edge Cases", () => {
         const config = {
             APP_URL: "http://example.org", // This actually has a pathname of "/" internally
             API_PORT: 1993,
-            API_BASE: "/api/" + API_VERSION,
+            API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
             FEDERATION: true,
@@ -466,7 +472,7 @@ describe("Edge Cases", () => {
         const config = {
             APP_URL: "http://example.org/path/", // Invalid: has path
             API_PORT: 1993,
-            API_BASE: "/api/" + API_VERSION,
+            API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
             FEDERATION: true,
@@ -483,7 +489,7 @@ describe("Edge Cases", () => {
         const config = {
             APP_URL: "http://localhost/", // Special case handled in schema
             API_PORT: 1993,
-            API_BASE: "/api/" + API_VERSION,
+            API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
             FEDERATION: true,
@@ -500,7 +506,7 @@ describe("Edge Cases", () => {
         const config = {
             APP_URL: "not-a-url",
             API_PORT: 1993,
-            API_BASE: "/api/" + API_VERSION,
+            API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
             FEDERATION: true,

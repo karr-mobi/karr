@@ -1,5 +1,5 @@
-import { Stepper } from "@karr/ui/components/stepper"
 import { Marquee } from "@karr/ui/components/marquee"
+import { Stepper } from "@karr/ui/components/stepper"
 
 import Loading from "@/components/Loading"
 
@@ -10,17 +10,17 @@ export default function StepperExample() {
                 <Loading />
             </div>
 
-            <div className="full-width flex flex-col gap-4 my-4">
+            <div className="full-width my-4 flex flex-col gap-4">
                 <Marquee
                     direction="left"
-                    className="bg-green-500 text-white py-2"
+                    className="bg-green-500 py-2 text-white"
                 >
                     Karr is very cool
                 </Marquee>
 
                 <Marquee
                     direction="left"
-                    className="bg-purple-500 text-white py-2"
+                    className="bg-purple-500 py-2 text-white"
                 >
                     It's made by finxol
                 </Marquee>

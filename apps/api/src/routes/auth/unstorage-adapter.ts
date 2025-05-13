@@ -1,3 +1,4 @@
+/*eslint-disable @typescript-eslint/no-explicit-any*/
 /**
  * Configure OpenAuth to use unstorage as a store.
  *
@@ -35,12 +36,12 @@
  */
 import {
     joinKey,
-    splitKey,
-    StorageAdapter
+    type StorageAdapter,
+    splitKey
 } from "@openauthjs/openauth/storage/storage"
 import { createStorage, type Driver as UnstorageDriver } from "unstorage"
 
-//eslint-disable-next-line @typescript-eslint/no-explicit-any
+//biome-ignore lint/suspicious/noExplicitAny: needed
 type Entry = { value: Record<string, any> | undefined; expiry?: number }
 
 export function UnStorage({
@@ -69,7 +70,7 @@ export function UnStorage({
             return entry.value
         },
 
-        //eslint-disable-next-line @typescript-eslint/no-explicit-any
+        //biome-ignore lint/suspicious/noExplicitAny: needed
         async set(key: string[], value: any, expiry?: Date) {
             const k = joinKey(key)
 
@@ -93,6 +94,7 @@ export function UnStorage({
 
             for (const key of keys) {
                 // Get the entry for this key
+                //biome-ignore lint/nursery/noAwaitInLoop: needed
                 const entry = await store.getItem(key)
 
                 if (!entry) continue

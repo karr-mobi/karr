@@ -1,8 +1,9 @@
+import { API_BASE } from "@karr/config"
 import createNextIntlPlugin from "next-intl/plugin"
 
-import { API_BASE } from "@karr/config"
-
 const withNextIntl = createNextIntlPlugin()
+
+console.log("API_BASE", API_BASE)
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -14,12 +15,12 @@ const nextConfig = {
         "/**/*.css": ["src/assets/**/*.css"]
     },
     env: {
+        //biome-ignore lint/style/useNamingConvention: it's an environment variable
         NEXT_PUBLIC_API_BASE: API_BASE
     },
 
     images: {
         remotePatterns: [
-            new URL("https://example.com/*"),
             new URL("https://profiles.cache.lol/finxol/picture?v=1743626159"),
             {
                 protocol: "https",

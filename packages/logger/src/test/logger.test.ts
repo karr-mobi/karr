@@ -1,5 +1,8 @@
-import { beforeEach, describe, expect, it, vi } from "vitest"
+/*eslint-disable @typescript-eslint/no-explicit-any*/
+//biome-ignore-all lint/style/useNamingConvention: intentional
+
 import c from "tinyrainbow"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 const { cyan, green, red, yellow, blue, magenta, gray, underline } = c
 
@@ -29,7 +32,7 @@ vi.mock("@karr/config", () => {
 })
 
 // Mock the console methods
-//eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: we want to be able to log anything
 const r = (...args: any) => args.map((arg: any) => String(arg)).join(" ")
 const mockConsole = {
     log: vi.fn(r),
@@ -96,7 +99,7 @@ describe("logger", () => {
             const expectedPrefix = prefix()
             logger.log(message)
             expect(mockConsole.log).toHaveBeenCalledWith(
-                cyan(expectedPrefix + ">"),
+                cyan(`${expectedPrefix}>`),
                 message
             )
         })
@@ -108,7 +111,7 @@ describe("logger", () => {
             const expectedPrefix = prefix()
             logger.log(arg1, arg2, arg3)
             expect(mockConsole.log).toHaveBeenCalledWith(
-                cyan(expectedPrefix + ">"),
+                cyan(`${expectedPrefix}>`),
                 arg1,
                 arg2,
                 arg3
@@ -151,9 +154,9 @@ describe("logger", () => {
 
             // Check that the formatted JSON was logged
             const formattedData = JSON.stringify(data, null, 2).split("\n")
-            formattedData.forEach((line) => {
+            for (const line of formattedData) {
                 expect(mockConsole.log).toHaveBeenCalledWith("   ", line)
-            })
+            }
         })
 
         it("should properly format objects with functions", () => {
@@ -221,12 +224,10 @@ describe("logger", () => {
 
         it("should properly format errors with added function properties", () => {
             const title = "Error with function"
-            //eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // biome-ignore lint/suspicious/noExplicitAny: Error type is too narrow for this test
             const error: any = new Error("Test error")
             // Add a custom function to the error
-            error.customHandler = function () {
-                return "Handled error"
-            }
+            error.customHandler = () => "Handled error"
 
             logger.error(title, error)
 
@@ -280,9 +281,9 @@ describe("logger", () => {
 
             // Check that the formatted JSON was logged
             const formattedData = JSON.stringify(data, null, 2).split("\n")
-            formattedData.forEach((line) => {
+            for (const line of formattedData) {
                 expect(mockConsole.warn).toHaveBeenCalledWith("   ", line)
-            })
+            }
         })
 
         it("should not log when LOG_LEVEL is error", () => {
@@ -326,9 +327,9 @@ describe("logger", () => {
 
             // Check that the formatted JSON was logged
             const formattedData = JSON.stringify(data, null, 2).split("\n")
-            formattedData.forEach((line) => {
+            for (const line of formattedData) {
                 expect(mockConsole.info).toHaveBeenCalledWith("   ", line)
-            })
+            }
         })
 
         it("should not log when LOG_LEVEL is warn or error", () => {
@@ -379,9 +380,9 @@ describe("logger", () => {
 
             // Check that the formatted JSON was logged
             const formattedData = JSON.stringify(data, null, 2).split("\n")
-            formattedData.forEach((line) => {
+            for (const line of formattedData) {
                 expect(mockConsole.debug).toHaveBeenCalledWith("   ", line)
-            })
+            }
         })
 
         it("should not log when LOG_LEVEL is info, warn, or error", () => {

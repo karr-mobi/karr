@@ -1,5 +1,5 @@
-import { isBun, isDeno, isNode } from "std-env"
 import { logger } from "@karr/logger"
+import { isBun, isDeno, isNode } from "std-env"
 
 /**
  * Load the appropriate database driver based on the runtime environment
@@ -15,15 +15,13 @@ export async function getDriver() {
     if (isBun) {
         const { getBunDriver } = await import("./bun-driver")
         return await getBunDriver()
-    } else if (isNode || isDeno) {
+    }
+    if (isNode || isDeno) {
         const { getNodeDriver } = await import("./node-driver")
         return await getNodeDriver()
-    } else {
-        // Default driver for unknown environments
-        logger.debug("Using default in-memory driver")
-        logger.warn(
-            "No persistent storage for auth - data will be lost on restart"
-        )
-        return undefined
     }
+    // Default driver for unknown environments
+    logger.debug("Using default in-memory driver")
+    logger.warn("No persistent storage for auth - data will be lost on restart")
+    return undefined
 }

@@ -1,6 +1,7 @@
-import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js"
-
+import process from "node:process"
 import { getDbConfig } from "@karr/config"
+import logger from "@karr/logger"
+import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js"
 
 const config = await getDbConfig()
 
@@ -28,7 +29,7 @@ try {
         "SELECT * FROM information_schema.tables WHERE table_name = 'Users';"
     )
 } catch (err) {
-    console.error(err)
+    logger.error(err)
     process.exit(1)
 }
 

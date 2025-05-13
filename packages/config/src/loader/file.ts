@@ -1,10 +1,9 @@
 import { existsSync, readFileSync } from "node:fs"
 import { isAbsolute, join } from "node:path"
+import process from "node:process"
 import { parseJSON, parseJSON5, parseYAML } from "confbox"
-import c from "tinyrainbow"
-
-import defaultConfig from "../default_config.json" with { type: "json" }
-import { ConfigFile, ConfigFileSchema } from "../schema.js"
+import defaultConfig from "../default-config.json" with { type: "json" }
+import { type ConfigFile, ConfigFileSchema } from "../schema.js"
 import { handleConfigError } from "./index.js"
 
 const CONFIG_DIR =
@@ -57,9 +56,6 @@ export function resolveConfigPath(): string | undefined {
     if (ext) {
         const file = `${fileWithoutExt}.${ext}`
 
-        //TODO: remove log line
-        console.log(c.gray(`Reading configuration from ${file}`))
-
         return file
     } else {
         return undefined
@@ -73,7 +69,7 @@ export function resolveConfigPath(): string | undefined {
  * @returns The parsed data
  * @throws {Error} If the file type is invalid, or if the file is not found
  */
-export function parseFile(file: string = ".") {
+export function parseFile(file = ".") {
     const filetype = file.split(".").pop()
     if (!filetype) {
         throw new Error("Invalid file type")
@@ -113,12 +109,6 @@ export function readConfigFromFile(): ConfigFile {
     const path = resolveConfigPath()
 
     if (!path) {
-        // Warn the user that no config file was found
-        console.log(
-            c.inverse(c.bold(c.yellow(" ! WARNING "))),
-            c.yellow("No configuration file found"),
-            "\n"
-        )
         return ConfigFileSchema.parse(defaultConfig)
     }
 

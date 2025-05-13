@@ -57,6 +57,7 @@ describe("tryCatch", () => {
 
     it("should handle async functions that throw errors", async () => {
         const asyncFnWithError = async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1))
             throw new Error("Async function error")
         }
 

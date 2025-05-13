@@ -1,8 +1,7 @@
-import { getTranslations } from "next-intl/server"
-import Image from "next/image"
-import { LogIn as IconLogIn, User as IconUser } from "lucide-react"
-
 import { Button } from "@karr/ui/components/button"
+import { LogIn as IconLogIn, User as IconUser } from "lucide-react"
+import Image from "next/image"
+import { getTranslations } from "next-intl/server"
 
 import { auth, login } from "~/auth/actions"
 import { AccountDropdown } from "./AccountDropdown"
@@ -25,10 +24,10 @@ export default async function LoginAccount() {
                         width={32}
                         height={32}
                         alt="Avatar"
-                        className="rounded-full size-10"
+                        className="size-10 rounded-full"
                     />
                 ) : (
-                    <IconUser className="rounded-full size-10" />
+                    <IconUser className="size-10 rounded-full" />
                 )}
             </Button>
         </AccountDropdown>

@@ -1,5 +1,5 @@
-import { HTMLAttributes, ReactNode } from "react"
 import { cn } from "@karr/ui/lib/utils"
+import type { HTMLAttributes, ReactNode } from "react"
 
 import "./marquee.css"
 
@@ -26,10 +26,13 @@ export function Marquee({
     speed = "normal",
     ...rest
 }: MarqueeProps) {
+    const copies = Array(numberOfCopies)
+        .fill(0)
+        .map((_, i) => i)
     return (
         <div
             className={cn(
-                "group flex gap-[1rem] max-w-[100vw] overflow-hidden",
+                "group flex max-w-[100vw] gap-[1rem] overflow-hidden",
                 direction === "left" ? "flex-row" : "flex-col",
                 className
             )}
@@ -47,28 +50,26 @@ export function Marquee({
             }}
             {...rest}
         >
-            {Array(numberOfCopies)
-                .fill(0)
-                .map((_, i) => (
-                    <div
-                        key={i}
-                        className={cn(
-                            "flex justify-around gap-[1rem] [--gap:1rem] shrink-0",
-                            direction === "left"
-                                ? "animate-marquee-left flex-row"
-                                : "animate-marquee-up flex-col",
-                            pauseOnHover &&
-                                "group-hover:[animation-play-state:paused]",
-                            reverse && "direction-reverse",
-                            speed === "slow" && "[--duration:20s]",
-                            speed === "normal" && "[--duration:10s]",
-                            speed === "fast" && "[--duration:5s]",
-                            innerClassName
-                        )}
-                    >
-                        {children}
-                    </div>
-                ))}
+            {copies.map((i) => (
+                <div
+                    key={i}
+                    className={cn(
+                        "flex shrink-0 justify-around gap-[1rem] [--gap:1rem]",
+                        direction === "left"
+                            ? "animate-marquee-left flex-row"
+                            : "animate-marquee-up flex-col",
+                        pauseOnHover &&
+                            "group-hover:[animation-play-state:paused]",
+                        reverse && "direction-reverse",
+                        speed === "slow" && "[--duration:20s]",
+                        speed === "normal" && "[--duration:10s]",
+                        speed === "fast" && "[--duration:5s]",
+                        innerClassName
+                    )}
+                >
+                    {children}
+                </div>
+            ))}
         </div>
     )
 }

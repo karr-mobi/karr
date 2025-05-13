@@ -1,15 +1,12 @@
-import { memo } from "react"
-import Image from "next/image"
-
 import { cn } from "@karr/ui/lib/utils"
-
+import Image from "next/image"
+import { memo } from "react"
+import logo from "@/assets/logo-tmp.jpg"
 import { Link } from "@/i18n/routing"
 import { APPLICATION_NAME } from "@/util/appname"
-import logo from "@/assets/logo-tmp.jpg"
-
+import { auth } from "~/auth/actions"
 import LoginAccount from "./header/LoginAccount"
 import { DesktopNavMenu, MobileNavMenu } from "./header/NavMenu"
-import { auth } from "~/auth/actions"
 
 const MemoizedAppName = memo(
     () => <h5>{APPLICATION_NAME}</h5>,
@@ -27,10 +24,10 @@ export async function Header({
         <header
             className={cn(
                 className,
-                "bg-transparent w-full sticky top-0 z-50 px-2"
+                "sticky top-0 z-50 w-full bg-transparent px-2"
             )}
         >
-            <div className="flex flex-row items-center justify-between mx-auto mt-2 p-2 max-w-[60rem] bg-header-background w-full rounded-md">
+            <div className="mx-auto mt-2 flex w-full max-w-[60rem] flex-row items-center justify-between rounded-md bg-header-background p-2">
                 <div className="flow-inline flex flex-row items-center justify-end">
                     <Link
                         href="/"

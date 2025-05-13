@@ -1,17 +1,5 @@
 "use client"
 
-import { Fragment } from "react"
-import {
-    CarFront as IconCarFront,
-    ChevronDown as IconChevronDown,
-    CirclePlus as IconCirclePlus,
-    Menu as IconMenu,
-    Search as IconSearch,
-    type LucideIcon
-} from "lucide-react"
-import { useTranslations } from "next-intl"
-import type { Messages } from "@/../global"
-
 import { Button } from "@karr/ui/components/button"
 import {
     DropdownMenu,
@@ -23,6 +11,17 @@ import {
     DropdownMenuTrigger
 } from "@karr/ui/components/dropdown"
 import { Separator } from "@karr/ui/components/separator"
+import {
+    CarFront as IconCarFront,
+    ChevronDown as IconChevronDown,
+    CirclePlus as IconCirclePlus,
+    Menu as IconMenu,
+    Search as IconSearch,
+    type LucideIcon
+} from "lucide-react"
+import { useTranslations } from "next-intl"
+import { Fragment } from "react"
+import type { Messages } from "@/../global"
 
 import { Link } from "@/i18n/routing"
 
@@ -33,7 +32,7 @@ type NavBarTranslationKey = keyof Messages["NavBar"]
 type MenuItem = {
     label: NavBarTranslationKey
     icon?: LucideIcon
-    items: Array<LinkItem>
+    items: LinkItem[]
 }
 
 const menuItems: MenuItem[] = [
@@ -90,7 +89,7 @@ export function DesktopNavMenu() {
                                     >
                                         <Link
                                             href={item.url}
-                                            className="flex items-center justify-start gap-2 w-full cursor-pointer"
+                                            className="flex w-full cursor-pointer items-center justify-start gap-2"
                                         >
                                             {item.icon ? (
                                                 <item.icon
@@ -103,7 +102,7 @@ export function DesktopNavMenu() {
                                                 cat.items.filter(
                                                     (it) => it.icon
                                                 ).length > 0 && (
-                                                    <div className="w-4"></div>
+                                                    <div className="w-4" />
                                                 )
                                             )}
                                             {t(item.label)}
@@ -159,7 +158,7 @@ export function MobileNavMenu() {
                                                     aria-hidden="true"
                                                 />
                                             ) : (
-                                                <div className="ms-4"></div>
+                                                <div className="ms-4" />
                                             )}
                                             {t(item.label)}
                                         </Link>

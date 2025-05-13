@@ -1,10 +1,10 @@
 "use client"
 
-import Link from "next/link"
-import Image from "next/image"
 import { motion } from "motion/react"
-import { footer } from "@/lib/content"
+import Image from "next/image"
+import Link from "next/link"
 import logo from "@/assets/logo-tmp.jpg"
+import { footer } from "@/lib/content"
 
 export default function Footer() {
     return (
@@ -24,7 +24,7 @@ export default function Footer() {
                         height={20}
                         className="rounded-sm"
                     />
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-muted-foreground text-sm">
                         {footer.note}
                     </p>
                 </div>
@@ -34,7 +34,7 @@ export default function Footer() {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="text-sm font-medium hover:underline underline-offset-4"
+                                className="font-medium text-sm underline-offset-4 hover:underline"
                             >
                                 {link.name}
                             </Link>

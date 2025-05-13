@@ -1,9 +1,8 @@
 import js from "@eslint/js"
-import tsPlugin from "@typescript-eslint/eslint-plugin"
 import tsParser from "@typescript-eslint/parser"
+import { configs as pnpmConfigs } from "eslint-plugin-pnpm" // Import the predefined configs
 import turboPlugin from "eslint-plugin-turbo"
 import tseslint from "typescript-eslint"
-import { configs as pnpmConfigs } from "eslint-plugin-pnpm" // Import the predefined configs
 
 /**
  * A shared ESLint configuration for the repository.

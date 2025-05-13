@@ -1,15 +1,12 @@
+import logger from "@karr/logger"
+import { tryCatch } from "@karr/util"
 import { eq } from "drizzle-orm"
 import { err, ok } from "neverthrow"
-
 import drizzle from "@/db"
 import { accountsTable } from "@/db/schemas/accounts"
 import { profileTable } from "@/db/schemas/profile"
-import { tryCatch } from "@karr/util"
-import logger from "@karr/logger"
-
-import type { UserWithPrefsAndStatus as _UserWithPrefsAndStatus } from "@/lib/types"
-import { userPrefsTable } from "@/db/schemas/userprefs"
 import { specialStatusTable } from "@/db/schemas/specialstatus"
+import { userPrefsTable } from "@/db/schemas/userprefs"
 
 /**
  * Select a user by their ID

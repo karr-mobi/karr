@@ -1,10 +1,9 @@
-import { FetchError, ofetch } from "ofetch"
-
 import { FEDERATION_TARGETS } from "@karr/config"
-import { Trip } from "@/db/schemas/trips"
 import logger from "@karr/logger"
+import { type FetchError, ofetch } from "ofetch"
+import type { Trip } from "@/db/schemas/trips"
 
-import { DataResponse } from "@/lib/types"
+import type { DataResponse } from "@/lib/types"
 
 export async function getFederatedTrips(): Promise<Trip[]> {
     const trips: Trip[] = []
@@ -15,7 +14,7 @@ export async function getFederatedTrips(): Promise<Trip[]> {
                 {
                     baseURL: target.url,
                     headers: {
-                        Cookie: `auth-token=federation`
+                        Cookie: "auth-token=federation"
                     }
                 }
             )

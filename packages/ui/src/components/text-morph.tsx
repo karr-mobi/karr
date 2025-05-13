@@ -1,9 +1,8 @@
 "use client"
 
-import { useId, useMemo } from "react"
-import { AnimatePresence, motion } from "motion/react"
-
 import { cn } from "@karr/ui/lib/utils"
+import { AnimatePresence, motion } from "motion/react"
+import { useId, useMemo } from "react"
 
 type TextMorphProps = {
     children: string

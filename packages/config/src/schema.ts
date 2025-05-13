@@ -1,5 +1,7 @@
-import { z } from "zod"
+//biome-ignore-all lint/style/useNamingConvention: config values are CONSTANT_CASE
 
+import process from "node:process"
+import { z } from "zod"
 import staticConfig from "./static.js"
 
 // ====================================================================
@@ -199,16 +201,16 @@ export const FullConfigSchema = z.object({
     APP_URL: appUrlSchema,
     API_PORT: z.number().positive(),
     API_BASE: apiBaseSchema.refine(
-        (val) => val.endsWith("/" + staticConfig.API_VERSION),
+        (val) => val.endsWith(`/${staticConfig.API_VERSION}`),
         {
             error: "Computed API base must end with the API version"
         }
     ),
     LOG_TIMESTAMP: z.boolean(),
     LOG_LEVEL: LogLevelSchema.default(
-        !(process.env.NODE_ENV === "production" || process.env.DOCKER)
-            ? "trace"
-            : "info"
+        process.env.NODE_ENV === "production" || process.env.DOCKER
+            ? "info"
+            : "trace"
     ),
     ADMIN_EMAIL: z.email().optional(),
     FEDERATION: z.boolean(),

@@ -1,9 +1,8 @@
+import { Toaster } from "@karr/ui/components/sonner"
 import type { Metadata } from "next"
 import localFont from "next/font/local"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages } from "next-intl/server"
-
-import { Toaster } from "@karr/ui/components/sonner"
 
 import { APPLICATION_NAME } from "@/util/appname"
 import "@/assets/globals.css"
@@ -39,7 +38,8 @@ export default async function RootLayout({
 
     return (
         <html
-            // lang={locale}
+            // TODO: make lang dynamic
+            lang="fr"
             suppressHydrationWarning
             className={`${geistSans.variable} ${baskervville.variable}`}
         >

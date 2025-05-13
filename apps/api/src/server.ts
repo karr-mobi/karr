@@ -13,7 +13,7 @@ import auth from "@/routes/auth/issuer"
 import system from "@/routes/system"
 import trips from "@/routes/trips"
 import user from "@/routes/user"
-import { AppVariables } from "./lib/types"
+import type { AppVariables } from "./lib/types"
 
 // ============================
 // ==== Unprotected routes ====

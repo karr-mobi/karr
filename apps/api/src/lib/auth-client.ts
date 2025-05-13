@@ -1,4 +1,4 @@
-import { getClient, getCallbackUrl } from "@karr/auth/client"
+import { getCallbackUrl, getClient } from "@karr/auth/client"
 import { lazy } from "@karr/util"
 
 const c = lazy(async () => await getClient())

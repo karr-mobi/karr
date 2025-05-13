@@ -1,10 +1,9 @@
+import process from "node:process"
+import { API_PORT, LOG_LEVEL, logLevels, PRODUCTION } from "@karr/config"
+import logger from "@karr/logger"
 import { serve } from "srvx"
 import { runtime } from "std-env"
-
-import { API_PORT, LOG_LEVEL, logLevels, PRODUCTION } from "@karr/config"
 import { drizzleMigrate } from "@/db/migrate"
-import logger from "@karr/logger"
-
 import { app } from "@/server"
 
 if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {

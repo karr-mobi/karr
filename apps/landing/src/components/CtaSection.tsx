@@ -1,11 +1,11 @@
 "use client"
 
-import { motion } from "motion/react"
 import { Button } from "@karr/ui/components/button"
-import AnimatedSection from "@/components/AnimatedSection"
-import { fadeIn, staggerContainer, popIn } from "@/lib/animation-variants"
-import { cta } from "@/lib/content"
+import { motion } from "motion/react"
 import Link from "next/link"
+import AnimatedSection from "@/components/AnimatedSection"
+import { fadeIn, popIn, staggerContainer } from "@/lib/animation-variants"
+import { cta } from "@/lib/content"
 
 export default function CtaSection() {
     return (
@@ -20,7 +20,7 @@ export default function CtaSection() {
                     variants={fadeIn}
                 >
                     <motion.h2
-                        className="text-3xl font-bold tracking-tighter md:text-4xl/tight"
+                        className="font-bold text-3xl tracking-tighter md:text-4xl/tight"
                         variants={fadeIn}
                     >
                         {cta.title}
@@ -67,7 +67,7 @@ export default function CtaSection() {
                         ))}
                     </motion.div>
                     <motion.p
-                        className="text-sm text-muted-foreground"
+                        className="text-muted-foreground text-sm"
                         variants={fadeIn}
                     >
                         {cta.subtext}

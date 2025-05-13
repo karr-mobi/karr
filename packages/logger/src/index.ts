@@ -1,6 +1,7 @@
-import c from "tinyrainbow"
+//biome-ignore-all lint/suspicious/noConsole: this is a logger
 
 import { LOG_LEVEL, LOG_TIMESTAMP, PRODUCTION } from "@karr/config"
+import c from "tinyrainbow"
 
 const { blue, cyan, gray, green, magenta, red, underline, yellow } = c
 
@@ -20,7 +21,7 @@ const getCallerFileAndLine = (): string | null => {
                 // Extract file, line, and column
                 const regex = /\s+at\s+(?:.*\s+)?\(?(.+):(\d+):(\d+)\)?/
                 const match = line.match(regex)
-                if (match && match[1]) {
+                if (match?.[1]) {
                     const filepath = match[1].split("/")
                     const file = filepath.pop()
                     const dirname = filepath.pop()
@@ -59,7 +60,7 @@ const formatArg = (arg: unknown): string => {
         // Use a custom replacer to include functions in the output
         return JSON.stringify(
             arg,
-            (key, value) => {
+            (_key, value) => {
                 if (typeof value === "function") {
                     return `[Function: ${value.name}]`
                 }
@@ -114,13 +115,11 @@ const logger = {
     success: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug", "info", "warn", "error"].includes(LOG_LEVEL)) {
             console.log(green(`${prefix()}✅ ${underline("SUCCESS")} >`), title)
-            args.forEach((arg) => {
-                formatArg(arg)
-                    .split("\n")
-                    .forEach((line) => {
-                        console.log("   ", line)
-                    })
-            })
+            for (const arg of args) {
+                for (const line of formatArg(arg).split("\n")) {
+                    console.log("   ", line)
+                }
+            }
         }
     },
     /**
@@ -136,13 +135,11 @@ const logger = {
     error: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug", "info", "warn", "error"].includes(LOG_LEVEL)) {
             console.error(red(`${prefix()}⚠️ ${underline("ERROR")} >`), title)
-            args.forEach((arg) => {
-                formatArg(arg)
-                    .split("\n")
-                    .forEach((line) => {
-                        console.error("   ", line)
-                    })
-            })
+            for (const arg of args) {
+                for (const line of formatArg(arg).split("\n")) {
+                    console.log("   ", line)
+                }
+            }
         }
     },
     /**
@@ -158,13 +155,11 @@ const logger = {
     warn: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug", "info", "warn"].includes(LOG_LEVEL)) {
             console.warn(yellow(`${prefix()}⚠ ${underline("WARN")} >`), title)
-            args.forEach((arg) => {
-                formatArg(arg)
-                    .split("\n")
-                    .forEach((line) => {
-                        console.warn("   ", line)
-                    })
-            })
+            for (const arg of args) {
+                for (const line of formatArg(arg).split("\n")) {
+                    console.log("   ", line)
+                }
+            }
         }
     },
     /**
@@ -180,13 +175,11 @@ const logger = {
     info: (title: unknown, ...args: unknown[]) => {
         if (["trace", "debug", "info"].includes(LOG_LEVEL)) {
             console.info(blue(`${prefix()}ℹ ${underline("INFO")} >`), title)
-            args.forEach((arg) => {
-                formatArg(arg)
-                    .split("\n")
-                    .forEach((line) => {
-                        console.info("   ", line)
-                    })
-            })
+            for (const arg of args) {
+                for (const line of formatArg(arg).split("\n")) {
+                    console.log("   ", line)
+                }
+            }
         }
     },
     /**
@@ -205,13 +198,11 @@ const logger = {
                 magenta(`${prefix()}🐞 ${underline("DEBUG")} >`),
                 title
             )
-            args.forEach((arg) => {
-                formatArg(arg)
-                    .split("\n")
-                    .forEach((line) => {
-                        console.debug("   ", line)
-                    })
-            })
+            for (const arg of args) {
+                for (const line of formatArg(arg).split("\n")) {
+                    console.log("   ", line)
+                }
+            }
         }
     },
     /**

@@ -1,9 +1,10 @@
-import { Prettify } from "@karr/util"
-import { oauthProviders, type OAuth2Provider } from "../providers"
+import type { Prettify } from "@karr/util"
+import { type OAuth2Provider, oauthProviders } from "../providers"
 
 export type OAuthProfileData = {
     provider: OAuth2Provider
     email: string
+    emailVerified: boolean
     remoteId: string
     avatar?: string
     name: string
@@ -32,5 +33,5 @@ export type ProfileData =
 export function isOAuth2ProfileData(
     data: ProfileData
 ): data is OAuthProfileData {
-    return (oauthProviders as ReadonlyArray<string>).includes(data.provider)
+    return (oauthProviders as readonly string[]).includes(data.provider)
 }
