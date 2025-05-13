@@ -4,7 +4,6 @@
     "files": { "ignoreUnknown": false, "includes": ["**"] },
     "formatter": {
         "enabled": true,
-        "useEditorconfig": true,
         "formatWithErrors": false,
         "indentStyle": "space",
         "indentWidth": 4,
@@ -12,26 +11,118 @@
         "lineWidth": 80,
         "attributePosition": "auto",
         "bracketSpacing": true,
+        "useEditorconfig": true,
         "includes": ["**", "!**/pnpm-lock.yaml", "!**/migrations/**/*"]
     },
-    "assist": { "actions": { "source": { "organizeImports": "on" } } },
     "linter": {
-        "enabled": false,
+        "enabled": true,
         "rules": {
+            "recommended": true,
+            "correctness": {
+                "noUndeclaredVariables": "error",
+                "noUndeclaredDependencies": "error",
+                "useJsxKeyInIterable": "error"
+            },
+            "complexity": {
+                "noExcessiveCognitiveComplexity": "on",
+                "noForEach": "on",
+                "noUselessStringConcat": "on"
+            },
+            "nursery": {
+                "noAwaitInLoop": "warn",
+                "noFloatingPromises": "on",
+                "noGlobalDirnameFilename": "on",
+                "noImportCycles": "on",
+                "noNoninteractiveElementInteractions": "on",
+                "noProcessGlobal": "on",
+                "noTsIgnore": "on",
+                "useIterableCallbackReturn": "on",
+                "useSortedClasses": "on"
+            },
+            "performance": {
+                "noBarrelFile": "on"
+            },
             "style": {
-                "noParameterAssign": "error",
-                "useAsConstAssertion": "error",
-                "useDefaultParameterLast": "error",
-                "useEnumInitializers": "error",
-                "useSelfClosingElements": "error",
-                "useConst": "error",
-                "useSingleVarDeclarator": "error",
-                "noUnusedTemplateLiteral": "error",
-                "useNumberNamespace": "error",
-                "noInferrableTypes": "error",
-                "noUselessElse": "error"
+                "noCommonJs": "error",
+                "noEnum": "error",
+                "noInferrableTypes": "on",
+                "noNamespace": "on",
+                "noNegationElse": "on",
+                "noProcessEnv": "error",
+                "noYodaExpression": "off",
+                "useAsConstAssertion": "on",
+                "useAtIndex": "on",
+                "useCollapsedElseIf": "on",
+                "useCollapsedIf": "on",
+                "useConsistentArrayType": "on",
+                "useConsistentCurlyBraces": "on",
+                "useConst": "on",
+                "useDefaultParameterLast": "on",
+                "useExplicitLengthCheck": "on",
+                "useExportType": "on",
+                "useImportType": "on",
+                "useFilenamingConvention": {
+                    "level": "error",
+                    "options": {
+                        "strictCase": false,
+                        "filenameCases": [
+                            "PascalCase",
+                            "camelCase",
+                            "kebab-case"
+                        ]
+                    }
+                },
+                "useNamingConvention": {
+                    "level": "error",
+                    "options": {
+                        "strictCase": false,
+                        "conventions": [
+                            {
+                                "selector": {
+                                    "kind": "typeMember"
+                                },
+
+                                "formats": [
+                                    "PascalCase",
+                                    "camelCase",
+                                    "CONSTANT_CASE"
+                                ]
+                            },
+                            {
+                                "selector": {
+                                    "kind": "objectLiteralProperty"
+                                },
+
+                                "formats": [
+                                    "PascalCase",
+                                    "camelCase",
+                                    "snake_case"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "useFragmentSyntax": "on",
+                "useNodejsImportProtocol": "error",
+                "useNumberNamespace": "on",
+                "useShorthandAssign": "on",
+                "useShorthandFunctionType": "on",
+                "useSingleVarDeclarator": "on",
+                "useThrowNewError": "on",
+                "useThrowOnlyError": "on"
+            },
+            "suspicious": {
+                "noConsole": "error",
+                "noDuplicateTestHooks": "on",
+                "noEmptyBlockStatements": "on",
+                "noExportsInTest": "on",
+                "noImplicitAnyLet": "on",
+                "noVar": "on",
+                "useAwait": "on",
+                "useGuardForIn": "on"
             }
-        }
+        },
+        "includes": ["**", "!**/node_modules/**", "!**/dist/**", "!**/out/**"]
     },
     "javascript": {
         "formatter": {
@@ -44,6 +135,89 @@
             "quoteStyle": "double",
             "attributePosition": "auto",
             "bracketSpacing": true
+        },
+        "globals": []
+    },
+    "overrides": [
+        // {
+        //     "includes": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
+        //     "linter": {
+        //         "rules": {
+        //             "complexity": { "noWith": "off" },
+        //             "correctness": {
+        //                 "noConstAssign": "off",
+        //                 "noGlobalObjectCalls": "off",
+        //                 "noInvalidBuiltinInstantiation": "off",
+        //                 "noInvalidConstructorSuper": "off",
+        //                 "noSetterReturn": "off",
+        //                 "noUndeclaredVariables": "off",
+        //                 "noUnreachable": "off",
+        //                 "noUnreachableSuper": "off"
+        //             },
+        //             "style": { "noArguments": "error", "useConst": "error" },
+        //             "suspicious": {
+        //                 "noClassAssign": "off",
+        //                 "noDuplicateClassMembers": "off",
+        //                 "noDuplicateObjectKeys": "off",
+        //                 "noDuplicateParameters": "off",
+        //                 "noFunctionAssign": "off",
+        //                 "noImportAssign": "off",
+        //                 "noRedeclare": "off",
+        //                 "noUnsafeNegation": "off",
+        //                 "noVar": "error",
+        //                 "useGetterReturn": "off"
+        //             }
+        //         }
+        //     }
+        // },
+        {
+            "includes": ["apps/web/**", "packages/ui/**"],
+            "linter": {
+                "domains": {
+                    "next": "all"
+                },
+                "rules": {
+                    "correctness": {
+                        "noUndeclaredDependencies": "off"
+                    },
+                    "performance": {
+                        "noImgElement": "on"
+                    },
+                    "suspicious": {
+                        "noConsole": "off"
+                    }
+                }
+            }
+        },
+        {
+            "includes": ["turbo/generators/**"],
+            "linter": {
+                "rules": {
+                    "correctness": {
+                        "noUndeclaredDependencies": "off"
+                    }
+                }
+            }
+        },
+        {
+            "includes": ["**/test/**"],
+            "linter": {
+                "rules": {
+                    "style": {
+                        "useFilenamingConvention": {
+                            "level": "error",
+                            "options": {
+                                "strictCase": false,
+                                "filenameCases": ["kebab-case", "snake_case"]
+                            }
+                        }
+                    }
+                }
+            }
         }
+    ],
+    "assist": {
+        "enabled": true,
+        "actions": { "source": { "organizeImports": "on" } }
     }
 }
