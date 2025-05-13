@@ -1,5 +1,6 @@
 import pluginNext from "@next/eslint-plugin-next"
 import pluginTanstackQuery from "@tanstack/eslint-plugin-query"
+import biome from "eslint-config-biome"
 import pluginReact from "eslint-plugin-react"
 import pluginReactHooks from "eslint-plugin-react-hooks"
 import globals from "globals"
@@ -107,5 +108,6 @@ export const nextJsConfig = [
                 }
             ]
         }
-    }
+    },
+    biome
 ]

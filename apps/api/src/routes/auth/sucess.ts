@@ -1,6 +1,6 @@
 import type { Prettify } from "@karr/util"
-import { type OAuth2Provider } from "./providers"
 import type { JWTPayload } from "hono/utils/jwt/types"
+import type { OAuth2Provider } from "./providers"
 
 export type SuccessValues = Prettify<
     | CodeSuccessValue
@@ -29,11 +29,14 @@ export type GoogleSuccessValue = {
             aud: string
             sub: string
             email: string
+            //biome-ignore lint/style/useNamingConvention: this is the naming convention used by Google
             email_verified: boolean
             nonce: string
             name: string
             picture: string
+            //biome-ignore lint/style/useNamingConvention: this is the naming convention used by Google
             given_name?: string
+            //biome-ignore lint/style/useNamingConvention: this is the naming convention used by Google
             family_name?: string
             jti: string
         }

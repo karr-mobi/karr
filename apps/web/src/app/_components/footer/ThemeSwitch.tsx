@@ -1,11 +1,10 @@
 "use client"
 
-import { useEffect, useId, useState } from "react"
-import { AnimatePresence, motion } from "motion/react"
-import { Moon as IconMoon, Sun as IconSun } from "lucide-react"
-import { useTheme } from "next-themes"
-
 import { Button } from "@karr/ui/components/button"
+import { Moon as IconMoon, Sun as IconSun } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
+import { useTheme } from "next-themes"
+import { useEffect, useId, useState } from "react"
 
 function ThemeSwitch() {
     const { resolvedTheme, setTheme } = useTheme()

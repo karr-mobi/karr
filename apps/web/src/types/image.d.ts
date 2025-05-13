@@ -28,7 +28,7 @@ declare module "*.svg" {
      * Use `any` to avoid conflicts with `@svgr/webpack`.
      * Feel free to change this configuration to fit your needs.
      */
-    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: I don't know how it can be narrowed
     const value: any // Or use `import('next/image').StaticImageData` if you only use SVGs with next/image
     export default value
 }

@@ -1,8 +1,7 @@
 "use client"
 
-import { ChangeEvent } from "react"
-
 import { Input } from "@karr/ui/components/input"
+import type { ChangeEvent } from "react"
 
 interface CurrencyInputProps {
     currencySymbol?: string
@@ -19,7 +18,9 @@ export function CurrencyInput({
 }: CurrencyInputProps) {
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
         const newValue =
-            event.target.value === "" ? 0 : parseFloat(event.target.value)
+            event.target.value === ""
+                ? 0
+                : Number.parseFloat(event.target.value)
         onChange(newValue)
     }
 
@@ -27,7 +28,7 @@ export function CurrencyInput({
 
     return (
         <div className="relative w-full">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <span className="text-muted-foreground">{currencySymbol}</span>
             </div>
             <Input

@@ -3,7 +3,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "lint": "pnpm run --filter '@karr/util' build && eslint . --max-warnings 0",
+        "lint:check": "pnpm run --filter '@karr/util' build && eslint . --max-warnings 0",
+        "lint": "pnpm run --filter '@karr/util' build && eslint . --max-warnings 0 --fix",
         "dev": "pnpm run --filter '@karr/util' build && tsc --watch",
         "build": "pnpm run --filter '@karr/util' build && tsc",
         "check-types": "tsc --noEmit",

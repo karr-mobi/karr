@@ -1,12 +1,11 @@
+import { API_BASE, APP_URL, PRODUCTION } from "@karr/config"
+import { logger } from "@karr/logger"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { showRoutes } from "hono/dev"
-import { secureHeaders } from "hono/secure-headers"
 import { createMiddleware } from "hono/factory"
+import { secureHeaders } from "hono/secure-headers"
 import { trimTrailingSlash } from "hono/trailing-slash"
-
-import { API_BASE, APP_URL, PRODUCTION } from "@karr/config"
-import logger from "@karr/logger"
 
 import { isAuthenticated } from "@/lib/auth"
 import account from "@/routes/account"
@@ -14,7 +13,7 @@ import auth from "@/routes/auth/issuer"
 import system from "@/routes/system"
 import trips from "@/routes/trips"
 import user from "@/routes/user"
-import { AppVariables } from "./lib/types"
+import type { AppVariables } from "./lib/types"
 
 // ============================
 // ==== Unprotected routes ====

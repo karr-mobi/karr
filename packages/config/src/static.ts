@@ -1,6 +1,6 @@
-type APIVERSION = "v1"
+type Apiversion = "v1"
 
-const API_VERSION: APIVERSION = "v1"
+const API_VERSION: Apiversion = "v1"
 const APPLICATION_NAME: string = "Karr"
 
 export default {

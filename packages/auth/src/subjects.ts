@@ -1,4 +1,4 @@
-import { Prettify } from "@karr/util"
+import type { Prettify } from "@karr/util"
 import { createSubjects } from "@openauthjs/openauth/subject"
 import { z } from "zod"
 

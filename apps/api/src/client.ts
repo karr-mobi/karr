@@ -1,7 +1,8 @@
 import { hc } from "hono/client"
+
 export type { InferResponseType } from "hono/client"
 
-import { protectedRoutes } from "./server"
+import type { protectedRoutes } from "./server"
 
 const _client = hc<typeof protectedRoutes>("")
 export type Client = typeof _client

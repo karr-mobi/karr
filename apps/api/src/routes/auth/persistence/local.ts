@@ -1,12 +1,12 @@
-import { err, ok } from "neverthrow"
+import type { UserProperties } from "@karr/auth/subjects"
+import logger from "@karr/logger"
 import { and, eq } from "drizzle-orm"
+import { err, ok } from "neverthrow"
 import db from "@/db"
 import { accountsTable } from "@/db/schemas/accounts"
-import { UserProperties } from "@karr/auth/subjects"
-import logger from "@karr/logger"
 import { profileTable } from "@/db/schemas/profile"
-import { initUser } from "./index" // Imports from persistence/index.ts
-import { LocalAuthProfileData } from "../profile-fetchers" // For type definition
+import type { LocalAuthProfileData } from "../profile-fetchers"
+import { initUser } from "./initUser"
 
 export async function findOrCreateUserFromLocalAuth(
     data: LocalAuthProfileData

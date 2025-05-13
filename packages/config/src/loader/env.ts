@@ -1,9 +1,10 @@
-import { ConfigFile, LogLevelSchema } from "../schema.js"
+import process from "node:process"
 import { toInt } from "@karr/util"
+import { env } from "std-env"
+import { type ConfigFile, LogLevelSchema } from "../schema.js"
 import { handleConfigError } from "./index.js"
 
-import { env } from "std-env"
-
+//biome-ignore lint/complexity/noExcessiveCognitiveComplexity: I don't want to split this into smaller functions
 export function readConfigFromEnv(): Partial<ConfigFile> {
     const config = {} as Partial<ConfigFile>
 
@@ -70,8 +71,8 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
         config.AUTH_PROVIDERS.push({
             name: "github",
             trusted: !(env.AUTH_OIDC_TRUSTED === "false"),
-            clientID: env.AUTH_GITHUB_CLIENT_ID!,
-            clientSecret: env.AUTH_GITHUB_CLIENT_SECRET!
+            clientID: env.AUTH_GITHUB_CLIENT_ID as string,
+            clientSecret: env.AUTH_GITHUB_CLIENT_SECRET as string
         })
     }
 
@@ -80,7 +81,7 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
         config.AUTH_PROVIDERS.push({
             name: "google",
             trusted: !(env.AUTH_OIDC_TRUSTED === "false"),
-            clientID: env.AUTH_GOOGLE_CLIENT_ID!
+            clientID: env.AUTH_GOOGLE_CLIENT_ID as string
         })
     }
 

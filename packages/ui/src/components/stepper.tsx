@@ -1,11 +1,10 @@
 "use client"
 
-import React, { useState } from "react"
-import { motion } from "motion/react"
-import { ChevronRight, CircleCheck } from "lucide-react"
-import { useTranslations } from "next-intl"
-
 import { cn } from "@karr/ui/lib/utils"
+import { ChevronRight, CircleCheck } from "lucide-react"
+import { motion } from "motion/react"
+import { useTranslations } from "next-intl"
+import React, { useState } from "react"
 
 import { Button } from "./button"
 import { TextMorph } from "./text-morph"
@@ -54,7 +53,7 @@ const Stepper = ({
 
     if (steps === 0) {
         return (
-            <div className="bg-red-500 text-white p-4 rounded-md">
+            <div className="rounded-md bg-red-500 p-4 text-white">
                 Stepper: No children provided
             </div>
         )
@@ -62,7 +61,7 @@ const Stepper = ({
 
     if (steps > widths.length) {
         return (
-            <div className="bg-red-500 text-white p-4 rounded-md">
+            <div className="rounded-md bg-red-500 p-4 text-white">
                 Stepper: Too many children provided
             </div>
         )
@@ -76,7 +75,7 @@ const Stepper = ({
     }
 
     const handleBack = () => {
-        if (step == 2) {
+        if (step === 2) {
             setIsExpanded(true)
         }
         if (step > 1) {
@@ -91,18 +90,16 @@ const Stepper = ({
                 className
             )}
         >
-            <div className="flex items-center gap-6 relative">
-                {Array.from({ length: steps }).map(
-                    (_dot: unknown, index: number) => (
-                        <div
-                            key={index}
-                            className={cn(
-                                "size-2 rounded-full relative z-10",
-                                index < step ? "bg-white" : "bg-gray-300"
-                            )}
-                        />
-                    )
-                )}
+            <div className="relative flex items-center gap-6">
+                {Array.from({ length: steps }).map((dot, index) => (
+                    <div
+                        key={dot as number}
+                        className={cn(
+                            "relative z-10 size-2 rounded-full",
+                            index < step ? "bg-white" : "bg-gray-300"
+                        )}
+                    />
+                ))}
 
                 {/* Green progress overlay */}
                 <motion.div
@@ -111,7 +108,7 @@ const Stepper = ({
                         width: widths[step],
                         x: 0
                     }}
-                    className="absolute -left-[8px] -top-[8px] h-3 bg-primary/65 rounded-full"
+                    className="-left-[8px] -top-[8px] absolute h-3 rounded-full bg-primary/65"
                     transition={{
                         type: "spring",
                         stiffness: 300,
@@ -124,11 +121,11 @@ const Stepper = ({
             </div>
 
             {/* Content */}
-            <div className="w-full relative overflow-hidden">
+            <div className="relative w-full overflow-hidden">
                 <div className="grid grid-cols-1 grid-rows-1">
                     {React.Children.map(children, (child, index) => (
                         <motion.div
-                            key={index}
+                            key={child?.toString()}
                             initial={{ x: index === 0 ? 0 : 300, opacity: 0 }}
                             animate={{
                                 x:
@@ -156,7 +153,7 @@ const Stepper = ({
             </div>
 
             {/* Buttons container */}
-            <div className="w-[80%] max-w-50 flex items-end gap-6 justify-end z-4">
+            <div className="z-4 flex w-[80%] max-w-50 items-end justify-end gap-6">
                 {!isExpanded && (
                     <motion.div
                         initial={{ opacity: 0, width: 0, scale: 0.8 }}

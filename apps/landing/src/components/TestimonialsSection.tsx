@@ -1,15 +1,15 @@
 "use client"
 
-import Image from "next/image"
-import { motion } from "motion/react"
 import {
     Card,
     CardContent,
     CardFooter,
     CardHeader
 } from "@karr/ui/components/card"
+import { motion } from "motion/react"
+import Image from "next/image"
 import AnimatedSection from "@/components/AnimatedSection"
-import { fadeIn, staggerContainer, popIn } from "@/lib/animation-variants"
+import { fadeIn, popIn, staggerContainer } from "@/lib/animation-variants"
 import { testimonials } from "@/lib/content"
 
 export default function TestimonialsSection() {
@@ -26,7 +26,7 @@ export default function TestimonialsSection() {
                 >
                     <div className="space-y-2">
                         <motion.h2
-                            className="text-3xl font-bold tracking-tighter md:text-4xl/tight"
+                            className="font-bold text-3xl tracking-tighter md:text-4xl/tight"
                             variants={fadeIn}
                         >
                             Trusted by Forward-Thinking Companies
@@ -41,7 +41,7 @@ export default function TestimonialsSection() {
                     </div>
                 </motion.div>
                 <motion.div
-                    className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3 lg:gap-12 pt-8"
+                    className="mx-auto grid max-w-5xl grid-cols-1 gap-6 pt-8 md:grid-cols-3 lg:gap-12"
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
@@ -49,14 +49,14 @@ export default function TestimonialsSection() {
                 >
                     {testimonials.map((testimonial, index) => (
                         <motion.div
-                            key={index}
+                            key={testimonial.quote}
                             variants={popIn}
                             whileHover={{
                                 y: -10,
                                 transition: { duration: 0.2 }
                             }}
                         >
-                            <Card className="text-center h-full">
+                            <Card className="h-full text-center">
                                 <CardHeader>
                                     <motion.div
                                         className="flex justify-center"
@@ -91,7 +91,7 @@ export default function TestimonialsSection() {
                                     <p className="font-semibold">
                                         {testimonial.author}
                                     </p>
-                                    <p className="text-sm text-muted-foreground">
+                                    <p className="text-muted-foreground text-sm">
                                         {testimonial.role}
                                     </p>
                                 </CardFooter>

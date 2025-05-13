@@ -1,12 +1,12 @@
-import { err, ok } from "neverthrow"
+import type { UserProperties } from "@karr/auth/subjects"
+import logger from "@karr/logger"
 import { and, eq } from "drizzle-orm"
+import { err, ok } from "neverthrow"
 import db from "@/db"
 import { accountsTable } from "@/db/schemas/accounts"
-import { UserProperties } from "@karr/auth/subjects"
-import logger from "@karr/logger"
 import { profileTable } from "@/db/schemas/profile"
-import { initUser } from "./index"
-import { OAuthProfileData } from "../profile-fetchers"
+import type { OAuthProfileData } from "../profile-fetchers"
+import { initUser, isTrustedProvider } from "./initUser"
 
 export async function findOrCreateUserFromGithub(data: OAuthProfileData) {
     // Check if user exists
@@ -31,13 +31,23 @@ export async function findOrCreateUserFromGithub(data: OAuthProfileData) {
         // update the user avatar if it is different
         let avatar = data.avatar
         if (user[0].Profile.avatar !== data.avatar) {
-            const a = await db
-                .update(profileTable)
-                .set({ avatar: data.avatar })
-                .where(eq(profileTable.id, user[0].Profile.id))
-                .returning({
-                    avatar: profileTable.avatar
-                })
+            const [a] = await Promise.all([
+                db
+                    .update(profileTable)
+                    .set({ avatar: data.avatar })
+                    .where(eq(profileTable.id, user[0].Profile.id))
+                    .returning({
+                        avatar: profileTable.avatar
+                    }),
+                db
+                    .update(accountsTable)
+                    .set({
+                        verified: isTrustedProvider(data.provider)
+                            ? data.emailVerified
+                            : false
+                    })
+                    .where(eq(accountsTable.id, user[0].Accounts.id))
+            ])
 
             if (a.length === 0 || !a[0]) {
                 logger.error("Failed to update avatar")
@@ -64,6 +74,7 @@ export async function findOrCreateUserFromGithub(data: OAuthProfileData) {
             lastName: lastName.join(" "),
             avatar: data.avatar,
             email: data.email,
+            verified: data.emailVerified,
             provider: data.provider,
             remoteId: data.remoteId
         })

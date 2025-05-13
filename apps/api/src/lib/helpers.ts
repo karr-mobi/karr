@@ -1,7 +1,7 @@
-import type { Context } from "hono"
+import logger from "@karr/logger"
 
 import { tryCatch } from "@karr/util"
-import logger from "@karr/logger"
+import type { Context } from "hono"
 
 /**
  * Template for a function that returns a response object
@@ -12,7 +12,7 @@ export function tmpResponse(c: Context) {
     return c.json(
         {
             // get timestamp from the current time using Date
-            timestamp: new Date().getTime(),
+            timestamp: Date.now(),
             data: {
                 message: "I'm a teapot",
                 img: "https://http.cat/images/418.jpg"
@@ -46,7 +46,7 @@ export async function handleRequest<T>(c: Context, fn: () => Promise<T>) {
     }
 
     return c.json({
-        timestamp: new Date().getTime(),
+        timestamp: Date.now(),
         data: out.value
     })
 }
@@ -66,7 +66,6 @@ export function checkContentType(c: Context, done: () => void) {
             },
             400
         )
-    } else {
-        done()
     }
+    done()
 }

@@ -1,10 +1,11 @@
-//eslint-disable-next-line
-// @ts-ignore
-import { logger, c } from "@karr/logger"
+//biome-ignore-all lint/style/noNonNullAssertion: it's a util file
+
+import process from "node:process"
+import { c, logger } from "@karr/logger"
 import { build } from "esbuild"
 import { esbuildPlugin as fixNodeBuiltins } from "./unplugin-fix-node-builtins.ts"
 
-console.info("Bundling API...")
+logger.info("Bundling API...")
 
 const start = Date.now()
 
@@ -26,7 +27,7 @@ build({
         logger.error("Build failed:", err)
         process.exit(1)
     })
-    .then(async (result) => {
+    .then((result) => {
         const end = Date.now()
         const duration = end - start
         const bytes = Object.keys(result.metafile.outputs)

@@ -1,27 +1,28 @@
-import { issuer } from "@openauthjs/openauth"
-import { Select } from "@openauthjs/openauth/ui/select"
-import type { Theme } from "@openauthjs/openauth/ui/theme"
-import type { Tokens } from "@openauthjs/openauth/client"
-import { setCookie } from "hono/cookie"
-import type { Context } from "hono"
-import { runtime } from "std-env"
-
-import { subjects, UserProperties } from "@karr/auth/subjects"
 import { authBaseUrl } from "@karr/auth/client"
+import { subjects, type UserProperties } from "@karr/auth/subjects"
 import { API_BASE } from "@karr/config"
 import { logger } from "@karr/logger"
-
+import { issuer } from "@openauthjs/openauth"
+import type {
+    ExchangeError,
+    ExchangeSuccess,
+    Tokens
+} from "@openauthjs/openauth/client"
+import { Select } from "@openauthjs/openauth/ui/select"
+import type { Theme } from "@openauthjs/openauth/ui/theme"
+import type { Context } from "hono"
+import { setCookie } from "hono/cookie"
+import type { Result } from "neverthrow"
+import { runtime } from "std-env"
 import { callbackUrl, client } from "@/lib/auth-client"
-
-import { UnStorage } from "./unstorage-adapter"
-import { providers } from "./providers"
-import type { SuccessValues } from "./sucess"
+import type { ErrorResponse } from "@/lib/types"
+import { getDriver } from "./drivers"
+import { getOrInsertUser } from "./persistence"
 import { getGithubUserData } from "./profile-fetchers/github"
 import { getGoogleUserData } from "./profile-fetchers/google"
-import { getOrInsertUser } from "./persistence"
-import { Result } from "neverthrow"
-import { ErrorResponse } from "@/lib/types"
-import { getDriver } from "./drivers"
+import { providers } from "./providers"
+import type { SuccessValues } from "./sucess"
+import { UnStorage } from "./unstorage-adapter"
 
 const driver = await getDriver()
 
@@ -55,31 +56,24 @@ const app = issuer({
     }),
     subjects,
     theme,
-    async allow(input, _req) {
-        return input.redirectURI === callbackUrl && input.clientID === "karr"
+    allow(input, _req) {
+        return Promise.resolve(
+            input.redirectURI === callbackUrl && input.clientID === "karr"
+        )
     },
     async success(ctx, value: SuccessValues) {
-        logger.debug(
-            `[${runtime}] auth success handler called with provider: ${value.provider}`
-        )
         let subjectData: Result<UserProperties, string>
         if (value.provider === "password") {
-            logger.debug(
-                `[${runtime}] Getting/inserting password provider user`
-            )
             subjectData = await getOrInsertUser({
                 provider: value.provider,
                 email: value.email
             })
         } else if (value.provider === "code") {
-            logger.debug(`[${runtime}] Getting/inserting code provider user`)
             subjectData = await getOrInsertUser({
                 provider: value.provider,
                 email: value.claims.email
             })
         } else if (value.provider === "github") {
-            logger.debug(`[${runtime}] Getting GitHub user data`)
-            // get the user data from github
             const userData = await getGithubUserData(value.tokenset.access)
 
             if (userData.isErr()) {
@@ -89,16 +83,9 @@ const app = issuer({
                 throw new Error(userData.error)
             }
 
-            logger.debug(`[${runtime}] Getting/inserting GitHub provider user`)
-            // save the user data to the database, and return the jwt payload
             subjectData = await getOrInsertUser(userData.value)
         } else if (value.provider === "google") {
-            logger.debug(`[${runtime}] Getting Google user data`)
-            // extract the user data
-            const userData = await getGoogleUserData(value.id)
-
-            logger.debug(`[${runtime}] Getting/inserting Google provider user`)
-            // save the user data to the database, and return the jwt payload
+            const userData = getGoogleUserData(value.id)
             subjectData = await getOrInsertUser(userData.value)
         } else {
             // should never happen
@@ -113,13 +100,11 @@ const app = issuer({
             throw new Error(subjectData.error)
         }
 
-        logger.debug(`[${runtime}] Success handler returning subject`)
         return ctx.subject("user", subjectData.value)
     }
 })
 
 app.get("/callback", async (ctx) => {
-    logger.debug(`[${runtime}] AUTH CALLBACK: processing callback request`)
     const url = new URL(ctx.req.url)
     const code = ctx.req.query("code")
     const error = ctx.req.query("error")
@@ -137,7 +122,6 @@ app.get("/callback", async (ctx) => {
     }
 
     if (!code) {
-        logger.debug(`[${runtime}] AUTH CALLBACK: Missing code parameter`)
         return ctx.json(
             {
                 message: "Missing code"
@@ -146,11 +130,9 @@ app.get("/callback", async (ctx) => {
         )
     }
 
-    logger.debug(`[${runtime}] AUTH CALLBACK: Exchanging code for tokens`)
-    let exchanged
+    let exchanged: ExchangeSuccess | ExchangeError
     try {
         exchanged = await client.exchange(code, callbackUrl)
-        logger.debug(`[${runtime}] AUTH CALLBACK: Code exchange completed`)
     } catch (error) {
         logger.error(
             `[${runtime}] AUTH CALLBACK: Exception during code exchange:`,
@@ -172,10 +154,8 @@ app.get("/callback", async (ctx) => {
         return ctx.json(exchanged.err satisfies ErrorResponse, 400)
     }
 
-    logger.debug(`[${runtime}] AUTH CALLBACK: Setting tokens`)
     setTokens(ctx, exchanged.tokens)
 
-    logger.debug(`[${runtime}] AUTH CALLBACK: Redirecting to ${next}`)
     return ctx.redirect(next)
 })
 

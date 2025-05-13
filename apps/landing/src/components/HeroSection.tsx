@@ -1,14 +1,14 @@
 "use client"
 
+import { Badge } from "@karr/ui/components/badge"
+import { Button } from "@karr/ui/components/button"
+import { SquareArrowOutUpRight } from "lucide-react"
+import { motion } from "motion/react"
 import Image from "next/image"
 import Link from "next/link"
-import { motion } from "motion/react"
-import { SquareArrowOutUpRight } from "lucide-react"
-import { Button } from "@karr/ui/components/button"
-import { Badge } from "@karr/ui/components/badge"
+import screenshot from "@/assets/karr_demo.jpg"
 import AnimatedSection from "@/components/AnimatedSection"
 import { slideInLeft, slideInRight } from "@/lib/animation-variants"
-import screenshot from "@/assets/karr_demo.jpg"
 import { hero } from "@/lib/content"
 
 export default function HeroSection() {
@@ -17,7 +17,7 @@ export default function HeroSection() {
             className="w-full overflow-x-clip py-12 md:py-24 lg:py-32 xl:py-48"
             id="hero"
         >
-            <div className="container px-4 md:px-6 w-full">
+            <div className="container w-full px-4 md:px-6">
                 <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
                     <motion.div
                         className="flex flex-col justify-center space-y-4"
@@ -34,7 +34,7 @@ export default function HeroSection() {
                                 </Badge>
                             </motion.div>
                             <motion.h1
-                                className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none [text-shadow:0_2px_15px_rgba(0,0,0,0.2)] lg:[text-shadow:none]"
+                                className="font-bold text-3xl tracking-tighter [text-shadow:0_2px_15px_rgba(0,0,0,0.2)] sm:text-5xl xl:text-6xl/none lg:[text-shadow:none]"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3, duration: 0.5 }}
@@ -89,7 +89,7 @@ export default function HeroSection() {
                             ))}
                         </motion.div>
                         <motion.p
-                            className="text-xs text-muted-foreground"
+                            className="text-muted-foreground text-xs"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.6, duration: 0.5 }}
@@ -98,7 +98,7 @@ export default function HeroSection() {
                         </motion.p>
                     </motion.div>
                     <motion.div
-                        className="relative flex items-center justify-center lg:justify-end lg:w-[70vw] lg:left-[-85%] -z-10 order-first lg:order-last -mb-28 lg:mb-[unset]"
+                        className="-z-10 -mb-28 relative order-first flex items-center justify-center lg:left-[-85%] lg:order-last lg:mb-[unset] lg:w-[70vw] lg:justify-end"
                         variants={slideInRight}
                     >
                         <motion.div

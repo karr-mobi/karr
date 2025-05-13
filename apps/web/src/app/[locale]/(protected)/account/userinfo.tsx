@@ -1,14 +1,13 @@
 "use client"
 
-import { useQuery } from "@tanstack/react-query"
-import { useTranslations } from "next-intl"
-import { CheckIcon, OctagonXIcon } from "lucide-react"
-
+import type { InferResponseType } from "@karr/api/client"
 import { Badge } from "@karr/ui/components/badge"
 import { Marquee } from "@karr/ui/components/marquee"
-import { InferResponseType } from "@karr/api/client"
-import { client } from "@/util/apifetch"
+import { useQuery } from "@tanstack/react-query"
+import { CheckIcon, OctagonXIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import Loading from "@/components/Loading"
+import { client } from "@/util/apifetch"
 
 export default function FetchUserData() {
     const { data, isError, isLoading, error } = useQuery({
@@ -39,7 +38,9 @@ export default function FetchUserData() {
 // TODO: add user type
 function ShowUserData({
     user
-}: { user: InferResponseType<typeof client.user.info.$get, 200> }) {
+}: {
+    user: InferResponseType<typeof client.user.info.$get, 200>
+}) {
     const t = useTranslations("auth.Account")
 
     const hasSpecialStatus = false
@@ -51,7 +52,7 @@ function ShowUserData({
                     numberOfCopies={10}
                     direction="left"
                     speed="fast"
-                    className="bg-green-500 text-white py-2 uppercase font-bold text-3xl"
+                    className="bg-green-500 py-2 font-bold text-3xl text-white uppercase"
                 >
                     You rock, {user.nickname || user.firstName}!
                 </Marquee>

@@ -1,9 +1,8 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getTranslations } from "next-intl/server"
-
+import type { Locale } from "@/../global"
 import { routing } from "@/i18n/routing"
-import { Locale } from "@/../global"
 
 export async function generateMetadata() {
     const t = await getTranslations("HomePage")

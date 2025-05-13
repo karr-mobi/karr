@@ -52,7 +52,7 @@ h3 {
 }
 
 blockquote:not([class]) {
-    font-famtly: var(--font-serif);
+    font-family: var(--font-serif);
     font-size: var(--text-xl);
 }
 

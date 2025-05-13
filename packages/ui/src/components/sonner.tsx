@@ -29,4 +29,5 @@ const Toaster = ({ ...props }: ToasterProps) => {
 }
 
 export { Toaster }
+//biome-ignore lint/performance/noBarrelFile: makes much more sense to export the toast function from sonner
 export { toast } from "sonner"

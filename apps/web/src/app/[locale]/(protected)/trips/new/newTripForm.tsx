@@ -1,17 +1,10 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { format } from "date-fns"
-import { CalendarDays as IconCalendarDays } from "lucide-react"
-import { useTranslations } from "next-intl"
-import { useForm } from "react-hook-form"
-
-import { NewTripInputSchema, type NewTripInput } from "@karr/api/db/trips"
+import { type NewTripInput, NewTripInputSchema } from "@karr/api/db/trips"
 import { Button } from "@karr/ui/components/button"
 import { Calendar } from "@karr/ui/components/calendar"
 import { CurrencyInput } from "@karr/ui/components/currencyInput"
-import { tryCatch } from "@karr/util"
 import {
     Form,
     FormControl,
@@ -29,9 +22,14 @@ import {
 } from "@karr/ui/components/popover"
 import { toast } from "@karr/ui/components/sonner"
 import { cn } from "@karr/ui/lib/utils"
-import { client } from "@/util/apifetch"
-
+import { tryCatch } from "@karr/util"
+import { format } from "date-fns"
+import { CalendarDays as IconCalendarDays } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 import { useRouter } from "@/i18n/routing"
+import { client } from "@/util/apifetch"
 
 export default function NewTripForm() {
     const t = useTranslations("trips.Create")
@@ -63,12 +61,11 @@ export default function NewTripForm() {
                 }
             })
         )
-        if (!res.success) {
-            console.error(res.error)
-            toast.error("Something went wrong")
-        } else {
+        if (res.success && res.value.status === 200) {
             toast.success(t("added"))
             router.push("/trips/search")
+        } else {
+            toast.error("Something went wrong")
         }
     }
 
@@ -117,9 +114,9 @@ export default function NewTripForm() {
                                 <PopoverTrigger asChild>
                                     <FormControl>
                                         <Button
-                                            variant={"outline"}
+                                            variant="outline"
                                             className={cn(
-                                                "pl-3 text-left font-normal w-full",
+                                                "w-full pl-3 text-left font-normal",
                                                 !field.value &&
                                                     "text-muted-foreground"
                                             )}
@@ -132,7 +129,7 @@ export default function NewTripForm() {
                                             ) : (
                                                 <span>{t("pick-date")}</span>
                                             )}
-                                            <IconCalendarDays className="ml-auto w-4 h-4" />
+                                            <IconCalendarDays className="ml-auto h-4 w-4" />
                                         </Button>
                                     </FormControl>
                                 </PopoverTrigger>

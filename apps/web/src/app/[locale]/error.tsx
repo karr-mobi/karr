@@ -1,11 +1,10 @@
 "use client"
 
-import { useEffect } from "react"
-import { useTranslations } from "next-intl"
-
 import { Button } from "@karr/ui/components/button"
+import { useTranslations } from "next-intl"
+import { useEffect } from "react"
 
-export default function Error({
+export default function ErrorPage({
     error,
     reset
 }: {
@@ -20,8 +19,8 @@ export default function Error({
     }, [error])
 
     return (
-        <div className="w-full flex min-h-screen flex-col items-center justify-center px-4 text-center">
-            <p className="text-sm font-semibold text-indigo-600">
+        <div className="flex min-h-screen w-full flex-col items-center justify-center px-4 text-center">
+            <p className="font-semibold text-indigo-600 text-sm">
                 {t("title", { name: error.name })}
             </p>
             <p className="mt-2 text-sm">{t("message")}</p>

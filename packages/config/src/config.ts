@@ -1,7 +1,7 @@
 import { lazy } from "@karr/util"
 
 import { loadDbConfig, loadFullConfig } from "./loader/index.js"
-import { DbConfig } from "./schema.js"
+import type { DbConfig } from "./schema.js"
 
 const config = lazy(async () => await loadFullConfig())
 
@@ -21,8 +21,9 @@ export const {
     PRODUCTION
 } = await config.value
 
-export { logLevels } from "./schema.js"
 export type { AuthProvider } from "./schema.js"
+//biome-ignore lint/performance/noBarrelFile: much simpler than exporting schema too
+export { logLevels } from "./schema.js"
 
 // ====================================================================
 // Database config
@@ -32,6 +33,6 @@ export type { AuthProvider } from "./schema.js"
  * Returns the database config
  * @returns The database config
  */
-export async function getDbConfig(): Promise<DbConfig> {
+export function getDbConfig(): Promise<DbConfig> {
     return loadDbConfig()
 }

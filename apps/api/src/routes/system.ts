@@ -1,7 +1,6 @@
-import { Hono } from "hono"
-
 import { APPLICATION_NAME } from "@karr/config"
 import { APP_VERSION } from "@karr/util/version"
+import { Hono } from "hono"
 
 const hono = new Hono()
 

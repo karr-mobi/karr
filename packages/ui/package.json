@@ -10,7 +10,8 @@
         "./hooks/*": "./src/hooks/*.ts"
     },
     "scripts": {
-        "lint": "eslint . --max-warnings 0",
+        "lint:check": "eslint . --max-warnings 0",
+        "lint": "eslint . --max-warnings 0 --fix",
         "generate:component": "turbo gen react-component",
         "check-types": "tsc --noEmit"
     },

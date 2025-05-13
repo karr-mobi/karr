@@ -1,11 +1,10 @@
+import { cn } from "@karr/ui/lib/utils"
 import {
     LoaderCircleIcon,
     LoaderIcon,
     LoaderPinwheelIcon,
     type LucideProps
 } from "lucide-react"
-
-import { cn } from "@karr/ui/lib/utils"
 
 type SpinnerVariantProps = Omit<SpinnerProps, "variant">
 

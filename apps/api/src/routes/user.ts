@@ -1,12 +1,11 @@
 import { Hono } from "hono"
-
-import { handleRequest, tmpResponse } from "@/lib/helpers"
-import type { AppVariables, ErrorResponse } from "@/lib/types.d.ts"
 import {
     selectUserById,
     selectUserProfileById,
     updateNickname
 } from "@/lib/db/users"
+import { handleRequest, tmpResponse } from "@/lib/helpers"
+import type { AppVariables, ErrorResponse } from "@/lib/types.d.ts"
 import { getUserSub } from "@/util/subject"
 
 const hono = new Hono<{ Variables: AppVariables }>()
@@ -75,7 +74,7 @@ const hono = new Hono<{ Variables: AppVariables }>()
         const { nickname } = await c.req.json()
 
         // check the nickname is a valid string
-        if (typeof nickname !== "string" || nickname.length < 1) {
+        if (typeof nickname !== "string" || nickname.length === 0) {
             return c.json(
                 {
                     message: "Invalid nickname"

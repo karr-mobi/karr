@@ -1,17 +1,16 @@
+import { zValidator } from "@hono/zod-validator"
+import logger from "@karr/logger"
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
-import { zValidator } from "@hono/zod-validator"
 
-import logger from "@karr/logger"
-
-import { NewTripInputSchema, Trip } from "@/db/schemas/trips"
+import { NewTripInputSchema, type Trip } from "@/db/schemas/trips"
+import { addTrip, deleteTrip, getTrips } from "@/lib/db/trips"
 import { handleRequest } from "@/lib/helpers"
 import type {
     AppVariables,
     DataResponse,
     ErrorResponse
 } from "@/lib/types.d.ts"
-import { addTrip, deleteTrip, getTrips } from "@/lib/db/trips"
 import { getUserSub } from "@/util/subject"
 
 import { getFederatedTrips } from "./federation/helpers"

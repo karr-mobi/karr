@@ -1,9 +1,6 @@
 "use client"
 
-import { useTransition } from "react"
-import { useTranslations } from "next-intl"
-import { LogOut as IconLogOut, User as IconUser } from "lucide-react"
-
+import type { UserProperties } from "@karr/auth/subjects"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,9 +15,11 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger
 } from "@karr/ui/components/dropdown"
-import { logout } from "~/auth/actions"
+import { LogOut as IconLogOut, User as IconUser } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useTransition } from "react"
 import { Link } from "@/i18n/routing"
-import { UserProperties } from "@karr/auth/subjects"
+import { logout } from "~/auth/actions"
 
 export function AccountDropdown({
     children,
@@ -46,7 +45,7 @@ export function AccountDropdown({
                 <DropdownMenuLabel>
                     {userdata.nickname ||
                         (userdata.firstName
-                            ? userdata.firstName + " " + userdata.lastName
+                            ? `${userdata.firstName} ${userdata.lastName}`
                             : t("Dropdown.title"))}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
@@ -54,7 +53,7 @@ export function AccountDropdown({
                     <DropdownMenuItem asChild>
                         <Link
                             href="/account"
-                            className="flex items-center justify-start gap-2 w-full cursor-pointer"
+                            className="flex w-full cursor-pointer items-center justify-start gap-2"
                         >
                             <IconUser
                                 size={16}

@@ -1,6 +1,6 @@
-import { GoogleAuthProfileData } from "./index"
-import { GoogleSuccessValue } from "../sucess"
 import { ok } from "neverthrow"
+import type { GoogleSuccessValue } from "../sucess"
+import type { GoogleAuthProfileData } from "./index"
 
 /**
  * Fetches the Google user data from the provided authentication data.
@@ -8,7 +8,7 @@ import { ok } from "neverthrow"
  * @param data The Google authentication data containing the user's profile information
  * @returns A Result containing the combined profile and email data
  */
-export async function getGoogleUserData(data: GoogleSuccessValue["id"]) {
+export function getGoogleUserData(data: GoogleSuccessValue["id"]) {
     const profileData: GoogleAuthProfileData = {
         provider: "google",
         email: data.email,

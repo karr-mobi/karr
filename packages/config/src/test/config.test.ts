@@ -1,16 +1,18 @@
+//biome-ignore-all lint/style/useNamingConvention: intentional
+
 import { existsSync, readFileSync } from "node:fs"
 import { join, normalize } from "node:path"
+import process from "node:process"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-
-import defaultConfig from "@/default_config.json" with { type: "json" }
+import defaultConfig from "@/default-config.json" with { type: "json" }
 import { loadDbConfig, loadFullConfig } from "@/loader/index"
-import { FullConfig, FullConfigSchema } from "@/schema.js"
+import { type FullConfig, FullConfigSchema } from "@/schema.js"
 import staticConfig from "@/static.js"
 import sampleConfigJson from "@/test/fixtures/sample_config.json" with {
     type: "json"
 }
 
-defaultConfig.API_BASE += "/" + staticConfig.API_VERSION
+defaultConfig.API_BASE += `/${staticConfig.API_VERSION}`
 
 const sampleConfigFile = readFileSync(
     join(process.cwd(), "./src/test/fixtures/sample_config.yaml")
@@ -62,7 +64,9 @@ function clearEnvVars() {
         "LOG_TIMESTAMP",
         "NODE_ENV"
     ]
-    vars.forEach((key) => delete process.env[key])
+    for (const key of vars) {
+        delete process.env[key]
+    }
 }
 
 describe("config module", () => {
@@ -95,7 +99,7 @@ describe("config module", () => {
                     ...defaultConfig,
                     API_BASE: "/api/v1" // Make sure API_BASE is set correctly
                     // Intentionally omit APP_URL
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    // biome-ignore lint/suspicious/noExplicitAny: intentional
                 }) as any
         )
 
@@ -104,7 +108,7 @@ describe("config module", () => {
         // We should now validate directly instead of relying on the module's validation
         const result = FullConfigSchema.safeParse(config)
         expect(result.success).toBe(false)
-        expect(result.error!.issues[0]!.path).toContain("APP_URL")
+        expect(result.error?.issues[0]?.path).toContain("APP_URL")
     })
 
     it("should load default config when no config file exists", async () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it, test, vi } from "vitest"
 
-import { lazy, toCamelCase, toInt, type Prettify } from "@/utilities.js"
+import { lazy, type Prettify, toCamelCase, toInt } from "@/utilities.js"
 
 describe("toCamelCase", () => {
     it("should return a given string in camel case", () => {
@@ -75,7 +75,7 @@ describe("toInt", () => {
         try {
             toInt("invalid")
             expect.fail("Should have thrown an error")
-            //eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // biome-ignore lint/suspicious/noExplicitAny: this is a test
         } catch (error: any) {
             expect(error.message).toContain("is not a number")
             expect(error.message).toContain("HINT")
@@ -176,11 +176,11 @@ describe("Prettify type", () => {
     test("Prettify works with basic intersection types", () => {
         type A = { a: string }
         type B = { b: number }
-        type AB = A & B
-        type PrettifiedAB = Prettify<AB>
+        type Ab = A & B
+        type PrettifiedAb = Prettify<Ab>
 
         // These are type-level tests that will be checked by TypeScript
-        const testPrettified: PrettifiedAB = { a: "string", b: 42 }
+        const testPrettified: PrettifiedAb = { a: "string", b: 42 }
 
         // Runtime assurance that the structure is correct
         expect(testPrettified).toEqual({ a: "string", b: 42 })

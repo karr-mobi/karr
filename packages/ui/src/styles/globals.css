@@ -1,24 +1,17 @@
-@import "tailwindcss";
+@layer block, utilities, base, theme;
+
+@import "./block.css" layer(block);
+@import "./utilities.css" layer(utilities);
+@import "./reset.css" layer(base);
+@import "./base.css" layer(base);
+@import "./theme.css" layer(theme);
+
+@import "tailwindcss" layer(base);
 @source "../components";
 
 @variant dark (&:is(.dark *));
 
-@layer block, utilities, base, theme;
-
-@import "./theme.css";
-
-@layer block {
-    @import "./block.css";
-}
-
-@layer utilities {
-    @import "./utilities.css";
-}
-
 @layer base {
-    @import "./reset.css";
-    @import "./base.css";
-
     /*
       The default border color has changed to `currentColor` in Tailwind CSS v4,
       so we've added these compatibility styles to make sure everything still

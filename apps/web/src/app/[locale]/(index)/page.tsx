@@ -1,12 +1,10 @@
-import { memo } from "react"
-import Image from "next/image"
-import { useTranslations } from "next-intl"
-
 import { APPLICATION_NAME } from "@karr/config/static"
 import { Button } from "@karr/ui/components/button"
-
-import { Link } from "@/i18n/routing"
+import Image from "next/image"
+import { useTranslations } from "next-intl"
+import { memo } from "react"
 import logo from "@/assets/logo-tmp.jpg"
+import { Link } from "@/i18n/routing"
 
 const MemoizedAppName = memo(
     () => <h1 className="tracking-tight">{APPLICATION_NAME}</h1>,
@@ -17,7 +15,7 @@ export default function Home() {
     const t = useTranslations("HomePage")
 
     return (
-        <div className="w-full flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+        <div className="flex w-full flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center">
                     <MemoizedAppName />

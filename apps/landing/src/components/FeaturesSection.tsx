@@ -2,14 +2,14 @@
 
 import { motion } from "motion/react"
 import AnimatedSection from "@/components/AnimatedSection"
-import { fadeIn, staggerContainer, popIn } from "@/lib/animation-variants"
+import { fadeIn, popIn, staggerContainer } from "@/lib/animation-variants"
 import { features } from "@/lib/content"
 
 export default function FeaturesSection() {
     return (
         <AnimatedSection
             id="features"
-            className="w-full py-12 md:py-24 lg:py-32 bg-muted"
+            className="w-full bg-muted py-12 md:py-24 lg:py-32"
             variants={fadeIn}
         >
             <div className="container px-4 md:px-6">
@@ -19,7 +19,7 @@ export default function FeaturesSection() {
                 >
                     <div className="space-y-8">
                         <motion.h2
-                            className="text-3xl font-bold tracking-tighter md:text-4xl/tight"
+                            className="font-bold text-3xl tracking-tighter md:text-4xl/tight"
                             variants={fadeIn}
                         >
                             {features.title}
@@ -33,7 +33,7 @@ export default function FeaturesSection() {
                     </div>
                 </motion.div>
                 <motion.div
-                    className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:gap-12 pt-8"
+                    className="mx-auto grid max-w-5xl grid-cols-1 gap-6 pt-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-12"
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
@@ -41,7 +41,7 @@ export default function FeaturesSection() {
                 >
                     {features.features.map((feature, index) => (
                         <motion.div
-                            key={index}
+                            key={feature.title}
                             className="flex flex-col items-center space-y-6 rounded-lg p-4 text-center"
                             variants={popIn}
                             whileHover={{
@@ -65,10 +65,10 @@ export default function FeaturesSection() {
                                     <feature.icon className="h-12 w-12 text-emerald-500" />
                                 }
                             </motion.div>
-                            <h4 className="text-xl/8 font-bold tracking-tight">
+                            <h4 className="font-bold text-xl/8 tracking-tight">
                                 {feature.title}
                             </h4>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-muted-foreground text-sm">
                                 {feature.description}
                             </p>
                         </motion.div>

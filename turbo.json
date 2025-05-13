@@ -1,5 +1,5 @@
 {
-    "$schema": "https://turbo.build/schema.json",
+    "$schema": "https://turborepo.com/schema.json",
     "globalEnv": [
         "NODE_ENV",
         "DOCKER",
@@ -34,6 +34,9 @@
         },
         "lint": {
             "dependsOn": ["^lint", "^check-types"]
+        },
+        "lint:check": {
+            "dependsOn": ["^lint:check", "^check-types"]
         },
         "check-types": {
             "dependsOn": ["^check-types"]

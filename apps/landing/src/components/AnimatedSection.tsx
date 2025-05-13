@@ -1,8 +1,7 @@
 "use client"
 
-import type React from "react"
-
 import { motion, type Variants } from "motion/react"
+import type React from "react"
 import { useInView } from "react-intersection-observer"
 import { fadeIn } from "@/lib/animation-variants"
 

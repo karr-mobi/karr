@@ -1,13 +1,13 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { motion } from "motion/react"
-import { Menu, X } from "lucide-react"
 import { Button } from "@karr/ui/components/button"
-import { useMobile } from "@/hooks/use-mobile"
+import { Menu, X } from "lucide-react"
+import { motion } from "motion/react"
+import Image from "next/image"
+import Link from "next/link"
+import { useEffect, useState } from "react"
 import logo from "@/assets/logo-tmp.jpg"
+import { useMobile } from "@/hooks/use-mobile"
 
 import { github, header } from "@/lib/content"
 
@@ -27,7 +27,7 @@ export default function Header() {
 
     return (
         <motion.header
-            className={`sticky top-0 z-50 w-full px-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 transition-all duration-200 ${scrolled ? "shadow-sm" : ""}`}
+            className={`sticky top-0 z-50 w-full border-b bg-background/95 px-4 backdrop-blur transition-all duration-200 supports-[backdrop-filter]:bg-background/60 ${scrolled ? "shadow-sm" : ""}`}
             transition={{ type: "spring", stiffness: 100, damping: 20 }}
         >
             <div className="container flex h-16 items-center justify-between">
@@ -43,7 +43,7 @@ export default function Header() {
                             height={32}
                             className="rounded"
                         />
-                        <h3 className="text-lg font-bold">{header.title}</h3>
+                        <h3 className="font-bold text-lg">{header.title}</h3>
                     </motion.div>
                 </Link>
 
@@ -60,7 +60,7 @@ export default function Header() {
                     )}
                 </Button>
                 <motion.nav
-                    className="hidden md:flex items-center gap-6"
+                    className="hidden items-center gap-6 md:flex"
                     transition={{ delay: 0.2, duration: 0.5 }}
                 >
                     <motion.div
@@ -81,7 +81,7 @@ export default function Header() {
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-sm font-medium hover:underline underline-offset-4"
+                            className="font-medium text-sm underline-offset-4 hover:underline"
                         >
                             {link.name}
                         </Link>
@@ -101,7 +101,7 @@ export default function Header() {
 
             {isMobile && isMenuOpen && (
                 <motion.div
-                    className="fixed container pb-4 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 left-0 right-0 px-4"
+                    className="container fixed right-0 left-0 bg-background/95 px-4 pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
@@ -112,7 +112,7 @@ export default function Header() {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+                                className="rounded-md px-3 py-2 font-medium text-sm hover:bg-accent"
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 {link.name}

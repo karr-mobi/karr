@@ -1,6 +1,6 @@
+import { unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { auth } from "~/auth/actions"
-import { unauthorized } from "next/navigation"
 
 import NewTripForm from "./newTripForm"
 
@@ -11,7 +11,7 @@ export default async function New() {
     if (!authState) unauthorized()
 
     return (
-        <article className="mt-6 flex flex-col items-center justify-center gap-4 w-full">
+        <article className="mt-6 flex w-full flex-col items-center justify-center gap-4">
             <h3 className="mb-4">{t("title")}</h3>
 
             <NewTripForm />

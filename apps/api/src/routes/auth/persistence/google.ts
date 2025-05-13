@@ -1,12 +1,12 @@
-import { err, ok } from "neverthrow"
+import type { UserProperties } from "@karr/auth/subjects"
+import logger from "@karr/logger"
 import { and, eq } from "drizzle-orm"
+import { err, ok } from "neverthrow"
 import db from "@/db"
 import { accountsTable } from "@/db/schemas/accounts"
-import { UserProperties } from "@karr/auth/subjects"
-import logger from "@karr/logger"
 import { profileTable } from "@/db/schemas/profile"
-import { initUser } from "./index"
-import { GoogleAuthProfileData } from "../profile-fetchers"
+import type { GoogleAuthProfileData } from "../profile-fetchers"
+import { initUser, isTrustedProvider, type UserInitData } from "./initUser"
 
 export async function findOrCreateUserFromGoogle(data: GoogleAuthProfileData) {
     // Check if user exists
@@ -41,7 +41,11 @@ export async function findOrCreateUserFromGoogle(data: GoogleAuthProfileData) {
                     }),
                 db
                     .update(accountsTable)
-                    .set({ verified: data.emailVerified })
+                    .set({
+                        verified: isTrustedProvider(data.provider)
+                            ? data.emailVerified
+                            : false
+                    })
                     .where(eq(accountsTable.id, user[0].Accounts.id))
             ])
 
@@ -60,11 +64,21 @@ export async function findOrCreateUserFromGoogle(data: GoogleAuthProfileData) {
             nickname: user[0].Profile.nickname,
             avatar: avatar
         } satisfies UserProperties)
-    } else if (user.length === 0) {
+    }
+
+    if (user.length === 0) {
         // the user does not exist
 
         // if user does not exist, create it and return the new user data
-        const newUser = await initUser(data)
+        const newUser = await initUser({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            avatar: data.avatar,
+            email: data.email,
+            verified: data.emailVerified,
+            provider: data.provider,
+            remoteId: data.remoteId
+        } satisfies UserInitData)
 
         if (newUser.isErr()) {
             logger.error("Failed to create user", newUser.error)

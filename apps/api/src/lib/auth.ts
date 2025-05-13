@@ -1,7 +1,7 @@
-import type { Context } from "hono"
-import { getCookie, deleteCookie } from "hono/cookie"
-
 import { subjects } from "@karr/auth/subjects"
+import logger from "@karr/logger"
+import type { Context } from "hono"
+import { deleteCookie, getCookie } from "hono/cookie"
 import { setTokens } from "@/routes/auth/issuer"
 import { client } from "./auth-client"
 
@@ -23,7 +23,7 @@ export async function isAuthenticated(ctx: Context) {
     })
 
     if (verified.err) {
-        console.error("Error verifying token:", verified.err)
+        logger.error("Error verifying token:", verified.err)
         deleteCookie(ctx, "access_token")
         deleteCookie(ctx, "refresh_token")
         return false

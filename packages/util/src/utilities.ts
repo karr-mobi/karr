@@ -1,5 +1,3 @@
-export { toCamelCase } from "@std/text"
-
 /**
  * Utility type that expands complex types (like intersections or mapped types)
  * into a simpler, more readable structure in tooltips and error messages.
@@ -36,8 +34,8 @@ export function toInt(value: number | string): number {
         return Number.isInteger(value) ? value : Math.floor(value)
     }
 
-    const parsed = parseInt(value, 10)
-    if (isNaN(parsed)) {
+    const parsed = Number.parseInt(value, 10)
+    if (Number.isNaN(parsed)) {
         throw new Error(
             `${value} is not a number \n \t\t\tHINT: likely an invalid environment variable`
         )
@@ -148,3 +146,6 @@ export async function tryCatch<T, E = Error>(
         return { success: false, value: null, error: error as E }
     }
 }
+
+//biome-ignore lint/performance/noBarrelFile: this is a utility file
+export { toCamelCase } from "@std/text"

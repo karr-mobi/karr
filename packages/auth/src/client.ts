@@ -1,5 +1,6 @@
-import { createClient } from "@openauthjs/openauth/client"
+import process from "node:process"
 import { logger } from "@karr/logger"
+import { createClient } from "@openauthjs/openauth/client"
 
 /**
  * The path to the OpenAuth issuer's authorization endpoint, where it is mounted in the Hono app

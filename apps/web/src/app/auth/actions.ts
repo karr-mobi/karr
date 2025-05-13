@@ -1,11 +1,10 @@
 "use server"
 
+import { getCallbackUrl, getClient } from "@karr/auth/client"
+import { subjects } from "@karr/auth/subjects"
+import type { Tokens } from "@openauthjs/openauth/client"
 import { cookies } from "next/headers"
 import { getLocale } from "next-intl/server"
-import { Tokens } from "@openauthjs/openauth/client"
-
-import { getClient, getCallbackUrl } from "@karr/auth/client"
-import { subjects } from "@karr/auth/subjects"
 
 import { redirect } from "@/i18n/routing"
 
@@ -32,10 +31,13 @@ export async function auth() {
     return verified.subject.properties
 }
 
-export async function login(returnTo: string | FormData = "/") {
+export async function login(next: string | FormData = "/") {
+    let returnTo: string
     // If returnTo is a FormData object, extract the value from it
-    if (returnTo instanceof FormData) {
-        returnTo = returnTo.get("returnTo") as string
+    if (next instanceof FormData) {
+        returnTo = next.get("returnTo") as string
+    } else {
+        returnTo = next
     }
 
     const locale = await getLocale()

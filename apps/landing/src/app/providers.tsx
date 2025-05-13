@@ -1,11 +1,10 @@
 "use client"
 
+import process from "node:process"
 import { usePathname, useSearchParams } from "next/navigation"
-import { useEffect, Suspense } from "react"
-import { usePostHog } from "posthog-js/react"
-
 import posthog from "posthog-js"
-import { PostHogProvider as PHProvider } from "posthog-js/react"
+import { PostHogProvider as PhProvider, usePostHog } from "posthog-js/react"
+import { Suspense, useEffect } from "react"
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
@@ -19,10 +18,10 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     }, [])
 
     return (
-        <PHProvider client={posthog}>
+        <PhProvider client={posthog}>
             <SuspendedPostHogPageView />
             {children}
-        </PHProvider>
+        </PhProvider>
     )
 }
 
@@ -36,9 +35,10 @@ function PostHogPageView() {
         if (pathname && posthog) {
             let url = window.origin + pathname
             if (searchParams.toString()) {
-                url = url + "?" + searchParams.toString()
+                url += `?${searchParams.toString()}`
             }
 
+            //biome-ignore lint/style/useNamingConvention: this is the naming convention used by Posthog
             posthog.capture("$pageview", { $current_url: url })
         }
     }, [pathname, searchParams, posthog])

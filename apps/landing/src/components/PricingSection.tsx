@@ -1,7 +1,7 @@
 "use client"
 
-import { motion } from "motion/react"
-import { CheckCircle2 } from "lucide-react"
+import { Badge } from "@karr/ui/components/badge"
+import { Button } from "@karr/ui/components/button"
 import {
     Card,
     CardContent,
@@ -10,17 +10,17 @@ import {
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
-import { Badge } from "@karr/ui/components/badge"
-import { Button } from "@karr/ui/components/button"
+import { CheckCircle2 } from "lucide-react"
+import { motion } from "motion/react"
 import AnimatedSection from "@/components/AnimatedSection"
-import { fadeIn, staggerContainer, popIn } from "@/lib/animation-variants"
+import { fadeIn, popIn, staggerContainer } from "@/lib/animation-variants"
 import { plans } from "@/lib/content"
 
 export default function PricingSection() {
     return (
         <AnimatedSection
             id="pricing"
-            className="w-full py-12 md:py-24 lg:py-32 bg-muted"
+            className="w-full bg-muted py-12 md:py-24 lg:py-32"
             variants={fadeIn}
         >
             <div className="container px-4 md:px-6">
@@ -30,7 +30,7 @@ export default function PricingSection() {
                 >
                     <div className="space-y-2">
                         <motion.h2
-                            className="text-3xl font-bold tracking-tighter md:text-4xl/tight"
+                            className="font-bold text-3xl tracking-tighter md:text-4xl/tight"
                             variants={fadeIn}
                         >
                             Simple, Transparent Pricing
@@ -45,15 +45,15 @@ export default function PricingSection() {
                     </div>
                 </motion.div>
                 <motion.div
-                    className="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3 lg:gap-8 pt-8"
+                    className="mx-auto grid max-w-5xl grid-cols-1 gap-6 pt-8 md:grid-cols-3 lg:gap-8"
                     variants={staggerContainer}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.2 }}
                 >
-                    {plans.map((plan, index) => (
+                    {plans.map((plan) => (
                         <motion.div
-                            key={index}
+                            key={plan.name}
                             variants={popIn}
                             whileHover={{
                                 y: -10,
@@ -61,7 +61,7 @@ export default function PricingSection() {
                             }}
                         >
                             <Card
-                                className={`flex flex-col h-full ${plan.popular ? "border-emerald-500 shadow-lg" : ""}`}
+                                className={`flex h-full flex-col ${plan.popular ? "border-emerald-500 shadow-lg" : ""}`}
                             >
                                 <CardHeader>
                                     {plan.popular && (
@@ -81,7 +81,7 @@ export default function PricingSection() {
                                     )}
                                     <CardTitle>{plan.name}</CardTitle>
                                     <div className="flex items-baseline">
-                                        <span className="text-3xl font-bold">
+                                        <span className="font-bold text-3xl">
                                             {plan.price}
                                         </span>
                                         {plan.price !== "Custom" && (
@@ -98,7 +98,7 @@ export default function PricingSection() {
                                     <ul className="space-y-2">
                                         {plan.features.map((feature, i) => (
                                             <motion.li
-                                                key={i}
+                                                key={feature}
                                                 className="flex items-center"
                                                 initial={{ opacity: 0, x: -20 }}
                                                 whileInView={{
