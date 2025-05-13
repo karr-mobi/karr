@@ -1,5 +1,6 @@
 import js from "@eslint/js"
 import tsParser from "@typescript-eslint/parser"
+import biome from "eslint-config-biome"
 import { configs as pnpmConfigs } from "eslint-plugin-pnpm" // Import the predefined configs
 import turboPlugin from "eslint-plugin-turbo"
 import tseslint from "typescript-eslint"
@@ -18,14 +19,7 @@ export const config = [
             parser: tsParser
         },
         rules: {
-            "turbo/no-undeclared-env-vars": "warn",
-            "@typescript-eslint/no-unused-vars": [
-                "warn",
-                {
-                    argsIgnorePattern: "^_", // starts with underscore
-                    varsIgnorePattern: "^_"
-                }
-            ]
+            "turbo/no-undeclared-env-vars": "warn"
         }
     },
     {
@@ -38,5 +32,6 @@ export const config = [
         ignores: ["**/node_modules/**", "**/dist/**", "**/out/**"]
     },
     ...pnpmConfigs.json,
-    ...pnpmConfigs.yaml
+    ...pnpmConfigs.yaml,
+    biome
 ]

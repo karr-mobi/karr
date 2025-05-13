@@ -89,6 +89,9 @@ catalogs:
     eslint:
       specifier: ^9.26.0
       version: 9.26.0
+    eslint-config-biome:
+      specifier: ^1.9.4
+      version: 1.9.4
     eslint-plugin-react:
       specifier: ^7.37.5
       version: 7.37.5
@@ -952,6 +955,9 @@ importers:
       eslint:
         specifier: catalog:lint
         version: 9.26.0(jiti@2.4.2)
+      eslint-config-biome:
+        specifier: catalog:lint
+        version: 1.9.4
       eslint-plugin-pnpm:
         specifier: catalog:devtools
         version: 0.3.1(eslint@9.26.0(jiti@2.4.2))
@@ -3752,6 +3758,9 @@ packages:
     resolution: {integrity: sha512-2NlIDTwUWJN0mRPQOdtQBzbUHvdGY2P1VXSyU83Q3xKxM7WHX2Ql8dKq782Q9TgQUNOLEzEYu9bzLNj1q88I5w==}
     engines: {node: '>=6.0'}
     hasBin: true
+
+  eslint-config-biome@1.9.4:
+    resolution: {integrity: sha512-4HX+rfUk1R2rPwN3hcxPxq5sLDLGb/xtu48AggTtxCVoRoD18kjwOwHA1c7gYsbRrEQso+9mlRSS9+G7OfDqFg==}
 
   eslint-plugin-pnpm@0.3.1:
     resolution: {integrity: sha512-vi5iHoELIAlBbX4AW8ZGzU3tUnfxuXhC/NKo3qRcI5o9igbz6zJUqSlQ03bPeMqWIGTPatZnbWsNR1RnlNERNQ==}
@@ -8790,6 +8799,8 @@ snapshots:
       esutils: 2.0.3
     optionalDependencies:
       source-map: 0.6.1
+
+  eslint-config-biome@1.9.4: {}
 
   eslint-plugin-pnpm@0.3.1(eslint@9.26.0(jiti@2.4.2)):
     dependencies:

@@ -15,6 +15,7 @@
         "@typescript-eslint/eslint-plugin": "catalog:lint",
         "@typescript-eslint/parser": "catalog:lint",
         "eslint": "catalog:lint",
+        "eslint-config-biome": "catalog:lint",
         "eslint-plugin-pnpm": "catalog:devtools",
         "eslint-plugin-react": "catalog:lint",
         "eslint-plugin-react-hooks": "catalog:lint",
