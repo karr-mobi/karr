@@ -1,8 +1,13 @@
-name: Deploy
+name: Deploy docs to Deno Deploy
+
 on:
     push:
         branches:
             - main
+        paths:
+            - 'apps/landing/**'
+            - 'packages/ui/**'
+            - '.github/workflows/release-landing.yml'
 
 jobs:
     deploy:

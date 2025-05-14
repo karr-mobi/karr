@@ -1,11 +1,10 @@
 // @ts-check
-import { defineConfig } from "astro/config"
+
 import starlight from "@astrojs/starlight"
-import config from "./values"
-
 import deno from "@deno/astro-adapter"
-
 import tailwindcss from "@tailwindcss/vite"
+import { defineConfig } from "astro/config"
+import config from "./values"
 
 // https://astro.build/config
 export default defineConfig({
