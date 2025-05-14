@@ -1,0 +1,10 @@
+{
+    "$schema": "https://turborepo.com/schema.json",
+    "extends": ["//"],
+    "tasks": {
+        "dev": {
+            "dependsOn": ["@karr/api#extract-routes"],
+            "persistent": true
+        }
+    }
+}

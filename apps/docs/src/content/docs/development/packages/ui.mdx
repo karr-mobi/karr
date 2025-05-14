@@ -1,0 +1,170 @@
+---
+title: "@karr/ui"
+description: The ui package
+---
+
+import { FileTree, LinkCard, Steps } from '@astrojs/starlight/components';
+
+This package contains all reusable UI components and global style definition.
+
+Most components are from [shadcn/ui](https://ui.shadcn.com/).
+Please [read below](#adding-shadcnui-components).
+
+<FileTree>
+    - src/
+        - components/ Reusable UI components
+            - button.tsx
+            - card.tsx
+            - input.tsx
+            - ...
+        - lib/
+            - utils.ts clsx + tailwind merge utils
+        - styles/ All global css files
+            - base.css
+            - globals.css
+            - reset.css
+            - ...
+        - components.json
+    - package.json
+    - ...
+</FileTree>
+
+## Adding shadcn/ui components
+
+**Do not use the CLI**.
+The [shadcn/ui](https://ui.shadcn.com/) CLI is not made for a monorepo structure, *at least [not yet](https://ui.shadcn.com/docs/monorepo)*.
+Instead, follow the manual instructions.
+
+<Steps>
+
+1.  **On the page of the component you want to add, go to the Manual tab of the Installation section.**
+    ![pnpm run dev](../../../../assets/shadcnui_manual_installation.jpg)
+
+2.  **Copy the code of the component into a new file of the name of the component into `src/components`.**
+
+    For example, a Button component would copied into `packages/ui/src/components/button.tsx`.
+
+3.  **Update the import path for the `cn` utility.**
+
+    By default, it's imported from `"@/lib/utils"`. We want to import it like this instead:
+
+    ```ts
+    import { cn } from "@karr/ui/lib/utils"
+    ```
+
+    This way the import works both from outside the package because of the `@karr/ui` package specifier,
+    and inside the package thanks to the tsconfig path.
+
+4.  If there are any, **install the dependencies into `@karr/ui` directly**, not in `apps/web`.
+
+</Steps>
+
+
+## Styling
+
+A CSS reset and some base utilities are defined in `styles/`
+
+This CSS hierarchy follows the specifications of [CUBE CSS](https://cube.fyi/).
+
+This pretty much removes the need for breakpoints on certain parts like font sizes.
+That is a great thing because there are so many screen sizes nowadays, we can't build specifically for each one.
+So building a style system that lets the browser decide, adapts and looks good for all sizes is golden.
+
+<LinkCard
+  title="Andy Bell on fluid CSS"
+  href="https://www.youtube.com/watch?v=5uhIiI9Ld5M"
+  target="_blank"
+  rel="noopener noreferer"
+  description="Be the browser's mentor, not its micro-manager"
+/>
+
+##### `globals.css`
+
+Sort of a barrel file to import and place other files in layers.
+
+Also contains the tailwind & shadcn/ui theme configuration.
+
+The layers are `block, utilities, base, theme`, from strongest to lowest precedence.
+
+
+##### `reset.css`
+
+**Layer**: `base`
+
+Does a few modern CSS resets for more convenience when writing styles.
+
+
+##### `base.css`
+
+**Layer**: `base`
+
+Defines body styling and basic CSS variables.
+
+
+##### `utilities.css`
+
+**Layer**: `utilities`
+
+Defines more CSS variables for fluid typing and spacing.
+
+This overrides Tailwindcss' `text-*` classes with fluid sizing.
+No need for `text-base md:text-lg lg:text-xl`, the font size adjusts automatically to the screen size!
+
+
+##### `block.css`
+
+**Layer**: `block`
+
+Defines block-scope properties.
+
+For example, all headings get a base style, e.g. for `h1`:
+```css
+h1 {
+    line-height: 1;
+    letter-spacing: var(--tracking-s);
+    font-weight: bold;
+    font-family: var(--font-serif);
+    font-size: var(--size-step-5);
+    max-width: 20ch;
+}
+```
+
+These can easily be overridden by specifying a Tailwind class.
+
+
+## Exports
+
+The UI package has a few exports
+
+##### `@karr/ui/globals.css`
+
+Exports the [`globals.css`](#globalscss) file.
+
+```css
+@import "@karr/ui/globals.css";
+```
+
+##### `@karr/ui/postcss-config`
+
+Exports the `postcss-config.mjs` file.
+
+##### `@karr/ui/lib/*`
+
+Exports any file in the `lib` directory.
+
+```ts
+import { cn } from "@karr/ui/lib/utils"
+````
+
+##### `@karr/ui/components/*`
+
+Exports any file in the `components` directory.
+
+```ts
+import { Button } from "@karr/ui/components/button"
+import { Separator } from "@karr/ui/components/separator"
+````
+
+##### `@karr/ui/hooks/*`
+
+There are none for the moment, might come in later.

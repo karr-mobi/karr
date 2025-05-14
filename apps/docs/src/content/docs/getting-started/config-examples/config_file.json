@@ -1,0 +1,35 @@
+{
+    "$schema": "https://karr.mobi/config.schema.json",
+    "APPLICATION_NAME": "My Karr Instance",
+    "APP_URL": "https://karr.example.com/",
+    "API_PORT": 3000,
+    "API_BASE": "/api",
+    "LOG_LEVEL": "info",
+    "LOG_TIMESTAMP": true,
+    "ADMIN_EMAIL": "admin@example.com",
+    "AUTH_PROVIDERS": [
+        {
+            "name": "password",
+            "trusted": false
+        },
+        {
+            "name": "google",
+            "clientID": "your-google-client-id",
+            "trusted": true
+        }
+    ],
+    "FEDERATION_TARGETS": [
+        {
+            "name": "Partner Instance",
+            "url": "https://karr.partner-example.com"
+        }
+    ],
+    "DB_CONFIG": {
+        "host": "db",
+        "port": 5432,
+        "user": "karr_user",
+        "password_file": "/run/secrets/db-password",
+        "db_name": "karr_db",
+        "ssl": true
+    }
+}

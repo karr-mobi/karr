@@ -6,8 +6,9 @@
     "scripts": {
         "build": "turbo build",
         "start": "turbo start",
-        "dev": "turbo dev --filter='!@karr/landing'",
+        "dev": "turbo dev --filter='!@karr/landing' --filter='!@karr/docs'",
         "dev:landing": "turbo dev --filter=@karr/landing",
+        "dev:docs": "turbo dev --filter=@karr/docs",
 
         "lint:biome": "biome check --write --error-on-warnings",
         "lint:check": "biome ci --error-on-warnings && turbo lint:check",

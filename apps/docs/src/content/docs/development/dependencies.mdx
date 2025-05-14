@@ -1,0 +1,55 @@
+---
+title: Dependency management
+description: How dependencies are managed within Karr.
+prev: false
+---
+
+import { Card, CardGrid, Code, LinkButton, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Karr is built on Node with pnpm.
+Pnpm offers a feature called [catalogs](https://pnpm.io/catalogs).
+This feature enables dependency consistency within the monorepo,
+and lets us [categorise our dependencies](https://antfu.me/posts/categorize-deps).
+
+## Catalogs
+
+At the root of the monorepo, there is a `pnpm-workspace.yaml` file.
+Among other things, this file contains all catalogs.
+
+The current list of catalogs is made to sort the dependencies neatly by use.
+
+## Tooling
+
+Since the catalogs feature in pnpm is still relatively recent, tooling support isn't great _yet_,
+even inside pnpm itself.
+To bridge that gap, there are a couple of neat little tools to make life easier.
+
+### `nip`
+
+[Nip](https://github.com/antfu/nip) enables us to install dependencies directly inside a catalog.
+
+Instead of finding a dependency version and adding it ourslves in the appropriate catalog,
+or installing it directly inside a package then moving it manually to a catalog,
+we can simply pass it to `nip` and it will do the work for us.
+
+#### Usage
+
+Instead of running `pnpm install package-name`, run:
+
+```bash
+pnpm nip package-name
+```
+
+Follow the promps to choose the appropriate catalog, and your dependency will be added neatly!
+
+### `taze`
+
+**You probably won't need to use this one yourself.**
+
+Taze is a tool that makes updating all dependencies in a workspace much easier.
+
+This is run periodically via Github Actions to automate the upgrade process.
+
+#### Usage
+
+Simply run `pnpm taze` to update everything inside `pnpm-workspace.yaml`.

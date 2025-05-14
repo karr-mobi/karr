@@ -1,0 +1,44 @@
+name: Deploy
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    deploy:
+        name: Deploy
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write # Needed for auth with Deno Deploy
+            contents: read # Needed to clone the repository
+
+        steps:
+            - uses: actions/checkout@v3
+              name: Checkout repository
+
+            - uses: pnpm/action-setup@v4
+              name: Install pnpm
+              with:
+                  run_install: false
+
+            - uses: actions/setup-node@v3
+              name: Setup Node.js
+              with:
+                  node-version: 22
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm i
+
+            - name: Extract routes from API
+              run: pnpm run --filter "@karr/api" extract-routes
+
+            - name: Build Astro
+              run: pnpm run --filter "@karr/docs" build
+
+            - name: Upload to Deno Deploy
+              uses: denoland/deployctl@v1
+              with:
+                  project: karr-docs
+                  entrypoint: server/entry.mjs
+                  root: apps/docs/dist

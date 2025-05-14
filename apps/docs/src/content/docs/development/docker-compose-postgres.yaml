@@ -1,0 +1,11 @@
+services:
+    postgresql:
+        image: "postgres:17"
+        volumes:
+            - "./data:/bitnami/postgresql"
+        ports:
+            - "5432:5432"
+        environment:
+            - POSTGRES_PASSWORD=karr
+            - POSTGRES_USER=karr
+            - POSTGRES_DB=karr

@@ -3,7 +3,7 @@
     "type": "module",
     "private": true,
     "exports": {
-        "./globals.css": "./src/styles/globals.css",
+        "./*.css": "./src/styles/*.css",
         "./postcss-config": "./postcss-config.mjs",
         "./lib/*": "./src/lib/*.ts",
         "./components/*": "./src/components/*.tsx",

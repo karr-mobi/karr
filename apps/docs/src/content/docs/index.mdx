@@ -1,0 +1,31 @@
+---
+title: Welcome to Karr Docs
+description: Get started seting up or building Karr.
+template: splash
+hero:
+  tagline: Get started with Karr.
+  image:
+    file: ../../assets/logo_tmp.jpg
+  actions:
+    - text: Setup guide
+      link: /getting-started/setup
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/finxol/karr
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Before you start
+
+<CardGrid stagger>
+	<Card title="Live demo" icon="rocket">
+	   For demonstration purposes, we publish a live demo site.
+	   <a href="https://karr.finxol.io" target="_blank" rel="noopener noreferrer">Visit the demo</a>
+	</Card>
+	<Card title="Are you a developer?" icon="add-document">
+		Check out the [developper docs](/development/getting-started) to learn how to build with Karr.
+	</Card>
+</CardGrid>

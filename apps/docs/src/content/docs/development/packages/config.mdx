@@ -1,0 +1,88 @@
+---
+title: "@karr/config"
+description: The config package
+---
+
+import { Code, FileTree } from "@astrojs/starlight/components";
+
+This package handles all the config imports.
+
+Please refer to the [Configuration Reference](/getting-started/configuration-reference) for a complete overview.
+
+
+With this configuration file, the directory structure would look like this:
+
+<FileTree>
+    - apps
+        - api/
+        - web/
+    - config
+        - karr.config.yaml
+    - packages
+        - config/
+        - util/
+        - ...
+    - ...
+</FileTree>
+
+## Exports
+
+The config package has a general export for all config values.
+The DB config isn't exported here to avoid leaking credentials.
+
+```ts
+import {
+    APP_URL,
+    API_PORT,
+    API_BASE,
+    LOG_TIMESTAMP,
+    LOG_LEVEL,
+    ADMIN_EMAIL,
+    AUTH_PROVIDERS,
+    FEDERATION,
+    FEDERATION_TARGETS,
+    APPLICATION_NAME,
+    PRODUCTION
+} from "@karr/config"; // these are all the config values
+
+console.log(API_PORT);
+```
+
+It also has a static export to explicitly import only the hard-coded config values.
+These values are defined in `src/static.ts`.
+
+```ts ins="/static"
+import { APPLICATION_NAME, API_VERSION } from "@karr/config/static";
+
+console.log(APPLICATION_NAME, API_VERSION);
+```
+
+## Files
+
+### `schema.ts`
+
+Defines the entire config schema.
+
+Config file and Full config are separated because some fields are different,
+and all fields that are optional in the config file are required in the full exported config.
+
+### `loader.ts`
+
+Handles finding and loading the config from the file or environment.
+
+Pretty-prints the errors encountered in parsing the config (file or env).
+
+### `config.ts`
+
+Exports the config fields to be used throughout.
+
+
+### `export-schema.ts`
+
+Creates the JSON schema for the config file.
+
+Used with `pnpm run --filter "@karr/config" schema:write`.
+
+### `static.ts`
+
+Contains the static, non-configurable config like `API_VERSION`.

@@ -1,0 +1,136 @@
+---
+title: "@karr/util"
+description: The util package
+---
+
+This package contains all reusable utilities.
+
+## Exports
+
+This package has 2 exports.
+
+`version` is exported separately because it needs to be run on server.
+This avoids problems when importing other utilities on web frontend.
+
+### `@karr/util`
+
+Contains most utilities.
+
+#### `Prettify<T>`
+
+```ts
+import type { Prettify } from "@karr/util"
+```
+
+Utility type that expands complex types (like intersections or mapped types)
+into a simpler, more readable structure in tooltips and error messages.
+
+It helps improve developer experience by showing the final computed shape
+of a type, making it easier to understand and debug. It doesn't change
+the actual structure of the type, only how TypeScript displays it.
+
+```ts
+type A = { a: string };
+type B = { b: number };
+type C = A & B;
+
+declare const myVar: C;
+//            ^? const myVar: C
+
+declare const myPrettyVar: Prettify<C>;
+//            ^? const myPrettyVar: { a: string; b: number; }
+```
+
+#### `toInt(number | string): number`
+
+```ts
+import { toInt } from "@karr/util"
+```
+
+Converts a string or number to an integer
+
+Throws if `parseInt(value, 10)` returns NaN.
+
+#### `lazy(() => T): { value: T }`
+
+```ts
+import { lazy } from "@karr/util"
+```
+
+Creates a lazy-initialized and memoized value.
+
+This function takes a `getter` function which is responsible for producing the value.
+It returns an object with a `value` property. The `getter` function is only
+executed the *first time* the `value` property is accessed. Subsequent accesses
+will return the cached result without re-executing the `getter`.
+
+This is useful for delaying expensive computations or initializations until
+they are actually needed, or for perfoming an expensive computation only once.
+
+```ts
+let computationCount = 0;
+const expensiveValue = lazy(() => {
+  console.log("Performing expensive computation...");
+  computationCount++;
+  return { data: "some complex data" };
+});
+
+console.log("Accessing value first time:");
+const val1 = expensiveValue.value; // Logs "Performing expensive computation..."
+console.log(val1);                 // Logs { data: "some complex data" }
+console.log("Computation count:", computationCount); // Logs 1
+
+console.log("Accessing value second time:");
+const val2 = expensiveValue.value; // Does *not* log anything
+console.log(val2);                 // Logs { data: "some complex data" }
+console.log("Computation count:", computationCount); // Still logs 1
+```
+
+#### `tryCatch(Promise<T>): Promise<...>`
+
+```ts
+import { tryCatch } from "@karr/util"
+```
+
+Wraps a promise in a try/catch block and returns a Result object representing
+either a successful value or an error.
+
+This utility function provides a more structured way to handle asynchronous operations
+without using try/catch blocks throughout your codebase. It follows a pattern similar
+to Rust's Result type, allowing for more predictable error handling.
+
+```ts
+// Success case
+const successResult = await tryCatch(Promise.resolve('data'));
+if (successResult.success) {
+  console.log(successResult.value); // 'data'
+}
+
+// Error case
+const errorResult = await tryCatch(Promise.reject(new Error('Failed')));
+if (!errorResult.success) {
+  console.error(errorResult.error.message); // 'Failed'
+}
+
+// Using with custom error type
+interface ApiError { code: number; message: string }
+const apiCall = tryCatch<UserData, ApiError>(fetchUserData());
+```
+
+#### `toCamelCase(string): string`
+
+```ts
+import { toCamelCase } from "@karr/util"
+```
+
+Converts a string to camelCase.
+
+For more info, please refer to [`@std/text` docs](https://jsr.io/@std/text)
+
+### `@karr/util/version`
+
+```ts
+import { APP_VERSION } from "@karr/util/verion"
+```
+
+This only exports the version from the root `package.json`.

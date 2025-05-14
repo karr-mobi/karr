@@ -1,0 +1,151 @@
+---
+title: Configuration Reference
+description: A comprehensive guide to configuring your Karr instance.
+next: false
+---
+
+import yamlConfig from "./config-examples/config_file.yaml?raw";
+import jsonConfig from "./config-examples/config_file.json?raw";
+import json5Config from "./config-examples/config_file.json5?raw";
+import { Aside, Code } from "@astrojs/starlight/components";
+
+At minimum, you must set the `APP_URL` for your instance to function properly.
+This guide provides a complete reference for all configuration options available in Karr.
+
+## Configuration Methods
+
+Karr can be configured through a configuration file or environment variables.
+
+### Environment variables
+
+Any field from the config file can be set with an envvar.
+
+They follow the same naming as their config file counterpart.
+The only exception is the db config, which is prefixed by `DB_`,
+e.g. `DB_NAME`, `DB_PASSWORD`, `DB_PASSWORD_FILE`...
+
+### Config file
+
+By default, the config file should be located in a `config/` directory at the root of the project and named `karr.config.*`.
+These can be overridden by the `CONFIG_DIR` and `CONFIG_FILENAME` environment variables respectively.
+
+The config file can be in YAML, [JSON5](https://json5.org/), or JSON format.
+
+The configuration schema is available at [https://karr.mobi/config.schema.json](https://karr.mobi/config.schema.json).
+
+## Required Fields
+
+| Option    | Type | Description                                                                                              |
+| --------- | ---- | -------------------------------------------------------------------------------------------------------- |
+| `APP_URL` | URL  | The base URL where your Karr instance can be accessed, without any path components. Must end with a `/`. |
+
+## General Configuration
+
+| Option             | Type    | Default  | Description                                                                                   |
+| ------------------ | ------- | -------- | --------------------------------------------------------------------------------------------- |
+| `APPLICATION_NAME` | String  | `"Karr"` | The name of your application instance.                                                        |
+| `API_PORT`         | Number  | `1993`   | The port on which the API server will listen.                                                 |
+| `API_BASE`         | String  | `"/api"` | The base path for API endpoints. Must start with a `/` and have no trailing slash.            |
+| `LOG_TIMESTAMP`    | Boolean | `true`   | Whether to include timestamps in logs.                                                        |
+| `LOG_LEVEL`        | String  | `"info"` | The log level to use. Available options: `"trace"`, `"debug"`, `"info"`, `"warn"`, `"error"`. |
+| `ADMIN_EMAIL`      | Email   |          | The email address of the admin user.                                                          |
+
+## Authentication
+
+Karr supports multiple authentication providers through the `AUTH_PROVIDERS` configuration option.
+
+### Supported Providers
+
+#### Local Authentication
+
+- [Password](#local-providers): Email/password authentication
+- [Code](#local-providers): One-time code authentication via email
+
+#### OAuth/OIDC Providers
+
+- [GitHub](#github): GitHub OAuth authentication.
+  Follow [the official docs](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) to get a client ID and secret.
+- [Google](#google): Google OIDC authentication.
+  Follow [the official docs](https://developers.google.com/identity/openid-connect/openid-connect) to get a client ID.
+  (Sorry the docs are quite messy)
+
+<Aside>
+    To use OAuth/OIDC providers, you'll need to register your application with
+    the respective service and obtain client credentials.
+</Aside>
+
+### Options
+
+#### Local Providers
+
+| Option    | Required | Type    | Description                                                                                              |
+| --------- | -------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| `name`    | ✔       | String  | The name of the provider (`password` or `code`)                                                          |
+| `trusted` |          | Boolean | When set to `true`, users authenticated through this provider are considered verified. Default: `false`. |
+
+#### Github
+
+| Option         | Required | Type    | Description                                                                                       |
+| -------------- | -------- | ------- | ------------------------------------------------------------------------------------------------- |
+| `name`         | ✔       | String  | The name of the provider (`github`)                                                               |
+| `clientID`     | ✔       | String  | The Client ID from the Auth provider                                                              |
+| `clientSecret` | ✔       | String  | The Client Secret from the Auth provider                                                          |
+| `pkce`         |          | Boolean | Additional query parameters to include in authorization requests.                                 |
+| `query`        |          | Object  | Additional query parameters to include in authorization requests.                                 |
+| `trusted`      |          | Boolean | When set to `true`, users authenticated through Github are considered verified. Default: `false`. |
+
+#### Google
+
+| Option     | Required | Type    | Description                                                                                       |
+| ---------- | -------- | ------- | ------------------------------------------------------------------------------------------------- |
+| `name`     | ✔       | String  | The name of the provider (`google`)                                                               |
+| `clientID` | ✔       | String  | The Client ID from the Auth provider                                                              |
+| `query`    |          | Object  | Additional query parameters to include in authorization requests.                                 |
+| `trusted`  |          | Boolean | When set to `true`, users authenticated through Google are considered verified. Default: `false`. |
+
+## Federation
+
+🚀 **Coming soon! This is not yet implemented, it will come in the near future.**
+
+You can directly specify target instances to federate with.
+
+## Database
+
+Database connection details can be configured through the `DB_CONFIG` option:
+
+| Option          | Type    | Default       | Description                                                                                      |
+| --------------- | ------- | ------------- | ------------------------------------------------------------------------------------------------ |
+| `host`          | String  | `"localhost"` | Database server hostname.                                                                        |
+| `port`          | Number  | `5432`        | Database server port.                                                                            |
+| `user`          | String  | `"postgres"`  | Database username.                                                                               |
+| `password`      | String  |               | Database password. Not recommended for production use.                                           |
+| `password_file` | String  |               | Path to a file containing the database password. Recommended for production with Docker Secrets. |
+| `db_name`       | String  | `"karr"`      | Database name.                                                                                   |
+| `ssl`           | Boolean | `false`       | Whether to use SSL for database connections.                                                     |
+
+<Aside type="caution">
+    Either `password` or `password_file` must be specified, but not both. For
+    production environments, using `password_file` with Docker Secrets is
+    strongly recommended.
+</Aside>
+
+## Example Configuration
+
+Here's an example of a complete configuration:
+
+### YAML
+
+<Code code={yamlConfig} lang="yaml" title="config/karr.config.yaml" />
+
+### JSON
+
+<Code code={jsonConfig} lang="json" title="config/karr.config.json" />
+
+### JSON5
+
+<Code code={json5Config} lang="json" title="config/karr.config.json5" />
+
+<Aside type="tip">
+    For more information on authentication providers and federation, check out
+    the advanced guides in the documentation.
+</Aside>

@@ -1,0 +1,158 @@
+---
+title: Introduction
+description: Get started with the web application
+tableOfContents:
+    minHeadingLevel: 2
+    maxHeadingLevel: 4
+---
+
+import { FileTree } from '@astrojs/starlight/components';
+
+This assumes all previous articles are read and understood.
+
+This also assumes you are familiar with [Next.js](https://nextjs.org/) and [Tailwind CSS](https://tailwindcss.com/).
+
+## Federation clarification
+
+Although Karr can be a federated service, the frontend does not handle federation.
+All federation is done on server side, the client only communicates with its instance's API.
+
+The UI will however show which instance a user/trip comes from.
+
+## Structure
+
+All application code lives in the `src/` directory.
+
+<FileTree>
+    - src/
+        - app/
+            - (index)/ Contains the home page files
+                - apage.tsx
+            - search/
+                - _components/ Local use components
+                    - SearchBar.tsx
+                    - SearchResults.tsx
+                - page.tsx
+            - ...
+        - assets/ All static assets to be imported
+        - components/ Global use components
+            - QueryProvider.tsx
+        - util/
+            - apifetch.ts Helper to fetch data from the API
+    - package.json
+    - next.config.js
+    - ...
+</FileTree>
+
+## Conventions/Practices
+
+### Imports
+
+Only imports from the same directory or subdirectories are relative.
+Otherwise, use either:
+
+- `@/*`: This alias' root is at `src/`, so `@/i18n/routing` resolves to `src/i18n/routing`.
+- `~/*`: This alias' root is at `src/app/`, so `~/auth/actions` resolves to `src/app/auth/actions`.
+
+### Components
+
+Components should live as low in the file tree as possible.
+
+- A component that is useful only in one page should live next to that page,
+  or in a `_components` directory next to that page.
+- A component that is used across multiple pages should live in the lowest common ancestor's directory,
+or its `_components` directory.
+
+Highly reusable components such as buttons, tabs, avatar, stats graph, etc. should be defined in the `@karr/ui` package.
+More information on [the package's page](/development/packages/ui).
+
+#### Adding [shadcn/ui](https://ui.shadcn.com/) components
+
+All shadcn/ui components are small and for targeted uses, so they should be added to the `@karr/ui` package.
+Please refer to [this package's documentation](/development/packages/ui).
+
+The only exception is for the pre-build Blocks and Charts *— not the Chart component.*
+These are bigger pieces of UI that are composed of multiple different components,
+so they should be directly put in `apps/web`.
+Refer to the [previous section](#components) for details.
+
+### Images
+
+Always use [`next/image`](https://nextjs.org/docs/pages/api-reference/components/image)'s `<Image>`,
+importing the image directly into the tsx component when possible, along with `placeholder="blur"` for a nice [Blurhash](https://blurha.sh/) while the image loads.
+
+### Fetching
+
+Minimise as much as possible any dependence on external providers (Google Fonts, image cdn, etc.).
+Always load files and content from API or `assets/`.
+
+#### From the API
+
+##### RPC
+
+The API is built with Hono, which offers [RPC](https://hono.dev/docs/guides/rpc) for end-to-end type safety between the API and web front-end.
+
+The RPC client is ready to use from `@/util/apifetch`.
+
+```ts
+import { client } from "@/util/apifetch"
+```
+
+Then use it inside a query.
+This way, the `data` key will be properly typed with the return type from the API route.
+
+For example:
+
+```ts
+const { data, isError, isLoading, error } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+        const res = await client.user.info.$get()
+        if (res.status !== 200) {
+            throw new Error("Failed to fetch user data", {
+                cause: await res.json()
+            })
+        }
+        return res.json()
+    }
+})
+```
+
+This works the same for other request methods.
+The body fields will be properly typed.
+
+For example with post:
+
+```ts
+const res = await tryCatch(
+    client.trips.add.$post({
+        json: {
+            ...data
+        }
+    })
+)
+if (!res.success) {
+    console.error(res.error)
+    toast.error("Something went wrong")
+} else {
+    toast.success(t("added"))
+    router.push("/trips/search")
+}
+```
+
+##### Trips
+
+The trip fetch route gives back an SSE.
+This means trips are progressively returned.
+
+This isn't yet supported by Hono RPC, so use:
+```ts
+import { apiFetch } from "@/util/apifetch"
+```
+
+#### External
+
+You shouldn't need to fetch from external urls, but if you do, use [ofetch](https://github.com/unjs/ofetch).
+```ts
+import { ofetch } from "ofetch"
+```

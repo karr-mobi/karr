@@ -1,0 +1,23 @@
+{
+    "name": "@karr/docs",
+    "version": "0.0.1",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "dev": "astro dev",
+        "start": "astro dev",
+        "build": "astro build",
+        "preview": "deno run --allow-net --allow-read --allow-env ./dist/server/entry.mjs",
+        "astro": "astro"
+    },
+    "dependencies": {
+        "@astrojs/starlight": "catalog:docs",
+        "@astrojs/starlight-tailwind": "catalog:docs",
+        "@deno/astro-adapter": "catalog:docs",
+        "@karr/ui": "workspace:*",
+        "@karr/api": "workspace:*",
+        "@tailwindcss/vite": "catalog:ui",
+        "astro": "catalog:docs",
+        "tailwindcss": "catalog:ui"
+    }
+}

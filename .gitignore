@@ -12,6 +12,7 @@ node_modules
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
 pass.txt
 
 # Vim swap files
@@ -28,6 +29,7 @@ coverage
 
 # Build Outputs
 .next/
+.astro/
 out/
 build
 dist
