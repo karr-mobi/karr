@@ -2,6 +2,7 @@ import process from "node:process"
 import { getDbConfig } from "@karr/config"
 import logger from "@karr/logger"
 import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js"
+import { isCI } from "std-env"
 
 const config = await getDbConfig()
 
@@ -24,10 +25,12 @@ let db: PostgresJsDatabase
 try {
     db = drizzle({ connection })
 
-    // Test the connection
-    await db.execute(
-        "SELECT * FROM information_schema.tables WHERE table_name = 'Users';"
-    )
+    if (!isCI) {
+        // Test the connection
+        await db.execute(
+            "SELECT * FROM information_schema.tables WHERE table_name = 'Users';"
+        )
+    }
 } catch (err) {
     logger.error(err)
     process.exit(1)
