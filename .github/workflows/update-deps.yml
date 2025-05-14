@@ -57,7 +57,7 @@ jobs:
         run: pnpm run check-types
 
       - name: Run Lint Checks
-        run: pnpm run lint
+        run: pnpm run lint:check
 
       - name: Run Tests
         run: pnpm run test
