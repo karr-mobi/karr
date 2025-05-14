@@ -49,6 +49,7 @@ catalogs:
     std-env: ^3.9.0
     tinyrainbow: ^2.0.0
     unplugin: ^2.3.3
+    sharp: ^0.34.1
     zod: next
 
   ui:

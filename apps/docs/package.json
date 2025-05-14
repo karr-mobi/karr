@@ -18,6 +18,7 @@
         "@karr/api": "workspace:*",
         "@tailwindcss/vite": "catalog:ui",
         "astro": "catalog:docs",
-        "tailwindcss": "catalog:ui"
+        "tailwindcss": "catalog:ui",
+        "sharp": "catalog:utils"
     }
 }
