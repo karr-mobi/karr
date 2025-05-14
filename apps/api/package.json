@@ -11,6 +11,10 @@
         "./client": {
             "types": "./dist/client.d.ts",
             "default": "./dist/client.js"
+        },
+        "./routes": {
+            "types": "./dist/routes.json",
+            "default": "./dist/routes.json"
         }
     },
     "scripts": {
@@ -25,7 +29,8 @@
         "start": "node ./out/main.mjs",
         "build:localinit": "esbuild src/db/local_dev_init.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/db/local_dev_init.mjs",
         "localinit": "pnpm run build:localinit && node out/db/local_dev_init.mjs",
-        "db:migrations-generate": "drizzle-kit generate"
+        "db:migrations-generate": "drizzle-kit generate",
+        "extract-routes": "APP_URL=http://build.time/ tsx ./script/utils/extract-routes.ts"
     },
     "dependencies": {
         "@hono/zod-validator": "catalog:api",

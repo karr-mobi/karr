@@ -52,6 +52,9 @@
         "start": {
             "dependsOn": ["^start"],
             "cache": false
+        },
+        "extract-routes": {
+            "cache": true
         }
     }
 }
