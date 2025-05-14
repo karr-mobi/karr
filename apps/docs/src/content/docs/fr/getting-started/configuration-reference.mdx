@@ -1,0 +1,151 @@
+---
+title: Référence de Configuration
+description: Un guide complet pour configurer votre instance Karr.
+next: false
+---
+
+import yamlConfig from "@/assets/config-examples/config_file.yaml?raw";
+import jsonConfig from "@/assets/config-examples/config_file.json?raw";
+import json5Config from "@/assets/config-examples/config_file.json5?raw";
+import { Aside, Code } from "@astrojs/starlight/components";
+
+Au minimum, vous devez définir l'`APP_URL` pour que votre instance fonctionne correctement.
+Ce guide fournit une référence complète de toutes les options de configuration disponibles dans Karr.
+
+## Méthodes de configuration
+
+Karr peut être configuré via un fichier de configuration ou des variables d'environnement.
+
+### Variables d'environnement
+
+Tout champ du fichier de configuration peut être défini avec une variable d'environnement.
+
+Elles suivent la même nomenclature que leur équivalent dans le fichier de configuration.
+La seule exception est la configuration de la base de données, qui est préfixée par `DB_`,
+par exemple `DB_NAME`, `DB_PASSWORD`, `DB_PASSWORD_FILE`...
+
+### Fichier de configuration
+
+Par défaut, le fichier de configuration doit être situé dans un répertoire `config/` à la racine du projet et nommé `karr.config.*`.
+Ces emplacements peuvent être modifiés par les variables d'environnement `CONFIG_DIR` et `CONFIG_FILENAME` respectivement.
+
+Le fichier de configuration peut être au format YAML, [JSON5](https://json5.org/), ou JSON.
+
+Le schéma de configuration est disponible sur [https://karr.mobi/config.schema.json](https://karr.mobi/config.schema.json).
+
+## Champs obligatoires
+
+| Option    | Type | Description                                                                                                 |
+| --------- | ---- | ----------------------------------------------------------------------------------------------------------- |
+| `APP_URL` | URL  | L'URL de base où votre instance Karr peut être accessible, sans aucun chemin supplémentaire. Doit se terminer par un `/`. |
+
+## Configuration générale
+
+| Option             | Type    | Défaut   | Description                                                                                       |
+| ------------------ | ------- | -------- | ------------------------------------------------------------------------------------------------- |
+| `APPLICATION_NAME` | String  | `"Karr"` | Le nom de votre instance d'application.                                                           |
+| `API_PORT`         | Number  | `1993`   | Le port sur lequel le serveur API écoutera.                                                       |
+| `API_BASE`         | String  | `"/api"` | Le chemin de base pour les points de terminaison API. Doit commencer par un `/` sans slash final. |
+| `LOG_TIMESTAMP`    | Boolean | `true`   | Indique si les horodatages doivent être inclus dans les journaux.                                 |
+| `LOG_LEVEL`        | String  | `"info"` | Le niveau de journal à utiliser. Options disponibles : `"trace"`, `"debug"`, `"info"`, `"warn"`, `"error"`. |
+| `ADMIN_EMAIL`      | Email   |          | L'adresse e-mail de l'utilisateur administrateur.                                                 |
+
+## Authentification
+
+Karr prend en charge plusieurs fournisseurs d'authentification via l'option de configuration `AUTH_PROVIDERS`.
+
+### Fournisseurs pris en charge
+
+#### Authentification locale
+
+- [Mot de passe](#local-providers) : Authentification par e-mail/mot de passe
+- [Code](#local-providers) : Authentification par code à usage unique via e-mail
+
+#### Fournisseurs OAuth/OIDC
+
+- [GitHub](#github) : Authentification OAuth GitHub.
+  Suivez [la documentation officielle](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/creating-an-oauth-app) pour obtenir un ID client et un secret.
+- [Google](#google) : Authentification OIDC Google.
+  Suivez [la documentation officielle](https://developers.google.com/identity/openid-connect/openid-connect) pour obtenir un ID client.
+  (Désolé, la documentation est assez confuse)
+
+<Aside>
+    Pour utiliser les fournisseurs OAuth/OIDC, vous devrez enregistrer votre application auprès
+    du service respectif et obtenir des identifiants client.
+</Aside>
+
+### Options
+
+#### Fournisseurs locaux
+
+| Option    | Obligatoire | Type    | Description                                                                                                   |
+| --------- | ----------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| `name`    | ✔          | String  | Le nom du fournisseur (`password` ou `code`)                                                                  |
+| `trusted` |             | Boolean | Lorsque défini sur `true`, les utilisateurs authentifiés via ce fournisseur sont considérés vérifiés. Par défaut : `false`. |
+
+#### Github
+
+| Option         | Obligatoire | Type    | Description                                                                                                |
+| -------------- | ----------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| `name`         | ✔          | String  | Le nom du fournisseur (`github`)                                                                           |
+| `clientID`     | ✔          | String  | L'ID client du fournisseur d'authentification                                                              |
+| `clientSecret` | ✔          | String  | Le secret client du fournisseur d'authentification                                                         |
+| `pkce`         |             | Boolean | Paramètres de requête supplémentaires à inclure dans les demandes d'autorisation.                          |
+| `query`        |             | Object  | Paramètres de requête supplémentaires à inclure dans les demandes d'autorisation.                          |
+| `trusted`      |             | Boolean | Lorsque défini sur `true`, les utilisateurs authentifiés via Github sont considérés vérifiés. Par défaut : `false`. |
+
+#### Google
+
+| Option     | Obligatoire | Type    | Description                                                                                                |
+| ---------- | ----------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| `name`     | ✔          | String  | Le nom du fournisseur (`google`)                                                                           |
+| `clientID` | ✔          | String  | L'ID client du fournisseur d'authentification                                                              |
+| `query`    |             | Object  | Paramètres de requête supplémentaires à inclure dans les demandes d'autorisation.                          |
+| `trusted`  |             | Boolean | Lorsque défini sur `true`, les utilisateurs authentifiés via Google sont considérés vérifiés. Par défaut : `false`. |
+
+## Fédération
+
+🚀 **Bientôt disponible ! Ce n'est pas encore implémenté, cela viendra dans un futur proche.**
+
+Vous pouvez spécifier directement les instances cibles avec lesquelles fédérer.
+
+## Base de données
+
+Les détails de connexion à la base de données peuvent être configurés via l'option `DB_CONFIG` :
+
+| Option          | Type    | Défaut        | Description                                                                                                  |
+| --------------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------ |
+| `host`          | String  | `"localhost"` | Nom d'hôte du serveur de base de données.                                                                   |
+| `port`          | Number  | `5432`        | Port du serveur de base de données.                                                                          |
+| `user`          | String  | `"postgres"`  | Nom d'utilisateur de la base de données.                                                                     |
+| `password`      | String  |               | Mot de passe de la base de données. Non recommandé pour une utilisation en production.                       |
+| `password_file` | String  |               | Chemin d'accès à un fichier contenant le mot de passe de la base de données. Recommandé pour la production avec Docker Secrets. |
+| `db_name`       | String  | `"karr"`      | Nom de la base de données.                                                                                   |
+| `ssl`           | Boolean | `false`       | Indique s'il faut utiliser SSL pour les connexions à la base de données.                                     |
+
+<Aside type="caution">
+    Soit `password` soit `password_file` doit être spécifié, mais pas les deux. Pour
+    les environnements de production, l'utilisation de `password_file` avec Docker Secrets est
+    fortement recommandée.
+</Aside>
+
+## Exemple de configuration
+
+Voici un exemple de configuration complète :
+
+### YAML
+
+<Code code={yamlConfig} lang="yaml" title="config/karr.config.yaml" />
+
+### JSON
+
+<Code code={jsonConfig} lang="json" title="config/karr.config.json" />
+
+### JSON5
+
+<Code code={json5Config} lang="json" title="config/karr.config.json5" />
+
+<Aside type="tip">
+    Pour plus d'informations sur les fournisseurs d'authentification et la fédération, consultez
+    les guides avancés dans la documentation.
+</Aside>

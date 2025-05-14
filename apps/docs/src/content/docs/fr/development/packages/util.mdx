@@ -1,0 +1,136 @@
+---
+title: "@karr/util"
+description: Le package d'utilitaires
+---
+
+Ce package contient tous les utilitaires réutilisables.
+
+## Exports
+
+Ce package a 2 exports.
+
+`version` est exporté séparément car il doit être exécuté sur le serveur.
+Cela évite les problèmes lors de l'importation d'autres utilitaires sur le frontend web.
+
+### `@karr/util`
+
+Contient la plupart des utilitaires.
+
+#### `Prettify<T>`
+
+```ts
+import type { Prettify } from "@karr/util"
+```
+
+Type utilitaire qui développe des types complexes (comme les intersections ou les types mappés)
+en une structure plus simple et plus lisible dans les info-bulles et les messages d'erreur.
+
+Il aide à améliorer l'expérience du développeur en montrant la forme calculée finale
+d'un type, facilitant sa compréhension et son débogage. Il ne change pas
+la structure réelle du type, seulement la façon dont TypeScript l'affiche.
+
+```ts
+type A = { a: string };
+type B = { b: number };
+type C = A & B;
+
+declare const myVar: C;
+//            ^? const myVar: C
+
+declare const myPrettyVar: Prettify<C>;
+//            ^? const myPrettyVar: { a: string; b: number; }
+```
+
+#### `toInt(number | string): number`
+
+```ts
+import { toInt } from "@karr/util"
+```
+
+Convertit une chaîne ou un nombre en entier
+
+Lève une exception si `parseInt(value, 10)` renvoie NaN.
+
+#### `lazy(() => T): { value: T }`
+
+```ts
+import { lazy } from "@karr/util"
+```
+
+Crée une valeur initialisée paresseusement et mémorisée.
+
+Cette fonction prend une fonction `getter` qui est responsable de la production de la valeur.
+Elle renvoie un objet avec une propriété `value`. La fonction `getter` est seulement
+exécutée la *première fois* que la propriété `value` est accédée. Les accès suivants
+renverront le résultat mis en cache sans réexécuter le `getter`.
+
+C'est utile pour retarder des calculs coûteux ou des initialisations jusqu'à
+ce qu'ils soient réellement nécessaires, ou pour effectuer un calcul coûteux une seule fois.
+
+```ts
+let computationCount = 0;
+const expensiveValue = lazy(() => {
+  console.log("Exécution d'un calcul coûteux...");
+  computationCount++;
+  return { data: "des données complexes" };
+});
+
+console.log("Accès à la valeur la première fois :");
+const val1 = expensiveValue.value; // Affiche "Exécution d'un calcul coûteux..."
+console.log(val1);                 // Affiche { data: "des données complexes" }
+console.log("Nombre de calculs :", computationCount); // Affiche 1
+
+console.log("Accès à la valeur la deuxième fois :");
+const val2 = expensiveValue.value; // N'affiche *rien*
+console.log(val2);                 // Affiche { data: "des données complexes" }
+console.log("Nombre de calculs :", computationCount); // Affiche toujours 1
+```
+
+#### `tryCatch(Promise<T>): Promise<...>`
+
+```ts
+import { tryCatch } from "@karr/util"
+```
+
+Enveloppe une promesse dans un bloc try/catch et renvoie un objet Result représentant
+soit une valeur réussie, soit une erreur.
+
+Cette fonction utilitaire fournit une façon plus structurée de gérer les opérations asynchrones
+sans utiliser de blocs try/catch dans tout votre code. Elle suit un modèle similaire
+au type Result de Rust, permettant une gestion des erreurs plus prévisible.
+
+```ts
+// Cas de succès
+const successResult = await tryCatch(Promise.resolve('data'));
+if (successResult.success) {
+  console.log(successResult.value); // 'data'
+}
+
+// Cas d'erreur
+const errorResult = await tryCatch(Promise.reject(new Error('Échec')));
+if (!errorResult.success) {
+  console.error(errorResult.error.message); // 'Échec'
+}
+
+// Utilisation avec un type d'erreur personnalisé
+interface ApiError { code: number; message: string }
+const apiCall = tryCatch<UserData, ApiError>(fetchUserData());
+```
+
+#### `toCamelCase(string): string`
+
+```ts
+import { toCamelCase } from "@karr/util"
+```
+
+Convertit une chaîne en camelCase.
+
+Pour plus d'informations, veuillez vous référer à la [documentation `@std/text`](https://jsr.io/@std/text)
+
+### `@karr/util/version`
+
+```ts
+import { APP_VERSION } from "@karr/util/verion"
+```
+
+Cela exporte uniquement la version du `package.json` racine.

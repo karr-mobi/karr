@@ -19,6 +19,7 @@
         "@tailwindcss/vite": "catalog:ui",
         "astro": "catalog:docs",
         "tailwindcss": "catalog:ui",
-        "sharp": "catalog:utils"
+        "sharp": "catalog:utils",
+        "starlight-sidebar-topics": "catalog:docs"
     }
 }

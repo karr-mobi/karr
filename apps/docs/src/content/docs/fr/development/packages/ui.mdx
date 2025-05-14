@@ -1,0 +1,170 @@
+---
+title: "@karr/ui"
+description: Le package UI
+---
+
+import { FileTree, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Ce package contient tous les composants UI réutilisables et la définition de style globale.
+
+La plupart des composants proviennent de [shadcn/ui](https://ui.shadcn.com/).
+Veuillez [lire ci-dessous](#ajouter-des-composants-shadcnui).
+
+<FileTree>
+    - src/
+        - components/ Composants UI réutilisables
+            - button.tsx
+            - card.tsx
+            - input.tsx
+            - ...
+        - lib/
+            - utils.ts utilitaires clsx + tailwind merge
+        - styles/ Tous les fichiers CSS globaux
+            - base.css
+            - globals.css
+            - reset.css
+            - ...
+        - components.json
+    - package.json
+    - ...
+</FileTree>
+
+## Ajouter des composants shadcn/ui
+
+**N'utilisez pas la CLI**.
+La CLI [shadcn/ui](https://ui.shadcn.com/) n'est pas faite pour une structure de monorepo, *du moins [pas encore](https://ui.shadcn.com/docs/monorepo)*.
+À la place, suivez les instructions manuelles.
+
+<Steps>
+
+1.  **Sur la page du composant que vous souhaitez ajouter, allez dans l'onglet Manuel de la section Installation.**
+    ![pnpm run dev](../../../../assets/shadcnui_manual_installation.jpg)
+
+2.  **Copiez le code du composant dans un nouveau fichier du nom du composant dans `src/components`.**
+
+    Par exemple, un composant Button serait copié dans `packages/ui/src/components/button.tsx`.
+
+3.  **Mettez à jour le chemin d'importation pour l'utilitaire `cn`.**
+
+    Par défaut, il est importé depuis `"@/lib/utils"`. Nous voulons l'importer comme ceci à la place :
+
+    ```ts
+    import { cn } from "@karr/ui/lib/utils"
+    ```
+
+    De cette façon, l'importation fonctionne à la fois depuis l'extérieur du package grâce au spécificateur de package `@karr/ui`,
+    et à l'intérieur du package grâce au chemin tsconfig.
+
+4.  S'il y en a, **installez les dépendances directement dans `@karr/ui`**, pas dans `apps/web`.
+
+</Steps>
+
+
+## Style
+
+Une réinitialisation CSS et quelques utilitaires de base sont définis dans `styles/`
+
+Cette hiérarchie CSS suit les spécifications de [CUBE CSS](https://cube.fyi/).
+
+Cela supprime pratiquement le besoin de points d'arrêt sur certaines parties comme les tailles de police.
+C'est une excellente chose car il existe aujourd'hui tant de tailles d'écran, nous ne pouvons pas construire spécifiquement pour chacune d'entre elles.
+Donc, construire un système de style qui laisse le navigateur décider, s'adapte et semble bon pour toutes les tailles est idéal.
+
+<LinkCard
+  title="Andy Bell sur le CSS fluide"
+  href="https://www.youtube.com/watch?v=5uhIiI9Ld5M"
+  target="_blank"
+  rel="noopener noreferer"
+  description="Soyez le mentor du navigateur, pas son micro-manager"
+/>
+
+##### `globals.css`
+
+Sorte de fichier centralisateur pour importer et placer d'autres fichiers en couches.
+
+Contient également la configuration du thème tailwind & shadcn/ui.
+
+Les couches sont `block, utilities, base, theme`, de la priorité la plus forte à la plus faible.
+
+
+##### `reset.css`
+
+**Couche**: `base`
+
+Effectue quelques réinitialisations CSS modernes pour plus de commodité lors de l'écriture de styles.
+
+
+##### `base.css`
+
+**Couche**: `base`
+
+Définit le style du corps et les variables CSS de base.
+
+
+##### `utilities.css`
+
+**Couche**: `utilities`
+
+Définit plus de variables CSS pour la typographie et l'espacement fluides.
+
+Cela remplace les classes `text-*` de Tailwindcss par des tailles fluides.
+Pas besoin de `text-base md:text-lg lg:text-xl`, la taille de la police s'ajuste automatiquement à la taille de l'écran !
+
+
+##### `block.css`
+
+**Couche**: `block`
+
+Définit les propriétés à portée de bloc.
+
+Par exemple, tous les titres obtiennent un style de base, par exemple pour `h1` :
+```css
+h1 {
+    line-height: 1;
+    letter-spacing: var(--tracking-s);
+    font-weight: bold;
+    font-family: var(--font-serif);
+    font-size: var(--size-step-5);
+    max-width: 20ch;
+}
+```
+
+Ces styles peuvent facilement être remplacés en spécifiant une classe Tailwind.
+
+
+## Exports
+
+Le package UI a quelques exports
+
+##### `@karr/ui/globals.css`
+
+Exporte le fichier [`globals.css`](#globalscss).
+
+```css
+@import "@karr/ui/globals.css";
+```
+
+##### `@karr/ui/postcss-config`
+
+Exporte le fichier `postcss-config.mjs`.
+
+##### `@karr/ui/lib/*`
+
+Exporte n'importe quel fichier dans le répertoire `lib`.
+
+```ts
+import { cn } from "@karr/ui/lib/utils"
+````
+
+##### `@karr/ui/components/*`
+
+Exporte n'importe quel fichier dans le répertoire `components`.
+
+```ts
+import { Button } from "@karr/ui/components/button"
+import { Separator } from "@karr/ui/components/separator"
+````
+
+##### `@karr/ui/hooks/*`
+
+Il n'y en a aucun pour le moment, pourrait venir plus tard.

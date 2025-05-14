@@ -1,0 +1,88 @@
+---
+title: "@karr/config"
+description: Le package de configuration
+---
+
+import { Code, FileTree } from "@astrojs/starlight/components";
+
+Ce package gère toutes les importations de configuration.
+
+Veuillez vous référer à la [Référence de Configuration](/fr/getting-started/configuration-reference) pour une vue d'ensemble complète.
+
+
+Avec ce fichier de configuration, la structure du répertoire ressemblerait à ceci :
+
+<FileTree>
+    - apps
+        - api/
+        - web/
+    - config
+        - karr.config.yaml
+    - packages
+        - config/
+        - util/
+        - ...
+    - ...
+</FileTree>
+
+## Exports
+
+Le package de configuration possède un export général pour toutes les valeurs de configuration.
+La configuration de la base de données n'est pas exportée ici pour éviter la fuite d'identifiants.
+
+```ts
+import {
+    APP_URL,
+    API_PORT,
+    API_BASE,
+    LOG_TIMESTAMP,
+    LOG_LEVEL,
+    ADMIN_EMAIL,
+    AUTH_PROVIDERS,
+    FEDERATION,
+    FEDERATION_TARGETS,
+    APPLICATION_NAME,
+    PRODUCTION
+} from "@karr/config"; // ce sont toutes les valeurs de configuration
+
+console.log(API_PORT);
+```
+
+Il possède également un export statique pour importer explicitement uniquement les valeurs de configuration codées en dur.
+Ces valeurs sont définies dans `src/static.ts`.
+
+```ts ins="/static"
+import { APPLICATION_NAME, API_VERSION } from "@karr/config/static";
+
+console.log(APPLICATION_NAME, API_VERSION);
+```
+
+## Fichiers
+
+### `schema.ts`
+
+Définit l'ensemble du schéma de configuration.
+
+Le fichier de configuration et la configuration complète sont séparés car certains champs sont différents,
+et tous les champs qui sont optionnels dans le fichier de configuration sont requis dans la configuration exportée complète.
+
+### `loader.ts`
+
+Gère la recherche et le chargement de la configuration à partir du fichier ou de l'environnement.
+
+Affiche de manière formatée les erreurs rencontrées lors de l'analyse de la configuration (fichier ou env).
+
+### `config.ts`
+
+Exporte les champs de configuration à utiliser partout.
+
+
+### `export-schema.ts`
+
+Crée le schéma JSON pour le fichier de configuration.
+
+Utilisé avec `pnpm run --filter "@karr/config" schema:write`.
+
+### `static.ts`
+
+Contient la configuration statique, non configurable comme `API_VERSION`.

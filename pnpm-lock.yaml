@@ -74,6 +74,9 @@ catalogs:
     astro:
       specifier: ^5.7.12
       version: 5.7.13
+    starlight-sidebar-topics:
+      specifier: ^0.6.0
+      version: 0.6.0
   lint:
     '@biomejs/biome':
       specifier: 2.0.0-beta.3
@@ -484,6 +487,9 @@ importers:
       sharp:
         specifier: catalog:utils
         version: 0.34.1
+      starlight-sidebar-topics:
+        specifier: catalog:docs
+        version: 0.6.0(@astrojs/starlight@0.34.3(astro@5.7.13(@types/node@22.15.17)(aws4fetch@1.0.20)(db0@0.3.2(drizzle-orm@0.43.1(gel@2.0.1)(postgres@3.4.5)))(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.38.0)(tsx@4.19.4)(typescript@5.8.3)(yaml@2.7.1)))
       tailwindcss:
         specifier: catalog:ui
         version: 4.1.6
@@ -6482,6 +6488,12 @@ packages:
 
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
+
+  starlight-sidebar-topics@0.6.0:
+    resolution: {integrity: sha512-ysmOR7zaHYKtk18/mpW4MbEMDioR/ZBsisu9bdQrq0v9BlHWpW7gAdWlqFWO9zdv1P7l0Mo1WKd0wJ0UtqOVEQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@astrojs/starlight': '>=0.32.0'
 
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
@@ -13529,6 +13541,11 @@ snapshots:
       cookie-es: 2.0.0
 
   stackback@0.0.2: {}
+
+  starlight-sidebar-topics@0.6.0(@astrojs/starlight@0.34.3(astro@5.7.13(@types/node@22.15.17)(aws4fetch@1.0.20)(db0@0.3.2(drizzle-orm@0.43.1(gel@2.0.1)(postgres@3.4.5)))(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.38.0)(tsx@4.19.4)(typescript@5.8.3)(yaml@2.7.1))):
+    dependencies:
+      '@astrojs/starlight': 0.34.3(astro@5.7.13(@types/node@22.15.17)(aws4fetch@1.0.20)(db0@0.3.2(drizzle-orm@0.43.1(gel@2.0.1)(postgres@3.4.5)))(jiti@2.4.2)(lightningcss@1.29.2)(rollup@4.38.0)(tsx@4.19.4)(typescript@5.8.3)(yaml@2.7.1))
+      picomatch: 4.0.2
 
   statuses@2.0.1: {}
 

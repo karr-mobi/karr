@@ -38,6 +38,7 @@ catalogs:
     "@astrojs/starlight-tailwind": ^4.0.1
     "@deno/astro-adapter": ^0.3.0
     astro: ^5.7.12
+    starlight-sidebar-topics: ^0.6.0
 
   utils:
     "@std/text": "jsr:^1.0.13"

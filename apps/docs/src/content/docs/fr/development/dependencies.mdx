@@ -1,0 +1,55 @@
+---
+title: Gestion des dépendances
+description: Comment les dépendances sont gérées au sein de Karr.
+prev: false
+---
+
+import { Card, CardGrid, Code, LinkButton, LinkCard, Steps } from '@astrojs/starlight/components';
+
+Karr est construit sur Node avec pnpm.
+Pnpm offre une fonctionnalité appelée [catalogs](https://pnpm.io/catalogs).
+Cette fonctionnalité permet la cohérence des dépendances au sein du monorepo,
+et nous permet de [catégoriser nos dépendances](https://antfu.me/posts/categorize-deps).
+
+## Catalogues
+
+À la racine du monorepo, il y a un fichier `pnpm-workspace.yaml`.
+Entre autres choses, ce fichier contient tous les catalogues.
+
+La liste actuelle des catalogues est conçue pour trier les dépendances proprement par usage.
+
+## Outillage
+
+Comme la fonctionnalité des catalogues dans pnpm est encore relativement récente, le support des outils n'est pas excellent _pour l'instant_,
+même au sein de pnpm lui-même.
+Pour combler cette lacune, il existe quelques petits outils pratiques pour faciliter la vie.
+
+### `nip`
+
+[Nip](https://github.com/antfu/nip) nous permet d'installer des dépendances directement dans un catalogue.
+
+Au lieu de chercher une version de dépendance et de l'ajouter nous-mêmes dans le catalogue approprié,
+ou de l'installer directement dans un package puis de la déplacer manuellement vers un catalogue,
+nous pouvons simplement la passer à `nip` et il fera le travail pour nous.
+
+#### Utilisation
+
+Au lieu d'exécuter `pnpm install nom-du-package`, exécutez :
+
+```bash
+pnpm nip nom-du-package
+```
+
+Suivez les instructions pour choisir le catalogue approprié, et votre dépendance sera ajoutée proprement !
+
+### `taze`
+
+**Vous n'aurez probablement pas besoin d'utiliser celui-ci vous-même.**
+
+Taze est un outil qui facilite grandement la mise à jour de toutes les dépendances dans un espace de travail.
+
+Il est exécuté périodiquement via GitHub Actions pour automatiser le processus de mise à jour.
+
+#### Utilisation
+
+Exécutez simplement `pnpm taze` pour mettre à jour tout ce qui se trouve dans `pnpm-workspace.yaml`.

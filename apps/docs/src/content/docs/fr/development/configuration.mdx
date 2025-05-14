@@ -1,0 +1,22 @@
+---
+title: Configuration
+description: Configurez votre environnement local.
+---
+
+## Configuration de Karr
+
+La configuration par défaut de Karr n'est pas nécessairement celle qui fonctionnera pour votre environnement local.
+Vous pouvez facilement modifier la configuration à utiliser via un fichier de configuration ou des variables d'environnement.
+
+Veuillez vous référer à la [Référence de Configuration](/fr/getting-started/configuration-reference) pour une vue d'ensemble complète.
+
+Plus d'informations sur la configuration de Karr dans la [page @karr/config](/fr/development/packages/config/).
+
+### Base de données
+
+Karr a besoin d'accéder à une base de données PostgreSQL.
+
+Le nom de la base de données peut être configuré dans le fichier de configuration, mais elle doit exister avant de s'y connecter.
+L'exécution du conteneur Docker Postgres avec la variable d'environnement `POSTGRES_DB` crée automatiquement la base de données.
+
+Les migrations de la base de données sont appliquées automatiquement au démarrage de l'API.

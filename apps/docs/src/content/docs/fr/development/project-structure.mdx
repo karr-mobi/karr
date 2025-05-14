@@ -1,0 +1,85 @@
+---
+title: Structure du Projet
+description: Comprendre l'architecture de Karr.
+---
+
+import { Icon } from '@astrojs/starlight/components';
+
+Karr est un monorepo, ce qui signifie qu'il contient plusieurs packages.
+
+Pour le rendre plus facile et plus efficace à gérer, nous utilisons
+[Turborepo](https://turbo.build/repo/docs).
+Cela permet des builds parallèles et la mise en cache.
+Turborepo est plutôt discret une fois configuré, vous ne devriez donc pas avoir à faire grand-chose avec.
+
+## Packages existants
+
+Chaque package est défini par son `package.json`.
+
+Le package racine est `karr`.
+Il ne contient pas de logique d'application réelle, il est là uniquement pour échafauder et organiser le projet.
+
+Le répertoire `apps/` contient tous les packages d'application, donc ce qui est destiné à être livré et utilisé par les clients.
+Il contient :
+
+- `api` : L'API Hono
+- `caddy` : Le reverse proxy Caddy pour assembler les éléments.
+- `docs` : Le code de cette documentation. Vous n'aurez probablement pas besoin de toucher à quoi que ce soit ici.
+- `landing` : Le code de la page d'accueil sur [karr.mobi](https://karr.mobi/?utm_source=docs). Vous n'aurez probablement pas besoin de toucher à quoi que ce soit ici.
+- `web` : Le frontend web Nextjs
+
+Le répertoire `packages/` contient tous les packages qui sont plutôt destinés à être importés ailleurs dans le monorepo.
+Ils ne sont pas destinés à être distribués ou accessibles de manière autonome.
+Il contient :
+
+- `auth` : Contient les définitions de client et de sujet [OpenAuth](https://openauth.js.org/).
+- `config` : Importe et gère la configuration d'exécution de Karr.
+- `logger` : Contient un logger personnalisé pour des logs plus élégants.
+- `ui` : Contient tous les composants UI et le CSS pour le frontend web.
+- `util` : Contient des utilitaires tels que `tryCatch`, `toInt`, `toCamelCase` et plus encore.
+
+## Commandes utiles
+
+### Générer un nouveau package
+
+Générateur Turbo qui crée interactivement un nouveau package dans `packages/`.
+Si vous voulez une `app` à la place (ce que vous ne devriez probablement pas faire), déplacez simplement le répertoire créé manuellement.
+
+```sh
+pnpm turbo gen package
+```
+
+### La plupart des commandes dans `package.json`
+
+La plupart des commandes dans un `package.json` peuvent être utiles à un moment donné. Certaines autres sont plutôt pour CI ou l'automatisation.
+
+Les plus utiles sont :
+
+```sh
+# Démarrer l'environnement de développement
+# Assurez-vous d'avoir un postgres local en cours d'exécution
+pnpm run dev
+
+# Construire le projet
+pnpm run build
+
+# Linter le projet
+pnpm run lint
+
+# Vérifier les types du projet (Typescript)
+pnpm run check-types
+
+# Exécuter tous les tests du projet
+pnpm run test
+
+# Formater la plupart des fichiers du projet
+pnpm run format
+```
+
+Toutes les commandes qui s'exécutent avec `turbo` (toutes celles ci-dessus sauf `format`) vous donneront une vue d'ensemble en plein écran de la commande en cours d'exécution dans les différents packages.
+
+Cette vue vous montre la sortie console de tous les packages en cours d'exécution. Utilisez les flèches haut et bas pour changer le package dont vous voulez voir la sortie.
+
+Voici le résultat pour `pnpm run dev`, avec le focus sur le package web.
+
+![pnpm run dev](@/assets/pnpm_run_dev.jpg)

@@ -4,6 +4,7 @@ import starlight from "@astrojs/starlight"
 import deno from "@deno/astro-adapter"
 import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "astro/config"
+import starlightSidebarTopics from "starlight-sidebar-topics"
 import config from "./values"
 
 // https://astro.build/config
@@ -19,6 +20,19 @@ export default defineConfig({
     integrations: [
         starlight({
             title: "Karr Docs",
+            lastUpdated: true,
+            // Set French as the default language for this site.
+            defaultLocale: "fr",
+            locales: {
+                // English docs in `src/content/docs/en/`
+                en: {
+                    label: "English"
+                },
+                // French docs in `src/content/docs/fr/`
+                fr: {
+                    label: "Français"
+                }
+            },
             logo: {
                 src: "./src/assets/logo_tmp.jpg"
             },
@@ -26,75 +40,112 @@ export default defineConfig({
                 {
                     icon: "github",
                     label: "GitHub",
-                    href: config.docsGithub
+                    href: config.github
                 }
             ],
             editLink: {
-                baseUrl: `${config.docsGithub}/edit/main/`
+                baseUrl: `${config.github}/edit/main/apps/docs/`
             },
             pagination: false,
-            sidebar: [
-                {
-                    label: "Glossary",
-                    link: "/glossary"
-                },
-                {
-                    label: "Getting Started",
-                    items: [
-                        {
-                            label: "Setup a new instance",
-                            link: "/getting-started/setup"
+            plugins: [
+                starlightSidebarTopics([
+                    {
+                        label: {
+                            en: "Getting Started",
+                            fr: "Prise en main"
                         },
-                        {
-                            label: "Configuration Reference",
-                            link: "/getting-started/configuration-reference"
-                        }
-                    ]
-                },
-                {
-                    label: "Development",
-                    collapsed: true,
-                    items: [
-                        {
-                            label: "Getting Started",
-                            link: "/development/getting-started"
-                        },
-                        {
-                            label: "Project Structure",
-                            link: "/development/project-structure"
-                        },
-                        {
-                            label: "Configuration",
-                            link: "/development/configuration"
-                        },
-                        {
-                            label: "Dependency Management",
-                            link: "/development/dependencies"
-                        },
-                        {
-                            label: "Web",
-                            collapsed: true,
-                            autogenerate: { directory: "development/web" }
-                        },
-                        {
-                            label: "API",
-                            collapsed: true,
-                            autogenerate: { directory: "development/api" }
-                        },
-                        {
-                            label: "Packages",
-                            collapsed: false,
-                            autogenerate: { directory: "development/packages" }
-                        },
-                        {
-                            label: "API reference",
-                            collapsed: true,
-                            autogenerate: {
-                                directory: "development/api-reference"
+                        icon: "rocket",
+                        link: "/getting-started",
+                        items: [
+                            {
+                                label: "Setup a new instance",
+                                link: "/getting-started",
+                                translations: {
+                                    fr: "Guide d'Installation"
+                                }
+                            },
+                            {
+                                label: "Glossary",
+                                link: "/glossary",
+                                translations: {
+                                    fr: "Glossaire"
+                                }
+                            },
+                            {
+                                label: "Configuration Reference",
+                                link: "/getting-started/configuration-reference",
+                                translations: {
+                                    fr: "Référence de configuration"
+                                }
                             }
-                        }
-                    ]
-                }
+                        ]
+                    },
+                    {
+                        label: {
+                            en: "Development",
+                            fr: "Développement"
+                        },
+                        icon: "laptop",
+                        link: "/development",
+                        items: [
+                            {
+                                label: "Getting Started",
+                                link: "/development",
+                                translations: {
+                                    fr: "Mise en route"
+                                }
+                            },
+                            {
+                                label: "Project Structure",
+                                link: "/development/project-structure",
+                                translations: {
+                                    fr: "Structure du projet"
+                                }
+                            },
+                            {
+                                label: "Configuration",
+                                link: "/development/configuration",
+                                translations: {
+                                    fr: "Configuration"
+                                }
+                            },
+                            {
+                                label: "Dependency Management",
+                                link: "/development/dependencies",
+                                translations: {
+                                    fr: "Gestion des dépendances"
+                                }
+                            },
+                            {
+                                label: "Web",
+                                collapsed: true,
+                                autogenerate: { directory: "development/web" }
+                            },
+                            {
+                                label: "API",
+                                collapsed: true,
+                                autogenerate: { directory: "development/api" }
+                            },
+                            {
+                                label: "Packages",
+                                collapsed: false,
+                                autogenerate: {
+                                    directory: "development/packages"
+                                }
+                            },
+                            {
+                                label: "API reference",
+                                translations: {
+                                    fr: "Référence de l'API"
+                                },
+                                collapsed: true,
+                                autogenerate: {
+                                    directory: "development/api-reference"
+                                }
+                            }
+                        ]
+                    }
+                ])
             ],
             customCss: [
                 // Path to your Tailwind base styles:

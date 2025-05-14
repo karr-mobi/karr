@@ -1,0 +1,158 @@
+---
+title: Introduction
+description: Commencez avec l'application web
+tableOfContents:
+    minHeadingLevel: 2
+    maxHeadingLevel: 4
+---
+
+import { FileTree } from '@astrojs/starlight/components';
+
+Cette section suppose que tous les articles précédents ont été lus et compris.
+
+Elle suppose également que vous êtes familier avec [Next.js](https://nextjs.org/) et [Tailwind CSS](https://tailwindcss.com/).
+
+## Clarification sur la fédération
+
+Bien que Karr puisse être un service fédéré, le frontend ne gère pas la fédération.
+Toute la fédération est effectuée côté serveur, le client ne communique qu'avec l'API de son instance.
+
+L'interface utilisateur affichera cependant de quelle instance provient un utilisateur/trajet.
+
+## Structure
+
+Tout le code de l'application se trouve dans le répertoire `src/`.
+
+<FileTree>
+    - src/
+        - app/
+            - (index)/ Contient les fichiers de la page d'accueil
+                - apage.tsx
+            - search/
+                - _components/ Composants à usage local
+                    - SearchBar.tsx
+                    - SearchResults.tsx
+                - page.tsx
+            - ...
+        - assets/ Tous les actifs statiques à importer
+        - components/ Composants à usage global
+            - QueryProvider.tsx
+        - util/
+            - apifetch.ts Aide pour récupérer des données de l'API
+    - package.json
+    - next.config.js
+    - ...
+</FileTree>
+
+## Conventions/Pratiques
+
+### Importations
+
+Seules les importations du même répertoire ou des sous-répertoires sont relatives.
+Sinon, utilisez l'une des options suivantes :
+
+- `@/*`: La racine de cet alias est à `src/`, donc `@/i18n/routing` se résout à `src/i18n/routing`.
+- `~/*`: La racine de cet alias est à `src/app/`, donc `~/auth/actions` se résout à `src/app/auth/actions`.
+
+### Composants
+
+Les composants doivent être placés aussi bas que possible dans l'arborescence.
+
+- Un composant utile uniquement dans une page doit être placé à côté de cette page,
+  ou dans un répertoire `_components` à côté de cette page.
+- Un composant utilisé dans plusieurs pages doit être placé dans le répertoire de l'ancêtre commun le plus bas,
+ou dans son répertoire `_components`.
+
+Les composants hautement réutilisables tels que boutons, onglets, avatar, graphiques de statistiques, etc. doivent être définis dans le package `@karr/ui`.
+Plus d'informations sur [la page du package](/fr/development/packages/ui).
+
+#### Ajout de composants [shadcn/ui](https://ui.shadcn.com/)
+
+Tous les composants shadcn/ui sont petits et pour des usages ciblés, ils doivent donc être ajoutés au package `@karr/ui`.
+Veuillez vous référer à [la documentation de ce package](/fr/development/packages/ui).
+
+La seule exception concerne les Blocks et Charts pré-construits *— pas le composant Chart.*
+Ce sont des éléments d'interface utilisateur plus importants qui sont composés de plusieurs composants différents,
+ils doivent donc être directement placés dans `apps/web`.
+Référez-vous à la [section précédente](#composants) pour plus de détails.
+
+### Images
+
+Utilisez toujours `<Image>` de [`next/image`](https://nextjs.org/docs/pages/api-reference/components/image),
+en important l'image directement dans le composant tsx lorsque c'est possible, avec `placeholder="blur"` pour un joli [Blurhash](https://blurha.sh/) pendant le chargement de l'image.
+
+### Récupération de données
+
+Minimisez autant que possible toute dépendance à des fournisseurs externes (Google Fonts, CDN d'images, etc.).
+Chargez toujours les fichiers et le contenu depuis l'API ou `assets/`.
+
+#### Depuis l'API
+
+##### RPC
+
+L'API est construite avec Hono, qui offre [RPC](https://hono.dev/docs/guides/rpc) pour une sécurité de type de bout en bout entre l'API et le frontend web.
+
+Le client RPC est prêt à être utilisé depuis `@/util/apifetch`.
+
+```ts
+import { client } from "@/util/apifetch"
+```
+
+Utilisez-le ensuite dans une requête.
+De cette façon, la clé `data` sera correctement typée avec le type de retour de la route API.
+
+Par exemple :
+
+```ts
+const { data, isError, isLoading, error } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+        const res = await client.user.info.$get()
+        if (res.status !== 200) {
+            throw new Error("Échec de la récupération des données utilisateur", {
+                cause: await res.json()
+            })
+        }
+        return res.json()
+    }
+})
+```
+
+Cela fonctionne de la même manière pour les autres méthodes de requête.
+Les champs du corps seront correctement typés.
+
+Par exemple avec post :
+
+```ts
+const res = await tryCatch(
+    client.trips.add.$post({
+        json: {
+            ...data
+        }
+    })
+)
+if (!res.success) {
+    console.error(res.error)
+    toast.error("Une erreur s'est produite")
+} else {
+    toast.success(t("ajouté"))
+    router.push("/trips/search")
+}
+```
+
+##### Trajets
+
+La route de récupération des trajets renvoie un SSE.
+Cela signifie que les trajets sont renvoyés progressivement.
+
+Ce n'est pas encore pris en charge par Hono RPC, utilisez donc :
+```ts
+import { apiFetch } from "@/util/apifetch"
+```
+
+#### Externe
+
+Vous ne devriez pas avoir besoin de récupérer des données depuis des URL externes, mais si c'est le cas, utilisez [ofetch](https://github.com/unjs/ofetch).
+```ts
+import { ofetch } from "ofetch"
+```

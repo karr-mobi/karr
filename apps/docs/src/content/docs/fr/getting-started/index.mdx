@@ -1,0 +1,87 @@
+---
+title: Guide d'Installation
+description: Un guide étape par étape pour configurer une nouvelle instance de Karr.
+next: false
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Ce guide vous accompagnera dans la configuration d'une nouvelle instance avec Docker.
+
+## Avant de commencer
+
+Nous aurons besoin de très peu d'outils pour cela :
+
+- **Docker**
+- Une connexion internet
+
+C'est tout.
+
+## Configuration de Docker
+
+Le fichier compose que nous fournissons est destiné à [Docker Stack](https://docs.docker.com/reference/cli/docker/stack/),
+à utiliser lorsque le [mode Swarm](https://docs.docker.com/engine/swarm/) est activé.
+
+Veuillez consulter la documentation Docker pour savoir comment activer le mode swarm.
+
+Si vous ne souhaitez pas ou ne pouvez pas utiliser le mode Swarm, vous devrez adapter le fichier compose en conséquence.
+
+### Définir le mot de passe de la base de données
+
+Tout d'abord, vous devrez stocker le mot de passe de la base de données dans un secret Docker.
+C'est beaucoup plus sécurisé que de l'avoir directement dans le fichier compose ou un autre fichier.
+
+Exécutez simplement cette commande pour générer un mot de passe sécurisé et l'enregistrer dans un secret `db-password`.
+
+```sh
+openssl rand -base64 32 | tr -d '\n' | xargs printf '%s' | docker secret create db-password -
+```
+
+
+<Aside>
+
+En faisant cela, vous ne verrez jamais le mot de passe de la base de données.
+
+Si vous avez besoin de l'avoir pour une raison quelconque, séparez les étapes :
+
+```sh
+openssl rand -base64 32 | tr -d '\n'
+```
+
+Puis transmettez-le à Docker Secret
+
+```sh
+printf "<mot_de_passe>" | docker secret create db-password -
+```
+
+Lorsque vous le transmettez à Docker, assurez-vous de ne pas ajouter de caractère de nouvelle ligne (`\n`) à la fin,
+donc n'utilisez pas `echo` mais plutôt `printf` !
+
+</Aside>
+
+Veuillez noter que les Secrets Docker ne peuvent pas être utilisés avec Docker Compose standard.
+
+### Configurer Karr
+
+Pour que Karr fonctionne correctement, il nécessite un fichier de configuration avec au moins l'`APP_URL` définie (ce peut être localhost).
+
+Consultez la [référence de configuration](/fr/getting-started/configuration-reference) pour plus de détails
+
+## Démarrer l'instance
+
+Téléchargez le fichier compose stack [depuis Github](https://raw.githubusercontent.com/finxol/karr/refs/heads/main/compose-stack.yml).
+Vous pouvez modifier les variables d'environnement selon vos préférences.
+
+Ensuite, lancez le Docker Stack.
+
+```sh
+docker stack deploy -c compose-stack.yml karr
+```
+
+**Votre propre instance Karr est maintenant en cours d'exécution !**
+
+<br/><br/>
+
+<Aside type="tip">
+Si vous rencontrez une erreur, consultez les [Issues Github](https://github.com/finxol/karr/issues?q=sort%3Aupdated-desc+is%3Aissue).
+</Aside>

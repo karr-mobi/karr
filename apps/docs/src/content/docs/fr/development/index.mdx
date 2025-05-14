@@ -1,0 +1,101 @@
+---
+title: Pour Commencer
+description: Commencez à développer Karr.
+prev: false
+---
+
+import { Card, CardGrid, Code, LinkButton, LinkCard, Steps } from '@astrojs/starlight/components';
+import dockerComposePostgres from "./docker-compose-postgres.yaml?raw"
+
+<Card title="Démo en direct" icon="rocket">
+    Avant de commencer à travailler sur Karr, consultez la démo en direct pour voir à quoi ça ressemble et les fonctionnalités implémentées.
+    <LinkButton
+        href="https://karr.mobi"
+        target="_blank"
+        rel="noopener noreferrer"
+        variant="secondary"
+        icon="external"
+        iconPlacement="start"
+    >
+        Visiter la démo
+    </LinkButton>
+</Card>
+
+## Avant de commencer
+
+### Git
+
+Assurez-vous d'avoir été ajouté au dépôt GitHub et d'avoir les permissions de push.
+
+La branche principale devrait être protégée, vous devrez donc travailler sur une autre branche et
+[ouvrir une pull request](https://docs.github.com/fr/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
+lorsque votre travail est prêt.
+
+### Dépendances
+
+Assurez-vous d'avoir toutes les dépendances, en utilisant la bonne version :
+
+- [Node.js](https://nodejs.org/fr/download): actuellement version 22, plus généralement la dernière LTS.
+- [pnpm](https://pnpm.io/fr/installation): actuellement version 10, plus généralement la dernière version stable.
+  Devrait être spécifié dans le `package.json` à la racine.
+- [PostgreSQL](https://www.postgresql.org/): actuellement version 17. Peut fonctionner à partir d'un conteneur Docker.
+
+<details>
+    <summary>Docker compose pour PostgreSQL</summary>
+
+    Exécutez ce fichier compose avec `docker compose up -d` pour avoir une base de données Postgres fonctionnelle.
+
+    <Code code={dockerComposePostgres} lang="yaml" title="docker-compose.yaml" />
+
+</details>
+
+## Obtenir le dépôt
+
+Assurez-vous d'avoir configuré les [clés ssh](https://docs.github.com/fr/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account) avec git.
+Cela rend l'utilisation de git beaucoup plus pratique et [plus sécurisée](https://superuser.com/questions/1526712/why-is-ssh-safer-than-https-on-direct-connections-to-a-git-repository-with-crede).
+
+Vous pouvez également configurer git pour [signer vos commits](https://docs.github.com/fr/authentication/managing-commit-signature-verification/signing-commits),
+bien que ce ne soit pas obligatoire.
+
+
+<Steps>
+1.  Tout d'abord, clonez le dépôt :
+
+    ```sh
+    git clone git@github.com:finxol/karr.git
+    ```
+
+2.  Accédez au répertoire et installez les dépendances.
+
+    ```sh
+    cd karr
+    pnpm install
+    ```
+</Steps>
+
+### Hooks Git
+
+Le dépôt utilise [Husky](https://typicode.github.io/husky/) pour gérer les hooks git.
+
+Si un hook échoue, l'action n'aura pas d'effet, vous laissant la possibilité de le corriger.
+
+Il y a 3 hooks configurés :
+
+- **Pre-commit** : Formate les fichiers en attente
+- **Pre-push** : Exécute tous les tests, vérifie les types, lint et vérifie le formatage. Ces opérations sont plus lentes, donc effectuées uniquement avant le push.
+- **Commit-msg** : Vérifie que le message de commit suit la convention [Conventional Commits](https://www.conventionalcommits.org/fr/v1.0.0/).
+  Ce format de commit est utile pour une génération précise de changelog.
+
+Les scripts de hook sont situés dans `.husky/`.
+
+Vous pouvez toujours désactiver les hooks git si vous ne les aimez vraiment pas, les vérifications seront également exécutées dans Github CI.
+Les hooks sont là pour une boucle de rétroaction plus rapide, et évitent d'attendre plusieurs minutes avant de découvrir qu'une vérification échoue.
+
+{/* <br /><br />
+
+Ensuite :
+<LinkCard
+  title="Structure du Projet"
+  href="/fr/development/project-structure/"
+  description="Familiarisez-vous avec l'architecture de Karr"
+/> */}
