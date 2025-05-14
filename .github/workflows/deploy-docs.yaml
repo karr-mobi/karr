@@ -5,9 +5,9 @@ on:
         branches:
             - main
         paths:
-            - 'apps/landing/**'
-            - 'packages/ui/**'
-            - '.github/workflows/release-landing.yml'
+            - 'apps/docs/**'
+            - 'karr/api/**'
+            - '.github/workflows/deploy-docs.yaml'
 
 jobs:
     deploy:
