@@ -54,6 +54,7 @@
             "cache": false
         },
         "extract-routes": {
+            "dependsOn": ["^build"],
             "cache": true
         }
     }

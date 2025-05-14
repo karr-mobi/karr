@@ -9,6 +9,7 @@
         "dev": "turbo dev --filter='!@karr/landing' --filter='!@karr/docs'",
         "dev:landing": "turbo dev --filter=@karr/landing",
         "dev:docs": "turbo dev --filter=@karr/docs",
+        "extract-routes": "turbo extract-routes",
 
         "lint:biome": "biome check --write --error-on-warnings",
         "lint:check": "biome ci --error-on-warnings && turbo lint:check",
