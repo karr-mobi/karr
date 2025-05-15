@@ -1,6 +1,5 @@
-import process from "node:process"
 import { logger } from "@karr/logger"
-import { createClient } from "@openauthjs/openauth/client"
+import { type Client, createClient } from "@openauthjs/openauth/client"
 
 /**
  * The path to the OpenAuth issuer's authorization endpoint, where it is mounted in the Hono app
@@ -34,22 +33,16 @@ export const authBaseUrl = (apiBase: string, appUrl?: string) => {
  * Constructs the full callback URL based on the runtime issuer URL.
  * @returns The full callback URL
  */
-export async function getCallbackUrl() {
+export async function getCallbackUrl(): Promise<string> {
     const { APP_URL, API_BASE } = await import("@karr/config")
 
     const issuerUrl = authBaseUrl(API_BASE, APP_URL)
 
-    if (!issuerUrl) {
-        logger.error(
-            "Issuer URL must be provided at runtime to getCallbackUrl."
-        )
-        return ""
-    }
     const callbackUrl = `${issuerUrl.replace(/\/$/, "")}${callbackPath}`
 
     if (!callbackUrl) {
         logger.error("Failed to initialize callback URL.")
-        process.exit(1)
+        return ""
     }
 
     return callbackUrl
@@ -59,17 +52,12 @@ export async function getCallbackUrl() {
  * Creates an auth client instance configured with the runtime issuer URL.
  * @returns An initialized OpenAuth client and the callback URL
  */
-export async function getClient() {
+export async function getClient(): Promise<Client> {
     const { APP_URL, API_BASE } = await import("@karr/config")
 
     const issuerUrl = authBaseUrl(API_BASE, APP_URL)
 
-    if (!issuerUrl) {
-        logger.error("Issuer URL must be provided at runtime to getClient.")
-        process.exit(1)
-    }
-
-    const client = createClient({
+    return createClient({
         clientID,
         issuer: issuerUrl,
         fetch: (url, options) => {
@@ -77,11 +65,4 @@ export async function getClient() {
             return fetch(url, options)
         }
     })
-
-    if (!client) {
-        logger.error("Failed to initialize OpenAuth client.")
-        process.exit(1)
-    }
-
-    return client
 }

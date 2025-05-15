@@ -1,7 +1,6 @@
-import process from "node:process"
 import { getDbConfig } from "@karr/config"
 import logger from "@karr/logger"
-import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js"
+import { drizzle } from "drizzle-orm/postgres-js"
 import { isCI } from "std-env"
 
 const config = await getDbConfig()
@@ -21,19 +20,14 @@ const connection = {
     fetch_types: true // Automatically fetches types on connect
 }
 
-let db: PostgresJsDatabase
-try {
-    db = drizzle({ connection })
+const db = drizzle({ connection })
 
-    if (!isCI) {
-        // Test the connection
-        await db.execute(
-            "SELECT * FROM information_schema.tables WHERE table_name = 'Users';"
-        )
-    }
-} catch (err) {
-    logger.error(err)
-    process.exit(1)
+if (!isCI) {
+    // Test the connection
+    const res = await db.execute(
+        "SELECT * FROM information_schema.tables WHERE table_name = 'Users';"
+    )
+    logger.debug("db connection tested", res)
 }
 
 export { db }

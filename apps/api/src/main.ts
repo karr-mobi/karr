@@ -1,8 +1,6 @@
-import process from "node:process"
 import { API_PORT, LOG_LEVEL, logLevels, PRODUCTION } from "@karr/config"
 import logger from "@karr/logger"
 import { serve } from "srvx"
-import { runtime } from "std-env"
 import { drizzleMigrate } from "@/db/migrate"
 import { app } from "@/server"
 
@@ -17,32 +15,19 @@ if (PRODUCTION && logLevels.findIndex((l) => l === LOG_LEVEL) < 2) {
 
 logger.info(`TZ=${Intl.DateTimeFormat().resolvedOptions().timeZone}`)
 
-// Run the server!
-try {
-    // Run database migrations
-    await drizzleMigrate()
+// Run database migrations
+await drizzleMigrate()
 
-    // Start the server
-    const server = serve({
-        fetch: app.fetch,
-        port: API_PORT,
-        hostname: "0.0.0.0",
-        silent: true
-    })
+// Start the server
+const server = serve({
+    fetch: app.fetch,
+    port: API_PORT,
+    hostname: "0.0.0.0",
+    silent: true
+})
 
-    await server.ready()
+await server.ready()
 
-    logger.success(
-        `Server listening on ${server.url} in ${PRODUCTION ? "production" : "dev"} mode`
-    )
-
-    process.on("SIGINT", async () => {
-        logger.info("SIGINT received, closing server...")
-        await server.close(!PRODUCTION)
-        logger.info("Server closed")
-        process.exit(0)
-    })
-} catch (err) {
-    logger.error(`[${runtime}] Error during server initialization:`, err)
-    process.exit(1)
-}
+logger.success(
+    `Server listening on ${server.url} in ${PRODUCTION ? "production" : "dev"} mode`
+)

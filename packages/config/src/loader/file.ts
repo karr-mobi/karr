@@ -1,3 +1,5 @@
+//biome-ignore-all lint/style/useThrowOnlyError: throwing empty string to avoid stack trace, avoid using process.exit
+
 import { existsSync, readFileSync } from "node:fs"
 import { isAbsolute, join } from "node:path"
 import process from "node:process"
@@ -123,7 +125,7 @@ export function readConfigFromFile(): ConfigFile {
 
     if (!parsed.success) {
         handleConfigError(parsed.error)
-        process.exit(1)
+        throw ""
     }
 
     return parsed.data
