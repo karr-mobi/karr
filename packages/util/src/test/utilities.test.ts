@@ -1,6 +1,12 @@
 import { describe, expect, it, test, vi } from "vitest"
 
-import { lazy, type Prettify, toCamelCase, toInt } from "@/utilities.js"
+import {
+    lazy,
+    type Prettify,
+    toBoolean,
+    toCamelCase,
+    toInt
+} from "@/utilities.js"
 
 describe("toCamelCase", () => {
     it("should return a given string in camel case", () => {
@@ -239,5 +245,53 @@ describe("Prettify type", () => {
 
         expect(withOptional.optional).toBeUndefined()
         expect(withBoth.optional).toBe(42)
+    })
+})
+
+describe("toBoolean", () => {
+    it("should properly convert to true", () => {
+        expect(toBoolean("true")).toBe(true)
+        expect(toBoolean("1")).toBe(true)
+        expect(toBoolean(1)).toBe(true)
+        expect(toBoolean(true)).toBe(true)
+        expect(toBoolean("anything")).toBe(true)
+        expect(toBoolean([])).toBe(true)
+        expect(toBoolean("yes")).toBe(true)
+        expect(toBoolean("on")).toBe(true)
+    })
+
+    it("should properly convert to false", () => {
+        expect(toBoolean(-1)).toBe(false)
+        expect(toBoolean(undefined)).toBe(false)
+        expect(toBoolean(false)).toBe(false)
+        expect(toBoolean("FALSE")).toBe(false)
+        expect(toBoolean("False")).toBe(false)
+        expect(toBoolean("false")).toBe(false)
+        expect(toBoolean(0)).toBe(false)
+        expect(toBoolean("0")).toBe(false)
+        expect(toBoolean("no")).toBe(false)
+        expect(toBoolean("off")).toBe(false)
+    })
+
+    it("should handle objects and arrays correctly", () => {
+        expect(toBoolean({})).toBe(true)
+        expect(toBoolean({ prop: "value" })).toBe(true)
+        expect(toBoolean([1, 2, 3])).toBe(true)
+        expect(toBoolean(new Date())).toBe(true)
+    })
+
+    it("should handle null and non-standard values", () => {
+        expect(toBoolean(null)).toBe(false)
+        expect(toBoolean(Number.NaN)).toBe(false)
+        expect(toBoolean("")).toBe(false)
+        expect(toBoolean(" ")).toBe(true) // Non-empty string
+    })
+
+    it("should handle numeric values consistently", () => {
+        expect(toBoolean(42)).toBe(true)
+        expect(toBoolean(Number.POSITIVE_INFINITY)).toBe(true)
+        expect(toBoolean(0.1)).toBe(true)
+        expect(toBoolean(-0)).toBe(false)
+        expect(toBoolean(Number(0))).toBe(false)
     })
 })

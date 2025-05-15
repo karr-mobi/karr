@@ -1,5 +1,6 @@
-import process from "node:process"
-import { toInt } from "@karr/util"
+//biome-ignore-all lint/style/useThrowOnlyError: throwing empty string to avoid stack trace, avoid using process.exit
+
+import { toBoolean, toInt } from "@karr/util"
 import { env } from "std-env"
 import { type ConfigFile, LogLevelSchema } from "../schema.js"
 import { handleConfigError } from "./index.js"
@@ -25,7 +26,7 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
     }
 
     if (env.LOG_TIMESTAMP) {
-        config.LOG_TIMESTAMP = !(env.LOG_TIMESTAMP === "false")
+        config.LOG_TIMESTAMP = toBoolean(env.LOG_TIMESTAMP)
     }
 
     if (env.LOG_LEVEL) {
@@ -33,7 +34,7 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
 
         if (!parsed.success) {
             handleConfigError(parsed.error)
-            process.exit(1)
+            throw ""
         }
 
         config.LOG_LEVEL = parsed.data
@@ -44,7 +45,7 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
     }
 
     if (env.FEDERATION) {
-        config.FEDERATION = !(env.FEDERATION === "false")
+        config.FEDERATION = toBoolean(env.FEDERATION)
     }
 
     // ====================
@@ -54,7 +55,7 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
         config.AUTH_PROVIDERS ||= []
         config.AUTH_PROVIDERS.push({
             name: "password",
-            trusted: !(env.AUTH_PASSWORD_TRUSTED === "false")
+            trusted: toBoolean(env.AUTH_PASSWORD_TRUSTED)
         })
     }
 
@@ -62,7 +63,7 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
         config.AUTH_PROVIDERS ||= []
         config.AUTH_PROVIDERS.push({
             name: "code",
-            trusted: !(env.AUTH_OIDC_TRUSTED === "false")
+            trusted: toBoolean(env.AUTH_CODE_TRUSTED)
         })
     }
 
@@ -70,7 +71,7 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
         config.AUTH_PROVIDERS ||= []
         config.AUTH_PROVIDERS.push({
             name: "github",
-            trusted: !(env.AUTH_OIDC_TRUSTED === "false"),
+            trusted: toBoolean(env.AUTH_GITHUB_TRUSTED),
             clientID: env.AUTH_GITHUB_CLIENT_ID as string,
             clientSecret: env.AUTH_GITHUB_CLIENT_SECRET as string
         })
@@ -80,7 +81,7 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
         config.AUTH_PROVIDERS ||= []
         config.AUTH_PROVIDERS.push({
             name: "google",
-            trusted: !(env.AUTH_OIDC_TRUSTED === "false"),
+            trusted: toBoolean(env.AUTH_GOOGLE_TRUSTED),
             clientID: env.AUTH_GOOGLE_CLIENT_ID as string
         })
     }
@@ -100,7 +101,7 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
 
     if (env.DB_SSL) {
         config.DB_CONFIG ||= {}
-        config.DB_CONFIG.ssl = !(env.DB_SSL === "false")
+        config.DB_CONFIG.ssl = toBoolean(env.DB_SSL)
     }
 
     if (env.DB_NAME) {

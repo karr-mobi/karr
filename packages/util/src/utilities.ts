@@ -147,5 +147,20 @@ export async function tryCatch<T, E = Error>(
     }
 }
 
+export function toBoolean(value: unknown): boolean {
+    switch (value) {
+        case "false":
+        case "FALSE":
+        case "False":
+        case "off":
+        case "no":
+        case "0":
+        case 0:
+        case -1:
+            return false
+    }
+    return Boolean(value)
+}
+
 //biome-ignore lint/performance/noBarrelFile: this is a utility file
 export { toCamelCase } from "@std/text"
