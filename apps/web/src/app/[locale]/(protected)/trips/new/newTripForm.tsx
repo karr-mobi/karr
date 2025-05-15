@@ -45,7 +45,7 @@ export default function NewTripForm() {
     const form = useForm<NewTripInput>({
         resolver: zodResolver(NewTripInputSchema),
         defaultValues: {
-            departure: new Date(Date.now()).toISOString(),
+            departure: new Date(Date.now()),
             from: "",
             to: "",
             price: 6
