@@ -5,12 +5,12 @@
     "exports": {
         "./types": "./src/lib/types.d.ts",
         "./db/*": {
-            "types": "./dist/db/schemas/*.d.ts",
-            "default": "./dist/db/schemas/*.js"
+            "types": "./dist/src/db/schemas/*.d.ts",
+            "default": "./dist/src/db/schemas/*.js"
         },
         "./client": {
-            "types": "./dist/client.d.ts",
-            "default": "./dist/client.js"
+            "types": "./dist/src/client.d.ts",
+            "default": "./dist/src/client.js"
         },
         "./routes": {
             "types": "./dist/routes.json",
@@ -25,7 +25,7 @@
         "dev:run": "tsx watch ./src/main.ts",
         "dev:build": "tsc --watch",
         "build": "tsc",
-        "build:bundle": "tsc --noEmit -p tsconfig.bundler.json && node --experimental-strip-types ./script/bundle.ts",
+        "build:bundle": "tsc --noEmit -p tsconfig.bundler.json && CI=true node --experimental-strip-types ./script/bundle.ts",
         "start": "node ./out/main.mjs",
         "build:localinit": "esbuild src/db/local_dev_init.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/db/local_dev_init.mjs",
         "localinit": "pnpm run build:localinit && node out/db/local_dev_init.mjs",
@@ -46,6 +46,7 @@
         "hono": "catalog:api",
         "neverthrow": "catalog:utils",
         "ofetch": "catalog:utils",
+        "postgres": "catalog:api",
         "unstorage": "catalog:api",
         "zod": "catalog:utils",
         "srvx": "catalog:api",

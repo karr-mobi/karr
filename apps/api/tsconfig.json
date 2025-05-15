@@ -2,7 +2,7 @@
     "extends": "@karr/tsconfig/base.json",
     "compilerOptions": {
         "outDir": "dist",
-        "rootDir": "src",
+        "rootDirs": ["src", "script"],
         "moduleResolution": "bundler",
         "module": "ESNext",
         "declaration": true,
@@ -11,6 +11,6 @@
             "@/*": ["./src/*"]
         }
     },
-    "include": ["src"],
+    "include": ["src", "script"],
     "exclude": ["node_modules", "dist", "out"]
 }

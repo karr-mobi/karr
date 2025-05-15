@@ -2,7 +2,7 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "allowImportingTsExtensions": true,
-        "rootDir": "script"
+        "rootDirs": ["script", "src"]
     },
-    "include": ["script"]
+    "include": ["script", "src"]
 }

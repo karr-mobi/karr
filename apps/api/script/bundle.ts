@@ -1,8 +1,10 @@
-//biome-ignore-all lint/style/noNonNullAssertion: it's a util file
+//biome-ignore-all lint/style/noNonNullAssertion: it's a util file idc
 
 import process from "node:process"
 import { c, logger } from "@karr/logger"
 import { build } from "esbuild"
+import { runtime } from "std-env"
+//@ts-expect-error we need to use a .ts here for it to be imported by node without compilation
 import { esbuildPlugin as fixNodeBuiltins } from "./unplugin-fix-node-builtins.ts"
 
 logger.info("Bundling API...")
@@ -21,7 +23,8 @@ build({
     external: ["node:*", "bun:*"],
     plugins: [fixNodeBuiltins()],
     splitting: true,
-    outExtension: { ".js": ".mjs" }
+    outExtension: { ".js": ".mjs" },
+    conditions: [runtime]
 })
     .catch((err) => {
         logger.error("Build failed:", err)
