@@ -4,6 +4,14 @@
     "LOG_TIMESTAMP": true,
     "LOG_LEVEL": "debug",
     "ADMIN_EMAIL": "foo@bar.com",
+    "AUTH_PROVIDERS": [
+        {
+            "name": "github",
+            "clientID": "kjnerfhjenbrgerg",
+            "clientSecret": "kjervhjberhber",
+            "trusted": false
+        }
+    ],
     "DB_CONFIG": {
         "host": "localhost",
         "port": 5432,

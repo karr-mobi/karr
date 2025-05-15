@@ -1,7 +1,7 @@
 //biome-ignore-all lint/style/useNamingConvention: config values are CONSTANT_CASE
 
 import process from "node:process"
-import { isCI, isProduction } from "std-env"
+import { isCI, isProduction, isTest } from "std-env"
 import { z } from "zod/v4"
 import staticConfig from "./static.js"
 
@@ -15,20 +15,21 @@ export const LogLevelSchema = z.enum([...logLevels])
 /**
  * Required keys for the config file or env
  */
-export const requiredKeys = ["APP_URL"]
+export const requiredKeys = ["APP_URL", "AUTH_PROVIDERS"]
 
 const appUrlSchema = z
     .url({
         error: "App URL must only be a domain and protocol",
         abort: true
     })
-    .refine((url) => !(isCI && !url.includes("build.time")), {
+    .refine((url) => !(!isTest && isCI && !url.includes("build.time")), {
         error: "Please only use 'http://build.time/' as APP_URL for CI",
         abort: true
     })
     .refine((url) => !(!isCI && url.includes("build.time")), {
         error: "Please specify an APP_URL"
     })
+    .refine((url) => new URL(url).pathname === "/")
 
 export const apiBaseSchema = z
     .string()

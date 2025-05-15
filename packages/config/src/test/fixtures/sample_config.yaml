@@ -3,6 +3,10 @@ API_PORT: 1993
 LOG_TIMESTAMP: true
 LOG_LEVEL: debug
 ADMIN_EMAIL: foo@bar.com
+AUTH_PROVIDERS:
+  - name: google
+    clientID: jhnefhberfjhberfjhberfjhb
+    trusted: false
 DB_CONFIG:
     host: localhost
     port: 5432

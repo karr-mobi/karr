@@ -78,7 +78,8 @@ describe("config module", () => {
         // Reset mocks to default values
         const tmp = {
             ...defaultConfig,
-            APP_URL: "http://example.org/" // Add APP_URL which is now required
+            APP_URL: "http://example.org/", // Add required APP_URL
+            AUTH_PROVIDERS: [{ name: "password", trusted: false }] // Add required AUTH_PROVIDERS
         }
 
         const parsedConfig = await FullConfigSchema.parseAsync(tmp)
@@ -97,8 +98,9 @@ describe("config module", () => {
             async () =>
                 ({
                     ...defaultConfig,
-                    API_BASE: "/api/v1" // Make sure API_BASE is set correctly
-                    // Intentionally omit APP_URL
+                    API_BASE: "/api/v1", // Make sure API_BASE is set correctly
+                    // Include AUTH_PROVIDERS but omit APP_URL to test that failure
+                    AUTH_PROVIDERS: [{ name: "password", trusted: false }]
                     // biome-ignore lint/suspicious/noExplicitAny: intentional
                 }) as any
         )
@@ -120,7 +122,8 @@ describe("config module", () => {
             LOG_LEVEL: defaultConfig.LOG_LEVEL,
             LOG_TIMESTAMP: defaultConfig.LOG_TIMESTAMP,
             APP_URL: "http://example.org/", // Now we expect APP_URL to be present
-            PRODUCTION: false
+            PRODUCTION: false,
+            AUTH_PROVIDERS: [{ name: "password", trusted: false }] // We now expect AUTH_PROVIDERS to be present
         })
 
         expect(Object.keys(config)).not.toContain("DB_CONFIG")
@@ -131,7 +134,8 @@ describe("config module", () => {
             ...defaultConfig,
             APP_URL: "http://localhost/", // Add required APP_URL
             API_PORT: 4000,
-            LOG_LEVEL: "debug"
+            LOG_LEVEL: "debug",
+            AUTH_PROVIDERS: [{ name: "password", trusted: false }] // Add required AUTH_PROVIDERS
         }
 
         const parsedCustomConfig =
@@ -156,7 +160,8 @@ describe("config module", () => {
             ...defaultConfig,
             APP_URL: "http://localhost/",
             API_PORT: 1337,
-            LOG_LEVEL: "warn"
+            LOG_LEVEL: "warn",
+            AUTH_PROVIDERS: [{ name: "password", trusted: false }] // Add required AUTH_PROVIDERS
         }
 
         const parsedEnvConfig = await FullConfigSchema.parseAsync(customConfig)
@@ -329,7 +334,8 @@ describe("config module", () => {
                     API_BASE: "/api/v1", // Make sure API_BASE is set correctly
                     APPLICATION_NAME: "karr",
                     PRODUCTION: false,
-                    ADMIN_EMAIL: "admin@example.com"
+                    ADMIN_EMAIL: "admin@example.com",
+                    AUTH_PROVIDERS: [{ name: "password", trusted: false }] // Add required AUTH_PROVIDERS
                 })
 
             const resolved = await expectedConfig

@@ -222,13 +222,13 @@ describe("File Format Support", () => {
 
         vi.mocked(readFileSync).mockImplementation((path) => {
             if (path.toString().includes(".yaml")) {
-                return "APP_URL: http://example.org/\nAPI_PORT: 1993"
+                return "APP_URL: http://example.org/\nAPI_PORT: 1993\nAUTH_PROVIDERS:\n    - name: password"
             }
             if (path.toString().includes(".json")) {
-                return '{"APP_URL": "http://example.org/", "API_PORT": 1993}'
+                return '{"APP_URL": "http://example.org/", "AUTH_PROVIDERS": [{ name: "password" }], "API_PORT": 1993}'
             }
             if (path.toString().includes(".json5")) {
-                return '{"APP_URL": "http://example.org/", "API_PORT": 1993, /* comment */ }'
+                return '{"APP_URL": "http://example.org/", AUTH_PROVIDERS: [{ name: "password" }], "API_PORT": 1993, /* comment */ }'
             }
             return ""
         })
