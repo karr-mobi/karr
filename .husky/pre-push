@@ -11,4 +11,4 @@ pnpm run test
 # Run linting and type checking
 ###############################################################################
 pnpm run lint:biome
-pnpm run check-types
+pnpm run check:types

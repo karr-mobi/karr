@@ -3,11 +3,11 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "lint:check": "eslint . --max-warnings 0",
+        "check:lint": "eslint . --max-warnings 0",
         "lint": "eslint . --max-warnings 0 --fix",
         "dev": "tsc --watch",
         "build": "tsc",
-        "check-types": "tsc --noEmit",
+        "check:types": "tsc --noEmit",
         "test": "vitest"
     },
     "exports": {

@@ -33,13 +33,13 @@
             "outputs": [".next/**", "!.next/cache/**", "out/**", "dist/**"]
         },
         "lint": {
-            "dependsOn": ["^lint", "^check-types"]
+            "dependsOn": ["^lint", "^check:types"]
         },
-        "lint:check": {
-            "dependsOn": ["^lint:check", "^check-types"]
+        "check:lint": {
+            "dependsOn": ["^check:lint", "^check:types"]
         },
-        "check-types": {
-            "dependsOn": ["^check-types"]
+        "check:types": {
+            "dependsOn": ["^check:types"]
         },
         "test": {
             "dependsOn": ["^test"]

@@ -12,10 +12,10 @@
         "extract-routes": "turbo extract-routes",
 
         "lint:biome": "biome check --write --error-on-warnings",
-        "lint:check": "biome ci --error-on-warnings && turbo lint:check",
+        "check:lint": "biome ci --error-on-warnings && turbo check:lint",
         "lint": "pnpm run lint:biome && turbo lint",
 
-        "check-types": "turbo check-types",
+        "check:types": "turbo check:types",
         "format": "biome format --write",
         "test": "turbo test",
 

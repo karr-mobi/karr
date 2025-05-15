@@ -18,9 +18,9 @@
         }
     },
     "scripts": {
-        "lint:check": "eslint . --max-warnings 0",
+        "check:lint": "eslint . --max-warnings 0",
         "lint": "eslint . --max-warnings 0 --fix",
-        "check-types": "tsc --noEmit",
+        "check:types": "tsc --noEmit",
         "dev": "pnpm --filter @karr/api --parallel \"/^dev:.*/\"",
         "dev:run": "tsx watch ./src/main.ts",
         "dev:build": "tsc --watch",

@@ -7,7 +7,7 @@
         "dev": "env $(cat ../../.env) next dev --turbo",
         "build": "next build --turbo",
         "start": "next start",
-        "lint:check": "eslint . --max-warnings 0",
+        "check:lint": "eslint . --max-warnings 0",
         "lint": "eslint . --max-warnings 0 --fix"
     },
     "dependencies": {
