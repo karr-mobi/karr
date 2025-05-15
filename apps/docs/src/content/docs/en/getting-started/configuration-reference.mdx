@@ -9,7 +9,7 @@ import jsonConfig from "@/assets/config-examples/config_file.json?raw";
 import json5Config from "@/assets/config-examples/config_file.json5?raw";
 import { Aside, Code } from "@astrojs/starlight/components";
 
-At minimum, you must set the `APP_URL` for your instance to function properly.
+At minimum, you must set `APP_URL` and `AUTH_PROVIDERS` for your instance to function properly.
 This guide provides a complete reference for all configuration options available in Karr.
 
 ## Configuration Methods
@@ -35,9 +35,10 @@ The configuration schema is available at [https://karr.mobi/config.schema.json](
 
 ## Required Fields
 
-| Option    | Type | Description                                                                                              |
-| --------- | ---- | -------------------------------------------------------------------------------------------------------- |
-| `APP_URL` | URL  | The base URL where your Karr instance can be accessed, without any path components. Must end with a `/`. |
+| Option           | Type | Description                                                                                              |
+| ---------------- | ---- | -------------------------------------------------------------------------------------------------------- |
+| `APP_URL`        | URL  | The base URL where your Karr instance can be accessed, without any path components. Must end with a `/`. |
+| `AUTH_PROVIDERS` | List | The list of authentication providers to enable on your instance                                          |
 
 ## General Configuration
 
