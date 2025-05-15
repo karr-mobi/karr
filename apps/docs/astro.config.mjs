@@ -13,6 +13,10 @@ export default defineConfig({
     adapter: deno(),
     site: config.docsWebsite,
 
+    redirects: {
+        "/": `/${config.locales.defaultLocale}`
+    },
+
     devToolbar: {
         enabled: false
     },
@@ -21,18 +25,7 @@ export default defineConfig({
         starlight({
             title: "Karr Docs",
             lastUpdated: true,
-            // Set French as the default language for this site.
-            defaultLocale: "fr",
-            locales: {
-                // English docs in `src/content/docs/en/`
-                en: {
-                    label: "English"
-                },
-                // French docs in `src/content/docs/fr/`
-                fr: {
-                    label: "Français"
-                }
-            },
+            ...config.locales,
             logo: {
                 src: "./src/assets/logo_tmp.jpg"
             },
