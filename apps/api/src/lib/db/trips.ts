@@ -1,7 +1,7 @@
 import logger from "@karr/logger"
 import { and, eq, getTableColumns } from "drizzle-orm"
 import { err, ok } from "neverthrow"
-import { z } from "zod"
+import { z } from "zod/v4"
 import drizzle from "@/db"
 import { profileTable } from "@/db/schemas/profile"
 import {

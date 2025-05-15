@@ -1,10 +1,10 @@
 //biome-ignore-all lint/suspicious/noConsole: can't import logger here
+//biome-ignore-all lint/style/useThrowOnlyError: throwing empty string to avoid stack trace, avoid using process.exit
 
-import process from "node:process"
 import defu from "defu"
-import { env, isBun, isDeno, isNode } from "std-env"
+import { env, isBun, isCI, isDeno, isNode } from "std-env"
 import c from "tinyrainbow"
-import type { z } from "zod"
+import type { z } from "zod/v4"
 import defaultConfig from "../default-config.json" with { type: "json" }
 import {
     type ConfigFile,
@@ -42,7 +42,7 @@ export async function loadDbConfig(): Promise<DbConfig> {
 
     if (!parsed.success) {
         handleConfigError(parsed.error)
-        process.exit(1)
+        throw ""
     }
 
     const dbConfig = (parsed.data.DB_CONFIG || {}) as DbConfig
@@ -61,7 +61,7 @@ export async function loadDbConfig(): Promise<DbConfig> {
 
     if (!parsedDbConfig.success) {
         handleConfigError(parsedDbConfig.error)
-        process.exit(1)
+        throw ""
     }
 
     return parsedDbConfig.data
@@ -119,13 +119,19 @@ export async function loadFullConfig(): Promise<FullConfig> {
         config.AUTH_PROVIDERS = authProviders
     }
 
+    if (isCI && config.AUTH_PROVIDERS?.length === 0) {
+        config.AUTH_PROVIDERS.push({
+            name: "password"
+        })
+    }
+
     config.API_BASE += `/${API_VERSION}`
 
     const parsed = FullConfigSchema.safeParse(config)
 
     if (!parsed.success) {
         handleConfigError(parsed.error)
-        process.exit(1)
+        throw ""
     }
 
     return parsed.data

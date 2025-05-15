@@ -17,7 +17,7 @@ export const tripsTable = pgTable("Trips", {
 })
 
 export const TripSchema = z.object({
-    id: z.uuid(),
+    id: z.string().uuid(),
     origin: z.string().optional().nullable(),
     from: z.string(),
     to: z.string(),
@@ -25,8 +25,8 @@ export const TripSchema = z.object({
     price: z.number().min(0),
     createdAt: z.string().optional().nullable(),
     updatedAt: z.string().optional().nullable(),
-    account: z.uuid(),
-    nickname: z.email().nullable().optional(),
+    account: z.string().uuid(),
+    nickname: z.string().email().nullable().optional(),
     firstName: z.string().nullable(),
     lastName: z.string().nullable().optional()
 })
@@ -38,7 +38,7 @@ export const NewTripSchema = z.object({
     to: z.string(),
     departure: z.string(),
     price: z.number().min(0),
-    account: z.uuid()
+    account: z.string().uuid()
 })
 
 export type NewTrip = z.infer<typeof NewTripSchema>
@@ -46,7 +46,7 @@ export type NewTrip = z.infer<typeof NewTripSchema>
 export const NewTripInputSchema = z.object({
     from: z.string().min(1),
     to: z.string().min(1),
-    departure: z.iso.datetime(),
+    departure: z.date(),
     price: z.number().min(0)
 })
 

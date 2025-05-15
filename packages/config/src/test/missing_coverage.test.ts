@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { join } from "node:path"
 import process from "node:process"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import type { ZodError } from "zod"
+import type { ZodError } from "zod/v4"
 import { getDbPasswordFromFile, resolvePath } from "@/loader/file"
 import { handleConfigError, loadDbConfig, loadFullConfig } from "@/loader/index"
 import {

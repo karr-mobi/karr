@@ -1,7 +1,8 @@
 //biome-ignore-all lint/style/useNamingConvention: config values are CONSTANT_CASE
 
 import process from "node:process"
-import { z } from "zod"
+import { isCI, isProduction } from "std-env"
+import { z } from "zod/v4"
 import staticConfig from "./static.js"
 
 // ====================================================================
@@ -16,37 +17,42 @@ export const LogLevelSchema = z.enum([...logLevels])
  */
 export const requiredKeys = ["APP_URL"]
 
-const appUrlSchema = z.union([
-    z.url().refine((val) => new URL(val).pathname === "/", {
-        error: "App URL must only be a domain and protocol"
-    }),
-    z.literal("http://localhost/")
-])
+const appUrlSchema = z
+    .url({
+        error: "App URL must only be a domain and protocol",
+        abort: true
+    })
+    .refine((url) => !(isCI && !url.includes("build.time")), {
+        error: "Please only use 'http://build.time/' as APP_URL for CI",
+        abort: true
+    })
+    .refine((url) => !(!isCI && url.includes("build.time")), {
+        error: "Please specify an APP_URL"
+    })
 
 export const apiBaseSchema = z
     .string()
     .refine((val) => val.startsWith("/") && !val.endsWith("/"), {
-        error: "API base must only be a pathname, without a trailing slash"
+        error: "API base must only be an absolute pathname, without a trailing slash"
     })
 
-export const authProvidersSchema = z
-    .array(
-        z.discriminatedUnion([
-            // Password and code auth
-            z.object({
-                name: z.union([z.literal("password"), z.literal("code")]),
-                trusted: z.boolean().default(false).optional()
-            }),
-            // TODO: Generic OIDC provider
-            /* z.object({
+export const authProvidersSchema = z.array(
+    z.discriminatedUnion([
+        // Password and code auth
+        z.object({
+            name: z.union([z.literal("password"), z.literal("code")]),
+            trusted: z.boolean().default(false).optional()
+        }),
+        // TODO: Generic OIDC provider
+        /* z.object({
                 name: z.literal("oidc"),
                 clientID: z.string(),
                 issuer: z.string(),
                 query: z.record(z.string(), z.string()).optional(),
                 scopes: z.array(z.string()).optional()
             }), */
-            // TODO: Generic OAuth2 provider
-            /* z.object({
+        // TODO: Generic OAuth2 provider
+        /* z.object({
                 name: z.literal("oauth2"),
                 clientID: z.string(),
                 clientSecret: z.string(),
@@ -59,8 +65,8 @@ export const authProvidersSchema = z
                 query: z.record(z.string(), z.string()).optional(),
                 scopes: z.array(z.string())
             }), */
-            // TODO: Apple OAuth2 provider
-            /* z.object({
+        // TODO: Apple OAuth2 provider
+        /* z.object({
                 name: z.literal("apple"),
                 clientID: z.string(),
                 clientSecret: z.string(),
@@ -72,8 +78,8 @@ export const authProvidersSchema = z
                 ]),
                 scopes: z.array(z.string())
             }), */
-            // TODO: Slack OAuth2 provider
-            /* z.object({
+        // TODO: Slack OAuth2 provider
+        /* z.object({
                 name: z.literal("slack"),
                 clientID: z.string(),
                 clientSecret: z.string(),
@@ -88,8 +94,8 @@ export const authProvidersSchema = z
                 ),
                 team: z.string()
             }), */
-            // TODO: Cognito OAuth2 provider
-            /* z.object({
+        // TODO: Cognito OAuth2 provider
+        /* z.object({
                 name: z.literal("cognito"),
                 clientID: z.string(),
                 clientSecret: z.string(),
@@ -99,8 +105,8 @@ export const authProvidersSchema = z
                 region: z.string(),
                 scopes: z.array(z.string())
             }), */
-            // TODO: Keycloak OAuth2 provider
-            /* z.object({
+        // TODO: Keycloak OAuth2 provider
+        /* z.object({
                 name: z.literal("keycloak"),
                 baseUrl: z.string(),
                 clientID: z.string(),
@@ -110,8 +116,8 @@ export const authProvidersSchema = z
                 realm: z.string(),
                 scopes: z.array(z.string())
             }), */
-            // TODO: Microsoft OAuth2 provider
-            /* z.object({
+        // TODO: Microsoft OAuth2 provider
+        /* z.object({
                 name: z.literal("microsoft"),
                 clientID: z.string(),
                 clientSecret: z.string(),
@@ -120,31 +126,29 @@ export const authProvidersSchema = z
                 scopes: z.array(z.string()),
                 tenant: z.string()
             }), */
-            // Google OIDC provider
-            z.object({
-                name: z.literal("google"),
-                clientID: z.string(),
-                query: z.record(z.string(), z.string()).optional(),
-                trusted: z.boolean().default(false).optional()
-            }),
-            // Other built-in OAuth2 providers
-            z.object({
-                name: z.union([
-                    z.literal("github")
-                    // TODO: z.literal("yahoo"),
-                    // TODO: z.literal("twitch"),
-                    // TODO: z.literal("facebook"),
-                    // TODO: z.literal("jumpcloud")
-                ]),
-                clientID: z.string(),
-                clientSecret: z.string(),
-                query: z.record(z.string(), z.string()).optional(),
-                trusted: z.boolean().default(false).optional()
-            })
-        ])
-    )
-    .min(1)
-    .max(18)
+        // Google OIDC provider
+        z.object({
+            name: z.literal("google"),
+            clientID: z.string(),
+            query: z.record(z.string(), z.string()).optional(),
+            trusted: z.boolean().default(false).optional()
+        }),
+        // Other built-in OAuth2 providers
+        z.object({
+            name: z.union([
+                z.literal("github")
+                // TODO: z.literal("yahoo"),
+                // TODO: z.literal("twitch"),
+                // TODO: z.literal("facebook"),
+                // TODO: z.literal("jumpcloud")
+            ]),
+            clientID: z.string(),
+            clientSecret: z.string(),
+            query: z.record(z.string(), z.string()).optional(),
+            trusted: z.boolean().default(false).optional()
+        })
+    ])
+)
 
 export type AuthProvider = z.infer<typeof authProvidersSchema>[number]
 
@@ -214,7 +218,7 @@ export const FullConfigSchema = z.object({
     ),
     ADMIN_EMAIL: z.email().optional(),
     FEDERATION: z.boolean(),
-    AUTH_PROVIDERS: authProvidersSchema,
+    AUTH_PROVIDERS: authProvidersSchema.min(1).max(18),
     // TODO: move federation targets to settings to be editable via the UI
     FEDERATION_TARGETS: z.array(
         z.object({
@@ -223,7 +227,7 @@ export const FullConfigSchema = z.object({
         })
     ),
     APPLICATION_NAME: z.string().default(staticConfig.APPLICATION_NAME),
-    PRODUCTION: z.boolean().default(process.env.NODE_ENV === "production")
+    PRODUCTION: z.boolean().default(isProduction)
 })
 
 export type FullConfig = z.infer<typeof FullConfigSchema>

@@ -30,7 +30,7 @@ catalogs:
     drizzle-zod: ^0.7.1
     hono: ^4.7.9
     postgres: ^3.4.5
-    srvx: ^0.6.0
+    srvx: ^0.7.1
     unstorage: ^1.16.0
 
   docs:

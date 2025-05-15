@@ -1,6 +1,6 @@
 import type { Prettify } from "@karr/util"
 import { createSubjects } from "@openauthjs/openauth/subject"
-import { z } from "zod"
+import { z } from "zod/v4"
 
 const user = z.object({
     id: z.string(),
