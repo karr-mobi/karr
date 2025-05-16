@@ -2,7 +2,7 @@
 //biome-ignore-all lint/style/useThrowOnlyError: throwing empty string to avoid stack trace, avoid using process.exit
 
 import defu from "defu"
-import { env, isBun, isCI, isDeno, isNode } from "std-env"
+import { env, isBun, isCI, isDeno, isNode, isTest } from "std-env"
 import c from "tinyrainbow"
 import type { z } from "zod/v4"
 import defaultConfig from "../default-config.json" with { type: "json" }
@@ -119,10 +119,15 @@ export async function loadFullConfig(): Promise<FullConfig> {
         config.AUTH_PROVIDERS = authProviders
     }
 
-    if (isCI && config.AUTH_PROVIDERS?.length === 0) {
-        config.AUTH_PROVIDERS.push({
-            name: "password"
-        })
+    if (isCI && !isTest) {
+        if (isCI && config.AUTH_PROVIDERS?.length === 0) {
+            config.AUTH_PROVIDERS.push({
+                name: "password"
+            })
+        }
+        if (!config.APP_URL) {
+            config.APP_URL = "http://build.time/"
+        }
     }
 
     config.API_BASE += `/${API_VERSION}`
