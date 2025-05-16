@@ -38,7 +38,7 @@ RUN apk update
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-ENV APP_URL="http://build.time/"
+ENV CI=true
 
 # First install the dependencies (as they change less often)
 COPY --from=installer /app/out/json/ .

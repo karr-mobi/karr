@@ -3,12 +3,12 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "check:lint": "pnpm run --filter '@karr/util' build && eslint . --max-warnings 0",
-        "lint": "pnpm run --filter '@karr/util' build && eslint . --max-warnings 0 --fix",
+        "check:lint": "eslint . --max-warnings 0",
+        "lint": "eslint . --max-warnings 0 --fix",
         "dev": "pnpm run --filter '@karr/util' build && tsc --watch",
-        "build": "pnpm run --filter '@karr/util' build && tsc",
+        "build": "tsc",
         "check:types": "tsc --noEmit",
-        "test": "pnpm run --filter '@karr/util' build && vitest",
+        "test": "vitest",
         "schema:write": "tsx src/export-schema.ts"
     },
     "exports": {

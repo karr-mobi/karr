@@ -25,12 +25,12 @@
         "dev:run": "tsx watch ./src/main.ts",
         "dev:build": "tsc --watch",
         "build": "tsc",
-        "build:bundle": "tsc --noEmit -p tsconfig.bundler.json && CI=true node --experimental-strip-types ./script/bundle.ts",
+        "build:bundle": "tsc --noEmit && CI=true node --experimental-strip-types ./script/bundle.ts",
         "start": "node ./out/main.mjs",
         "build:localinit": "esbuild src/db/local_dev_init.ts --bundle --minify --platform=node --target=node22 --format=esm --outfile=out/db/local_dev_init.mjs",
         "localinit": "pnpm run build:localinit && node out/db/local_dev_init.mjs",
         "db:migrations-generate": "drizzle-kit generate",
-        "extract-routes": "APP_URL=http://build.time/ tsx ./script/utils/extract-routes.ts"
+        "extract-routes": "CI=true tsx ./script/utils/extract-routes.ts"
     },
     "dependencies": {
         "@hono/zod-validator": "catalog:api",

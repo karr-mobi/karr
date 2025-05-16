@@ -48,7 +48,7 @@ RUN pnpm install --frozen-lockfile
 
 ENV NODE_ENV=production
 # Set required config values for the build
-ENV APP_URL=http://build.time
+ENV CI=true
 
 # Build the project
 COPY --from=installer /app/out/full/ .

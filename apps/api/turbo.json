@@ -8,6 +8,10 @@
         "build:bundle": {
             "dependsOn": ["^build"],
             "outputs": ["out/**"]
+        },
+        "extract-routes": {
+            "dependsOn": ["^build"],
+            "cache": true
         }
     }
 }

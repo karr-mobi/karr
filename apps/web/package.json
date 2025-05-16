@@ -7,9 +7,9 @@
         "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",
-        "check:lint": "pnpm run --filter '@karr/config' build && eslint . --max-warnings 0",
-        "lint": "pnpm run --filter '@karr/config' build && eslint . --max-warnings 0 --fix",
-        "check:types": "pnpm run --filter '@karr/config' build && pnpm run --filter '@karr/api' build && tsc --noEmit"
+        "check:lint": "eslint . --max-warnings 0",
+        "lint": "eslint . --max-warnings 0 --fix",
+        "check:types": "tsc --noEmit"
     },
     "dependencies": {
         "@hookform/resolvers": "catalog:ui",
