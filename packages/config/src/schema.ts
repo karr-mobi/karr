@@ -1,7 +1,7 @@
 //biome-ignore-all lint/style/useNamingConvention: config values are CONSTANT_CASE
 
 import process from "node:process"
-import { isCI, isProduction, isTest } from "std-env"
+import { isCI, isProduction } from "std-env"
 import { z } from "zod/v4"
 import staticConfig from "./static.js"
 
@@ -22,10 +22,6 @@ const appUrlSchema = z
         error: "App URL must only be a domain and protocol",
         abort: true
     })
-    .refine((url) => !(!isTest && isCI && !url.includes("build.time")), {
-        error: "Please only use 'http://build.time/' as APP_URL for CI",
-        abort: true
-    })
     .refine((url) => !(!isCI && url.includes("build.time")), {
         error: "Please specify an APP_URL"
     })
@@ -39,94 +35,14 @@ export const apiBaseSchema = z
 
 export const authProvidersSchema = z.array(
     z.discriminatedUnion([
-        // Password and code auth
-        z.object({
-            name: z.union([z.literal("password"), z.literal("code")]),
-            trusted: z.boolean().default(false).optional()
-        }),
-        // TODO: Generic OIDC provider
-        /* z.object({
-                name: z.literal("oidc"),
-                clientID: z.string(),
-                issuer: z.string(),
-                query: z.record(z.string(), z.string()).optional(),
-                scopes: z.array(z.string()).optional()
-            }), */
-        // TODO: Generic OAuth2 provider
-        /* z.object({
-                name: z.literal("oauth2"),
-                clientID: z.string(),
-                clientSecret: z.string(),
-                endpoint: z.object({
-                    authorization: z.string(),
-                    jwks: z.string().optional(),
-                    token: z.string()
-                }),
-                pkce: z.boolean().optional(),
-                query: z.record(z.string(), z.string()).optional(),
-                scopes: z.array(z.string())
-            }), */
-        // TODO: Apple OAuth2 provider
-        /* z.object({
-                name: z.literal("apple"),
-                clientID: z.string(),
-                clientSecret: z.string(),
-                pkce: z.boolean().optional(),
-                query: z.record(z.string(), z.string()).optional(),
-                response_mode: z.union([
-                    z.literal("query"),
-                    z.literal("form_post")
-                ]),
-                scopes: z.array(z.string())
-            }), */
-        // TODO: Slack OAuth2 provider
-        /* z.object({
-                name: z.literal("slack"),
-                clientID: z.string(),
-                clientSecret: z.string(),
-                pkce: z.boolean().optional(),
-                query: z.record(z.string(), z.string()).optional(),
-                scopes: z.array(
-                    z.union([
-                        z.literal("email"),
-                        z.literal("profile"),
-                        z.literal("openid")
-                    ])
-                ),
-                team: z.string()
-            }), */
-        // TODO: Cognito OAuth2 provider
-        /* z.object({
-                name: z.literal("cognito"),
-                clientID: z.string(),
-                clientSecret: z.string(),
-                domain: z.string(),
-                pkce: z.boolean().optional(),
-                query: z.record(z.string(), z.string()).optional(),
-                region: z.string(),
-                scopes: z.array(z.string())
-            }), */
-        // TODO: Keycloak OAuth2 provider
-        /* z.object({
-                name: z.literal("keycloak"),
-                baseUrl: z.string(),
-                clientID: z.string(),
-                clientSecret: z.string(),
-                pkce: z.boolean().optional(),
-                query: z.record(z.string(), z.string()).optional(),
-                realm: z.string(),
-                scopes: z.array(z.string())
-            }), */
-        // TODO: Microsoft OAuth2 provider
-        /* z.object({
-                name: z.literal("microsoft"),
-                clientID: z.string(),
-                clientSecret: z.string(),
-                pkce: z.boolean().optional(),
-                query: z.record(z.string(), z.string()).optional(),
-                scopes: z.array(z.string()),
-                tenant: z.string()
-            }), */
+        z
+            .object({
+                name: z.union([z.literal("password"), z.literal("code")]),
+                trusted: z.boolean().default(false).optional()
+            })
+            .refine(() => !isProduction, {
+                error: "Password and Code Providers are not available for production"
+            }),
         // Google OIDC provider
         z.object({
             name: z.literal("google"),
@@ -152,6 +68,90 @@ export const authProvidersSchema = z.array(
 )
 
 export type AuthProvider = z.infer<typeof authProvidersSchema>[number]
+
+// TODO: Generic OIDC provider
+/* z.object({
+        name: z.literal("oidc"),
+        clientID: z.string(),
+        issuer: z.string(),
+        query: z.record(z.string(), z.string()).optional(),
+        scopes: z.array(z.string()).optional()
+    }), */
+// TODO: Generic OAuth2 provider
+/* z.object({
+        name: z.literal("oauth2"),
+        clientID: z.string(),
+        clientSecret: z.string(),
+        endpoint: z.object({
+            authorization: z.string(),
+            jwks: z.string().optional(),
+            token: z.string()
+        }),
+        pkce: z.boolean().optional(),
+        query: z.record(z.string(), z.string()).optional(),
+        scopes: z.array(z.string())
+    }), */
+// TODO: Apple OAuth2 provider
+/* z.object({
+        name: z.literal("apple"),
+        clientID: z.string(),
+        clientSecret: z.string(),
+        pkce: z.boolean().optional(),
+        query: z.record(z.string(), z.string()).optional(),
+        response_mode: z.union([
+            z.literal("query"),
+            z.literal("form_post")
+        ]),
+        scopes: z.array(z.string())
+    }), */
+// TODO: Slack OAuth2 provider
+/* z.object({
+        name: z.literal("slack"),
+        clientID: z.string(),
+        clientSecret: z.string(),
+        pkce: z.boolean().optional(),
+        query: z.record(z.string(), z.string()).optional(),
+        scopes: z.array(
+            z.union([
+                z.literal("email"),
+                z.literal("profile"),
+                z.literal("openid")
+            ])
+        ),
+        team: z.string()
+    }), */
+// TODO: Cognito OAuth2 provider
+/* z.object({
+        name: z.literal("cognito"),
+        clientID: z.string(),
+        clientSecret: z.string(),
+        domain: z.string(),
+        pkce: z.boolean().optional(),
+        query: z.record(z.string(), z.string()).optional(),
+        region: z.string(),
+        scopes: z.array(z.string())
+    }), */
+// TODO: Keycloak OAuth2 provider
+/* z.object({
+        name: z.literal("keycloak"),
+        baseUrl: z.string(),
+        clientID: z.string(),
+        clientSecret: z.string(),
+        pkce: z.boolean().optional(),
+        query: z.record(z.string(), z.string()).optional(),
+        realm: z.string(),
+        scopes: z.array(z.string())
+    }), */
+// TODO: Microsoft OAuth2 provider
+/* z.object({
+        name: z.literal("microsoft"),
+        clientID: z.string(),
+        clientSecret: z.string(),
+        pkce: z.boolean().optional(),
+        query: z.record(z.string(), z.string()).optional(),
+        scopes: z.array(z.string()),
+        tenant: z.string()
+    }), */
 
 export const ConfigFileSchema = z.object({
     APPLICATION_NAME: z.string().optional(),
