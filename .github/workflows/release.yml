@@ -82,8 +82,8 @@ jobs:
                   file: ./apps/api/Dockerfile
                   push: true
                   tags: |
-                      ghcr.io/finxol/karr-api:latest
-                      ghcr.io/finxol/karr-api:${{ needs.release.outputs.version }}
+                      ghcr.io/karr-mobi/karr-api:latest
+                      ghcr.io/karr-mobi/karr-api:${{ needs.release.outputs.version }}
 
     build-web:
         needs: release
@@ -109,8 +109,8 @@ jobs:
                   file: ./apps/web/Dockerfile
                   push: true
                   tags: |
-                      ghcr.io/finxol/karr-web:latest
-                      ghcr.io/finxol/karr-web:${{ needs.release.outputs.version }}
+                      ghcr.io/karr-mobi/karr-web:latest
+                      ghcr.io/karr-mobi/karr-web:${{ needs.release.outputs.version }}
 
     build-caddy:
         needs: release
@@ -137,5 +137,5 @@ jobs:
                   file: ./apps/caddy/Dockerfile
                   push: true
                   tags: |
-                      ghcr.io/finxol/karr-caddy:latest
-                      ghcr.io/finxol/karr-caddy:${{ needs.release.outputs.version }}
+                      ghcr.io/karr-mobi/karr-caddy:latest
+                      ghcr.io/karr-mobi/karr-caddy:${{ needs.release.outputs.version }}
