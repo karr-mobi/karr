@@ -40,7 +40,7 @@ export const authProvidersSchema = z.array(
                 name: z.union([z.literal("password"), z.literal("code")]),
                 trusted: z.boolean().default(false).optional()
             })
-            .refine(() => !isProduction, {
+            .refine(() => !isProduction || isCI, {
                 error: "Password and Code Providers are not available for production"
             }),
         // Google OIDC provider
