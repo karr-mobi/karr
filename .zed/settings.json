@@ -12,7 +12,8 @@
     "lsp": {
         "biome": {
             "settings": {
-                "require_config_file": true
+                "require_config_file": true,
+                "configuration_path": "./biome.jsonc"
             }
         }
     },
