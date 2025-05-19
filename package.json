@@ -10,15 +10,12 @@
         "dev:landing": "turbo dev --filter=@karr/landing",
         "dev:docs": "turbo dev --filter=@karr/docs",
         "extract-routes": "turbo extract-routes",
-
         "lint:biome": "biome check --write --error-on-warnings",
         "check:lint": "biome ci --error-on-warnings && turbo check:lint",
         "lint": "pnpm run lint:biome && turbo lint",
-
         "check:types": "turbo check:types",
         "format": "biome format --write",
         "test": "turbo test",
-
         "prepare": "husky",
         "commitlint": "commitlint --edit",
         "release": "changelogen --release --push"
