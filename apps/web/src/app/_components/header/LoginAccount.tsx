@@ -33,7 +33,7 @@ export default async function LoginAccount() {
         </AccountDropdown>
     ) : (
         <form action={login}>
-            <Button>
+            <Button type="submit">
                 <IconLogIn />
                 {t("Login.title")}
             </Button>
