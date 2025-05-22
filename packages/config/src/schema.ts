@@ -34,7 +34,7 @@ export const apiBaseSchema = z
     })
 
 export const authProvidersSchema = z.array(
-    z.discriminatedUnion([
+    z.discriminatedUnion("name", [
         z
             .object({
                 name: z.union([z.literal("password"), z.literal("code")]),

@@ -23,6 +23,7 @@
         "@radix-ui/react-select": "catalog:radix",
         "@radix-ui/react-separator": "catalog:radix",
         "@radix-ui/react-slot": "catalog:radix",
+        "@tanstack/react-form": "catalog:web",
         "class-variance-authority": "catalog:ui",
         "clsx": "catalog:ui",
         "date-fns": "catalog:ui",
