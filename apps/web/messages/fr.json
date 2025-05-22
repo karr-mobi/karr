@@ -94,6 +94,12 @@
             "price": "Prix (par passager)",
             "create": "Créer un nouveau trajet",
             "added": "Trajet ajouté !"
+        },
+        "Delete": {
+            "unauthorized": "Ce trajet ne vous appartient pas!",
+            "not-found": "Trajet introuvable",
+            "other-error": "Désolé, une erreur est survenue",
+            "success": "Trajet supprimé correctement"
         }
     },
     "Utilities": {

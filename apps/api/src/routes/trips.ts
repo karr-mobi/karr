@@ -1,18 +1,17 @@
-import { zValidator } from "@hono/zod-validator"
+import { FEDERATION } from "@karr/config"
 import logger from "@karr/logger"
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
-
+import { validator } from "hono/validator"
+import { z } from "zod/v4-mini"
 import { NewTripInputSchema, type Trip } from "@/db/schemas/trips"
-import { addTrip, deleteTrip, getTrips } from "@/lib/db/trips"
-import { handleRequest } from "@/lib/helpers"
+import { addTrip, deleteTrip, getTrip, getTrips } from "@/lib/db/trips"
 import type {
     AppVariables,
     DataResponse,
     ErrorResponse
 } from "@/lib/types.d.ts"
 import { getUserSub } from "@/util/subject"
-
 import { getFederatedTrips } from "./federation/helpers"
 
 const hono = new Hono<{ Variables: AppVariables }>()
@@ -32,9 +31,8 @@ const hono = new Hono<{ Variables: AppVariables }>()
 
             const tripsToSend: Promise<void>[] = []
 
-            // TODO(@finxol): Fix the type of data
             function sendData(data: Trip[]) {
-                logger.debug(`Sending ${data.length} trips`, data)
+                logger.debug(`Sending ${data.length} trips`)
                 for (const item of data) {
                     tripsToSend.push(
                         stream.writeSSE({
@@ -62,10 +60,12 @@ const hono = new Hono<{ Variables: AppVariables }>()
                 })
 
                 // Get the trips from the federated servers
-                const slowerPromises: Promise<void>[] = [
-                    getFederatedTrips().then(sendData)
-                    // getSlowerData().then(sendData)
-                ]
+                const slowerPromises: Promise<void>[] = FEDERATION
+                    ? [
+                          getFederatedTrips().then(sendData)
+                          // getSlowerData().then(sendData)
+                      ]
+                    : []
 
                 await Promise.allSettled([
                     ...tripsToSend,
@@ -87,16 +87,18 @@ const hono = new Hono<{ Variables: AppVariables }>()
      */
     .post(
         "/add",
-        zValidator("json", NewTripInputSchema, (result, c) => {
-            if (!result.success) {
+        validator("json", (value, c) => {
+            const res = z.safeParse(NewTripInputSchema, value)
+            if (!res.success) {
                 return c.json(
                     {
                         message: "Invalid request body",
-                        cause: result.error
+                        cause: res.error
                     } satisfies ErrorResponse,
                     400
                 )
             }
+            return res.data
         }),
         async (c) => {
             const subject = getUserSub(c)
@@ -116,7 +118,7 @@ const hono = new Hono<{ Variables: AppVariables }>()
 
             const createdTrip = await addTrip({
                 ...t,
-                account: subject.id
+                driver: subject.id
             })
 
             if (createdTrip.isErr()) {
@@ -145,22 +147,61 @@ const hono = new Hono<{ Variables: AppVariables }>()
      */
     .delete(
         "/:id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}",
-        (c) => {
+        async (c) => {
             const subject = getUserSub(c)
 
             if (!subject) {
                 return c.json(
                     {
+                        success: false,
                         message: "User subject missing in context"
-                    } satisfies ErrorResponse,
+                    },
                     500
                 )
             }
 
             const tripId: string = c.req.param("id")
 
+            const trip = await getTrip(tripId)
+
+            if (trip.isErr()) {
+                return c.json(
+                    {
+                        success: false,
+                        error: trip.error
+                    },
+                    trip.error === "Trip not found" ? 404 : 500
+                )
+            }
+
+            if (trip.value.driver !== subject.id) {
+                return c.json(
+                    {
+                        success: false,
+                        error: "Trip does not belong to you"
+                    },
+                    401
+                )
+            }
+
             logger.debug(`Deleting trip: ${subject.id} ${tripId}`)
-            return handleRequest(c, () => deleteTrip(tripId, subject.id))
+            const res = await deleteTrip(tripId, subject.id)
+
+            if (!res) {
+                return c.json(
+                    {
+                        success: false
+                    },
+                    401
+                )
+            }
+
+            return c.json(
+                {
+                    success: true
+                },
+                200
+            )
         }
     )
 
