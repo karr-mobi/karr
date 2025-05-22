@@ -1,0 +1,2 @@
+DROP VIEW "public"."trips_view";--> statement-breakpoint
+CREATE VIEW "public"."trips_view" AS (select "Trips"."id", "Trips"."from", "Trips"."to", "Trips"."departure", "Trips"."price", "Trips"."driver", "Profile"."firstName", "Profile"."lastName", "Profile"."nickname" from "Trips" left join "Profile" on "Trips"."driver" = "Profile"."id");

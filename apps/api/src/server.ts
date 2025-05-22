@@ -42,7 +42,6 @@ export const protectedRoutes = new Hono<{ Variables: AppVariables }>()
 
             // Set the subject in the context
             c.set("userSubject", subject)
-            logger.debug("User subject set in context", subject)
             await next()
         })
     )
