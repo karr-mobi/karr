@@ -1,6 +1,6 @@
 services:
     web:
-        image: ghcr.io/finxol/karr-web:latest
+        image: ghcr.io/karr-mobi/karr-web:latest
         networks:
             - karr_network
         environment:
@@ -11,7 +11,7 @@ services:
             - api
 
     api:
-        image: ghcr.io/finxol/karr-api:latest
+        image: ghcr.io/karr-mobi/karr-api:latest
         networks:
             - karr_network
         secrets:
@@ -42,7 +42,7 @@ services:
             retries: 5
 
     caddy:
-        image: ghcr.io/finxol/karr-caddy:latest
+        image: ghcr.io/karr-mobi/karr-caddy:latest
         networks:
             - karr_network
         ports:
