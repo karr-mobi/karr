@@ -1,28 +1,40 @@
 import logger from "@karr/logger"
-import { and, eq, getTableColumns } from "drizzle-orm"
+import { tryCatch } from "@karr/util"
+import { and, eq, sql } from "drizzle-orm"
 import { err, ok } from "neverthrow"
-import { z } from "zod/v4"
+import { z } from "zod/v4-mini"
 import drizzle from "@/db"
-import { profileTable } from "@/db/schemas/profile"
 import {
     type NewTrip,
     NewTripSchema,
     TripSchema,
-    tripsTable
+    tripsTable,
+    tripsView
 } from "@/db/schemas/trips"
 
 export async function getTrips() {
-    const trips = await drizzle
-        .select({
-            ...getTableColumns(tripsTable),
-            firstName: profileTable.firstName,
-            lastName: profileTable.lastName,
-            nickname: profileTable.nickname
-        })
-        .from(tripsTable)
-        .leftJoin(profileTable, eq(tripsTable.account, profileTable.id))
+    const trips = await tryCatch(
+        drizzle
+            .select({
+                id: tripsView.id,
+                from: tripsView.from,
+                to: tripsView.to,
+                departure: tripsView.departure,
+                price: tripsView.price,
+                driver: tripsView.driver,
+                firstName: sql`"trips_view"."firstName"`,
+                lastName: sql`"trips_view"."lastName"`,
+                nickname: sql`"trips_view"."nickname"`
+            })
+            .from(tripsView)
+    )
 
-    const t = TripSchema.array().safeParse(trips)
+    if (!trips.success) {
+        logger.error("failed to get from trips view", trips.error)
+        return err("Failed to get trips from db")
+    }
+
+    const t = z.safeParse(TripSchema.array(), trips.value)
     if (!t.success) {
         logger.debug("Failed to parse trips:", t.error)
         return err("Failed to parse trips")
@@ -31,11 +43,28 @@ export async function getTrips() {
     return ok(t.data)
 }
 
+export async function getTrip(tripId: string) {
+    const trip = await tryCatch(
+        drizzle.select().from(tripsTable).where(eq(tripsTable.id, tripId))
+    )
+
+    if (!trip.success) {
+        logger.error("Error connecting to db", trip.error)
+        return err("Failed to query db")
+    }
+
+    if (trip.value.length === 0 || !trip.value[0]) {
+        return err("Trip not found")
+    }
+
+    return ok(trip.value[0])
+}
+
 export async function getUserTrips(userId: string) {
     const trips = await drizzle
         .select()
         .from(tripsTable)
-        .where(eq(tripsTable.account, userId))
+        .where(eq(tripsTable.driver, userId))
 
     const u = TripSchema.array().safeParse(trips)
     if (!u.success) {
@@ -46,7 +75,7 @@ export async function getUserTrips(userId: string) {
     return ok(u.data)
 }
 
-export async function addTrip(trip: NewTrip | { departure: Date }) {
+export async function addTrip(trip: NewTrip) {
     const t = NewTripSchema.safeParse(trip)
 
     if (!t.success) {
@@ -65,7 +94,7 @@ export async function addTrip(trip: NewTrip | { departure: Date }) {
     }
 
     const InsertedTripSchema = z.object({
-        id: z.string().uuid()
+        id: z.uuid()
     })
 
     const insertedTrip = InsertedTripSchema.safeParse(inserted[0])
@@ -82,8 +111,14 @@ export async function deleteTrip(
     tripId: string,
     userId: string
 ): Promise<boolean> {
-    await drizzle
-        .delete(tripsTable)
-        .where(and(eq(tripsTable.id, tripId), eq(tripsTable.account, userId)))
-    return true
+    const res = await tryCatch(
+        drizzle
+            .delete(tripsTable)
+            .where(
+                and(eq(tripsTable.id, tripId), eq(tripsTable.driver, userId))
+            )
+            .returning({ deletedId: tripsTable.id })
+    )
+
+    return res.success && !!res.value[0]?.deletedId
 }
