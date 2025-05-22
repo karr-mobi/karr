@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.13.3
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.13.2...v0.13.3)
+
+### 🩹 Fixes
+
+- Button type ([cb82618](https://github.com/karr-mobi/karr/commit/cb82618))
+
+### 🏡 Chore
+
+- Update repo ([24847e5](https://github.com/karr-mobi/karr/commit/24847e5))
+- Change image name ([8822a1b](https://github.com/karr-mobi/karr/commit/8822a1b))
+- Fix linting issues ([ea8f8da](https://github.com/karr-mobi/karr/commit/ea8f8da))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.13.2
 
 [compare changes](https://github.com/finxol/karr/compare/v0.13.1...v0.13.2)
