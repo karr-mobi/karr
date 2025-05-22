@@ -21,6 +21,7 @@
         "@karr/util": "workspace:*",
         "@openauthjs/openauth": "catalog:api",
         "@tailwindcss/postcss": "catalog:ui",
+        "@tanstack/react-form": "catalog:web",
         "@tanstack/react-query": "catalog:web",
         "babel-plugin-react-compiler": "catalog:web",
         "date-fns": "catalog:ui",
@@ -33,7 +34,8 @@
         "react": "catalog:web",
         "react-dom": "catalog:web",
         "react-hook-form": "catalog:ui",
-        "tailwindcss": "catalog:ui"
+        "tailwindcss": "catalog:ui",
+        "zod": "catalog:utils"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
