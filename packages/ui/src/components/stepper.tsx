@@ -43,7 +43,7 @@ const Stepper = ({
     children,
     className
 }: {
-    submit: React.ReactNode
+    submit?: React.ReactNode
     children: React.ReactNode[]
     className?: string
 }) => {
