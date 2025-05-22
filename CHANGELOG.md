@@ -1,5 +1,63 @@
 # Changelog
 
+## v0.13.2
+
+[compare changes](https://github.com/finxol/karr/compare/v0.13.1...v0.13.2)
+
+### 🚀 Enhancements
+
+- **docs:** Add i18n + sidebar topic separation ([61f764f](https://github.com/finxol/karr/commit/61f764f))
+- Use Tanstack Form for new trip form ([#147](https://github.com/finxol/karr/pull/147))
+
+### 🩹 Fixes
+
+- Typo ([0a780fd](https://github.com/finxol/karr/commit/0a780fd))
+- Add sharp ([67b6f89](https://github.com/finxol/karr/commit/67b6f89))
+- **docs:** Image link ([daaccdc](https://github.com/finxol/karr/commit/daaccdc))
+- **docs:** Redirect correctly to default locale ([d2f9e38](https://github.com/finxol/karr/commit/d2f9e38))
+- Remove `pkce` option from auth docs ([3e10baa](https://github.com/finxol/karr/commit/3e10baa))
+- Balance use of zod v4 beta ([322ad84](https://github.com/finxol/karr/commit/322ad84))
+- Add esbuild runtime condition ([843684b](https://github.com/finxol/karr/commit/843684b))
+- Mention AUTH_PROVIDERS is now required ([9eaec64](https://github.com/finxol/karr/commit/9eaec64))
+- Types ([2720bec](https://github.com/finxol/karr/commit/2720bec))
+- Add default config values for CI (not test) ([7c30034](https://github.com/finxol/karr/commit/7c30034))
+- Disallow password and code providers in prod ([b9702ce](https://github.com/finxol/karr/commit/b9702ce))
+- Auth providers condition narrowing ([74ba6ee](https://github.com/finxol/karr/commit/74ba6ee))
+
+### 💅 Refactors
+
+- Integrate docs site in monorepo ([4f5966c](https://github.com/finxol/karr/commit/4f5966c))
+
+### 📦 Build
+
+- Move to biome for linting ([#145](https://github.com/finxol/karr/pull/145))
+- Add toBoolean util ([72f64d0](https://github.com/finxol/karr/commit/72f64d0))
+- Fix tests ([bf3a55f](https://github.com/finxol/karr/commit/bf3a55f))
+- Fix biome extension config ([d7a6640](https://github.com/finxol/karr/commit/d7a6640))
+
+### 🏡 Chore
+
+- Add api routes extraction script ([c6ec6e5](https://github.com/finxol/karr/commit/c6ec6e5))
+- Change text ([460c0f7](https://github.com/finxol/karr/commit/460c0f7))
+- Rename scripts ([61ca783](https://github.com/finxol/karr/commit/61ca783))
+- Don’t use `process.exit` ([c17dbc2](https://github.com/finxol/karr/commit/c17dbc2))
+
+### 🤖 CI
+
+- Fix script to use ([cefdca1](https://github.com/finxol/karr/commit/cefdca1))
+- Fix script order ([42a0c04](https://github.com/finxol/karr/commit/42a0c04))
+- Fix triggers ([0b44163](https://github.com/finxol/karr/commit/0b44163))
+- Fix script order (with turbo this time) ([79f508b](https://github.com/finxol/karr/commit/79f508b))
+- Don’t test db connection in CI ([d45c48e](https://github.com/finxol/karr/commit/d45c48e))
+- Add autofix.ci ([af0165d](https://github.com/finxol/karr/commit/af0165d))
+- Fix script ordering ([509b161](https://github.com/finxol/karr/commit/509b161))
+- Update repo namespace ([a3957bf](https://github.com/finxol/karr/commit/a3957bf))
+
+### ❤️ Contributors
+
+- Colin Ozanne ([@finxol](https://github.com/finxol))
+- Finxol ([@finxol](https://github.com/finxol))
+
 ## v0.13.1
 
 [compare changes](https://github.com/finxol/karr/compare/v0.13.0...v0.13.1)
