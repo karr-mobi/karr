@@ -3,6 +3,7 @@
 import { cn } from "@karr/ui/lib/utils"
 import { ChevronRight, CircleCheck } from "lucide-react"
 import { motion } from "motion/react"
+import { useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
 import React, { useState } from "react"
 
@@ -38,15 +39,19 @@ const widths = [
 ]
 
 const Stepper = ({
+    submit,
     children,
     className
 }: {
+    submit: React.ReactNode
     children: React.ReactNode[]
     className?: string
 }) => {
+    const p = useSearchParams()
+
     const t = useTranslations("Utilities")
 
-    const [step, setStep] = useState(1)
+    const [step, setStep] = useState(Number(p.get("step")) || 1)
     const [isExpanded, setIsExpanded] = useState(true)
 
     const steps = React.Children.count(children)
@@ -83,6 +88,10 @@ const Stepper = ({
         }
     }
 
+    const dots = Array(steps)
+        .fill(0)
+        .map((_, i) => i)
+
     return (
         <div
             className={cn(
@@ -91,7 +100,7 @@ const Stepper = ({
             )}
         >
             <div className="relative flex items-center gap-6">
-                {Array.from({ length: steps }).map((dot, index) => (
+                {dots.map((dot, index) => (
                     <div
                         key={dot as number}
                         className={cn(
@@ -143,7 +152,8 @@ const Stepper = ({
                                 mass: 0.8
                             }}
                             style={{
-                                gridArea: "1 / 1"
+                                gridArea: "1 / 1",
+                                padding: "1rem"
                             }}
                         >
                             {child}
@@ -169,49 +179,55 @@ const Stepper = ({
                         }}
                         onClick={handleBack}
                     >
-                        <Button variant="ghost">{t("back")}</Button>
+                        <Button type="button" variant="ghost">
+                            {t("back")}
+                        </Button>
                     </motion.div>
                 )}
 
-                <Button onClick={handleContinue}>
-                    {/* Completed step icon */}
-                    {step === steps && (
-                        <motion.div
-                            initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 500,
-                                damping: 15,
-                                mass: 0.5,
-                                bounce: 0.4
-                            }}
-                        >
-                            <CircleCheck size={16} />
-                        </motion.div>
-                    )}
+                {submit && step === steps ? (
+                    submit
+                ) : (
+                    <Button onClick={handleContinue}>
+                        {/* Completed step icon */}
+                        {step === steps && (
+                            <motion.div
+                                initial={{ scale: 0, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 500,
+                                    damping: 15,
+                                    mass: 0.5,
+                                    bounce: 0.4
+                                }}
+                            >
+                                <CircleCheck size={16} />
+                            </motion.div>
+                        )}
 
-                    <TextMorph>
-                        {step === steps ? t("submit") : t("next")}
-                    </TextMorph>
+                        <TextMorph>
+                            {step === steps ? t("submit") : t("next")}
+                        </TextMorph>
 
-                    {/* Next step icon */}
-                    {step !== steps && (
-                        <motion.div
-                            initial={{ scale: 0, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 500,
-                                damping: 15,
-                                mass: 0.5,
-                                bounce: 0.4
-                            }}
-                        >
-                            <ChevronRight size={16} />
-                        </motion.div>
-                    )}
-                </Button>
+                        {/* Next step icon */}
+                        {step !== steps && (
+                            <motion.div
+                                initial={{ scale: 0, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{
+                                    type: "spring",
+                                    stiffness: 500,
+                                    damping: 15,
+                                    mass: 0.5,
+                                    bounce: 0.4
+                                }}
+                            >
+                                <ChevronRight size={16} />
+                            </motion.div>
+                        )}
+                    </Button>
+                )}
             </div>
         </div>
     )
