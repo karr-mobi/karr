@@ -94,6 +94,12 @@
             "price": "Price (per passenger)",
             "create": "Create new trip",
             "added": "Trip added!"
+        },
+        "Delete": {
+            "unauthorized": "This trip does not belong to you!",
+            "not-found": "Couldn't find the trip to delete",
+            "other-error": "Sorry, an unknown error occurred",
+            "success": "Trip deleted successfully"
         }
     },
     "Utilities": {

@@ -13,36 +13,37 @@ import {
 } from "@karr/ui/components/card"
 import { toast } from "@karr/ui/components/sonner"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import {
-    Earth as IconEarth,
-    House as IconHouse,
-    Trash as IconTrash
-} from "lucide-react"
+import { Earth as IconEarth, House as IconHouse, TrashIcon } from "lucide-react"
+import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import Loading from "@/components/Loading"
-import { apiFetch } from "@/util/apifetch"
+import { apiFetch, client } from "@/util/apifetch"
 
 export default function FetchTrips() {
     const queryClient = useQueryClient()
     const [trips, setTrips] = useState<Trip[]>([])
     const [loading, setLoading] = useState(false)
+    const t = useTranslations("trips.Delete")
 
     async function deleteTrip(tripId: string): Promise<undefined> {
-        try {
-            await apiFetch(`/trips/${tripId}`, {
-                method: "DELETE",
-                headers: {
-                    authorization: tripId
-                }
-            })
-            toast.success("Successfully deleted trip")
-            // Invalidate and refetch
+        const res = await client.trips[
+            ":id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}"
+        ].$delete({
+            param: {
+                id: tripId
+            }
+        })
+
+        if (res.status === 200) {
+            toast.success(t("success"))
             queryClient.invalidateQueries({ queryKey: ["trips"] })
-            // Clear local trips state
             setTrips([])
-        } catch (e) {
-            console.error(e)
-            toast.error("Failed to delete trip")
+        } else if (res.status === 404) {
+            toast.error(t("not-found"))
+        } else if (res.status === 401) {
+            toast.error(t("unauthorized"))
+        } else {
+            toast.error(t("other-error"))
         }
     }
 
@@ -195,13 +196,19 @@ function TripCard({
                                 variant="outline"
                                 onClick={() => onDelete(trip.id)}
                             >
-                                <IconTrash />
+                                <TrashIcon />
                             </Button>
                         )}
                     </div>
                 </CardTitle>
                 <CardDescription>
-                    {new Date(trip.departure).toLocaleDateString()}
+                    {new Date(trip.departure).toLocaleDateString(useLocale(), {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -226,8 +233,8 @@ function TripCard({
                 )}
                 <p>
                     {trip.nickname ||
-                        `${trip.firstName} ${trip.lastName}` ||
-                        trip.account.split("-")[0]}
+                        `${trip.firstName} ${trip.lastName || ""}` ||
+                        trip.driver.split("-")[0]}
                 </p>
             </CardFooter>
         </Card>

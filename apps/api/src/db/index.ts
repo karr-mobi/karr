@@ -25,7 +25,7 @@ const db = drizzle({ connection })
 if (!isCI) {
     // Test the connection
     const res = await db.execute(
-        "SELECT * FROM information_schema.tables WHERE table_name = 'Users';"
+        "SELECT * FROM information_schema.tables WHERE table_name = 'Accounts';"
     )
     logger.debug("db connection tested", res)
 }

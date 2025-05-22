@@ -64,6 +64,27 @@
       "when": 1746728773197,
       "tag": "0008_dapper_leader",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1747852333517,
+      "tag": "0009_slimy_lifeguard",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1747928246464,
+      "tag": "0010_past_doomsday",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1747929567071,
+      "tag": "0011_blue_jackal",
+      "breakpoints": true
     }
   ]
 }
