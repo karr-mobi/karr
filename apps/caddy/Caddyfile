@@ -13,13 +13,8 @@
 		level info
 	}
 
-	handle /.well-known/jwks.json {
-		rewrite * /api/v1/auth/.well-known/jwks.json
-		reverse_proxy api:{$API_PORT}
-	}
-
-	handle /.well-known/oauth-authorization-server {
-		rewrite * /api/v1/auth/.well-known/oauth-authorization-server
+	handle /.well-known/* {
+		rewrite * /api/v1/auth/{path}
 		reverse_proxy api:{$API_PORT}
 	}
 
