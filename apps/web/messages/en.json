@@ -28,41 +28,11 @@
         "account": "Account"
     },
     "auth": {
-        "SignUp": {
-            "title": "Sign up",
-            "form": {
-                "email": {
-                    "label": "Email",
-                    "errors": {
-                        "required": "Username is required"
-                    }
-                },
-                "password": {
-                    "label": "Password",
-                    "errors": {
-                        "required": "Password is required"
-                    }
-                }
-            },
-            "haveAnAccountQuestion": "Already have an account?"
-        },
         "Login": {
-            "title": "Sign in",
-            "form": {
-                "email": {
-                    "label": "Email",
-                    "errors": {
-                        "required": "Username is required"
-                    }
-                },
-                "password": {
-                    "label": "Password",
-                    "errors": {
-                        "required": "Password is required"
-                    }
-                }
-            },
-            "dontHaveAnAccountQuestion": "Don't have an account yet?"
+            "sign-in": "Sign in",
+            "choose-provider": "Please choose a provider to continue",
+            "continue-with": "Continue with",
+            "redirecting": "Redirecting..."
         },
         "Logout": {
             "title": "Logout"

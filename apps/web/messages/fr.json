@@ -28,41 +28,11 @@
         "account": "Compte"
     },
     "auth": {
-        "SignUp": {
-            "title": "S'inscrire",
-            "form": {
-                "email": {
-                    "label": "Email",
-                    "errors": {
-                        "required": "L'email est obligatoire"
-                    }
-                },
-                "password": {
-                    "label": "Mot de passe",
-                    "errors": {
-                        "required": "Le mot de passe est obligatoire"
-                    }
-                }
-            },
-            "haveAnAccountQuestion": "Vous avez déjà un compte?"
-        },
         "Login": {
-            "title": "Se connecter",
-            "form": {
-                "email": {
-                    "label": "Email",
-                    "errors": {
-                        "required": "L'email est obligatoire"
-                    }
-                },
-                "password": {
-                    "label": "Mot de passe",
-                    "errors": {
-                        "required": "Le mot de passe est obligatoire"
-                    }
-                }
-            },
-            "dontHaveAnAccountQuestion": "Vous n'avez pas encore de compte?"
+            "sign-in": "Se connecter",
+            "choose-provider": "Choisir un fournisseur pour continuer",
+            "continue-with": "Continuer avec",
+            "redirecting": "Redirection..."
         },
         "Logout": {
             "title": "Se déconnecter"

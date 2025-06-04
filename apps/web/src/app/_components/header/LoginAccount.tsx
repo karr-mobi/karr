@@ -1,9 +1,9 @@
 import { Button } from "@karr/ui/components/button"
-import { LogIn as IconLogIn, User as IconUser } from "lucide-react"
+import { LogInIcon, UserIcon } from "lucide-react"
 import Image from "next/image"
 import { getTranslations } from "next-intl/server"
-
-import { auth, login } from "~/auth/actions"
+import { Link } from "@/i18n/routing"
+import { auth } from "~/auth/actions"
 import { AccountDropdown } from "./AccountDropdown"
 
 export default async function LoginAccount() {
@@ -27,16 +27,16 @@ export default async function LoginAccount() {
                         className="size-10 rounded-full"
                     />
                 ) : (
-                    <IconUser className="size-10 rounded-full" />
+                    <UserIcon className="size-10 rounded-full" />
                 )}
             </Button>
         </AccountDropdown>
     ) : (
-        <form action={login}>
-            <Button type="submit">
-                <IconLogIn />
-                {t("Login.title")}
-            </Button>
-        </form>
+        <Button asChild>
+            <Link href="/login">
+                <LogInIcon />
+                {t("Login.sign-in")}
+            </Link>
+        </Button>
     )
 }
