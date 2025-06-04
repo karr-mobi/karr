@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.13.6
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.13.5...v0.13.6)
+
+### 🩹 Fixes
+
+- Well-known path rewrite ([ac72c72](https://github.com/karr-mobi/karr/commit/ac72c72))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.13.5
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.13.4...v0.13.5)
