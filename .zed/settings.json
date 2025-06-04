@@ -9,14 +9,7 @@
             "name": "biome"
         }
     },
-    "lsp": {
-        "biome": {
-            "settings": {
-                "require_config_file": true,
-                "configuration_path": "./biome.jsonc"
-            }
-        }
-    },
+    "language_servers": ["biome"],
     "languages": {
         "TypeScript": {
             "language_servers": [

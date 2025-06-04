@@ -5,7 +5,6 @@ import { subjects } from "@karr/auth/subjects"
 import type { Tokens } from "@openauthjs/openauth/client"
 import { cookies } from "next/headers"
 import { getLocale } from "next-intl/server"
-
 import { redirect } from "@/i18n/routing"
 
 export async function auth() {
@@ -31,34 +30,24 @@ export async function auth() {
     return verified.subject.properties
 }
 
-export async function login(next: string | FormData = "/") {
-    let returnTo: string
-    // If returnTo is a FormData object, extract the value from it
-    if (next instanceof FormData) {
-        returnTo = next.get("returnTo") as string
-    } else {
-        returnTo = next
-    }
-
-    const locale = await getLocale()
+export async function loginWithProvider({ provider }: { provider?: string }) {
     const jar = await cookies()
     const accessToken = jar.get("access_token")
-    const refreshToken = jar.get("refresh_token")
 
     const client = await getClient()
     const callbackUrl = await getCallbackUrl()
 
     if (accessToken) {
         const verified = await client.verify(subjects, accessToken.value, {
-            refresh: refreshToken?.value
+            refresh: jar.get("refresh_token")?.value
         })
         if (!verified.err && verified.tokens) {
-            redirect({ href: returnTo, locale })
+            return { redirectTo: "/", isAuthenticated: true }
         }
     }
 
-    const { url } = await client.authorize(callbackUrl, "code")
-    redirect({ href: url, locale })
+    const { url } = await client.authorize(callbackUrl, "code", { provider })
+    return { redirectTo: url, isAuthenticated: false }
 }
 
 export async function logout() {

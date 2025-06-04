@@ -1,7 +1,17 @@
 {
     "$schema": "https://biomejs.dev/schemas/2.0.0-beta.3/schema.json",
     "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
-    "files": { "ignoreUnknown": false, "includes": ["**"] },
+    "files": {
+        "ignoreUnknown": true,
+        "includes": [
+            "**",
+            "!**/pnpm-lock.yaml",
+            "!**/migrations/**/*",
+            "!**/node_modules/**/*",
+            "!**/dist/**",
+            "!**/out/**"
+        ]
+    },
     "formatter": {
         "enabled": true,
         "formatWithErrors": false,
@@ -11,8 +21,7 @@
         "lineWidth": 80,
         "attributePosition": "auto",
         "bracketSpacing": true,
-        "useEditorconfig": true,
-        "includes": ["**", "!**/pnpm-lock.yaml", "!**/migrations/**/*"]
+        "useEditorconfig": true
     },
     "linter": {
         "enabled": true,
@@ -132,8 +141,7 @@
                 "useAwait": "on",
                 "useGuardForIn": "on"
             }
-        },
-        "includes": ["**", "!**/node_modules/**", "!**/dist/**", "!**/out/**"]
+        }
     },
     "javascript": {
         "formatter": {
