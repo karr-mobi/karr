@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.13.4
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.13.3...v0.13.4)
+
+### 🚀 Enhancements
+
+- Make provider selection part of the web UI ([#150](https://github.com/karr-mobi/karr/pull/150))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.13.3
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.13.2...v0.13.3)
