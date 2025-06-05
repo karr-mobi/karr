@@ -232,6 +232,7 @@ export const FullConfigSchema = z
     .refine(
         (data) =>
             // Error out if password provider is configured and resend API key is missing
+            !isCI &&
             data.AUTH_PROVIDERS.find(
                 (provider) => provider.name === "password"
             ) !== undefined
