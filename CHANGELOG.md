@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.13.8
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.13.7...v0.13.8)
+
+### 🩹 Fixes
+
+- Don't enforce `RESEND_API_KEY` when in CI ([1c33b18](https://github.com/karr-mobi/karr/commit/1c33b18))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.13.7
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.13.6...v0.13.7)
