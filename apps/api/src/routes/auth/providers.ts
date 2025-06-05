@@ -8,6 +8,7 @@ import { PasswordProvider } from "@openauthjs/openauth/provider/password"
 import type { Provider } from "@openauthjs/openauth/provider/provider"
 import { CodeUI } from "@openauthjs/openauth/ui/code"
 import { PasswordUI } from "@openauthjs/openauth/ui/password"
+import { sendEmail } from "./mail"
 
 export type Providers = AuthProvider["name"]
 
@@ -54,8 +55,13 @@ function getProviders() {
                             "This email is already taken. (translate this)",
                         button_continue: "Continue (translate this)"
                     },
-                    sendCode: async (email, code) =>
-                        logger.info(`Sending code ${code} to ${email}`)
+                    sendCode: async (email, code) => {
+                        await sendEmail(
+                            email,
+                            `Your confirmation code is ${code}`,
+                            `Your Karr confirmation code is <b>${code}</b>.`
+                        )
+                    }
                 })
             )
         } else if (provider.name === "code") {
@@ -64,8 +70,13 @@ function getProviders() {
                     copy: {
                         code_info: "We'll send a pin code to your email"
                     },
-                    sendCode: async (claims, code) =>
-                        logger.info(`Sending code ${code} to ${claims.email}`)
+                    sendCode: async (claims, code) => {
+                        await sendEmail(
+                            claims.email as string,
+                            `Your confirmation code is ${code}`,
+                            `Your Karr confirmation code is <b>${code}</b>.`
+                        )
+                    }
                 })
             )
         } else if (provider.name === "github") {

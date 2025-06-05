@@ -35,14 +35,10 @@ export const apiBaseSchema = z
 
 export const authProvidersSchema = z.array(
     z.discriminatedUnion("name", [
-        z
-            .object({
-                name: z.union([z.literal("password"), z.literal("code")]),
-                trusted: z.boolean().default(false).optional()
-            })
-            .refine(() => !isProduction || isCI, {
-                error: "Password and Code Providers are not available for production"
-            }),
+        z.object({
+            name: z.union([z.literal("password"), z.literal("code")]),
+            trusted: z.boolean().default(false).optional()
+        }),
         // Google OIDC provider
         z.object({
             name: z.literal("google"),

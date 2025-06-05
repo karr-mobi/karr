@@ -51,7 +51,8 @@
         "zod": "catalog:utils",
         "srvx": "catalog:api",
         "std-env": "catalog:utils",
-        "unplugin": "catalog:utils"
+        "unplugin": "catalog:utils",
+        "resend": "catalog:api"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
