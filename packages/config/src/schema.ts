@@ -157,19 +157,20 @@ export const ConfigFileSchema = z.object({
     LOG_TIMESTAMP: z.boolean().optional(),
     LOG_LEVEL: LogLevelSchema.optional(),
     ADMIN_EMAIL: z.email().optional(),
-    FEDERATION: z.boolean().optional(),
     AUTH_PROVIDERS: authProvidersSchema.optional(),
-    FEDERATION_TARGETS: z
-        .array(
-            z.object({
-                name: z.string(),
-                url: z.string()
-            }),
-            {
-                error: "Invalid federation target. Needs am array of objects with name and url"
-            }
-        )
-        .optional(),
+    RESEND_API_KEY: z.string().optional(),
+    // FEDERATION: z.boolean().optional(),
+    // FEDERATION_TARGETS: z
+    //     .array(
+    //         z.object({
+    //             name: z.string(),
+    //             url: z.string()
+    //         }),
+    //         {
+    //             error: "Invalid federation target. Needs am array of objects with name and url"
+    //         }
+    //     )
+    //     .optional(),
     DB_CONFIG: z
         .object({
             host: z.string().optional(),
@@ -198,34 +199,49 @@ export type ConfigFile = z.infer<typeof ConfigFileSchema>
 // Full config spec
 // ====================================================================
 
-export const FullConfigSchema = z.object({
-    APP_URL: appUrlSchema,
-    API_PORT: z.number().positive(),
-    API_BASE: apiBaseSchema.refine(
-        (val) => val.endsWith(`/${staticConfig.API_VERSION}`),
+export const FullConfigSchema = z
+    .object({
+        APP_URL: appUrlSchema,
+        API_PORT: z.number().positive(),
+        API_BASE: apiBaseSchema.refine(
+            (val) => val.endsWith(`/${staticConfig.API_VERSION}`),
+            {
+                error: "Computed API base must end with the API version"
+            }
+        ),
+        LOG_TIMESTAMP: z.boolean(),
+        LOG_LEVEL: LogLevelSchema.default(
+            process.env.NODE_ENV === "production" || process.env.DOCKER
+                ? "info"
+                : "trace"
+        ),
+        ADMIN_EMAIL: z.email().optional(),
+        AUTH_PROVIDERS: authProvidersSchema.min(1).max(18),
+        RESEND_API_KEY: z.string().optional(),
+        // TODO: move federation targets to settings to be editable via the UI
+        // FEDERATION: z.boolean(),
+        // FEDERATION_TARGETS: z.array(
+        //     z.object({
+        //         name: z.string(),
+        //         url: z.union([z.url(), z.ipv4(), z.ipv6()])
+        //     })
+        // ),
+        APPLICATION_NAME: z.string().default(staticConfig.APPLICATION_NAME),
+        PRODUCTION: z.boolean().default(isProduction)
+    })
+    .refine(
+        (data) =>
+            // Error out if password provider is configured and resend API key is missing
+            data.AUTH_PROVIDERS.find(
+                (provider) => provider.name === "password"
+            ) !== undefined
+                ? data.RESEND_API_KEY
+                : true,
         {
-            error: "Computed API base must end with the API version"
+            path: ["RESEND_API_KEY"],
+            error: "Password provider is configured but resend API key is missing"
         }
-    ),
-    LOG_TIMESTAMP: z.boolean(),
-    LOG_LEVEL: LogLevelSchema.default(
-        process.env.NODE_ENV === "production" || process.env.DOCKER
-            ? "info"
-            : "trace"
-    ),
-    ADMIN_EMAIL: z.email().optional(),
-    FEDERATION: z.boolean(),
-    AUTH_PROVIDERS: authProvidersSchema.min(1).max(18),
-    // TODO: move federation targets to settings to be editable via the UI
-    FEDERATION_TARGETS: z.array(
-        z.object({
-            name: z.string(),
-            url: z.union([z.url(), z.ipv4(), z.ipv6()])
-        })
-    ),
-    APPLICATION_NAME: z.string().default(staticConfig.APPLICATION_NAME),
-    PRODUCTION: z.boolean().default(isProduction)
-})
+    )
 
 export type FullConfig = z.infer<typeof FullConfigSchema>
 
