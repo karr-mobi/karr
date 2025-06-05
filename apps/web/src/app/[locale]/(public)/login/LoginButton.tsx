@@ -27,6 +27,14 @@ export function LoginButton({
         })
     }
 
+    let title = `${t("continue-with")} ${provider.charAt(0).toUpperCase() + provider.slice(1)}`
+
+    if (provider === "password") {
+        title = t("password")
+    } else if (provider === "code") {
+        title = t("code")
+    }
+
     return (
         <Button
             className="h-12 w-96 max-w-[80vw]"
@@ -42,8 +50,7 @@ export function LoginButton({
             ) : (
                 <>
                     {logo}
-                    {`${t("continue-with")} `}
-                    {provider.charAt(0).toUpperCase() + provider.slice(1)}
+                    {title}
                 </>
             )}
         </Button>

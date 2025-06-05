@@ -32,7 +32,10 @@
             "sign-in": "Sign in",
             "choose-provider": "Please choose a provider to continue",
             "continue-with": "Continue with",
-            "redirecting": "Redirecting..."
+            "redirecting": "Redirecting...",
+            "password": "Use a password",
+            "code": "Send a code to my email",
+            "or": "or"
         },
         "Logout": {
             "title": "Logout"

@@ -44,8 +44,8 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
         config.ADMIN_EMAIL = env.ADMIN_EMAIL
     }
 
-    if (env.FEDERATION) {
-        config.FEDERATION = toBoolean(env.FEDERATION)
+    if (env.RESEND_API_KEY) {
+        config.RESEND_API_KEY = env.RESEND_API_KEY
     }
 
     // ====================

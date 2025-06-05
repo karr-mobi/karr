@@ -32,7 +32,10 @@
             "sign-in": "Se connecter",
             "choose-provider": "Choisir un fournisseur pour continuer",
             "continue-with": "Continuer avec",
-            "redirecting": "Redirection..."
+            "redirecting": "Redirection...",
+            "password": "Utiliser un mot de passe",
+            "code": "Envoyer un code à mon email",
+            "or": "ou"
         },
         "Logout": {
             "title": "Se déconnecter"

@@ -16,8 +16,6 @@ import user from "@/routes/user"
 import type { AppVariables } from "./lib/types"
 
 const authCheckMiddleware = createMiddleware(async (c, next) => {
-    logger.debug("request received", c.req.url)
-
     const subject = await isAuthenticated(c)
 
     if (!subject) {
@@ -46,9 +44,9 @@ const unprotectedRoutes = new Hono().route("/", system).route("/auth", auth)
 export const protectedRoutes = new Hono<{ Variables: AppVariables }>()
 
     // auth check middleware
-    .use("/user", authCheckMiddleware)
-    .use("/account", authCheckMiddleware)
-    .use("/trips", authCheckMiddleware)
+    .use("/user/*", authCheckMiddleware)
+    .use("/account/*", authCheckMiddleware)
+    .use("/trips/*", authCheckMiddleware)
 
     .route("/user", user)
     .route("/account", account)

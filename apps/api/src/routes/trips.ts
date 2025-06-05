@@ -1,4 +1,3 @@
-import { FEDERATION } from "@karr/config"
 import logger from "@karr/logger"
 import { Hono } from "hono"
 import { streamSSE } from "hono/streaming"
@@ -12,7 +11,6 @@ import type {
     ErrorResponse
 } from "@/lib/types.d.ts"
 import { getUserSub } from "@/util/subject"
-import { getFederatedTrips } from "./federation/helpers"
 
 const hono = new Hono<{ Variables: AppVariables }>()
 
@@ -60,12 +58,7 @@ const hono = new Hono<{ Variables: AppVariables }>()
                 })
 
                 // Get the trips from the federated servers
-                const slowerPromises: Promise<void>[] = FEDERATION
-                    ? [
-                          getFederatedTrips().then(sendData)
-                          // getSlowerData().then(sendData)
-                      ]
-                    : []
+                const slowerPromises: Promise<void>[] = []
 
                 await Promise.allSettled([
                     ...tripsToSend,

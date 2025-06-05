@@ -73,9 +73,8 @@ describe("API_VERSION handling", () => {
             API_BASE: "/api/invalid-version", // Wrong version
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
-            FEDERATION: true,
-            AUTH_PROVIDERS: [{ name: "password" }],
-            FEDERATION_TARGETS: []
+            RESEND_API_KEY: "valid-api-key",
+            AUTH_PROVIDERS: [{ name: "password" }]
         }
 
         // Try to validate this config
@@ -222,13 +221,13 @@ describe("File Format Support", () => {
 
         vi.mocked(readFileSync).mockImplementation((path) => {
             if (path.toString().includes(".yaml")) {
-                return "APP_URL: http://example.org/\nAPI_PORT: 1993\nAUTH_PROVIDERS:\n    - name: password"
+                return "APP_URL: http://example.org/\nAPI_PORT: 1993\nRESEND_API_KEY: test-api-key\nAUTH_PROVIDERS:\n    - name: password"
             }
             if (path.toString().includes(".json")) {
-                return '{"APP_URL": "http://example.org/", "AUTH_PROVIDERS": [{ name: "password" }], "API_PORT": 1993}'
+                return '{"APP_URL": "http://example.org/", "AUTH_PROVIDERS": [{ "name": "password" }], "API_PORT": 1993, "RESEND_API_KEY": "test-api-key"}'
             }
             if (path.toString().includes(".json5")) {
-                return '{"APP_URL": "http://example.org/", AUTH_PROVIDERS: [{ name: "password" }], "API_PORT": 1993, /* comment */ }'
+                return '{"APP_URL": "http://example.org/", AUTH_PROVIDERS: [{ name: "password" }], "API_PORT": 1993, RESEND_API_KEY: "test-api-key", /* comment */ }'
             }
             return ""
         })
@@ -345,9 +344,8 @@ describe("API_BASE Validation", () => {
             API_BASE: `api/${API_VERSION}`, // Missing leading slash
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
-            FEDERATION: true,
-            AUTH_PROVIDERS: [{ name: "password" }],
-            FEDERATION_TARGETS: []
+            RESEND_API_KEY: "valid-api-key",
+            AUTH_PROVIDERS: [{ name: "password" }]
         }
 
         const result = FullConfigSchema.safeParse(config)
@@ -362,9 +360,8 @@ describe("API_BASE Validation", () => {
             API_BASE: `/api/${API_VERSION}/`, // Has trailing slash
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
-            FEDERATION: true,
-            AUTH_PROVIDERS: [{ name: "password" }],
-            FEDERATION_TARGETS: []
+            RESEND_API_KEY: "valid-api-key",
+            AUTH_PROVIDERS: [{ name: "password" }]
         }
 
         const result = FullConfigSchema.safeParse(config)
@@ -442,9 +439,8 @@ describe("Edge Cases", () => {
             API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
-            FEDERATION: true,
-            AUTH_PROVIDERS: [{ name: "password" }],
-            FEDERATION_TARGETS: []
+            RESEND_API_KEY: "valid-api-key",
+            AUTH_PROVIDERS: [{ name: "password" }]
         }
 
         const result = FullConfigSchema.safeParse(config)
@@ -458,9 +454,8 @@ describe("Edge Cases", () => {
             API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
-            FEDERATION: true,
-            AUTH_PROVIDERS: [{ name: "password" }],
-            FEDERATION_TARGETS: []
+            RESEND_API_KEY: "valid-api-key",
+            AUTH_PROVIDERS: [{ name: "password" }]
         }
 
         const result = FullConfigSchema.safeParse(config)
@@ -475,9 +470,8 @@ describe("Edge Cases", () => {
             API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
-            FEDERATION: true,
-            AUTH_PROVIDERS: [{ name: "password" }],
-            FEDERATION_TARGETS: []
+            RESEND_API_KEY: "valid-api-key",
+            AUTH_PROVIDERS: [{ name: "password" }]
         }
 
         const result = FullConfigSchema.safeParse(config)
@@ -492,9 +486,8 @@ describe("Edge Cases", () => {
             API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
-            FEDERATION: true,
-            AUTH_PROVIDERS: [{ name: "password" }],
-            FEDERATION_TARGETS: []
+            RESEND_API_KEY: "valid-api-key",
+            AUTH_PROVIDERS: [{ name: "password" }]
         }
 
         const result = FullConfigSchema.safeParse(config)
@@ -509,9 +502,8 @@ describe("Edge Cases", () => {
             API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
             LOG_LEVEL: "info",
-            FEDERATION: true,
-            AUTH_PROVIDERS: [{ name: "password" }],
-            FEDERATION_TARGETS: []
+            RESEND_API_KEY: "valid-api-key",
+            AUTH_PROVIDERS: [{ name: "password" }]
         }
 
         const result = FullConfigSchema.safeParse(config)

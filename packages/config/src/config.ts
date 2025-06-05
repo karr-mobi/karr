@@ -15,8 +15,7 @@ export const {
     LOG_LEVEL,
     ADMIN_EMAIL,
     AUTH_PROVIDERS,
-    FEDERATION,
-    FEDERATION_TARGETS,
+    RESEND_API_KEY,
     APPLICATION_NAME,
     PRODUCTION
 } = await config.value
