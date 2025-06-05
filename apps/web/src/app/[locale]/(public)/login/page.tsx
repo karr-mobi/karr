@@ -1,10 +1,10 @@
 import { GithubLogo } from "@karr/ui/logos/github"
 import { GoogleLogo } from "@karr/ui/logos/google"
 import { PasswordLogo } from "@karr/ui/logos/password"
+import { SendIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { LoginButton } from "./LoginButton"
-import { SendIcon } from "lucide-react"
-import { OAuthProviders, LocalProviders } from "./providers"
+import { LocalProviders, OAuthProviders } from "./providers"
 
 const LOGOS = {
     google: <GoogleLogo />,
@@ -32,11 +32,11 @@ export default function Login() {
                     ))}
                     {OAuthProviders.length > 0 && LocalProviders.length > 0 && (
                         <div className="flex w-96 max-w-[80vw] items-center justify-center">
-                            <div className="flex-1 border-t border-gray-300"></div>
-                            <span className="px-4 text-sm text-gray-500">
+                            <div className="flex-1 border-gray-300 border-t"></div>
+                            <span className="px-4 text-gray-500 text-sm">
                                 {t("or")}
                             </span>
-                            <div className="flex-1 border-t border-gray-300"></div>
+                            <div className="flex-1 border-gray-300 border-t"></div>
                         </div>
                     )}
                     {LocalProviders.map((provider) => (
