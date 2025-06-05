@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.13.7
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.13.6...v0.13.7)
+
+### 🚀 Enhancements
+
+- Add email sending with Resend ([#151](https://github.com/karr-mobi/karr/pull/151))
+
+### 🩹 Fixes
+
+- Routing ([4ae2dee](https://github.com/karr-mobi/karr/commit/4ae2dee))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.13.6
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.13.5...v0.13.6)
