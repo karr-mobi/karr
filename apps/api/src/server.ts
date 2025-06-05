@@ -15,6 +15,26 @@ import trips from "@/routes/trips"
 import user from "@/routes/user"
 import type { AppVariables } from "./lib/types"
 
+const authCheckMiddleware = createMiddleware(async (c, next) => {
+    logger.debug("request received", c.req.url)
+
+    const subject = await isAuthenticated(c)
+
+    if (!subject) {
+        logger.debug("Unauthorized request attempt blocked")
+        return c.json(
+            {
+                error: "Unauthorized"
+            },
+            401
+        )
+    }
+
+    // Set the subject in the context
+    c.set("userSubject", subject)
+    await next()
+})
+
 // ============================
 // ==== Unprotected routes ====
 // ============================
@@ -26,25 +46,9 @@ const unprotectedRoutes = new Hono().route("/", system).route("/auth", auth)
 export const protectedRoutes = new Hono<{ Variables: AppVariables }>()
 
     // auth check middleware
-    .use(
-        createMiddleware(async (c, next) => {
-            const subject = await isAuthenticated(c)
-
-            if (!subject) {
-                logger.debug("Unauthorized request attempt blocked")
-                return c.json(
-                    {
-                        error: "Unauthorized"
-                    },
-                    401
-                )
-            }
-
-            // Set the subject in the context
-            c.set("userSubject", subject)
-            await next()
-        })
-    )
+    .use("/user", authCheckMiddleware)
+    .use("/account", authCheckMiddleware)
+    .use("/trips", authCheckMiddleware)
 
     .route("/user", user)
     .route("/account", account)
