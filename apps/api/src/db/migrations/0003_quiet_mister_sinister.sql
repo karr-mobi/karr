@@ -1,1 +1,0 @@
-ALTER TABLE "Accounts" ADD COLUMN "token" text;
