@@ -35,7 +35,9 @@
             "redirecting": "Redirecting...",
             "password": "Use a password",
             "code": "Send a code to my email",
-            "or": "or"
+            "or": "or",
+            "error": "An error occurred while logging in. Please try again later.",
+            "blocked": "Your account is blocked. Please contact support."
         },
         "Logout": {
             "title": "Logout"
