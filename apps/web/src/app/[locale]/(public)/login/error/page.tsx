@@ -8,6 +8,7 @@ export const metadata = {
 export default async function Login({
     searchParams
 }: {
+    //biome-ignore lint/style/useNamingConvention: openauth param name
     searchParams: Promise<{ error: string; error_description: string }>
 }) {
     const params = await searchParams
@@ -21,11 +22,11 @@ export default async function Login({
         <div className="flex w-full flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center justify-center">
                 {error && (
-                    <div className="text-center text-xs text-gray-500">
+                    <div className="text-center text-gray-500 text-xs">
                         {error}
                     </div>
                 )}
-                <div className="text-sm text-center gap-4 text-gray-500">
+                <div className="gap-4 text-center text-gray-500 text-sm">
                     {t("error")}
                 </div>
                 {errorDescription && (
