@@ -7,6 +7,11 @@ import { auth } from "~/auth/actions"
 
 import TripList from "./trips"
 
+export const metadata = {
+    title: "Search",
+    description: "Search for trips"
+}
+
 export default async function Search() {
     const t = await getTranslations("trips")
 

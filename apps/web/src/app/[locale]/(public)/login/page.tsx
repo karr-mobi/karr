@@ -13,6 +13,11 @@ const LOGOS = {
     password: <PasswordLogo />
 }
 
+export const metadata = {
+    title: "Login",
+    description: "Login to your Karr account"
+}
+
 export default function Login() {
     const t = useTranslations("auth.Login")
 

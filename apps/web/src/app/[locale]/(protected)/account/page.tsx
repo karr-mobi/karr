@@ -7,6 +7,11 @@ import { auth } from "~/auth/actions"
 
 import UserInfo from "./userinfo"
 
+export const metadata = {
+    title: "Account",
+    description: "Manage your Karr account"
+}
+
 export default async function AccountPage() {
     const t = await getTranslations("auth.Account")
 
