@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.13.10
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.13.9...v0.13.10)
+
+### 🚀 Enhancements
+
+- Translate auth flow ([#152](https://github.com/karr-mobi/karr/pull/152))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.13.9
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.13.8...v0.13.9)
