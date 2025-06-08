@@ -8,7 +8,6 @@ import type {
     ExchangeSuccess,
     Tokens
 } from "@openauthjs/openauth/client"
-import { Select } from "@openauthjs/openauth/ui/select"
 import type { Theme } from "@openauthjs/openauth/ui/theme"
 import type { Context } from "hono"
 import { setCookie } from "hono/cookie"
@@ -49,7 +48,6 @@ const theme: Theme = {
 
 const app = issuer({
     basePath: authBaseUrl(API_BASE),
-    select: Select({}),
     providers,
     storage: UnStorage({
         driver
@@ -108,17 +106,18 @@ app.get("/callback", async (ctx) => {
     const url = new URL(ctx.req.url)
     const code = ctx.req.query("code")
     const error = ctx.req.query("error")
+    const errorDescription = ctx.req.query("error_description")
     const next = ctx.req.query("next") ?? `${url.origin}/`
 
     if (error) {
         logger.debug(`[${runtime}] AUTH CALLBACK: Error in request - ${error}`)
-        return ctx.json(
-            {
-                message: error,
-                cause: ctx.req.query("error_description")
-            } satisfies ErrorResponse,
-            500
-        )
+
+        const url = new URL(`/fr/login/error`, ctx.req.url)
+        url.searchParams.set("error", error)
+        url.searchParams.set("error_description", errorDescription ?? "")
+        logger.debug(`Redirecting to ${url.href}`)
+
+        return ctx.redirect(url.href, 302)
     }
 
     if (!code) {

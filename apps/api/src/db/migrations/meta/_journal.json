@@ -5,85 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1736880915982,
-      "tag": "0000_dapper_maginty",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1737218132209,
-      "tag": "0001_eager_revanche",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1737219006891,
-      "tag": "0002_far_kronos",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1737220277647,
-      "tag": "0003_quiet_mister_sinister",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1737400279655,
-      "tag": "0004_gifted_champions",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1737401522935,
-      "tag": "0005_lonely_warhawk",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "7",
-      "when": 1746483658102,
-      "tag": "0006_fat_black_cat",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1746488137847,
-      "tag": "0007_cuddly_catseye",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "7",
-      "when": 1746728773197,
-      "tag": "0008_dapper_leader",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "7",
-      "when": 1747852333517,
-      "tag": "0009_slimy_lifeguard",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "7",
-      "when": 1747928246464,
-      "tag": "0010_past_doomsday",
-      "breakpoints": true
-    },
-    {
-      "idx": 11,
-      "version": "7",
-      "when": 1747929567071,
-      "tag": "0011_blue_jackal",
+      "when": 1749407629192,
+      "tag": "0000_wide_proudstar",
       "breakpoints": true
     }
   ]

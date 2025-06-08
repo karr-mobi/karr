@@ -8,6 +8,8 @@ import { PasswordProvider } from "@openauthjs/openauth/provider/password"
 import type { Provider } from "@openauthjs/openauth/provider/provider"
 import { CodeUI } from "@openauthjs/openauth/ui/code"
 import { PasswordUI } from "@openauthjs/openauth/ui/password"
+import { isProduction } from "std-env"
+import { messages } from "@/lib/messages"
 import { sendEmail } from "./mail"
 
 export type Providers = AuthProvider["name"]
@@ -49,33 +51,36 @@ function getProviders() {
         if (provider.name === "password") {
             providerConfig = PasswordProvider(
                 PasswordUI({
-                    copy: {
-                        // TODO: translate this
-                        error_email_taken:
-                            "This email is already taken. (translate this)",
-                        button_continue: "Continue (translate this)"
-                    },
+                    copy: messages.fr.password,
                     sendCode: async (email, code) => {
-                        await sendEmail(
-                            email,
-                            `Your confirmation code is ${code}`,
-                            `Your Karr confirmation code is <b>${code}</b>.`
-                        )
+                        if (isProduction) {
+                            await sendEmail(
+                                email,
+                                `Your confirmation code is ${code}`,
+                                `Your Karr confirmation code is <b>${code}</b>.`
+                            )
+                        } else {
+                            logger.info(`Email sent to ${email} — Code ${code}`)
+                        }
                     }
                 })
             )
         } else if (provider.name === "code") {
             providerConfig = CodeProvider(
                 CodeUI({
-                    copy: {
-                        code_info: "We'll send a pin code to your email"
-                    },
+                    copy: messages.fr.code,
                     sendCode: async (claims, code) => {
-                        await sendEmail(
-                            claims.email as string,
-                            `Your confirmation code is ${code}`,
-                            `Your Karr confirmation code is <b>${code}</b>.`
-                        )
+                        if (isProduction) {
+                            await sendEmail(
+                                claims.email as string,
+                                `Your confirmation code is ${code}`,
+                                `Your Karr confirmation code is <b>${code}</b>.`
+                            )
+                        } else {
+                            logger.info(
+                                `Email sent to ${claims.email} — Code ${code}`
+                            )
+                        }
                     }
                 })
             )

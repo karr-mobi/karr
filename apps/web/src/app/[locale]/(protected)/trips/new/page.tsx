@@ -4,6 +4,11 @@ import { auth } from "~/auth/actions"
 
 import { Form } from "./new-trip-form"
 
+export const metadata = {
+    title: "New Trip",
+    description: "Create a new trip"
+}
+
 export default async function New() {
     const t = await getTranslations("trips.Create")
 

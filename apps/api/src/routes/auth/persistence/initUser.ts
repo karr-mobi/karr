@@ -1,6 +1,7 @@
 import type { UserProperties } from "@karr/auth/subjects"
 import { AUTH_PROVIDERS } from "@karr/config"
 import logger from "@karr/logger"
+import { tryCatch } from "@karr/util"
 import { err, ok } from "neverthrow"
 import { db } from "@/db"
 import { accountsTable } from "@/db/schemas/accounts"
@@ -59,18 +60,22 @@ export async function initUser(data: UserInitData) {
         return err("Failed to create profile")
     }
 
-    const account = await db
-        .insert(accountsTable)
-        .values({
-            provider: data.provider,
-            remoteId: data.remoteId,
-            email: data.email,
-            profile: profile[0].id,
-            verified: isTrustedProvider(data.provider) ? data.verified : false
-        })
-        .returning()
+    const account = await tryCatch(
+        db
+            .insert(accountsTable)
+            .values({
+                provider: data.provider,
+                remoteId: data.remoteId,
+                email: data.email,
+                profile: profile[0].id,
+                verified: isTrustedProvider(data.provider)
+                    ? data.verified
+                    : false
+            })
+            .returning()
+    )
 
-    if (account.length === 0 || !account[0]) {
+    if (!account.success || account.value.length === 0 || !account.value[0]) {
         logger.error("Failed to create account")
         return err("Failed to create account")
     }

@@ -23,7 +23,10 @@ const baskervville = localFont({
 })
 
 export const metadata: Metadata = {
-    title: APPLICATION_NAME,
+    title: {
+        template: `%s | ${APPLICATION_NAME}`,
+        default: APPLICATION_NAME
+    },
     description: `${APPLICATION_NAME} is a federated carpool platform.`
 }
 

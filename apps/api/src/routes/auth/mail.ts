@@ -8,6 +8,6 @@ export function sendEmail(to: string, subject: string, text: string) {
         from: "Karr <noreply@updates.karr.mobi>",
         to,
         subject,
-        text
+        html: `<p>${text}</p>`
     })
 }

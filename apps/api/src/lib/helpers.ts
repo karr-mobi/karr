@@ -2,6 +2,13 @@ import logger from "@karr/logger"
 
 import { tryCatch } from "@karr/util"
 import type { Context } from "hono"
+import { getCookie } from "hono/cookie"
+
+export function useLocale(c: Context): string {
+    const localeParam = c.req.param("locale")
+    const localeCookie = getCookie(c, "NEXT_LOCALE")
+    return localeParam || localeCookie || "fr"
+}
 
 /**
  * Template for a function that returns a response object

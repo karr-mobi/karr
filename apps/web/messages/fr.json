@@ -35,7 +35,9 @@
             "redirecting": "Redirection...",
             "password": "Utiliser un mot de passe",
             "code": "Envoyer un code à mon email",
-            "or": "ou"
+            "or": "ou",
+            "error": "Une erreur est survenue lors de la connexion. Veuillez réessayer plus tard.",
+            "blocked": "Votre compte est bloqué. Veuillez contacter le support."
         },
         "Logout": {
             "title": "Se déconnecter"
