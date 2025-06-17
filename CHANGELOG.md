@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.14.2
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.1...v0.14.2)
+
+### 🚀 Enhancements
+
+- Add avatars to trips list ([#159](https://github.com/karr-mobi/karr/pull/159))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.1
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.0...v0.14.1)
