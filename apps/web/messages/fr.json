@@ -77,6 +77,36 @@
             "success": "Trajet supprimé correctement"
         }
     },
+    "Trips": {
+        "trip-details": "Détails du trajet",
+        "trip-details-subtitle": "Voir les informations et les détails de votre trajet",
+        "trip-overview": "Aperçu du trajet",
+        "per-seat": "par siège",
+        "from": "De",
+        "to": "Vers",
+        "date": "Date",
+        "departure-time": "Heure de départ",
+        "seats": "Places au total",
+        "auto-book": "Réservation automatique",
+        "available": "disponibles",
+        "description": "Description",
+        "driver-info": "Informations sur le conducteur",
+        "verified": "Vérifié",
+        "not-verified": "Non vérifié",
+        "rating": "Note",
+        "vehicle": "Véhicule",
+        "trip-preferences": "Préférences du trajet",
+        "music-allowed": "Musique",
+        "smoking-allowed": "Cigarettes",
+        "pets-allowed": "Animaux",
+        "max-baggage": "Bagages maximum",
+        "payment-method": "Méthode de paiement",
+        "yes": "Oui",
+        "no": "Non",
+        "cash": "Espèces",
+        "raw-trip-data": "Données brutes du trajet"
+    },
+
     "Utilities": {
         "next": "Suivant",
         "prev": "Précédent",
