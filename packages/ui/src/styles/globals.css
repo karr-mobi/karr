@@ -1,7 +1,7 @@
-@layer block, utilities, base, theme;
+@layer utilities, block, base, theme;
 
-@import "./block.css" layer(block);
 @import "./utilities.css" layer(utilities);
+@import "./block.css" layer(block);
 @import "./reset.css" layer(base);
 @import "./base.css" layer(base);
 @import "./theme.css" layer(theme);

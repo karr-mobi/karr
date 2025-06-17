@@ -5,7 +5,7 @@ import { ChevronRight, CircleCheck } from "lucide-react"
 import { motion } from "motion/react"
 import { useSearchParams } from "next/navigation"
 import { useTranslations } from "next-intl"
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 
 import { Button } from "./button"
 import { TextMorph } from "./text-morph"
@@ -53,8 +53,97 @@ const Stepper = ({
 
     const [step, setStep] = useState(Number(p.get("step")) || 1)
     const [isExpanded, setIsExpanded] = useState(true)
+    const stepContainerRef = useRef<HTMLDivElement>(null)
 
     const steps = React.Children.count(children)
+
+    const handleContinue = useCallback(() => {
+        if (step < steps) {
+            setStep(step + 1)
+            setIsExpanded(false)
+        }
+    }, [step, steps])
+
+    const handleBack = () => {
+        if (step === 2) {
+            setIsExpanded(true)
+        }
+        if (step > 1) {
+            setStep(step - 1)
+        }
+    }
+
+    const dots = Array(steps)
+        .fill(0)
+        .map((_, i) => i)
+
+    // Handle keyboard events
+    useEffect(() => {
+        //biome-ignore lint/complexity/noExcessiveCognitiveComplexity: it's fine
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Enter" || event.key === "Tab") {
+                event.preventDefault()
+
+                // Find the next focusable element within the current step
+                if (stepContainerRef.current) {
+                    const currentStepElement =
+                        stepContainerRef.current.querySelector(
+                            `[data-step="${step}"]`
+                        )
+                    if (currentStepElement) {
+                        const focusableElements =
+                            currentStepElement.querySelectorAll(
+                                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                            )
+
+                        const currentFocused = document.activeElement
+                        const currentIndex = Array.from(
+                            focusableElements
+                        ).indexOf(currentFocused as Element)
+
+                        if (
+                            currentIndex >= 0 &&
+                            currentIndex < focusableElements.length - 1
+                        ) {
+                            // Focus next element in current step
+                            ;(
+                                focusableElements[
+                                    currentIndex + 1
+                                ] as HTMLElement
+                            ).focus()
+                            // Focus first element in next step or continue to next step
+                        } else if (step < steps) {
+                            handleContinue()
+                            // After step change, focus first element in new step
+                            setTimeout(() => {
+                                const nextStepElement =
+                                    stepContainerRef.current?.querySelector(
+                                        `[data-step="${step + 1}"]`
+                                    )
+                                if (nextStepElement) {
+                                    const nextFocusableElements =
+                                        nextStepElement.querySelectorAll(
+                                            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                                        )
+                                    if (nextFocusableElements.length > 0) {
+                                        ;(
+                                            nextFocusableElements[0] as HTMLElement
+                                        ).focus()
+                                    }
+                                }
+                            }, 100)
+                        }
+                    }
+                }
+            }
+        }
+
+        document.addEventListener("keydown", handleKeyDown)
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown)
+        }
+    }, [handleContinue, step, steps])
 
     if (steps === 0) {
         return (
@@ -71,26 +160,6 @@ const Stepper = ({
             </div>
         )
     }
-
-    const handleContinue = () => {
-        if (step < steps) {
-            setStep(step + 1)
-            setIsExpanded(false)
-        }
-    }
-
-    const handleBack = () => {
-        if (step === 2) {
-            setIsExpanded(true)
-        }
-        if (step > 1) {
-            setStep(step - 1)
-        }
-    }
-
-    const dots = Array(steps)
-        .fill(0)
-        .map((_, i) => i)
 
     return (
         <div
@@ -130,11 +199,15 @@ const Stepper = ({
             </div>
 
             {/* Content */}
-            <div className="relative w-full overflow-hidden">
+            <div
+                className="relative w-full overflow-hidden"
+                ref={stepContainerRef}
+            >
                 <div className="grid grid-cols-1 grid-rows-1">
                     {React.Children.map(children, (child, index) => (
                         <motion.div
                             key={child?.toString()}
+                            data-step={index + 1}
                             initial={{ x: index === 0 ? 0 : 300, opacity: 0 }}
                             animate={{
                                 x:
