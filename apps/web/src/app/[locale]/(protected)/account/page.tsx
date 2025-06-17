@@ -1,10 +1,9 @@
+import process from "node:process"
 import { unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
-
 import Loading from "@/components/Loading"
 import { auth } from "~/auth/actions"
-
 import UserInfo from "./userinfo"
 
 export const metadata = {
@@ -27,6 +26,14 @@ export default async function AccountPage() {
             <Suspense fallback={<Loading />}>
                 <UserInfo avatar={authState.avatar} />
             </Suspense>
+            {process.env.NODE_ENV !== "production" && (
+                <details className="mt-4 ml-4 text-sm">
+                    <summary className="text-muted-foreground text-xs">
+                        Raw jwt data
+                    </summary>
+                    <pre>{JSON.stringify(authState, null, 2)}</pre>
+                </details>
+            )}
         </div>
     )
 }

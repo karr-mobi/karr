@@ -1,5 +1,6 @@
 "use client"
 
+import process from "node:process"
 import type { InferResponseType } from "@karr/api/client"
 import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 import { Badge } from "@karr/ui/components/badge"
@@ -89,7 +90,7 @@ function ShowUserData({
                             <AvatarFallback>{initials}</AvatarFallback>
                         </Avatar>
                         <div className="space-y-1">
-                            <h3 className="font-semibold text-lg">
+                            <h3 className="!font-normal !font-sans text-lg">
                                 {displayName}
                             </h3>
                             <div className="flex items-center gap-2">
@@ -214,31 +215,14 @@ function ShowUserData({
                     </div>
                 </CardContent>
             </Card>
-
-            {/* Account Details Card */}
-            <Card className="md:col-span-2">
-                <CardHeader>
-                    <CardTitle>{t("account-details.title")}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="grid gap-4 md:grid-cols-2">
-                        <div>
-                            <Label className="font-medium text-muted-foreground text-sm">
-                                {t("account-details.user-id")}
-                            </Label>
-                            <p className="font-mono text-sm">{user.id}</p>
-                        </div>
-                        <div>
-                            <Label className="font-medium text-muted-foreground text-sm">
-                                {t("account-details.provider")}
-                            </Label>
-                            <p className="text-sm capitalize">
-                                {user.provider}
-                            </p>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
+            {process.env.NODE_ENV !== "production" && (
+                <details className="mt-4 ml-4 text-sm">
+                    <summary className="text-muted-foreground text-xs">
+                        Raw user data
+                    </summary>
+                    <pre>{JSON.stringify(user, null, 2)}</pre>
+                </details>
+            )}
         </div>
     )
 }

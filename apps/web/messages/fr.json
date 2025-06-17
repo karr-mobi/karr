@@ -50,7 +50,7 @@
     "Account": {
         "title": "Compte",
         "subtitle": "Gérer vos paramètres et préférences de compte",
-        "profile-info": "Profile Information",
+        "profile-info": "Profil",
         "blocked": "Compte bloqué",
         "verified": "Compte vérifié",
         "not-verified": "Compte non vérifié",
