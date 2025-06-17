@@ -1,7 +1,9 @@
+import { AuthProvider } from "~/auth/context"
+
 export default function AuthedLayout({
     children
 }: {
     children: React.ReactNode
 }) {
-    return children
+    return <AuthProvider>{children}</AuthProvider>
 }
