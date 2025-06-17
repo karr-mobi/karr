@@ -133,7 +133,9 @@ export function Form() {
                         children={(field) => {
                             return (
                                 <>
-                                    <Label htmlFor={field.name}>{t("from")}</Label>
+                                    <Label htmlFor={field.name}>
+                                        {t("from")}
+                                    </Label>
                                     <Input
                                         id={field.name}
                                         name={field.name}
@@ -174,7 +176,9 @@ export function Form() {
                         name="departure"
                         children={(field) => (
                             <>
-                                <Label htmlFor={field.name}>{t("departure")}</Label>
+                                <Label htmlFor={field.name}>
+                                    {t("departure")}
+                                </Label>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <Button

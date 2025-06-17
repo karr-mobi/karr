@@ -1,10 +1,8 @@
 import { APPLICATION_NAME } from "@karr/config/static"
-import { Button } from "@karr/ui/components/button"
 import Image from "next/image"
 import { useTranslations } from "next-intl"
 import { memo } from "react"
 import logo from "@/assets/logo-tmp.jpg"
-import { Link } from "@/i18n/routing"
 
 const MemoizedAppName = memo(
     () => <h1 className="tracking-tight">{APPLICATION_NAME}</h1>,
