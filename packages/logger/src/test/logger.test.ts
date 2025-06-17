@@ -64,7 +64,7 @@ describe("logger", () => {
         it("should return a string with caller info when not in production", () => {
             mockConfig.PRODUCTION = false
             const result = prefix()
-            expect(result).toContain("dist/index.js:")
+            expect(result).toMatch(/dist\/.*\.js:\d+:\d+/)
         })
 
         it("should include timestamp when LOG_TIMESTAMP is true", () => {

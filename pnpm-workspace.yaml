@@ -5,13 +5,13 @@ packages:
 
 catalogs:
   web:
-    '@tanstack/react-form': ^1.12.0
-    '@tanstack/react-query': ^5.79.0
+    '@tanstack/react-form': ^1.12.3
+    '@tanstack/react-query': ^5.80.7
     babel-plugin-react-compiler: ^19.1.0-rc.2
     next: ^15.3.3
     next-themes: ^0.4.6
     next-intl: ^4.1.0
-    posthog-js: ^1.249.0
+    posthog-js: ^1.253.4
     react: ^19.1.0
     react-dom: ^19.1.0
   api:
@@ -23,14 +23,14 @@ catalogs:
     drizzle-zod: ^0.8.2
     hono: ^4.7.11
     postgres: ^3.4.7
-    resend: ^4.5.2
-    srvx: ^0.7.3
+    resend: ^4.6.0
+    srvx: ^0.7.5
     unstorage: ^1.16.0
   docs:
-    '@astrojs/starlight': ^0.34.3
+    '@astrojs/starlight': ^0.34.4
     '@astrojs/starlight-tailwind': ^4.0.1
     '@deno/astro-adapter': ^0.3.1
-    astro: ^5.8.1
+    astro: ^5.9.4
     starlight-sidebar-topics: ^0.6.0
   utils:
     '@std/text': jsr:^1.0.14
@@ -43,23 +43,23 @@ catalogs:
     tinyrainbow: ^2.0.0
     unplugin: ^2.3.5
     sharp: ^0.34.2
-    zod: ^3.25.48
+    zod: ^3.25.67
   ui:
     '@icons-pack/react-simple-icons': ^12.9.0
-    '@hookform/resolvers': ^5.0.1
-    '@tailwindcss/postcss': ^4.1.8
-    '@tailwindcss/vite': ^4.1.8
+    '@hookform/resolvers': ^5.1.1
+    '@tailwindcss/postcss': ^4.1.10
+    '@tailwindcss/vite': ^4.1.10
     class-variance-authority: ^0.7.1
     clsx: ^2.1.1
     date-fns: ^4.1.0
     lucide-react: ^0.507.0
-    motion: ^12.15.0
+    motion: ^12.18.1
     react-day-picker: ^9.7.0
-    react-hook-form: ^7.57.0
+    react-hook-form: ^7.58.0
     react-intersection-observer: ^9.16.0
-    sonner: ^2.0.4
-    tailwind-merge: ^3.3.0
-    tailwindcss: ^4.1.8
+    sonner: ^2.0.5
+    tailwind-merge: ^3.3.1
+    tailwindcss: ^4.1.10
     tailwindcss-animate: ^1.0.7
   radix:
     '@radix-ui/react-accordion': ^1.2.11
@@ -90,29 +90,29 @@ catalogs:
     '@radix-ui/react-toggle-group': ^1.1.10
     '@radix-ui/react-tooltip': ^1.2.7
   types:
-    '@types/node': ^22.15.29
-    '@types/react': ^19.1.6
-    '@types/react-dom': ^19.1.5
+    '@types/node': ^22.15.32
+    '@types/react': ^19.1.8
+    '@types/react-dom': ^19.1.6
   test:
-    vitest: ^3.1.4
+    vitest: ^3.2.3
     vite-tsconfig-paths: ^5.1.4
   lint:
     '@biomejs/biome': 2.0.0-beta.6
     '@commitlint/cli': ^19.8.1
     '@commitlint/config-conventional': ^19.8.1
-    '@eslint/js': ^9.28.0
+    '@eslint/js': ^9.29.0
     '@next/eslint-plugin-next': ^15.3.3
     '@tanstack/eslint-plugin-query': ^5.78.0
-    '@typescript-eslint/eslint-plugin': ^8.33.0
-    '@typescript-eslint/parser': ^8.33.0
-    eslint: ^9.28.0
+    '@typescript-eslint/eslint-plugin': ^8.34.1
+    '@typescript-eslint/parser': ^8.34.1
+    eslint: ^9.29.0
     eslint-config-biome: ^1.9.4
     eslint-config-prettier: ^10.1.5
     eslint-plugin-react: ^7.37.5
     eslint-plugin-react-hooks: ^5.2.0
     eslint-plugin-turbo: ^2.5.4
     lint-staged: ^15.5.2
-    typescript-eslint: ^8.33.0
+    typescript-eslint: ^8.34.1
   devtools:
     '@turbo/gen': ^2.5.4
     changelogen: ^0.6.1
@@ -121,7 +121,7 @@ catalogs:
     husky: ^9.1.7
     taze: ^19.1.0
     turbo: ^2.5.4
-    tsx: ^4.19.4
+    tsx: ^4.20.3
     typescript: ^5.8.3
 
 disallowWorkspaceCycles: true
