@@ -19,6 +19,7 @@ import { useAuth } from "@/app/auth/context"
 import Loading from "@/components/Loading"
 import { Link } from "@/i18n/routing"
 import { client } from "@/util/apifetch"
+import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 
 export default function FetchTrips({ url }: { url: string }) {
     const [trips, setTrips] = useState<Trip[]>([])
@@ -58,14 +59,15 @@ export default function FetchTrips({ url }: { url: string }) {
             try {
                 console.log("event data", event.data)
                 const tripData = JSON.parse(event.data)
-                console.log("parsed trip data", tripData)
                 const trip = TripSchema.parse(tripData)
-                console.log("parsed trip", trip)
                 setTrips((prev) => [...prev, trip])
-                console.log("updated trip")
             } catch (e) {
                 console.error("Failed to parse trip:", e)
             }
+        })
+
+        eventSource.addEventListener("failed", (event) => {
+            console.error("Error:", event.data)
         })
 
         eventSource.onopen = (e) => {
@@ -176,22 +178,15 @@ function TripCard({
                 <p>{trip.price} €</p>
             </CardContent>
             <CardFooter className="flow-inline">
-                {trip.origin ? (
-                    <Badge
-                        variant="outline"
-                        className="flex flex-row items-center gap-1 text-sm"
-                    >
-                        <IconEarth />
-                        {trip.origin}
-                    </Badge>
-                ) : (
-                    <Badge
-                        variant="outline"
-                        className="flex flex-row items-center gap-1 text-sm"
-                    >
-                        <IconHouse className="my-0.5" />
-                    </Badge>
-                )}
+                <Avatar>
+                    <AvatarImage src={trip.avatar || ""} />
+                    <AvatarFallback>
+                        {trip.nickname ||
+                            `${trip.firstName} ${trip.lastName || ""}` ||
+                            trip.driver.split("-")[0]}
+                    </AvatarFallback>
+                </Avatar>
+
                 <p>
                     {trip.nickname ||
                         `${trip.firstName} ${trip.lastName || ""}` ||
