@@ -54,7 +54,7 @@ const hono = new Hono<{ Variables: AppVariables }>()
                     if (data.isErr()) {
                         stream.writeSSE({
                             data: JSON.stringify(data.error),
-                            event: "error",
+                            event: "failed",
                             id: crypto.randomUUID()
                         })
                         return Promise.reject(data.error)
