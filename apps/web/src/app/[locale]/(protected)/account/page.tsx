@@ -13,18 +13,20 @@ export const metadata = {
 }
 
 export default async function AccountPage() {
-    const t = await getTranslations("auth.Account")
+    const t = await getTranslations("Account")
 
     const authState = await auth()
     if (!authState) unauthorized()
 
     return (
-        <>
-            <h1>{t("title")}</h1>
-            <code>{JSON.stringify(authState, null, 2)}</code>
+        <div className="container mx-auto py-8">
+            <div className="mb-8">
+                <h1 className="font-bold text-3xl">{t("title")}</h1>
+                <p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
+            </div>
             <Suspense fallback={<Loading />}>
-                <UserInfo />
+                <UserInfo avatar={authState.avatar} />
             </Suspense>
-        </>
+        </div>
     )
 }

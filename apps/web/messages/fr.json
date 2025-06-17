@@ -45,14 +45,33 @@
         "Dropdown": {
             "title": "Mon Compte"
         },
-        "Account": {
-            "title": "Compte",
-            "blocked": "Compte bloqué",
-            "verified": "Compte vérifié",
-            "not-verified": "Compte non vérifié",
-            "no-special-status": "Pas de statut spécial",
-            "user-id": "ID utilisateur",
-            "email": "Email"
+        "account": "Mon Compte"
+    },
+    "Account": {
+        "title": "Compte",
+        "subtitle": "Gérer vos paramètres et préférences de compte",
+        "profile-info": "Profile Information",
+        "blocked": "Compte bloqué",
+        "verified": "Compte vérifié",
+        "not-verified": "Compte non vérifié",
+        "no-special-status": "Pas de statut spécial",
+        "user-id": "ID utilisateur",
+        "email": "Email",
+
+        "preferences": {
+            "title": "Préférences",
+            "auto-book": "Réservation Automatique",
+            "music": "Musique",
+            "smoking": "Cigarettes",
+            "pets": "Animaux de compagnie",
+            "default-places": "Nombre de places par défaut",
+            "notifications": "Notifications"
+        },
+
+        "account-details": {
+            "title": "Détails du compte",
+            "provider": "Fournisseur",
+            "user-id": "ID utilisateur"
         }
     },
     "trips": {

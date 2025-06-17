@@ -45,14 +45,33 @@
         "Dropdown": {
             "title": "My Account"
         },
-        "Account": {
-            "title": "Account",
-            "blocked": "Account blocked",
-            "verified": "Account verified",
-            "not-verified": "Account not verified",
-            "no-special-status": "No special status",
-            "user-id": "User ID",
-            "email": "Email"
+        "account": "My Account"
+    },
+    "Account": {
+        "title": "Account",
+        "subtitle": "Manage your account settings and preferences",
+        "profile-info": "Profile Information",
+        "blocked": "Account blocked",
+        "verified": "Account verified",
+        "not-verified": "Account not verified",
+        "no-special-status": "No special status",
+        "user-id": "User ID",
+        "email": "Email",
+
+        "preferences": {
+            "title": "Preferences",
+            "auto-book": "Auto Book",
+            "music": "Music",
+            "smoking": "Smoking",
+            "pets": "Pets",
+            "default-places": "Default Places",
+            "notifications": "Notifications"
+        },
+
+        "account-details": {
+            "title": "Account Details",
+            "provider": "Provider",
+            "user-id": "User ID"
         }
     },
     "trips": {

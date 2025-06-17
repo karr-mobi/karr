@@ -885,6 +885,9 @@ importers:
       '@hookform/resolvers':
         specifier: catalog:ui
         version: 5.1.1(react-hook-form@7.58.0(react@19.1.0))
+      '@radix-ui/react-avatar':
+        specifier: catalog:radix
+        version: 1.1.10(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-dropdown-menu':
         specifier: catalog:radix
         version: 2.1.15(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -903,6 +906,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: catalog:radix
         version: 1.2.3(@types/react@19.1.8)(react@19.1.0)
+      '@radix-ui/react-switch':
+        specifier: catalog:radix
+        version: 1.2.5(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@tanstack/react-form':
         specifier: catalog:web
         version: 1.12.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)

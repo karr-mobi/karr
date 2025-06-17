@@ -40,7 +40,9 @@
         "sonner": "catalog:ui",
         "tailwind-merge": "catalog:ui",
         "tailwindcss-animate": "catalog:ui",
-        "zod": "catalog:utils"
+        "zod": "catalog:utils",
+        "@radix-ui/react-avatar": "catalog:radix",
+        "@radix-ui/react-switch": "catalog:radix"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
