@@ -33,6 +33,12 @@ const nextConfig = {
                 hostname: "*.googleusercontent.com",
                 port: "",
                 pathname: "/a/**"
+            },
+            {
+                protocol: "https",
+                hostname: "misc.finxol.io",
+                port: "",
+                pathname: "/*"
             }
         ]
     },

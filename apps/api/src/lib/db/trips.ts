@@ -27,7 +27,8 @@ export async function getTrips() {
                 driver: tripsView.driver,
                 firstName: sql`"trips_view"."firstName"`,
                 lastName: sql`"trips_view"."lastName"`,
-                nickname: sql`"trips_view"."nickname"`
+                nickname: sql`"trips_view"."nickname"`,
+                avatar: sql`"trips_view"."avatar"`
             })
             .from(tripsView)
     )

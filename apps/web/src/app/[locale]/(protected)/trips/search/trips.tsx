@@ -1,7 +1,7 @@
 "use client"
 
 import { type Trip, TripSchema } from "@karr/api/db/trips"
-import { Badge } from "@karr/ui/components/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 import { Button } from "@karr/ui/components/button"
 import {
     Card,
@@ -12,7 +12,7 @@ import {
     CardTitle
 } from "@karr/ui/components/card"
 import { toast } from "@karr/ui/components/sonner"
-import { Earth as IconEarth, House as IconHouse, TrashIcon } from "lucide-react"
+import { TrashIcon } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { useAuth } from "@/app/auth/context"
@@ -58,14 +58,15 @@ export default function FetchTrips({ url }: { url: string }) {
             try {
                 console.log("event data", event.data)
                 const tripData = JSON.parse(event.data)
-                console.log("parsed trip data", tripData)
                 const trip = TripSchema.parse(tripData)
-                console.log("parsed trip", trip)
                 setTrips((prev) => [...prev, trip])
-                console.log("updated trip")
             } catch (e) {
                 console.error("Failed to parse trip:", e)
             }
+        })
+
+        eventSource.addEventListener("failed", (event) => {
+            console.error("Error:", event.data)
         })
 
         eventSource.onopen = (e) => {
@@ -176,22 +177,15 @@ function TripCard({
                 <p>{trip.price} €</p>
             </CardContent>
             <CardFooter className="flow-inline">
-                {trip.origin ? (
-                    <Badge
-                        variant="outline"
-                        className="flex flex-row items-center gap-1 text-sm"
-                    >
-                        <IconEarth />
-                        {trip.origin}
-                    </Badge>
-                ) : (
-                    <Badge
-                        variant="outline"
-                        className="flex flex-row items-center gap-1 text-sm"
-                    >
-                        <IconHouse className="my-0.5" />
-                    </Badge>
-                )}
+                <Avatar>
+                    <AvatarImage src={trip.avatar || ""} />
+                    <AvatarFallback>
+                        {trip.nickname ||
+                            `${trip.firstName} ${trip.lastName || ""}` ||
+                            trip.driver.split("-")[0]}
+                    </AvatarFallback>
+                </Avatar>
+
                 <p>
                     {trip.nickname ||
                         `${trip.firstName} ${trip.lastName || ""}` ||

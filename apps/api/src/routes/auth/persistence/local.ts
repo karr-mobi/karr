@@ -45,7 +45,7 @@ export async function findOrCreateUserFromLocalAuth(
         const newUser = await initUser({
             firstName: name ?? "",
             lastName: "",
-            avatar: "https://profiles.cache.lol/finxol/picture?v=1743626159",
+            avatar: "https://misc.finxol.io/clemence.jpeg",
             email: data.email,
             provider: data.provider,
             remoteId: data.email

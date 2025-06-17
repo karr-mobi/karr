@@ -28,7 +28,8 @@ export const tripsView = pgView("trips_view").as((qb) => {
             driver: tripsTable.driver,
             firstName: profileTable.firstName,
             lastName: profileTable.lastName,
-            nickname: profileTable.nickname
+            nickname: profileTable.nickname,
+            avatar: profileTable.avatar
         })
         .from(tripsTable)
         .leftJoin(profileTable, eq(tripsTable.driver, profileTable.id))
