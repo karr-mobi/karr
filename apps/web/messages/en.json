@@ -96,6 +96,36 @@
             "success": "Trip deleted successfully"
         }
     },
+    "Trips": {
+        "trip-details": "Trip Details",
+        "trip-details-subtitle": "View your trip information and details",
+        "trip-overview": "Trip Overview",
+        "per-seat": "per seat",
+        "from": "From",
+        "to": "To",
+        "date": "Date",
+        "departure-time": "Departure Time",
+        "seats": "Seats",
+        "auto-book": "Auto book",
+        "available": "available",
+        "description": "Description",
+        "driver-info": "Driver Information",
+        "verified": "Verified",
+        "not-verified": "Not Verified",
+        "rating": "Rating",
+        "vehicle": "Vehicle",
+        "trip-preferences": "Trip Preferences",
+        "music-allowed": "Music Allowed",
+        "smoking-allowed": "Smoking Allowed",
+        "pets-allowed": "Pets Allowed",
+        "max-baggage": "Max Baggage",
+        "payment-method": "Payment Method",
+        "yes": "Yes",
+        "no": "No",
+        "cash": "Cash",
+        "raw-trip-data": "Raw trip data"
+    },
+
     "Utilities": {
         "next": "Next",
         "prev": "Previous",

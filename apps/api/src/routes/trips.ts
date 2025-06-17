@@ -4,7 +4,13 @@ import { streamSSE } from "hono/streaming"
 import { validator } from "hono/validator"
 import { z } from "zod/v4-mini"
 import { NewTripInputSchema, type Trip } from "@/db/schemas/trips"
-import { addTrip, deleteTrip, getTrip, getTrips } from "@/lib/db/trips"
+import {
+    addTrip,
+    deleteTrip,
+    getTrip,
+    getTripDetails,
+    getTrips
+} from "@/lib/db/trips"
 import type {
     AppVariables,
     DataResponse,
@@ -130,6 +136,50 @@ const hono = new Hono<{ Variables: AppVariables }>()
                     name: "Test Trip"
                 }
             } satisfies DataResponse<object>)
+        }
+    )
+
+    /**
+     * Get a trip by ID
+     * @param id The ID of the trip
+     * @returns The trip
+     */
+    .get(
+        "/:id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}",
+        async (c) => {
+            const subject = getUserSub(c)
+
+            if (!subject) {
+                return c.json(
+                    {
+                        success: false,
+                        message: "User subject missing in context"
+                    },
+                    500
+                )
+            }
+
+            const tripId: string = c.req.param("id")
+
+            const trip = await getTripDetails(tripId)
+
+            if (trip.isErr()) {
+                return c.json(
+                    {
+                        success: false,
+                        error: trip.error
+                    },
+                    trip.error === "Trip not found" ? 404 : 500
+                )
+            }
+
+            return c.json(
+                {
+                    success: true,
+                    data: trip.value
+                },
+                200
+            )
         }
     )
 

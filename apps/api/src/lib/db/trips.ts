@@ -4,6 +4,8 @@ import { and, eq, sql } from "drizzle-orm"
 import { err, ok } from "neverthrow"
 import { z } from "zod/v4-mini"
 import drizzle from "@/db"
+import { accountsTable } from "@/db/schemas/accounts"
+import { profileTable } from "@/db/schemas/profile"
 import {
     type NewTrip,
     NewTripSchema,
@@ -11,6 +13,7 @@ import {
     tripsTable,
     tripsView
 } from "@/db/schemas/trips"
+import { userPrefsTable } from "@/db/schemas/userprefs"
 
 export async function getTrips() {
     const trips = await tryCatch(
@@ -41,6 +44,50 @@ export async function getTrips() {
     }
 
     return ok(t.data)
+}
+
+export async function getTripDetails(tripId: string) {
+    const trip = await tryCatch(
+        drizzle
+            .select({
+                id: tripsTable.id,
+                from: tripsTable.from,
+                to: tripsTable.to,
+                departure: tripsTable.departure,
+                price: tripsTable.price,
+                places: userPrefsTable.defaultPlaces,
+                driver: {
+                    id: profileTable.id,
+                    firstName: profileTable.firstName,
+                    lastName: profileTable.lastName,
+                    nickname: profileTable.nickname,
+                    avatar: profileTable.avatar,
+                    verified: accountsTable.verified
+                },
+                preferences: {
+                    autoBook: userPrefsTable.autoBook,
+                    music: userPrefsTable.music,
+                    smoke: userPrefsTable.smoke,
+                    pets: userPrefsTable.pets
+                }
+            })
+            .from(tripsTable)
+            .where(eq(tripsTable.id, tripId))
+            .leftJoin(profileTable, eq(tripsTable.driver, profileTable.id))
+            .leftJoin(accountsTable, eq(profileTable.id, accountsTable.profile))
+            .leftJoin(userPrefsTable, eq(profileTable.prefs, userPrefsTable.id))
+    )
+
+    if (!trip.success) {
+        logger.error("Error connecting to db", trip.error)
+        return err("Failed to query db")
+    }
+
+    if (trip.value.length === 0 || !trip.value[0]) {
+        return err("Trip not found")
+    }
+
+    return ok(trip.value[0])
 }
 
 export async function getTrip(tripId: string) {
