@@ -13,7 +13,7 @@ export const metadata = {
 export default async function TripPage({
     params
 }: {
-    params: { id: string; locale: string }
+    params: Promise<{ id: string; locale: string }>
 }) {
     const t = await getTranslations("Trips")
 
@@ -29,7 +29,7 @@ export default async function TripPage({
                 </p>
             </div>
             <Suspense fallback={<Loading />}>
-                <TripInfo tripId={params.id} />
+                <TripInfo tripId={(await params).id} />
             </Suspense>
         </div>
     )
