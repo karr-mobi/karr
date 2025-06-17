@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.14.3
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.2...v0.14.3)
+
+### 🩹 Fixes
+
+- Adjustments ([23d2440](https://github.com/karr-mobi/karr/commit/23d2440))
+- Linting ([2de4d4b](https://github.com/karr-mobi/karr/commit/2de4d4b))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.2
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.1...v0.14.2)
