@@ -1,7 +1,7 @@
 "use client"
 
 import { type Trip, TripSchema } from "@karr/api/db/trips"
-import { Badge } from "@karr/ui/components/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 import { Button } from "@karr/ui/components/button"
 import {
     Card,
@@ -12,14 +12,13 @@ import {
     CardTitle
 } from "@karr/ui/components/card"
 import { toast } from "@karr/ui/components/sonner"
-import { Earth as IconEarth, House as IconHouse, TrashIcon } from "lucide-react"
+import { TrashIcon } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { useAuth } from "@/app/auth/context"
 import Loading from "@/components/Loading"
 import { Link } from "@/i18n/routing"
 import { client } from "@/util/apifetch"
-import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 
 export default function FetchTrips({ url }: { url: string }) {
     const [trips, setTrips] = useState<Trip[]>([])
