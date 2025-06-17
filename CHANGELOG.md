@@ -1,5 +1,29 @@
 # Changelog
 
+## v0.13.11
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.13.10...v0.13.11)
+
+### 🚀 Enhancements
+
+- **ui:** Redesign Account page ([#154](https://github.com/karr-mobi/karr/pull/154))
+- Add trip details page ([#155](https://github.com/karr-mobi/karr/pull/155))
+- Use EventSource for trip data streaming ([#156](https://github.com/karr-mobi/karr/pull/156))
+- Improve keyboard navigation for trip add ([#157](https://github.com/karr-mobi/karr/pull/157))
+
+### 🩹 Fixes
+
+- Await params ([#158](https://github.com/karr-mobi/karr/pull/158))
+
+### 🏡 Chore
+
+- Update pnpm ([b11b985](https://github.com/karr-mobi/karr/commit/b11b985))
+- Upgrade deps ([#153](https://github.com/karr-mobi/karr/pull/153))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.13.10
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.13.9...v0.13.10)
