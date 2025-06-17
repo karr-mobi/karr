@@ -12,15 +12,15 @@ import {
     CardTitle
 } from "@karr/ui/components/card"
 import { toast } from "@karr/ui/components/sonner"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { Earth as IconEarth, House as IconHouse, TrashIcon } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
+import { useAuth } from "@/app/auth/context"
 import Loading from "@/components/Loading"
-import { apiFetch, client } from "@/util/apifetch"
+import { Link } from "@/i18n/routing"
+import { client } from "@/util/apifetch"
 
-export default function FetchTrips() {
-    const queryClient = useQueryClient()
+export default function FetchTrips({ url }: { url: string }) {
     const [trips, setTrips] = useState<Trip[]>([])
     const [loading, setLoading] = useState(false)
     const t = useTranslations("trips.Delete")
@@ -36,8 +36,6 @@ export default function FetchTrips() {
 
         if (res.status === 200) {
             toast.success(t("success"))
-            queryClient.invalidateQueries({ queryKey: ["trips"] })
-            setTrips([])
         } else if (res.status === 404) {
             toast.error(t("not-found"))
         } else if (res.status === 401) {
@@ -47,104 +45,48 @@ export default function FetchTrips() {
         }
     }
 
-    const {
-        data: stream,
-        isLoading,
-        isError,
-        error
-    } = useQuery({
-        queryKey: ["trips"],
-        retry: false,
-        refetchOnWindowFocus: false,
-        refetchOnReconnect: false,
-        queryFn: async () =>
-            apiFetch("/trips/search", {
-                responseType: "stream"
-            })
-    })
+    const [isLoading, setIsLoading] = useState(true)
+    const [error, setError] = useState<Error | null>(null)
 
     useEffect(() => {
-        if (!stream) return
+        const eventSource = new EventSource(url)
+        setIsLoading(true)
+        setLoading(true)
+        setError(null)
 
-        const reader = stream.getReader()
-        const decoder = new TextDecoder()
-        let buffer = ""
-        let mounted = true // Add mounted flag
-
-        //biome-ignore lint/complexity/noExcessiveCognitiveComplexity: this is a complex function
-        async function processStream() {
+        eventSource.addEventListener("new-trip", (event) => {
             try {
-                setLoading(true)
-                while (mounted) {
-                    // Check if still mounted
-                    //biome-ignore lint/nursery/noAwaitInLoop: need to await here
-                    const { done, value } = await reader.read()
-                    if (done) {
-                        setLoading(false)
-                        break
-                    }
-
-                    buffer += decoder.decode(value, { stream: true })
-
-                    // Split by newlines and process complete JSON objects
-                    const lines = buffer.split("\n")
-                    buffer = lines.pop() || "" // Keep the last incomplete line in buffer
-
-                    const newTrips = lines
-                        .filter((line) => line.startsWith("data: "))
-                        .map((l) => {
-                            let line = l.trim()
-                            try {
-                                line = line.substring(6)
-                                const tripData = JSON.parse(line)
-                                return TripSchema.parse(tripData)
-                            } catch (e) {
-                                console.error("Failed to parse trip:", e)
-                                return null
-                            }
-                        })
-                        .filter((trip): trip is Trip => trip !== null)
-
-                    if (newTrips.length > 0 && mounted) {
-                        // Check if still mounted
-                        setTrips((prev) => [...prev, ...newTrips])
-                    }
-                }
-
-                // Process any remaining data
-                if (buffer.trim() && mounted) {
-                    try {
-                        const tripData = JSON.parse(buffer)
-                        const trip = TripSchema.parse(tripData)
-                        setTrips((prev) => [...prev, trip])
-                    } catch (e) {
-                        console.error("Failed to parse final trip:", e)
-                    }
-                }
+                console.log("event data", event.data)
+                const tripData = JSON.parse(event.data)
+                console.log("parsed trip data", tripData)
+                const trip = TripSchema.parse(tripData)
+                console.log("parsed trip", trip)
+                setTrips((prev) => [...prev, trip])
+                console.log("updated trip")
             } catch (e) {
-                if (mounted) {
-                    // Only log if still mounted
-                    console.error("Stream reading error:", e)
-                }
+                console.error("Failed to parse trip:", e)
             }
+        })
+
+        eventSource.onopen = (e) => {
+            console.log("EventSource opened", e)
+            setIsLoading(false)
+            setLoading(false)
         }
 
-        void processStream()
+        eventSource.onerror = () => {
+            console.log("EventSource stream ended")
+            // TODO: add error handling logic. Not yet implemented because normal stream closure is considered as an error. Need to look into it more.
+            setIsLoading(false)
+            setLoading(false)
+            eventSource.close()
+        }
 
         return () => {
-            mounted = false // Set mounted to false on cleanup
-            // Ensure we properly clean up the reader
-            try {
-                reader.cancel()
-            } catch (e) {
-                console.error("Error cleaning up reader:", e)
-            } finally {
-                reader.releaseLock()
-                // Clear local trips state
-                setTrips([])
-            }
+            eventSource.close()
+            setTrips([])
         }
-    }, [stream])
+    }, [url])
 
     useEffect(() => {
         // Clear trips when component mounts or userid changes
@@ -155,8 +97,23 @@ export default function FetchTrips() {
         return <Loading />
     }
 
-    if (isError || !stream) {
-        return <div>Error: {error?.message}</div>
+    if (error) {
+        return (
+            <>
+                <div>Error: {error?.message}</div>
+                {trips.map((trip) => {
+                    const t = TripSchema.parse(trip)
+                    return (
+                        <TripCard
+                            key={`${trip.origin || ""}@${t.id}`}
+                            trip={t}
+                            onDelete={deleteTrip}
+                        />
+                    )
+                })}
+                {loading && <Loading />}
+            </>
+        )
     }
 
     return (
@@ -183,15 +140,19 @@ function TripCard({
     trip: Trip
     onDelete: (id: string) => Promise<void>
 }) {
+    const authState = useAuth().authState
+
     return (
         <Card className="w-lg max-w-full">
             <CardHeader>
                 <CardTitle>
                     <div className="flex flex-row items-center justify-between gap-2">
                         <p>
-                            {trip.from} – {trip.to}
+                            <Link href={`/trips/${trip.id}`}>
+                                {trip.from} – {trip.to}
+                            </Link>
                         </p>
-                        {!trip.origin && (
+                        {!trip.origin && authState?.id === trip.driver && (
                             <Button
                                 variant="outline"
                                 onClick={() => onDelete(trip.id)}
