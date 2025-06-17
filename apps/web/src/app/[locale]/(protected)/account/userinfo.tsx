@@ -1,15 +1,39 @@
 "use client"
 
+import process from "node:process"
 import type { InferResponseType } from "@karr/api/client"
+import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 import { Badge } from "@karr/ui/components/badge"
-import { Marquee } from "@karr/ui/components/marquee"
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle
+} from "@karr/ui/components/card"
+import { Label } from "@karr/ui/components/label"
+import { Switch } from "@karr/ui/components/switch"
 import { useQuery } from "@tanstack/react-query"
-import { CheckIcon, OctagonXIcon } from "lucide-react"
+import {
+    CarIcon,
+    CheckIcon,
+    CigaretteIcon,
+    MailIcon,
+    MessageSquareIcon,
+    Music4Icon,
+    OctagonXIcon,
+    PawPrintIcon,
+    PhoneIcon,
+    UserIcon
+} from "lucide-react"
 import { useTranslations } from "next-intl"
 import Loading from "@/components/Loading"
 import { client } from "@/util/apifetch"
 
-export default function FetchUserData() {
+export default function FetchUserData({
+    avatar
+}: {
+    avatar: string | null | undefined
+}) {
     const { data, isError, isLoading, error } = useQuery({
         queryKey: ["user"],
         queryFn: async () => {
@@ -32,66 +56,173 @@ export default function FetchUserData() {
         return <p>Error loading user data</p>
     }
 
-    return <ShowUserData user={data} />
+    return <ShowUserData user={data} avatar={avatar} />
 }
 
-// TODO: add user type
 function ShowUserData({
-    user
+    user,
+    avatar
 }: {
     user: InferResponseType<typeof client.user.info.$get, 200>
+    avatar: string | null | undefined
 }) {
-    const t = useTranslations("auth.Account")
+    const t = useTranslations("Account")
 
-    const hasSpecialStatus = false
+    const displayName =
+        user.nickname || `${user.firstName} ${user.lastName}`.trim()
+    const initials =
+        `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`.toUpperCase()
 
     return (
-        <>
-            <div className="full-width">
-                <Marquee
-                    numberOfCopies={10}
-                    direction="left"
-                    speed="fast"
-                    className="bg-green-500 py-2 font-bold text-3xl text-white uppercase"
-                >
-                    You rock, {user.nickname || user.firstName}!
-                </Marquee>
-            </div>
-            <aside className="flex flex-row gap-4">
-                {user.verified ? (
-                    <Badge variant="default">
-                        <CheckIcon aria-hidden="true" />
-                        {t("verified")}
-                    </Badge>
-                ) : (
-                    <Badge variant="destructive">
-                        <OctagonXIcon aria-hidden="true" />
-                        {t("not-verified")}
-                    </Badge>
-                )}
+        <div className="grid gap-6 md:grid-cols-2">
+            {/* Profile Card */}
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                        <UserIcon className="h-5 w-5" />
+                        {t("profile-info")}
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="flex items-center gap-4">
+                        <Avatar className="h-16 w-16">
+                            <AvatarImage src={avatar || undefined} />
+                            <AvatarFallback>{initials}</AvatarFallback>
+                        </Avatar>
+                        <div className="space-y-1">
+                            <h3 className="!font-normal !font-sans text-lg">
+                                {displayName}
+                            </h3>
+                            <div className="flex items-center gap-2">
+                                {user.verified ? (
+                                    <Badge
+                                        variant="default"
+                                        className="text-xs"
+                                    >
+                                        <CheckIcon className="mr-1 h-3 w-3" />
+                                        {t("verified")}
+                                    </Badge>
+                                ) : (
+                                    <Badge
+                                        variant="destructive"
+                                        className="text-xs"
+                                    >
+                                        <OctagonXIcon className="mr-1 h-3 w-3" />
+                                        {t("not-verified")}
+                                    </Badge>
+                                )}
+                                <Badge variant="outline" className="text-xs">
+                                    {user.provider}
+                                </Badge>
+                            </div>
+                        </div>
+                    </div>
 
-                {!hasSpecialStatus && (
-                    <Badge variant="outline">
-                        <p>{user?.bio || t("no-special-status")}</p>
-                    </Badge>
-                )}
-            </aside>
-            <section className="flow">
-                <div className="flex flex-row gap-6">
-                    <b>{t("user-id")}</b>
-                    <p>{user.id.split("-")[0]}</p>
-                </div>
-                <div className="flex flex-row gap-6">
-                    <b>{t("email")}</b>
-                    <p>{user.email}</p>
-                </div>
-            </section>
-            <details className="mt-12 text-sm">
-                <summary className="text-gray-300 dark:text-gray-700">
-                    See raw
-                </summary>
-                <pre>{JSON.stringify(user, null, 2)}</pre>
-            </details>
-        </>
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                            <MailIcon className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm">{user.email}</span>
+                        </div>
+
+                        {user.phone && (
+                            <div className="flex items-center gap-3">
+                                <PhoneIcon className="h-4 w-4 text-muted-foreground" />
+                                <span className="text-sm">{user.phone}</span>
+                            </div>
+                        )}
+
+                        {user.bio && (
+                            <div className="flex items-start gap-3">
+                                <MessageSquareIcon className="mt-0.5 h-4 w-4 text-muted-foreground" />
+                                <span className="text-sm">{user.bio}</span>
+                            </div>
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* Preferences Card */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{t("preferences.title")}</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <CarIcon className="h-4 w-4 text-muted-foreground" />
+                            <Label
+                                htmlFor="auto-book"
+                                className="font-medium text-sm"
+                            >
+                                {t("preferences.auto-book")}
+                            </Label>
+                        </div>
+                        <Switch
+                            id="auto-book"
+                            checked={!!user.autoBook}
+                            disabled
+                        />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <Music4Icon className="h-4 w-4 text-muted-foreground" />
+                            <Label
+                                htmlFor="music"
+                                className="font-medium text-sm"
+                            >
+                                {t("preferences.music")}
+                            </Label>
+                        </div>
+                        <Switch id="music" checked={!!user.music} disabled />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <CigaretteIcon className="h-4 w-4 text-muted-foreground" />
+                            <Label
+                                htmlFor="smoke"
+                                className="font-medium text-sm"
+                            >
+                                {t("preferences.smoking")}
+                            </Label>
+                        </div>
+                        <Switch id="smoke" checked={!!user.smoke} disabled />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <PawPrintIcon className="h-4 w-4 text-muted-foreground" />
+                            <Label
+                                htmlFor="pets"
+                                className="font-medium text-sm"
+                            >
+                                {t("preferences.pets")}
+                            </Label>
+                        </div>
+                        <Switch id="pets" checked={!!user.pets} disabled />
+                    </div>
+
+                    <div className="border-t pt-2">
+                        <div className="flex items-center justify-between">
+                            <Label className="font-medium text-sm">
+                                {t("preferences.default-places")}
+                            </Label>
+                            <Badge variant="outline">
+                                {user.defaultPlaces}
+                            </Badge>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+            {process.env.NODE_ENV !== "production" && (
+                <details className="mt-4 ml-4 text-sm">
+                    <summary className="text-muted-foreground text-xs">
+                        Raw user data
+                    </summary>
+                    <pre>{JSON.stringify(user, null, 2)}</pre>
+                </details>
+            )}
+        </div>
     )
 }

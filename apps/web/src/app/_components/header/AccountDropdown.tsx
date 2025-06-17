@@ -61,7 +61,7 @@ export function AccountDropdown({
                                 className="opacity-60"
                                 aria-hidden="true"
                             />
-                            {t("Account.title")}
+                            {t("account")}
                         </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
