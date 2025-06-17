@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.14.0
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.13.11...v0.14.0)
+
+### 🏡 Chore
+
+- ⚠️  Version bump ([7c1626f](https://github.com/karr-mobi/karr/commit/7c1626f))
+
+#### ⚠️ Breaking Changes
+
+- ⚠️  Version bump ([7c1626f](https://github.com/karr-mobi/karr/commit/7c1626f))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.13.11
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.13.10...v0.13.11)
