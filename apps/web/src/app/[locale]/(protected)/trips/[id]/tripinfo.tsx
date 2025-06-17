@@ -1,6 +1,8 @@
+//biome-ignore-all lint/nursery/noProcessGlobal: Webpack can't handle node: imports
+//biome-ignore-all lint/style/noProcessEnv: Just for dev
+
 "use client"
 
-import process from "node:process"
 import type { InferResponseType } from "@karr/api/client"
 import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 import { Badge } from "@karr/ui/components/badge"

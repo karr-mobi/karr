@@ -1,4 +1,6 @@
-import process from "node:process"
+//biome-ignore-all lint/nursery/noProcessGlobal: Webpack can't handle node: imports
+//biome-ignore-all lint/style/noProcessEnv: Just for dev
+
 import { unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
