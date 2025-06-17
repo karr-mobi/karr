@@ -119,7 +119,7 @@ export function Form() {
                             <div className="flex flex-row items-center justify-end gap-2">
                                 <Button type="submit" disabled={!canSubmit}>
                                     <TextMorph>
-                                        {isSubmitting ? "Sending" : "Submit"}
+                                        {isSubmitting ? "Sending" : t("create")}
                                     </TextMorph>
                                 </Button>
                             </div>
@@ -133,7 +133,7 @@ export function Form() {
                         children={(field) => {
                             return (
                                 <>
-                                    <Label htmlFor={field.name}>From:</Label>
+                                    <Label htmlFor={field.name}>{t("from")}</Label>
                                     <Input
                                         id={field.name}
                                         name={field.name}
@@ -154,7 +154,7 @@ export function Form() {
                         name="to"
                         children={(field) => (
                             <>
-                                <Label htmlFor={field.name}>To:</Label>
+                                <Label htmlFor={field.name}>{t("to")}</Label>
                                 <Input
                                     id={field.name}
                                     name={field.name}
@@ -174,7 +174,7 @@ export function Form() {
                         name="departure"
                         children={(field) => (
                             <>
-                                <Label htmlFor={field.name}>Departure:</Label>
+                                <Label htmlFor={field.name}>{t("departure")}</Label>
                                 <Popover>
                                     <PopoverTrigger asChild>
                                         <Button
@@ -191,7 +191,7 @@ export function Form() {
                                                     "dd/MM/yyyy"
                                                 )
                                             ) : (
-                                                <span>Pick a date</span>
+                                                <span>{t("pick-date")}</span>
                                             )}
                                             <CalendarDaysIcon className="ml-auto h-4 w-4" />
                                         </Button>
@@ -222,7 +222,7 @@ export function Form() {
                         name="price"
                         children={(field) => (
                             <>
-                                <Label htmlFor={field.name}>Price:</Label>
+                                <Label htmlFor={field.name}>{t("price")}</Label>
                                 <InputNumber
                                     id={field.name}
                                     name={field.name}

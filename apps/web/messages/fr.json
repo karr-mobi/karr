@@ -77,7 +77,7 @@
     "trips": {
         "title": "Trajets",
         "Search": {
-            "title": "Rechercher un trajet"
+            "title": "Trajets disponibles"
         },
         "Create": {
             "title": "Créer un nouveau trajet",
@@ -86,7 +86,7 @@
             "departure": "Départ",
             "pick-date": "Choisir une date",
             "price": "Prix (par passager)",
-            "create": "Créer un nouveau trajet",
+            "create": "Envoyer",
             "added": "Trajet ajouté !"
         },
         "Delete": {

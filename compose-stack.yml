@@ -22,6 +22,7 @@ services:
             - DB_PASSWORD_FILE=/run/secrets/db-password
         volumes:
             - /srv/http/karr/karr.config.yaml:/app/config/karr.config.yaml
+            - auth_data:/app/.data/
         depends_on:
             - db
 
@@ -31,6 +32,8 @@ services:
             - karr_network
         secrets:
             - db-password
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
         environment:
             - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
             - POSTGRES_USER=karr
@@ -56,6 +59,8 @@ services:
             - caddy_config:/config
 
 volumes:
+    auth_data:
+    postgres_data:
     caddy_data:
     caddy_config:
 

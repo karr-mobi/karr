@@ -30,14 +30,6 @@ export default function Home() {
                         className="rounded-lg"
                         placeholder="blur"
                     />
-                    <Button className="mt-4" asChild>
-                        <Link
-                            href="https://github.com/finxol/karr"
-                            target="_blank"
-                        >
-                            GitHub live
-                        </Link>
-                    </Button>
                 </div>
             </div>
         </div>

@@ -10,6 +10,7 @@ import {
 } from "lucide-react"
 import type * as React from "react"
 import { DayFlag, DayPicker, SelectionState, UI } from "react-day-picker"
+import { fr } from "react-day-picker/locale"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -68,6 +69,7 @@ export const Calendar = ({
                     />
                 )
             }}
+            locale={fr}
             {...props}
         />
     )
