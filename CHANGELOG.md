@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.14.1
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.0...v0.14.1)
+
+### 🩹 Fixes
+
+- Don't import from `node:` in next ([38cbb21](https://github.com/karr-mobi/karr/commit/38cbb21))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.0
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.13.11...v0.14.0)
