@@ -6,6 +6,7 @@ import Loading from "@/components/Loading"
 import { auth } from "~/auth/actions"
 
 import TripList from "./trips"
+import { url } from "./url"
 
 export const metadata = {
     title: "Search",
@@ -20,11 +21,11 @@ export default async function Search() {
 
     return (
         <>
-            <h3>{t("Search.title")}</h3>
+            <h3 className="my-4">{t("Search.title")}</h3>
 
-            <div className="my-10">
+            <div className="w-[calc(100vw-2rem)]">
                 <Suspense fallback={<Loading />}>
-                    <TripList />
+                    <TripList url={url} />
                 </Suspense>
             </div>
         </>
