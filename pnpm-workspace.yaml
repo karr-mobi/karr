@@ -6,7 +6,7 @@ packages:
 catalogs:
   web:
     '@tanstack/react-form': ^1.12.3
-    '@tanstack/react-query': ^5.80.7
+    '@tanstack/react-query': ^5.81.2
     babel-plugin-react-compiler: ^19.1.0-rc.2
     next: ^15.3.3
     next-themes: ^0.4.6
@@ -21,7 +21,7 @@ catalogs:
     drizzle-kit: ^0.31.1
     drizzle-orm: ^0.43.1
     drizzle-zod: ^0.8.2
-    hono: ^4.7.11
+    hono: ^4.8.2
     postgres: ^3.4.7
     resend: ^4.6.0
     srvx: ^0.7.5
@@ -30,7 +30,7 @@ catalogs:
     '@astrojs/starlight': ^0.34.4
     '@astrojs/starlight-tailwind': ^4.0.1
     '@deno/astro-adapter': ^0.3.1
-    astro: ^5.9.4
+    astro: ^5.10.0
     starlight-sidebar-topics: ^0.6.0
   utils:
     '@std/text': jsr:^1.0.14
@@ -55,7 +55,7 @@ catalogs:
     lucide-react: ^0.507.0
     motion: ^12.18.1
     react-day-picker: ^9.7.0
-    react-hook-form: ^7.58.0
+    react-hook-form: ^7.58.1
     react-intersection-observer: ^9.16.0
     sonner: ^2.0.5
     tailwind-merge: ^3.3.1
@@ -94,15 +94,15 @@ catalogs:
     '@types/react': ^19.1.8
     '@types/react-dom': ^19.1.6
   test:
-    vitest: ^3.2.3
+    vitest: ^3.2.4
     vite-tsconfig-paths: ^5.1.4
   lint:
     '@biomejs/biome': 2.0.0
     '@commitlint/cli': ^19.8.1
     '@commitlint/config-conventional': ^19.8.1
     '@eslint/js': ^9.29.0
-    '@next/eslint-plugin-next': ^15.3.3
-    '@tanstack/eslint-plugin-query': ^5.78.0
+    '@next/eslint-plugin-next': ^15.3.4
+    '@tanstack/eslint-plugin-query': ^5.81.2
     '@typescript-eslint/eslint-plugin': ^8.34.1
     '@typescript-eslint/parser': ^8.34.1
     eslint: ^9.29.0
