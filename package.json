@@ -38,7 +38,7 @@
         "turbo": "catalog:devtools",
         "typescript": "catalog:devtools"
     },
-    "packageManager": "pnpm@10.12.1",
+    "packageManager": "pnpm@10.12.2",
     "engines": {
         "node": ">=22",
         "pnpm": ">=10"
