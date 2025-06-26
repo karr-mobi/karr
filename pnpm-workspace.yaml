@@ -15,6 +15,7 @@ catalogs:
     react: ^19.1.0
     react-dom: ^19.1.0
   api:
+    '@libs/xml': jsr:^7.0.0
     '@hono/zod-validator': ^0.5.0
     '@openauthjs/openauth': ^0.4.3
     db0: ^0.3.2

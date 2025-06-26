@@ -9,6 +9,9 @@ catalogs:
     '@hono/zod-validator':
       specifier: ^0.5.0
       version: 0.5.0
+    '@libs/xml':
+      specifier: jsr:^7.0.0
+      version: 7.0.0
     '@openauthjs/openauth':
       specifier: ^0.4.3
       version: 0.4.3
@@ -406,6 +409,9 @@ importers:
       '@karr/util':
         specifier: workspace:*
         version: link:../../packages/util
+      '@libs/xml':
+        specifier: catalog:api
+        version: '@jsr/libs__xml@7.0.0'
       '@openauthjs/openauth':
         specifier: catalog:api
         version: 0.4.3(patch_hash=2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2)(arctic@2.3.4)(hono@4.8.2)
@@ -1969,6 +1975,9 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
+
+  '@jsr/libs__xml@7.0.0':
+    resolution: {integrity: sha512-z9MMmvBC3I1bXy4S+ZHcLAs8RlC2eY+kAvvVYkWeTu5QkCaOB9E0ATgj3h1LfGiQOdPCz1iz/JltM/PypvwtGg==, tarball: https://npm.jsr.io/~/11/@jsr/libs__xml/7.0.0.tgz}
 
   '@jsr/std__text@1.0.14':
     resolution: {integrity: sha512-BOgujeYLLrPGhRkaYPd54NxjBaEHnVTxXIFOymJXp7ozXtdPHNbVKRyojVp/SH1rlhgGuVmRxm5bmAYIvShAWA==, tarball: https://npm.jsr.io/~/11/@jsr/std__text/1.0.14.tgz}
@@ -7872,6 +7881,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+
+  '@jsr/libs__xml@7.0.0': {}
 
   '@jsr/std__text@1.0.14': {}
 

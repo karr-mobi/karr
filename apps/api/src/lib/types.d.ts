@@ -1,10 +1,9 @@
+import type { Prettify } from "@karr/util"
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm"
-
 import type { accountsTable } from "@/db/schemas/accounts"
 import type { specialStatusTable } from "@/db/schemas/specialstatus"
 import type { userPrefsTable } from "@/db/schemas/userprefs"
 import type { usersTable } from "@/db/schemas/users"
-import { Prettify } from "@karr/util"
 
 export type AppVariables = {
     userSubject?: UserSubject
@@ -62,3 +61,30 @@ export type AccountInsert = Omit<InferInsertModel<typeof accountsTable>, "id">
 export type AccountVerified = {
     verified: boolean
 }
+
+//biome-ignore-start lint/style/useNamingConvention: not controled by us
+interface Prices {
+    e10: string
+    s98: string
+    s95: string
+    e85: string
+    gazplus: string
+    gaz: string
+    gpl: string
+}
+
+interface PetroleumPrice {
+    date: string
+    prix_dollar: string
+    prix_euro: string
+    percent_change: string
+}
+
+export interface ZagazData {
+    "@xmlns": string
+    "@xml:lang": string
+    "@lang": string
+    prix_moyen: Prices
+    prix_petrole: PetroleumPrice
+}
+//biome-ignore-end lint/style/useNamingConvention: not controled by us
