@@ -31,7 +31,7 @@ export default async function New() {
         <article className="mt-6 flex w-full flex-col items-center justify-center gap-4">
             <h3 className="mb-4">{t("title")}</h3>
 
-            <Form petrol_price={getPetrolPrice()} />
+            <Form petrolPrice={getPetrolPrice()} />
         </article>
     )
 }
