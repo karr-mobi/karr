@@ -38,6 +38,7 @@
         "@karr/config": "workspace:*",
         "@karr/logger": "workspace:*",
         "@karr/util": "workspace:*",
+        "@libs/xml": "catalog:api",
         "@openauthjs/openauth": "catalog:api",
         "db0": "catalog:api",
         "drizzle-kit": "catalog:api",

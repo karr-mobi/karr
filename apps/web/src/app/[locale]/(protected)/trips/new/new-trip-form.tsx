@@ -23,6 +23,7 @@ import { format } from "date-fns"
 import { CalendarDaysIcon, OctagonXIcon } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useTranslations } from "next-intl"
+import { use } from "react"
 import { useRouter } from "@/i18n/routing"
 import { client } from "@/util/apifetch"
 
@@ -68,15 +69,18 @@ function FieldInfo({
     )
 }
 
-export function Form() {
+export function Form({ petrolPrice }: { petrolPrice: Promise<number> }) {
+    const avgPetrolPrice = use(petrolPrice)
     const t = useTranslations("trips.Create")
     const router = useRouter()
+
     const form = useForm({
         defaultValues: {
             from: "",
             to: "",
             departure: new Date(Date.now()).toISOString(),
-            price: 6
+            // TODO: make this dynamic depending on actual trip distance
+            price: Math.round(((40 * 6) / 100) * avgPetrolPrice) // estimated price for 40km, 6 L/100km consumption, using national E10 price average
         },
         validators: {
             //@ts-expect-error: type problem but it's fine, just not infered well

@@ -1,4 +1,4 @@
-import { API_BASE } from "@karr/config"
+import { API_BASE, APP_URL } from "@karr/config"
 import createNextIntlPlugin from "next-intl/plugin"
 
 const withNextIntl = createNextIntlPlugin()
@@ -15,8 +15,10 @@ const nextConfig = {
         "/**/*.css": ["src/assets/**/*.css"]
     },
     env: {
-        //biome-ignore lint/style/useNamingConvention: it's an environment variable
-        NEXT_PUBLIC_API_BASE: API_BASE
+        //biome-ignore-start lint/style/useNamingConvention: it's an environment variable
+        NEXT_PUBLIC_API_BASE: API_BASE,
+        NEXT_PUBLIC_APP_URL: APP_URL
+        //biome-ignore-end lint/style/useNamingConvention: it's an environment variable
     },
 
     images: {
