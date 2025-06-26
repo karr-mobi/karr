@@ -180,8 +180,8 @@ function TripCard({
                 <Avatar>
                     <AvatarImage src={trip.avatar || ""} />
                     <AvatarFallback>
-                        {trip.nickname ||
-                            `${trip.firstName} ${trip.lastName || ""}` ||
+                        {trip.nickname?.slice(0, 2).toUpperCase() ||
+                            `${trip.firstName?.charAt(0).toUpperCase()}${trip.lastName?.charAt(0).toUpperCase() || ""}` ||
                             trip.driver.split("-")[0]}
                     </AvatarFallback>
                 </Avatar>
