@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.14.4
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.3...v0.14.4)
+
+### 🚀 Enhancements
+
+- Add petrol price fetch ([#161](https://github.com/karr-mobi/karr/pull/161))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.3
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.2...v0.14.3)
