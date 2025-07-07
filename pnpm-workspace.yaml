@@ -10,8 +10,8 @@ catalogs:
     babel-plugin-react-compiler: ^19.1.0-rc.2
     next: ^15.3.3
     next-themes: ^0.4.6
-    next-intl: ^4.3.1
-    posthog-js: ^1.255.1
+    next-intl: ^4.3.4
+    posthog-js: ^1.256.2
     react: ^19.1.0
     react-dom: ^19.1.0
   api:
@@ -31,7 +31,7 @@ catalogs:
     '@astrojs/starlight': ^0.34.4
     '@astrojs/starlight-tailwind': ^4.0.1
     '@deno/astro-adapter': ^0.3.1
-    astro: ^5.10.1
+    astro: ^5.11.0
     starlight-sidebar-topics: ^0.6.0
   utils:
     '@std/text': jsr:^1.0.14
@@ -44,7 +44,7 @@ catalogs:
     tinyrainbow: ^2.0.0
     unplugin: ^2.3.5
     sharp: ^0.34.2
-    zod: ^3.25.67
+    zod: ^3.25.75
   ui:
     '@icons-pack/react-simple-icons': ^12.9.0
     '@hookform/resolvers': ^5.1.1
@@ -54,11 +54,11 @@ catalogs:
     clsx: ^2.1.1
     date-fns: ^4.1.0
     lucide-react: ^0.507.0
-    motion: ^12.19.2
-    react-day-picker: ^9.7.0
-    react-hook-form: ^7.59.0
+    motion: ^12.23.0
+    react-day-picker: ^9.8.0
+    react-hook-form: ^7.60.0
     react-intersection-observer: ^9.16.0
-    sonner: ^2.0.5
+    sonner: ^2.0.6
     tailwind-merge: ^3.3.1
     tailwindcss: ^4.1.11
     tailwindcss-animate: ^1.0.7
@@ -91,7 +91,7 @@ catalogs:
     '@radix-ui/react-toggle-group': ^1.1.10
     '@radix-ui/react-tooltip': ^1.2.7
   types:
-    '@types/node': ^22.15.34
+    '@types/node': ^22.16.0
     '@types/react': ^19.1.8
     '@types/react-dom': ^19.1.6
   test:
@@ -101,24 +101,24 @@ catalogs:
     '@biomejs/biome': 2.0.0
     '@commitlint/cli': ^19.8.1
     '@commitlint/config-conventional': ^19.8.1
-    '@eslint/js': ^9.30.0
-    '@next/eslint-plugin-next': ^15.3.4
+    '@eslint/js': ^9.30.1
+    '@next/eslint-plugin-next': ^15.3.5
     '@tanstack/eslint-plugin-query': ^5.81.2
-    '@typescript-eslint/eslint-plugin': ^8.35.0
-    '@typescript-eslint/parser': ^8.35.0
-    eslint: ^9.30.0
+    '@typescript-eslint/eslint-plugin': ^8.35.1
+    '@typescript-eslint/parser': ^8.35.1
+    eslint: ^9.30.1
     eslint-config-biome: ^1.9.4
     eslint-config-prettier: ^10.1.5
     eslint-plugin-react: ^7.37.5
     eslint-plugin-react-hooks: ^5.2.0
     eslint-plugin-turbo: ^2.5.4
     lint-staged: ^15.5.2
-    typescript-eslint: ^8.35.0
+    typescript-eslint: ^8.35.1
   devtools:
     '@turbo/gen': ^2.5.4
-    changelogen: ^0.6.1
+    changelogen: ^0.6.2
     eslint-plugin-pnpm: ^0.3.1
-    globals: ^16.2.0
+    globals: ^16.3.0
     husky: ^9.1.7
     taze: ^19.1.0
     turbo: ^2.5.4
