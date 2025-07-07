@@ -87,7 +87,21 @@
             "style": {
                 "title": "🎨 Styles",
                 "semver": "patch"
-            }
+            },
+            "docs": {
+                "title": "📖 Documentation",
+                "semver": "patch"
+            },
+            "examples": {
+                "title": "🏀 Examples"
+            },
+            "ci": {
+                "title": "🤖 CI"
+            },
+            "refactor": false,
+            "types": false,
+            "chore": false,
+            "test": false
         }
     }
 }
