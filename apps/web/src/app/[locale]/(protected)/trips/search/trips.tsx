@@ -2,7 +2,6 @@
 
 import { type Trip, TripSchema } from "@karr/api/db/trips"
 import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
-import { Button } from "@karr/ui/components/button"
 import {
     Card,
     CardContent,
@@ -11,39 +10,14 @@ import {
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
-import { toast } from "@karr/ui/components/sonner"
-import { TrashIcon } from "lucide-react"
-import { useLocale, useTranslations } from "next-intl"
+import { useLocale } from "next-intl"
 import { useEffect, useState } from "react"
-import { useAuth } from "@/app/auth/context"
 import Loading from "@/components/Loading"
 import { Link } from "@/i18n/routing"
-import { client } from "@/util/apifetch"
 
 export default function FetchTrips({ url }: { url: string }) {
     const [trips, setTrips] = useState<Trip[]>([])
     const [loading, setLoading] = useState(false)
-    const t = useTranslations("trips.Delete")
-
-    async function deleteTrip(tripId: string): Promise<undefined> {
-        const res = await client.trips[
-            ":id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}"
-        ].$delete({
-            param: {
-                id: tripId
-            }
-        })
-
-        if (res.status === 200) {
-            toast.success(t("success"))
-        } else if (res.status === 404) {
-            toast.error(t("not-found"))
-        } else if (res.status === 401) {
-            toast.error(t("unauthorized"))
-        } else {
-            toast.error(t("other-error"))
-        }
-    }
 
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<Error | null>(null)
@@ -108,7 +82,6 @@ export default function FetchTrips({ url }: { url: string }) {
                         <TripCard
                             key={`${trip.origin || ""}@${t.id}`}
                             trip={t}
-                            onDelete={deleteTrip}
                         />
                     )
                 })}
@@ -122,11 +95,7 @@ export default function FetchTrips({ url }: { url: string }) {
             {trips.map((trip: Trip) => {
                 const t = TripSchema.parse(trip)
                 return (
-                    <TripCard
-                        key={`${trip.origin || ""}@${t.id}`}
-                        trip={t}
-                        onDelete={deleteTrip}
-                    />
+                    <TripCard key={`${trip.origin || ""}@${t.id}`} trip={t} />
                 )
             })}
             {loading && <Loading />}
@@ -134,15 +103,7 @@ export default function FetchTrips({ url }: { url: string }) {
     )
 }
 
-function TripCard({
-    trip,
-    onDelete
-}: {
-    trip: Trip
-    onDelete: (id: string) => Promise<void>
-}) {
-    const authState = useAuth().authState
-
+function TripCard({ trip }: { trip: Trip }) {
     return (
         <Card className="w-lg max-w-full">
             <CardHeader>
@@ -153,14 +114,6 @@ function TripCard({
                                 {trip.from} – {trip.to}
                             </Link>
                         </p>
-                        {!trip.origin && authState?.id === trip.driver && (
-                            <Button
-                                variant="outline"
-                                onClick={() => onDelete(trip.id)}
-                            >
-                                <TrashIcon />
-                            </Button>
-                        )}
                     </div>
                 </CardTitle>
                 <CardDescription>
