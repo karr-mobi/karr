@@ -1,11 +1,10 @@
-import { APPLICATION_NAME } from "@karr/config"
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
-import { APP_VERSION } from "@karr/util/version"
+import { APPLICATION_NAME, APP_VERSION } from "@/util/appname"
 import { ServerIcon } from "lucide-react"
 import { unauthorized } from "next/navigation"
 import { Suspense } from "react"
