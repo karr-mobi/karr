@@ -7,7 +7,8 @@ const user = z.object({
     avatar: z.url().optional().nullable(),
     firstName: z.string(),
     lastName: z.string(),
-    nickname: z.string().nullable()
+    nickname: z.string().nullable(),
+    role: z.enum(["user", "admin"])
 })
 
 export const subjects = createSubjects({

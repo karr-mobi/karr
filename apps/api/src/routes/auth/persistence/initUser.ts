@@ -85,6 +85,7 @@ export async function initUser(data: UserInitData) {
         firstName: profile[0].firstName,
         lastName: profile[0].lastName,
         nickname: profile[0].nickname,
-        avatar: profile[0].avatar
+        avatar: profile[0].avatar,
+        role: account.value[0].role
     } satisfies UserProperties)
 }

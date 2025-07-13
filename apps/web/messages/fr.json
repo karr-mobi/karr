@@ -4,6 +4,10 @@
             "title": "Non autorisé",
             "message": "Veuillez vous connecter avant d'accéder à cette page."
         },
+        "401-admin": {
+            "title": "Non autorisé",
+            "message": "Vous n'avez pas l'autorisation d'accéder à cette page."
+        },
         "404": {
             "title": "Page non trouvée",
             "message": "La page que vous recherchez n'existe pas."
@@ -45,7 +49,8 @@
         "Dropdown": {
             "title": "Mon Compte"
         },
-        "account": "Mon Compte"
+        "account": "Mon Compte",
+        "admin": "Panel d'administration"
     },
     "Account": {
         "title": "Compte",
@@ -123,7 +128,10 @@
         "yes": "Oui",
         "no": "Non",
         "cash": "Espèces",
-        "raw-trip-data": "Données brutes du trajet"
+        "raw-trip-data": "Données brutes du trajet",
+        "delete": "Supprimer le trajet",
+        "are-you-sure": "Are you sure you want to delete this trip?",
+        "cancel": "Cancel"
     },
 
     "Utilities": {

@@ -1,6 +1,7 @@
 "use client"
 
 import type { UserProperties } from "@karr/auth/subjects"
+import { Badge } from "@karr/ui/components/badge"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,7 +16,7 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger
 } from "@karr/ui/components/dropdown"
-import { LogOut as IconLogOut, User as IconUser } from "lucide-react"
+import { LogOutIcon, ShieldUserIcon, UserIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useTransition } from "react"
 import { Link } from "@/i18n/routing"
@@ -38,6 +39,8 @@ export function AccountDropdown({
 
     const showDev = false
 
+    const isAdmin = userdata.role === "admin"
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
@@ -47,6 +50,11 @@ export function AccountDropdown({
                         (userdata.firstName
                             ? `${userdata.firstName} ${userdata.lastName}`
                             : t("Dropdown.title"))}
+                    {isAdmin && (
+                        <Badge className="ms-2" variant="secondary">
+                            Admin
+                        </Badge>
+                    )}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
@@ -55,7 +63,7 @@ export function AccountDropdown({
                             href="/account"
                             className="flex w-full cursor-pointer items-center justify-start gap-2"
                         >
-                            <IconUser
+                            <UserIcon
                                 size={16}
                                 strokeWidth={2}
                                 className="opacity-60"
@@ -64,6 +72,22 @@ export function AccountDropdown({
                             {t("account")}
                         </Link>
                     </DropdownMenuItem>
+                    {isAdmin && (
+                        <DropdownMenuItem asChild>
+                            <Link
+                                href="/admin"
+                                className="flex w-full cursor-pointer items-center justify-start gap-2"
+                            >
+                                <ShieldUserIcon
+                                    size={16}
+                                    strokeWidth={2}
+                                    className="opacity-60"
+                                    aria-hidden="true"
+                                />
+                                {t("admin")}
+                            </Link>
+                        </DropdownMenuItem>
+                    )}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 {showDev && (
@@ -100,7 +124,7 @@ export function AccountDropdown({
                     onSelect={logoutTransition}
                     className="cursor-pointer"
                 >
-                    <IconLogOut
+                    <LogOutIcon
                         size={16}
                         strokeWidth={2}
                         className="opacity-60"

@@ -62,7 +62,8 @@ export async function findOrCreateUserFromGoogle(data: GoogleAuthProfileData) {
             firstName: user[0].Profile.firstName,
             lastName: user[0].Profile.lastName,
             nickname: user[0].Profile.nickname,
-            avatar: avatar
+            avatar: avatar,
+            role: user[0].Accounts.role
         } satisfies UserProperties)
     }
 

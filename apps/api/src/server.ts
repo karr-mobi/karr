@@ -9,6 +9,7 @@ import { trimTrailingSlash } from "hono/trailing-slash"
 
 import { isAuthenticated } from "@/lib/auth"
 import account from "@/routes/account"
+import admin from "@/routes/admin"
 import auth from "@/routes/auth/issuer"
 import system from "@/routes/system"
 import trips from "@/routes/trips"
@@ -47,10 +48,12 @@ export const protectedRoutes = new Hono<{ Variables: AppVariables }>()
     .use("/user/*", authCheckMiddleware)
     .use("/account/*", authCheckMiddleware)
     .use("/trips/*", authCheckMiddleware)
+    .use("/admin/*", authCheckMiddleware)
 
     .route("/user", user)
     .route("/account", account)
     .route("/trips", trips)
+    .route("/admin", admin)
 
 export const app = new Hono<{ Variables: AppVariables }>()
     .basePath(API_BASE)

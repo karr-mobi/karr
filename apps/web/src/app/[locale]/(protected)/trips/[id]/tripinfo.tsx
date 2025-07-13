@@ -6,14 +6,23 @@
 import type { InferResponseType } from "@karr/api/client"
 import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 import { Badge } from "@karr/ui/components/badge"
+import { Button } from "@karr/ui/components/button"
 import {
     Card,
     CardContent,
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle
+} from "@karr/ui/components/dialog"
 import { Label } from "@karr/ui/components/label"
 import { Separator } from "@karr/ui/components/separator"
+import { toast } from "@karr/ui/components/sonner"
 import { useQuery } from "@tanstack/react-query"
 import {
     CalendarIcon,
@@ -24,12 +33,16 @@ import {
     OctagonXIcon,
     PawPrintIcon,
     RouteIcon,
+    TrashIcon,
     UserIcon,
     UsersIcon,
     ZapIcon
 } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
+import { useState } from "react"
+import { useAuth } from "@/app/auth/context"
 import Loading from "@/components/Loading"
+import { redirect } from "@/i18n/routing"
 import { client } from "@/util/apifetch"
 
 const tripRoute =
@@ -69,7 +82,10 @@ export default function FetchTripData({ tripId }: { tripId: string }) {
 
 function ShowTripData({ trip }: { trip: Trip }) {
     const t = useTranslations("Trips")
+    const tDelete = useTranslations("trips.Delete")
     const locale = useLocale()
+    const user = useAuth()
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
     const formatDate = (dateString: string) => {
         return new Date(dateString).toLocaleDateString(locale, {
@@ -85,6 +101,27 @@ function ShowTripData({ trip }: { trip: Trip }) {
             hour: "2-digit",
             minute: "2-digit"
         })
+    }
+
+    async function deleteTrip(tripId: string): Promise<undefined> {
+        const res = await client.trips[
+            ":id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}"
+        ].$delete({
+            param: {
+                id: tripId
+            }
+        })
+
+        if (res.status === 200) {
+            toast.success(tDelete("success"))
+            redirect({ href: "/trips/search", locale })
+        } else if (res.status === 404) {
+            toast.error(tDelete("not-found"))
+        } else if (res.status === 401) {
+            toast.error(tDelete("unauthorized"))
+        } else {
+            toast.error(tDelete("other-error"))
+        }
     }
 
     return (
@@ -280,6 +317,42 @@ function ShowTripData({ trip }: { trip: Trip }) {
                     </CardContent>
                 </Card>
             </div>
+
+            {user?.authState?.id === trip.driver.id && (
+                <Button
+                    variant="destructive"
+                    className="w-fit justify-self-end"
+                    onClick={() => setDeleteDialogOpen(true)}
+                >
+                    <TrashIcon />
+                    {t("delete")}
+                </Button>
+            )}
+
+            <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{t("are-you-sure")}</DialogTitle>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button
+                            variant="outline"
+                            onClick={() => setDeleteDialogOpen(false)}
+                        >
+                            {t("cancel")}
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={() => {
+                                void deleteTrip(trip.id)
+                                setDeleteDialogOpen(false)
+                            }}
+                        >
+                            {t("delete")}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
 
             {process.env.NODE_ENV !== "production" && (
                 <details className="mt-4 ml-4 text-sm">
