@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.14.6
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.5...v0.14.6)
+
+### 🚀 Enhancements
+
+- **admin:** Create basic admin page ([#164](https://github.com/karr-mobi/karr/pull/164))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.5
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.4...v0.14.5)
