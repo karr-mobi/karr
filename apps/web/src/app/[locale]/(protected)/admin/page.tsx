@@ -4,12 +4,12 @@ import {
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
-import { APPLICATION_NAME, APP_VERSION } from "@/util/appname"
 import { ServerIcon } from "lucide-react"
 import { unauthorized } from "next/navigation"
 import { Suspense } from "react"
 import { auth } from "@/app/auth/actions"
 import Loading from "@/components/Loading"
+import { APP_VERSION, APPLICATION_NAME } from "@/util/appname"
 import { InstanceInfo } from "./components/InstanceInfo"
 import { UsersList } from "./components/UsersList"
 
