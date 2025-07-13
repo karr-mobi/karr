@@ -42,7 +42,8 @@
         "tailwindcss-animate": "catalog:ui",
         "zod": "catalog:utils",
         "@radix-ui/react-avatar": "catalog:radix",
-        "@radix-ui/react-switch": "catalog:radix"
+        "@radix-ui/react-switch": "catalog:radix",
+        "@radix-ui/react-dialog": "catalog:radix"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",
