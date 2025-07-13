@@ -7,12 +7,12 @@ import {
 } from "@karr/ui/components/card"
 import { APP_VERSION } from "@karr/util/version"
 import { ServerIcon } from "lucide-react"
+import { unauthorized } from "next/navigation"
 import { Suspense } from "react"
+import { auth } from "@/app/auth/actions"
 import Loading from "@/components/Loading"
 import { InstanceInfo } from "./components/InstanceInfo"
 import { UsersList } from "./components/UsersList"
-import { auth } from "@/app/auth/actions"
-import { unauthorized } from "next/navigation"
 
 export default async function AdminPage() {
     const user = await auth()
