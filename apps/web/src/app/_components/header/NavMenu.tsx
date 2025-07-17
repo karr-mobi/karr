@@ -125,7 +125,7 @@ export function MobileNavMenu() {
         <div className="block sm:hidden">
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon">
+                    <Button variant="ghost" size="icon">
                         <IconMenu
                             className="opacity-60"
                             size={16}
