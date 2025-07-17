@@ -71,7 +71,7 @@ const hono = new Hono<{ Variables: AppVariables }>()
             })
             .from(accountsTable)
             .innerJoin(profileTable, eq(accountsTable.profile, profileTable.id))
-            .orderBy(desc(accountsTable.id))
+            .orderBy(desc(accountsTable.createdAt))
 
         // Format the response with proper name handling
         const formattedUsers = usersList.map((user) => ({
