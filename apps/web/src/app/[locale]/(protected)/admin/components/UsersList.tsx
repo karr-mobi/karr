@@ -168,7 +168,7 @@ function Users({ users }: { users: User[] }) {
                             Block
                         </Button>
                     ))}
-                <div className="text-muted-foreground text-sm max-w-[30vw] text-right">
+                <div className="max-w-[30vw] text-right text-muted-foreground text-sm">
                     Joined {new Date(user.createdAt).toLocaleDateString()}
                 </div>
             </div>
