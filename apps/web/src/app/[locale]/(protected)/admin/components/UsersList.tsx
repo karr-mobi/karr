@@ -123,13 +123,11 @@ function Users({ users }: { users: User[] }) {
                     </div>
                 )}
                 <div>
-                    <div className="font-medium">
-                        {user.name}
+                    <div className="flex flex-col flex-wrap items-start justify-start gap-2 font-medium sm:flex-row sm:items-center">
                         {user.id === authState?.id && (
-                            <Badge variant="secondary" className="ms-2">
-                                You
-                            </Badge>
+                            <Badge variant="secondary">You</Badge>
                         )}
+                        <div className="max-w-[30vw]">{user.name}</div>
                     </div>
                     <div className="mt-1 flex items-center gap-2">
                         <Badge
@@ -146,7 +144,7 @@ function Users({ users }: { users: User[] }) {
                     </div>
                 </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 self-end">
                 {user.role === "user" &&
                     (user.blocked ? (
                         <Button
@@ -170,9 +168,9 @@ function Users({ users }: { users: User[] }) {
                             Block
                         </Button>
                     ))}
-                <span className="text-muted-foreground text-sm">
+                <div className="text-muted-foreground text-sm max-w-[30vw] text-right">
                     Joined {new Date(user.createdAt).toLocaleDateString()}
-                </span>
+                </div>
             </div>
         </div>
     ))
@@ -205,7 +203,7 @@ export function UsersList() {
                     Users
                 </CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="px-3 pt-0 pb-6 md:px-6">
                 {isLoading ? (
                     <UsersSkeleton />
                 ) : isError || !users ? (
