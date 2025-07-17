@@ -57,8 +57,6 @@ function Users({ users }: { users: User[] }) {
     const queryClient = useQueryClient()
     const { authState } = useAuth()
 
-    console.log(authState?.id)
-
     const blockUserMutation = useMutation({
         mutationFn: async (userId: string) => {
             const res = await client.admin.users[":id"].block.$post({
@@ -130,13 +128,9 @@ function Users({ users }: { users: User[] }) {
                         <div className="max-w-[30vw]">{user.name}</div>
                     </div>
                     <div className="mt-1 flex items-center gap-2">
-                        <Badge
-                            variant={
-                                user.role === "admin" ? "default" : "secondary"
-                            }
-                        >
-                            {user.role}
-                        </Badge>
+                        {user.role === "admin" && (
+                            <Badge variant="default">{user.role}</Badge>
+                        )}
                         <Badge variant="outline">{user.provider}</Badge>
                         {user.blocked && (
                             <Badge variant="destructive">Blocked</Badge>
