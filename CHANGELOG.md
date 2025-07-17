@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.14.7
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.6...v0.14.7)
+
+### 🩹 Fixes
+
+- **ui:** Remove border around mobile nav trigger button ([#166](https://github.com/karr-mobi/karr/pull/166))
+- **admin:** Dashboard text wrapping ([#167](https://github.com/karr-mobi/karr/pull/167))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.6
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.5...v0.14.6)
