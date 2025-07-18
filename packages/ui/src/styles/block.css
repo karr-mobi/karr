@@ -66,12 +66,6 @@ pre {
     overflow: scroll;
 }
 
-svg {
-    height: 2ex;
-    width: auto;
-    flex: none;
-}
-
 a:hover {
     text-decoration: none;
 }
