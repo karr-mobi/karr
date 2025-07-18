@@ -13,7 +13,7 @@ export const APP_NAME = "Karr"
 
 export const github = {
     name: "GitHub",
-    href: "https://github.com/finxol/karr",
+    href: "https://github.com/karr-mobi/karr",
     icon: Github
 }
 
