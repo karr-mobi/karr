@@ -63,6 +63,13 @@
         "user-id": "User ID",
         "email": "Email",
 
+        "nickname": {
+            "enter": "Enter nickname",
+            "update": "Update nickname",
+            "update-success": "Nickname updated successfully",
+            "update-failure": "Failed to update nickname"
+        },
+
         "preferences": {
             "title": "Preferences",
             "auto-book": "Auto Book",

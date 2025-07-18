@@ -17,3 +17,9 @@ body {
     line-height: 1.4;
     letter-spacing: var(--tracking);
 }
+
+svg {
+    height: 2ex;
+    width: auto;
+    flex: none;
+}

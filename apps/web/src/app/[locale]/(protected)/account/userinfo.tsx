@@ -30,6 +30,7 @@ import {
 import { useTranslations } from "next-intl"
 import Loading from "@/components/Loading"
 import { client } from "@/util/apifetch"
+import DisplayName from "./DisplayName"
 
 export default function FetchUserData({
     avatar
@@ -70,8 +71,6 @@ function ShowUserData({
 }) {
     const t = useTranslations("Account")
 
-    const displayName =
-        user.nickname || `${user.firstName} ${user.lastName}`.trim()
     const initials =
         `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`.toUpperCase()
 
@@ -92,9 +91,11 @@ function ShowUserData({
                             <AvatarFallback>{initials}</AvatarFallback>
                         </Avatar>
                         <div className="space-y-1">
-                            <h3 className="!font-normal !font-sans text-lg">
-                                {displayName}
-                            </h3>
+                            <DisplayName
+                                firstName={user.firstName}
+                                lastName={user.lastName}
+                                nickname={user.nickname}
+                            />
                             <div className="flex items-center gap-2">
                                 {user.verified ? (
                                     <Badge
