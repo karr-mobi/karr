@@ -59,7 +59,8 @@ const hono = new Hono<{ Variables: AppVariables }>()
     .get("/users", async (c) => {
         const usersList = await db
             .select({
-                id: profileTable.id,
+                id: accountsTable.id,
+                profileId: profileTable.id,
                 role: accountsTable.role,
                 blocked: accountsTable.blocked,
                 provider: accountsTable.provider,
@@ -76,6 +77,7 @@ const hono = new Hono<{ Variables: AppVariables }>()
         // Format the response with proper name handling
         const formattedUsers = usersList.map((user) => ({
             id: user.id,
+            profileId: user.profileId,
             name:
                 user.nickname ||
                 `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
