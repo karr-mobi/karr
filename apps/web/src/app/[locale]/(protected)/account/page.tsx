@@ -7,8 +7,9 @@ import { Suspense } from "react"
 import Loading from "@/components/Loading"
 import { auth } from "~/auth/actions"
 import UserInfo from "./userinfo"
+import { Metadata } from "next"
 
-export const metadata = {
+export const metadata: Metadata = {
     title: "Account",
     description: "Manage your Karr account"
 }
