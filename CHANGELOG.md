@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.14.8
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.7...v0.14.8)
+
+### 🚀 Enhancements
+
+- **account:** Add nickname change UI ([#169](https://github.com/karr-mobi/karr/pull/169))
+
+### 🩹 Fixes
+
+- **admin:** Don't show user role badge ([5d8a25d](https://github.com/karr-mobi/karr/commit/5d8a25d))
+- **admin:** User blocking by account id ([#168](https://github.com/karr-mobi/karr/pull/168))
+- **landing:** Tweaks ([5361ddb](https://github.com/karr-mobi/karr/commit/5361ddb))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.7
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.6...v0.14.7)
