@@ -18,6 +18,7 @@ import { client } from "@/util/apifetch"
 
 interface User {
     id: string
+    profileId: string
     name?: string | null
     avatar?: string | null
     role: "user" | "admin"
@@ -122,7 +123,7 @@ function Users({ users }: { users: User[] }) {
                 )}
                 <div>
                     <div className="flex flex-col flex-wrap items-start justify-start gap-2 font-medium sm:flex-row sm:items-center">
-                        {user.id === authState?.id && (
+                        {user.profileId === authState?.id && (
                             <Badge variant="secondary">You</Badge>
                         )}
                         <div className="max-w-[30vw]">{user.name}</div>

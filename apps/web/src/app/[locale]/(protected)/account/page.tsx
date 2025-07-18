@@ -1,6 +1,7 @@
 //biome-ignore-all lint/nursery/noProcessGlobal: Webpack can't handle node: imports
 //biome-ignore-all lint/style/noProcessEnv: Just for dev
 
+import type { Metadata } from "next"
 import { unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
@@ -8,7 +9,7 @@ import Loading from "@/components/Loading"
 import { auth } from "~/auth/actions"
 import UserInfo from "./userinfo"
 
-export const metadata = {
+export const metadata: Metadata = {
     title: "Account",
     description: "Manage your Karr account"
 }
