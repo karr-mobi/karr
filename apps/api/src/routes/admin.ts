@@ -78,10 +78,9 @@ const hono = new Hono<{ Variables: AppVariables }>()
         const formattedUsers = usersList.map((user) => ({
             id: user.id,
             profileId: user.profileId,
-            name:
-                user.nickname ||
-                `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
-                null,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            nickname: user.nickname,
             avatar: user.avatar,
             role: user.role,
             blocked: user.blocked,

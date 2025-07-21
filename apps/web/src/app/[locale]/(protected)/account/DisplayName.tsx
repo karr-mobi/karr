@@ -3,6 +3,7 @@
 import { Button } from "@karr/ui/components/button"
 import { Input } from "@karr/ui/components/input"
 import { toast } from "@karr/ui/components/sonner"
+import { useDisplayName } from "@karr/ui/hooks/users"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { CheckIcon, PencilIcon, XIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
@@ -25,8 +26,7 @@ export default function DisplayName({
     const [isEditing, setIsEditing] = useState(false)
     const [editValue, setEditValue] = useState(nickname || "")
 
-    const displayName =
-        nickname || `${firstName || ""} ${lastName || ""}`.trim()
+    const displayName = useDisplayName({ nickname, lastName, firstName })
 
     const mutation = useMutation({
         mutationFn: async (newNickname: string) => {
