@@ -1,5 +1,6 @@
 "use client"
 
+import type { InferResponseType } from "@karr/api/client"
 import { Badge } from "@karr/ui/components/badge"
 import { Button } from "@karr/ui/components/button"
 import {
@@ -8,55 +9,26 @@ import {
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@karr/ui/components/dialog"
 import { Skeleton } from "@karr/ui/components/skeleton"
 import { toast } from "@karr/ui/components/sonner"
+import { useDisplayName } from "@karr/ui/hooks/users"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Ban, UserIcon } from "lucide-react"
+import { Ban, Calendar1Icon, CircleCheckIcon, UserIcon } from "lucide-react"
 import Image from "next/image"
 import { useAuth } from "@/app/auth/context"
 import { client } from "@/util/apifetch"
 
-interface User {
-    id: string
-    profileId: string
-    name?: string | null
-    avatar?: string | null
-    role: "user" | "admin"
-    createdAt: string
-    blocked?: boolean | null
-    provider: string
-}
+type Users = InferResponseType<typeof client.admin.users.$get, 200>
 
-function UsersSkeleton() {
-    return ["skeleton-1", "skeleton-2", "skeleton-3"].map((id) => (
-        <div
-            key={id}
-            className="group mb-4 flex items-center justify-between rounded-lg border bg-card p-4"
-        >
-            <div className="flex items-center gap-4">
-                <Skeleton className="h-10 w-10 rounded-full" />
-                <div>
-                    <div className="font-medium">
-                        <Skeleton className="h-4 w-20" />
-                    </div>
-                    <div className="mt-1 flex items-center gap-2">
-                        <Skeleton className="h-4 w-20 rounded-full" />
-                        <Skeleton className="h-4 w-20 rounded-full" />
-                    </div>
-                </div>
-            </div>
-            <div className="flex items-center gap-2">
-                <span className="text-muted-foreground text-sm">
-                    <Skeleton className="h-4 w-20" />
-                </span>
-            </div>
-        </div>
-    ))
-}
-
-function Users({ users }: { users: User[] }) {
+function useBlockMutations() {
     const queryClient = useQueryClient()
-    const { authState } = useAuth()
 
     const blockUserMutation = useMutation({
         mutationFn: async (userId: string) => {
@@ -102,16 +74,39 @@ function Users({ users }: { users: User[] }) {
         }
     })
 
-    return users.map((user) => (
+    return { blockUserMutation, unblockUserMutation }
+}
+
+function UsersSkeleton() {
+    return ["skeleton-1", "skeleton-2", "skeleton-3"].map((id) => (
         <div
-            key={user.id}
-            className="group flex items-center justify-between rounded-lg border bg-card p-4 transition-colors hover:bg-accent/50"
+            key={id}
+            className="group mb-4 flex items-center justify-between rounded-lg border bg-card p-4"
         >
             <div className="flex items-center gap-4">
+                <Skeleton className="h-10 w-10 rounded-full" />
+                <div>
+                    <div className="mt-1 flex items-center gap-2">
+                        <Skeleton className="h-4 w-25 rounded-full" />
+                        <Skeleton className="h-4 w-15 rounded-full" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    ))
+}
+
+function UserCard({ user }: { user: Users[number] }) {
+    const { authState } = useAuth()
+    const displayName = useDisplayName(user)
+
+    return (
+        <>
+            <div className="flex w-full items-center justify-start gap-4 font-medium">
                 {user.avatar ? (
                     <Image
                         src={user.avatar}
-                        alt={user.name || "User"}
+                        alt={displayName}
                         className="h-10 w-10 rounded-full"
                         width="40"
                         height="40"
@@ -121,54 +116,115 @@ function Users({ users }: { users: User[] }) {
                         <UserIcon className="h-5 w-5" />
                     </div>
                 )}
-                <div>
-                    <div className="flex flex-col flex-wrap items-start justify-start gap-2 font-medium sm:flex-row sm:items-center">
-                        {user.profileId === authState?.id && (
-                            <Badge variant="secondary">You</Badge>
+                {user.profileId === authState?.id && (
+                    <Badge variant="secondary">You</Badge>
+                )}
+                <div>{displayName}</div>
+                {user.role === "admin" && (
+                    <Badge variant="default">{user.role}</Badge>
+                )}
+                {user.blocked && <Badge variant="destructive">Blocked</Badge>}
+            </div>
+        </>
+    )
+}
+
+function User({ user }: { user: Users[number]; key: string }) {
+    const { blockUserMutation, unblockUserMutation } = useBlockMutations()
+
+    const displayName = useDisplayName(user)
+
+    return (
+        <Dialog key={user.id}>
+            <DialogTrigger asChild>
+                <div className="group flex w-full cursor-pointer items-center justify-between rounded-lg border bg-card p-4 transition-colors hover:bg-accent/50 md:w-[49%]">
+                    <DialogTitle className="sr-only">
+                        Open user details
+                    </DialogTitle>
+                    <UserCard user={user} />
+                </div>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle className="flex items-center gap-4">
+                        {user.avatar ? (
+                            <Image
+                                src={user.avatar}
+                                alt={displayName}
+                                className="h-10 w-10 rounded-full"
+                                width="40"
+                                height="40"
+                            />
+                        ) : (
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                                <UserIcon className="h-5 w-5" />
+                            </div>
                         )}
-                        <div className="max-w-[30vw]">{user.name}</div>
-                    </div>
+                        {displayName}
+                    </DialogTitle>
+                </DialogHeader>
+                <div className="flex flex-col gap-4">
                     <div className="mt-1 flex items-center gap-2">
                         {user.role === "admin" && (
                             <Badge variant="default">{user.role}</Badge>
                         )}
-                        <Badge variant="outline">{user.provider}</Badge>
+                        <Badge variant="outline" className="capitalize">
+                            {user.provider}
+                        </Badge>
                         {user.blocked && (
                             <Badge variant="destructive">Blocked</Badge>
                         )}
                     </div>
+
+                    <div className="flex items-center gap-3">
+                        <UserIcon className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-sm capitalize">
+                            {`${user.firstName} `}
+                            {user.lastName}
+                        </span>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <Calendar1Icon className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-sm">
+                            Joined{" "}
+                            {new Date(user.createdAt).toLocaleDateString()}
+                        </span>
+                    </div>
+
+                    {user.role === "user" && (
+                        <div className="mt-2 flex flex-col-reverse gap-2 sm:flex-row sm:justify-start">
+                            {user.blocked ? (
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    onClick={() =>
+                                        unblockUserMutation.mutate(user.id)
+                                    }
+                                    disabled={unblockUserMutation.isPending}
+                                >
+                                    <CircleCheckIcon className="mr-1 h-4 w-4" />
+                                    Unblock
+                                </Button>
+                            ) : (
+                                <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={() =>
+                                        blockUserMutation.mutate(user.id)
+                                    }
+                                    disabled={blockUserMutation.isPending}
+                                >
+                                    <Ban className="mr-1 h-4 w-4" />
+                                    Block
+                                </Button>
+                            )}
+                        </div>
+                    )}
                 </div>
-            </div>
-            <div className="flex items-center gap-2 self-end">
-                {user.role === "user" &&
-                    (user.blocked ? (
-                        <Button
-                            variant="secondary"
-                            size="sm"
-                            onClick={() => unblockUserMutation.mutate(user.id)}
-                            disabled={unblockUserMutation.isPending}
-                            className="opacity-0 transition-opacity group-hover:opacity-100"
-                        >
-                            Unblock
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => blockUserMutation.mutate(user.id)}
-                            disabled={blockUserMutation.isPending}
-                            className="opacity-0 transition-opacity group-hover:opacity-100"
-                        >
-                            <Ban className="mr-1 h-4 w-4" />
-                            Block
-                        </Button>
-                    ))}
-                <div className="max-w-[30vw] text-right text-muted-foreground text-sm">
-                    Joined {new Date(user.createdAt).toLocaleDateString()}
-                </div>
-            </div>
-        </div>
-    ))
+            </DialogContent>
+        </Dialog>
+    )
 }
 
 export function UsersList() {
@@ -207,9 +263,11 @@ export function UsersList() {
                         {error?.message || "Unknown error"}
                     </div>
                 ) : (
-                    <div className="space-y-2">
+                    <div className="flex flex-row flex-wrap gap-2">
                         {users && users.length > 0 ? (
-                            <Users users={users} />
+                            users.map((user) => (
+                                <User user={user} key={user.id} />
+                            ))
                         ) : (
                             <div className="py-8 text-center text-muted-foreground">
                                 No users found
