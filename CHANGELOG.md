@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.14.10
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.9...v0.14.10)
+
+### 🚀 Enhancements
+
+- Add public profile page ([#173](https://github.com/karr-mobi/karr/pull/173))
+- **admin:** Translate ui ([#174](https://github.com/karr-mobi/karr/pull/174))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.9
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.8...v0.14.9)
