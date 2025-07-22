@@ -1,4 +1,5 @@
 import { Hono } from "hono"
+import { z } from "zod/v4"
 import {
     selectUserById,
     selectUserProfileById,
@@ -7,6 +8,8 @@ import {
 import { handleRequest, tmpResponse } from "@/lib/helpers"
 import type { AppVariables, ErrorResponse } from "@/lib/types.d.ts"
 import { getUserSub } from "@/util/subject"
+
+const NicknameSchema = z.string().min(2)
 
 const hono = new Hono<{ Variables: AppVariables }>()
 
@@ -73,8 +76,10 @@ const hono = new Hono<{ Variables: AppVariables }>()
 
         const { nickname } = await c.req.json()
 
+        const parsedNickname = NicknameSchema.safeParse(nickname)
+
         // check the nickname is a valid string
-        if (typeof nickname !== "string" || nickname.length === 0) {
+        if (!parsedNickname.success) {
             return c.json(
                 {
                     message: "Invalid nickname"
@@ -85,7 +90,7 @@ const hono = new Hono<{ Variables: AppVariables }>()
 
         // update the user's nickname in the database
         return await handleRequest<boolean>(c, () =>
-            updateNickname(subject.id, nickname)
+            updateNickname(subject.id, parsedNickname.data)
         )
     })
 
