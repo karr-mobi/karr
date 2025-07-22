@@ -22,6 +22,7 @@ import { useDisplayName } from "@karr/ui/hooks/users"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Ban, Calendar1Icon, CircleCheckIcon, UserIcon } from "lucide-react"
 import Image from "next/image"
+import { useLocale, useTranslations } from "next-intl"
 import { useAuth } from "@/app/auth/context"
 import { client } from "@/util/apifetch"
 
@@ -99,15 +100,16 @@ function UsersSkeleton() {
 function UserCard({ user }: { user: Users[number] }) {
     const { authState } = useAuth()
     const displayName = useDisplayName(user)
+    const t = useTranslations("Admin")
 
     return (
         <>
-            <div className="flex w-full items-center justify-start gap-4 font-medium">
+            <div className="flex w-full items-center justify-start gap-2 font-medium">
                 {user.avatar ? (
                     <Image
                         src={user.avatar}
                         alt={displayName}
-                        className="h-10 w-10 rounded-full"
+                        className="me-2 h-10 w-10 rounded-full"
                         width="40"
                         height="40"
                     />
@@ -117,13 +119,15 @@ function UserCard({ user }: { user: Users[number] }) {
                     </div>
                 )}
                 {user.profileId === authState?.id && (
-                    <Badge variant="secondary">You</Badge>
+                    <Badge variant="secondary">{t("you")}</Badge>
                 )}
                 <div>{displayName}</div>
                 {user.role === "admin" && (
                     <Badge variant="default">{user.role}</Badge>
                 )}
-                {user.blocked && <Badge variant="destructive">Blocked</Badge>}
+                {user.blocked && (
+                    <Badge variant="destructive">{t("blocked")}</Badge>
+                )}
             </div>
         </>
     )
@@ -133,13 +137,15 @@ function User({ user }: { user: Users[number]; key: string }) {
     const { blockUserMutation, unblockUserMutation } = useBlockMutations()
 
     const displayName = useDisplayName(user)
+    const t = useTranslations("Admin")
+    const locale = useLocale()
 
     return (
         <Dialog key={user.id}>
             <DialogTrigger asChild>
                 <div className="group flex w-full cursor-pointer items-center justify-between rounded-lg border bg-card p-4 transition-colors hover:bg-accent/50 md:w-[49%]">
                     <DialogTitle className="sr-only">
-                        Open user details
+                        {t("open-user-details")}
                     </DialogTitle>
                     <UserCard user={user} />
                 </div>
@@ -172,7 +178,7 @@ function User({ user }: { user: Users[number]; key: string }) {
                             {user.provider}
                         </Badge>
                         {user.blocked && (
-                            <Badge variant="destructive">Blocked</Badge>
+                            <Badge variant="destructive">{t("blocked")}</Badge>
                         )}
                     </div>
 
@@ -187,8 +193,11 @@ function User({ user }: { user: Users[number]; key: string }) {
                     <div className="flex items-center gap-3">
                         <Calendar1Icon className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">
-                            Joined{" "}
-                            {new Date(user.createdAt).toLocaleDateString()}
+                            {t("joined", {
+                                date: new Date(
+                                    user.createdAt
+                                ).toLocaleDateString(locale)
+                            })}
                         </span>
                     </div>
 
@@ -204,7 +213,7 @@ function User({ user }: { user: Users[number]; key: string }) {
                                     disabled={unblockUserMutation.isPending}
                                 >
                                     <CircleCheckIcon className="mr-1 h-4 w-4" />
-                                    Unblock
+                                    {t("unblock")}
                                 </Button>
                             ) : (
                                 <Button
@@ -216,7 +225,7 @@ function User({ user }: { user: Users[number]; key: string }) {
                                     disabled={blockUserMutation.isPending}
                                 >
                                     <Ban className="mr-1 h-4 w-4" />
-                                    Block
+                                    {t("block")}
                                 </Button>
                             )}
                         </div>
@@ -228,6 +237,8 @@ function User({ user }: { user: Users[number]; key: string }) {
 }
 
 export function UsersList() {
+    const t = useTranslations("Admin")
+
     const {
         data: users,
         isLoading,
@@ -251,7 +262,7 @@ export function UsersList() {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <UserIcon className="h-5 w-5" />
-                    Users
+                    {t("users")}
                 </CardTitle>
             </CardHeader>
             <CardContent className="px-3 pt-0 pb-6 md:px-6">
@@ -259,7 +270,7 @@ export function UsersList() {
                     <UsersSkeleton />
                 ) : isError || !users ? (
                     <div className="py-8 text-center text-red-500">
-                        Failed to load users:{" "}
+                        {t("failed-load-users")}:{" "}
                         {error?.message || "Unknown error"}
                     </div>
                 ) : (
@@ -270,7 +281,7 @@ export function UsersList() {
                             ))
                         ) : (
                             <div className="py-8 text-center text-muted-foreground">
-                                No users found
+                                {t("no-users-found")}
                             </div>
                         )}
                     </div>

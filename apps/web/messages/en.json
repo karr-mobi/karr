@@ -52,6 +52,29 @@
         "account": "My Account",
         "admin": "Admin Panel"
     },
+
+    "Admin": {
+        "title": "Admin Dashboard",
+        "description": "Manage your Karr instance",
+        "instance-name": "Instance Name",
+        "version": "Version",
+        "total-users": "Total Users",
+        "users": "Users",
+        "registered-users": "Registered Users",
+        "instance-created": "Instance Created",
+
+        "open-user-details": "Open User Details",
+        "you": "You",
+        "blocked": "Blocked",
+        "unblock": "Unblock",
+        "block": "Block",
+        "joined": "Joined {date}",
+
+        "error-loading-instance-data": "Error Loading Instance Data",
+        "failed-load-users": "Failed to load users",
+        "no-users-found": "No users found"
+    },
+
     "Account": {
         "title": "Account",
         "subtitle": "Manage your account settings and preferences",

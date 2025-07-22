@@ -52,6 +52,29 @@
         "account": "Mon Compte",
         "admin": "Panel d'administration"
     },
+
+    "Admin": {
+        "title": "Panel d'administration",
+        "description": "Gérer votre instance Karr",
+        "instance-name": "Nom de l'instance",
+        "version": "Version",
+        "total-users": "Total des utilisateurs",
+        "users": "Utilisateurs",
+        "registered-users": "Utilisateurs enregistrés",
+        "instance-created": "Instance créée",
+
+        "open-user-details": "Ouvrir les détails de l'utilisateur",
+        "you": "Vous",
+        "blocked": "Bloqué",
+        "unblock": "Débloquer",
+        "block": "Bloquer",
+        "joined": "Rejoint le {date}",
+
+        "error-loading-instance-data": "Erreur lors du chargement des données de l'instance",
+        "failed-load-users": "Échec du chargement des utilisateurs",
+        "no-users-found": "Aucun utilisateur trouvé"
+    },
+
     "Account": {
         "title": "Compte",
         "subtitle": "Gérer vos paramètres et préférences de compte",
