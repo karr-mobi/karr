@@ -1,11 +1,12 @@
 import logger from "@karr/logger"
 import { tryCatch } from "@karr/util"
-import { eq } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import { err, ok } from "neverthrow"
 import drizzle from "@/db"
 import { accountsTable } from "@/db/schemas/accounts"
 import { profileTable } from "@/db/schemas/profile"
 import { specialStatusTable } from "@/db/schemas/specialstatus"
+import { tripsTable } from "@/db/schemas/trips"
 import { userPrefsTable } from "@/db/schemas/userprefs"
 
 /**
@@ -76,9 +77,16 @@ export async function selectUserProfileById(id: string) {
         drizzle
             .select({
                 firstName: profileTable.firstName,
+                lastName: profileTable.lastName,
                 nickname: profileTable.nickname,
+                avatar: profileTable.avatar,
                 bio: profileTable.bio,
-                specialStatus: profileTable.specialStatus
+                specialStatus: profileTable.specialStatus,
+                tripsCount: sql<number>`(
+                    SELECT COUNT(*)::int
+                    FROM ${tripsTable}
+                    WHERE ${tripsTable.driver} = ${id}
+                )`
             })
             .from(profileTable)
             .where(eq(profileTable.id, id))

@@ -86,6 +86,15 @@
             "user-id": "ID utilisateur"
         }
     },
+    "Profile": {
+        "title": "Profil utilisateur",
+        "description": "Voir les informations du profil utilisateur",
+        "error-loading": "Erreur lors du chargement du profil",
+        "basic-info": "Informations de base",
+        "about": "À propos",
+        "special-status": "Statut spécial",
+        "trips-published": "{count, plural, =0{Aucun trajet publié} =1{# trajet publié} other{# trajets publiés}}"
+    },
     "trips": {
         "title": "Trajets",
         "Search": {

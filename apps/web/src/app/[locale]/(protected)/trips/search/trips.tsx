@@ -10,6 +10,7 @@ import {
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
+import { useDisplayName } from "@karr/ui/hooks/users"
 import { useLocale } from "next-intl"
 import { useEffect, useState } from "react"
 import Loading from "@/components/Loading"
@@ -129,21 +130,22 @@ function TripCard({ trip }: { trip: Trip }) {
             <CardContent>
                 <p>{trip.price} €</p>
             </CardContent>
-            <CardFooter className="flow-inline">
-                <Avatar>
-                    <AvatarImage src={trip.avatar || ""} />
-                    <AvatarFallback>
-                        {trip.nickname?.slice(0, 2).toUpperCase() ||
-                            `${trip.firstName?.charAt(0).toUpperCase()}${trip.lastName?.charAt(0).toUpperCase() || ""}` ||
-                            trip.driver.split("-")[0]}
-                    </AvatarFallback>
-                </Avatar>
+            <CardFooter>
+                <Link
+                    href={`/profile/${trip.driver}`}
+                    className="flex items-center justify-start gap-4"
+                >
+                    <Avatar>
+                        <AvatarImage src={trip.avatar || ""} />
+                        <AvatarFallback>
+                            {trip.nickname?.slice(0, 2).toUpperCase() ||
+                                `${trip.firstName?.charAt(0).toUpperCase()}${trip.lastName?.charAt(0).toUpperCase() || ""}` ||
+                                trip.driver.split("-")[0]}
+                        </AvatarFallback>
+                    </Avatar>
 
-                <p>
-                    {trip.nickname ||
-                        `${trip.firstName} ${trip.lastName || ""}` ||
-                        trip.driver.split("-")[0]}
-                </p>
+                    <p>{useDisplayName(trip) || trip.driver.split("-")[0]}</p>
+                </Link>
             </CardFooter>
         </Card>
     )
