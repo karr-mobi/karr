@@ -9,6 +9,7 @@ import {
 import { Skeleton } from "@karr/ui/components/skeleton"
 import { useQuery } from "@tanstack/react-query"
 import { UsersIcon } from "lucide-react"
+import { useLocale, useTranslations } from "next-intl"
 import { client } from "@/util/apifetch"
 
 interface InstanceInfo {
@@ -17,6 +18,9 @@ interface InstanceInfo {
 }
 
 export function InstanceInfo() {
+    const t = useTranslations("Admin")
+    const locale = useLocale()
+
     // Fetch instance information
     const {
         data: instanceInfo,
@@ -41,7 +45,7 @@ export function InstanceInfo() {
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="font-medium text-sm">
-                        Total Users
+                        {t("total-users")}
                     </CardTitle>
                     <UsersIcon className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
@@ -56,7 +60,7 @@ export function InstanceInfo() {
                         )}
                     </div>
                     <p className="text-muted-foreground text-xs">
-                        Registered users
+                        {t("registered-users")}
                     </p>
                 </CardContent>
             </Card>
@@ -65,19 +69,19 @@ export function InstanceInfo() {
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="font-medium text-sm">
-                            Instance Created
+                            {t("instance-created")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="font-bold text-2xl">
                             {new Date(
                                 instanceInfo.createdAt
-                            ).toLocaleDateString()}
+                            ).toLocaleDateString(locale)}
                         </div>
                         <p className="text-muted-foreground text-xs">
                             {new Date(
                                 instanceInfo.createdAt
-                            ).toLocaleTimeString()}
+                            ).toLocaleTimeString(locale)}
                         </p>
                     </CardContent>
                 </Card>
@@ -88,7 +92,7 @@ export function InstanceInfo() {
                 <Card className="border-destructive">
                     <CardHeader>
                         <CardTitle className="text-destructive">
-                            Error Loading Instance Data
+                            {t("error-loading-instance-data")}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
