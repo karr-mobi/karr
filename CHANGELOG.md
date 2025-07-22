@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.14.9
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.8...v0.14.9)
+
+### 🚀 Enhancements
+
+- **admin:** Improve users list UI ([#171](https://github.com/karr-mobi/karr/pull/171))
+
+### 🩹 Fixes
+
+- **api:** Use zod for nickname validity check ([#172](https://github.com/karr-mobi/karr/pull/172))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.8
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.7...v0.14.8)
