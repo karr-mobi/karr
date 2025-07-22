@@ -27,6 +27,7 @@ import { useQuery } from "@tanstack/react-query"
 import {
     CalendarIcon,
     CheckIcon,
+    ChevronRightIcon,
     CigaretteIcon,
     ClockIcon,
     Music4Icon,
@@ -42,7 +43,7 @@ import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
 import { useAuth } from "@/app/auth/context"
 import Loading from "@/components/Loading"
-import { redirect } from "@/i18n/routing"
+import { Link, redirect } from "@/i18n/routing"
 import { client } from "@/util/apifetch"
 
 const tripRoute =
@@ -207,51 +208,56 @@ function ShowTripData({ trip }: { trip: Trip }) {
 
             <div className="grid gap-6 md:grid-cols-2">
                 {/* Driver Info Card */}
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="flex items-center gap-3">
-                            <UserIcon className="h-5 w-5" />
-                            {t("driver-info")}
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="flex items-center gap-4">
-                            <Avatar className="h-12 w-12">
-                                <AvatarImage
-                                    src={trip.driver.avatar || undefined}
-                                />
-                                <AvatarFallback>
-                                    {`${trip.driver.firstName?.[0] || ""}${trip.driver.lastName?.[0] || ""}`.toUpperCase()}
-                                </AvatarFallback>
-                            </Avatar>
-                            <div className="space-y-1">
-                                <h4 className="font-medium">
-                                    {trip.driver.nickname ||
-                                        `${trip.driver.firstName} ${trip.driver.lastName}`.trim()}
-                                </h4>
-                                <div className="flex items-center gap-2">
-                                    {trip.driver.verified ? (
-                                        <Badge
-                                            variant="default"
-                                            className="text-xs"
-                                        >
-                                            <CheckIcon className="mr-1 h-3 w-3" />
-                                            {t("verified")}
-                                        </Badge>
-                                    ) : (
-                                        <Badge
-                                            variant="destructive"
-                                            className="text-xs"
-                                        >
-                                            <OctagonXIcon className="mr-1 h-3 w-3" />
-                                            {t("not-verified")}
-                                        </Badge>
-                                    )}
+                <Link href={`/profile/${trip.driver.id}`} className="block">
+                    <Card className="cursor-pointer transition-shadow hover:shadow-lg">
+                        <CardHeader>
+                            <CardTitle className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <UserIcon className="h-5 w-5" />
+                                    {t("driver-info")}
+                                </div>
+                                <ChevronRightIcon className="h-5 w-5 text-muted-foreground" />
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex items-center gap-4">
+                                <Avatar className="h-12 w-12">
+                                    <AvatarImage
+                                        src={trip.driver.avatar || undefined}
+                                    />
+                                    <AvatarFallback>
+                                        {`${trip.driver.firstName?.[0] || ""}${trip.driver.lastName?.[0] || ""}`.toUpperCase()}
+                                    </AvatarFallback>
+                                </Avatar>
+                                <div className="space-y-1">
+                                    <h4 className="font-medium">
+                                        {trip.driver.nickname ||
+                                            `${trip.driver.firstName} ${trip.driver.lastName}`.trim()}
+                                    </h4>
+                                    <div className="flex items-center gap-2">
+                                        {trip.driver.verified ? (
+                                            <Badge
+                                                variant="default"
+                                                className="text-xs"
+                                            >
+                                                <CheckIcon className="mr-1 h-3 w-3" />
+                                                {t("verified")}
+                                            </Badge>
+                                        ) : (
+                                            <Badge
+                                                variant="destructive"
+                                                className="text-xs"
+                                            >
+                                                <OctagonXIcon className="mr-1 h-3 w-3" />
+                                                {t("not-verified")}
+                                            </Badge>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                        </CardContent>
+                    </Card>
+                </Link>
 
                 {/* Trip Preferences Card */}
                 <Card>

@@ -114,8 +114,27 @@ const hono = new Hono<{ Variables: AppVariables }>()
         async (c) => {
             const id = c.req.param("id")
 
-            // get the user from the database and send it back
-            return await handleRequest(c, () => selectUserProfileById(id))
+            const profile = await selectUserProfileById(id)
+
+            if (profile.isErr()) {
+                return c.json(
+                    {
+                        message: profile.error
+                    } satisfies ErrorResponse,
+                    500
+                )
+            }
+
+            if (!profile.value) {
+                return c.json(
+                    {
+                        message: "Profile not found"
+                    } satisfies ErrorResponse,
+                    404
+                )
+            }
+
+            return c.json(profile.value, 200)
         }
     )
 
