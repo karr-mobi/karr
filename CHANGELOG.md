@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.14.11
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.10...v0.14.11)
+
+### 🚀 Enhancements
+
+- **account:** Display user trips on account page ([#175](https://github.com/karr-mobi/karr/pull/175))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.10
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.9...v0.14.10)
