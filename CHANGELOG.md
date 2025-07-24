@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.14.12
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.11...v0.14.12)
+
+### 🩹 Fixes
+
+- **account:** Gracefully handle no user trips in list ([#176](https://github.com/karr-mobi/karr/pull/176))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.11
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.10...v0.14.11)
