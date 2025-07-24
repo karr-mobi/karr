@@ -4,14 +4,19 @@
         "source.organizeImports.biome": true,
         "source.fixAll.biome": true
     },
-    "formatter": {
-        "language_server": {
-            "name": "biome"
-        }
-    },
     "language_servers": ["biome"],
     "languages": {
         "TypeScript": {
+            "formatter": {
+                "external": {
+                    "command": "node_modules/@biomejs/biome/bin/biome",
+                    "arguments": [
+                        "check",
+                        "--stdin-file-path={buffer_path}",
+                        "--write"
+                    ]
+                }
+            },
             "language_servers": [
                 "biome",
                 "typescript-language-server",
@@ -19,6 +24,16 @@
             ]
         },
         "TSX": {
+            "formatter": {
+                "external": {
+                    "command": "node_modules/@biomejs/biome/bin/biome",
+                    "arguments": [
+                        "check",
+                        "--stdin-file-path={buffer_path}",
+                        "--write"
+                    ]
+                }
+            },
             "language_servers": [
                 "biome",
                 "typescript-language-server",
@@ -26,6 +41,16 @@
             ]
         },
         "JavaScript": {
+            "formatter": {
+                "external": {
+                    "command": "node_modules/@biomejs/biome/bin/biome",
+                    "arguments": [
+                        "check",
+                        "--stdin-file-path={buffer_path}",
+                        "--write"
+                    ]
+                }
+            },
             "language_servers": [
                 "biome",
                 "typescript-language-server",
@@ -33,6 +58,42 @@
             ]
         },
         "JSON": {
+            "formatter": {
+                "external": {
+                    "command": "node_modules/@biomejs/biome/bin/biome",
+                    "arguments": [
+                        "check",
+                        "--stdin-file-path={buffer_path}",
+                        "--write"
+                    ]
+                }
+            },
+            "language_servers": ["biome"]
+        },
+        "JSONC": {
+            "formatter": {
+                "external": {
+                    "command": "node_modules/@biomejs/biome/bin/biome",
+                    "arguments": [
+                        "check",
+                        "--stdin-file-path={buffer_path}",
+                        "--write"
+                    ]
+                }
+            },
+            "language_servers": ["biome"]
+        },
+        "CSS": {
+            "formatter": {
+                "external": {
+                    "command": "node_modules/@biomejs/biome/bin/biome",
+                    "arguments": [
+                        "check",
+                        "--stdin-file-path={buffer_path}",
+                        "--write"
+                    ]
+                }
+            },
             "language_servers": ["biome"]
         }
     }
