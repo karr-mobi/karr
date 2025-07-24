@@ -7,6 +7,7 @@ import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 import Loading from "@/components/Loading"
 import { auth } from "~/auth/actions"
+import { UserTrips } from "./UserTrips"
 import UserInfo from "./userinfo"
 
 export const metadata: Metadata = {
@@ -28,6 +29,9 @@ export default async function AccountPage() {
             </div>
             <Suspense fallback={<Loading />}>
                 <UserInfo avatar={authState.avatar} />
+            </Suspense>
+            <Suspense fallback={<Loading />}>
+                <UserTrips />
             </Suspense>
             {process.env.NODE_ENV !== "production" && (
                 <details className="mt-4 ml-4 text-sm">

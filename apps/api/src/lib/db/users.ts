@@ -2,11 +2,12 @@ import logger from "@karr/logger"
 import { tryCatch } from "@karr/util"
 import { eq, sql } from "drizzle-orm"
 import { err, ok } from "neverthrow"
+import { z } from "zod/v4-mini"
 import drizzle from "@/db"
 import { accountsTable } from "@/db/schemas/accounts"
 import { profileTable } from "@/db/schemas/profile"
 import { specialStatusTable } from "@/db/schemas/specialstatus"
-import { tripsTable } from "@/db/schemas/trips"
+import { TripSchema, tripsTable, tripsView } from "@/db/schemas/trips"
 import { userPrefsTable } from "@/db/schemas/userprefs"
 
 /**
@@ -70,6 +71,39 @@ export async function updateNickname(id: string, nickname: string) {
         return false
     }
     return true
+}
+
+export async function selectUserTrips(id: string) {
+    const trips = await tryCatch(
+        drizzle
+            .select({
+                id: tripsView.id,
+                from: tripsView.from,
+                to: tripsView.to,
+                departure: tripsView.departure,
+                price: tripsView.price,
+                driver: tripsView.driver,
+                firstName: sql`"trips_view"."firstName"`,
+                lastName: sql`"trips_view"."lastName"`,
+                nickname: sql`"trips_view"."nickname"`,
+                avatar: sql`"trips_view"."avatar"`
+            })
+            .from(tripsView)
+            .where(eq(tripsView.driver, id))
+    )
+
+    if (!trips.success) {
+        logger.error("failed to get from trips view", trips.error)
+        return err("Failed to get trips from db")
+    }
+
+    const t = z.safeParse(TripSchema.array(), trips.value)
+    if (!t.success) {
+        logger.debug("Failed to parse trips:", t.error)
+        return err("Failed to parse trips")
+    }
+
+    return ok(t.data)
 }
 
 export async function selectUserProfileById(id: string) {

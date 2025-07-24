@@ -85,6 +85,7 @@
         "no-special-status": "Pas de statut spécial",
         "user-id": "ID utilisateur",
         "email": "Email",
+        "my-trips": "Mes trajets",
 
         "nickname": {
             "enter": "Entrer un pseudonyme",

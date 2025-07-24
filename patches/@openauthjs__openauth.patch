@@ -12,7 +12,7 @@ index 3cd7f7020c9fe913c44efa50575e88e8a1333da0..a1202b433d1d8398489eecb543ec6405
      return wellKnown;
    }
 diff --git a/dist/esm/issuer.js b/dist/esm/issuer.js
-index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..b84bc30cf23b92723be7c245e40828c36738962b 100644
+index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..dc6c2040dc2c7acae004bc1deb2c3d33fb6068a2 100644
 --- a/dist/esm/issuer.js
 +++ b/dist/esm/issuer.js
 @@ -8,7 +8,7 @@ import {
@@ -24,10 +24,11 @@ index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..b84bc30cf23b92723be7c245e40828c3
  import { Storage } from "./storage/storage.js";
  import { encryptionKeys, legacySigningKeys, signingKeys } from "./keys.js";
  import { validatePKCE } from "./pkce.js";
-@@ -19,8 +19,12 @@ import { DynamoStorage } from "./storage/dynamo.js";
+@@ -18,9 +18,12 @@ import { getRelativeUrl, isDomainMatch, lazy } from "./util.js";
+ import { DynamoStorage } from "./storage/dynamo.js";
  import { MemoryStorage } from "./storage/memory.js";
  import { cors } from "hono/cors";
- import { logger } from "hono/logger";
+-import { logger } from "hono/logger";
 +import { createMiddleware } from "hono/factory";
  var aws = awsHandle;
 +var basePath = undefined;
@@ -37,7 +38,7 @@ index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..b84bc30cf23b92723be7c245e40828c3
    const error = input.error ?? function(err) {
      return new Response(err.message, {
        status: 400,
-@@ -195,9 +199,28 @@ function issuer(input) {
+@@ -195,9 +198,28 @@ function issuer(input) {
      return JSON.parse(new TextDecoder().decode(await compactDecrypt(value, await encryptionKey().then((v) => v.private)).then((value2) => value2.plaintext)));
    }
    function issuer2(ctx) {
@@ -48,8 +49,8 @@ index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..b84bc30cf23b92723be7c245e40828c3
 +    const url = new URL(host);
 +    url.pathname = basePath;
 +    return url.toString();
-   }
-   const app = new Hono().use(logger());
++  }
++  const app = new Hono;
 +  if (basePath) {
 +    app.use(createMiddleware(async (c, next) => {
 +      await next();
@@ -63,11 +64,12 @@ index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..b84bc30cf23b92723be7c245e40828c3
 +      }
 +      return c.res;
 +    }));
-+  }
+   }
+-  const app = new Hono().use(logger());
    for (const [name, value] of Object.entries(input.providers)) {
      const route = new Hono;
      route.use(async (c, next) => {
-@@ -236,7 +259,7 @@ function issuer(input) {
+@@ -236,7 +258,7 @@ function issuer(input) {
        issuer: iss,
        authorization_endpoint: `${iss}/authorize`,
        token_endpoint: `${iss}/token`,
@@ -76,7 +78,7 @@ index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..b84bc30cf23b92723be7c245e40828c3
        response_types_supported: ["code", "token"]
      });
    });
-@@ -263,7 +286,6 @@ function issuer(input) {
+@@ -263,7 +285,6 @@ function issuer(input) {
            error_description: "Authorization code has been used or expired"
          }, 400);
        }
@@ -84,7 +86,7 @@ index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..b84bc30cf23b92723be7c245e40828c3
        if (payload.redirectURI !== form.get("redirect_uri")) {
          return c.json({
            error: "invalid_redirect_uri",
-@@ -291,6 +313,7 @@ function issuer(input) {
+@@ -291,6 +312,7 @@ function issuer(input) {
          }
        }
        const tokens = await generateTokens(c, payload);
@@ -92,7 +94,7 @@ index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..b84bc30cf23b92723be7c245e40828c3
        return c.json({
          access_token: tokens.access,
          expires_in: tokens.expiresIn,
-@@ -431,6 +454,39 @@ function issuer(input) {
+@@ -431,6 +453,39 @@ function issuer(input) {
        value.type
      ])), c.req.raw));
    });
@@ -132,13 +134,52 @@ index 1b18009bfeaa09f2222e9df760dde0e4eb1d4326..b84bc30cf23b92723be7c245e40828c3
    app.onError(async (err, c) => {
      console.error(err);
      if (err instanceof UnknownStateError) {
-@@ -447,5 +503,6 @@ function issuer(input) {
+@@ -447,5 +502,6 @@ function issuer(input) {
  }
  export {
    issuer,
 +  basePath,
    aws
  };
+diff --git a/dist/esm/provider/apple.js b/dist/esm/provider/apple.js
+index fd8aba72a6c74f419880899fdc812c06bb47b6cf..cdd24fb0ff52e7479c2cc2bf54102ddda97cce5e 100644
+--- a/dist/esm/provider/apple.js
++++ b/dist/esm/provider/apple.js
+@@ -2,13 +2,17 @@
+ import { Oauth2Provider } from "./oauth2.js";
+ import { OidcProvider } from "./oidc.js";
+ function AppleProvider(config) {
++  const { responseMode, ...restConfig } = config;
++  const additionalQuery = responseMode === "form_post" ? { response_mode: "form_post", ...config.query } : config.query || {};
+   return Oauth2Provider({
+-    ...config,
++    ...restConfig,
+     type: "apple",
+     endpoint: {
+       authorization: "https://appleid.apple.com/auth/authorize",
+-      token: "https://appleid.apple.com/auth/token"
+-    }
++      token: "https://appleid.apple.com/auth/token",
++      jwks: "https://appleid.apple.com/auth/keys"
++    },
++    query: additionalQuery
+   });
+ }
+ function AppleOidcProvider(config) {
+diff --git a/dist/esm/provider/google.js b/dist/esm/provider/google.js
+index 28cc16ff04573eac1606292c8f7322db63cf98b2..c89ab5064c640bbae1a5fb6c1d97daacdc7bba2a 100644
+--- a/dist/esm/provider/google.js
++++ b/dist/esm/provider/google.js
+@@ -7,7 +7,8 @@ function GoogleProvider(config) {
+     type: "google",
+     endpoint: {
+       authorization: "https://accounts.google.com/o/oauth2/v2/auth",
+-      token: "https://oauth2.googleapis.com/token"
++      token: "https://oauth2.googleapis.com/token",
++      jwks: "https://www.googleapis.com/oauth2/v3/certs"
+     }
+   });
+ }
 diff --git a/dist/esm/provider/linkedin.js b/dist/esm/provider/linkedin.js
 new file mode 100644
 index 0000000000000000000000000000000000000000..44973a89632738b02ee8d1ff982a3f0803bff29f
@@ -160,6 +201,136 @@ index 0000000000000000000000000000000000000000..44973a89632738b02ee8d1ff982a3f08
 +export {
 +  LinkedInAdapter
 +};
+diff --git a/dist/esm/provider/oauth2.js b/dist/esm/provider/oauth2.js
+index 166bab82f608bcd230e5fc976cb19a0da7f5a307..f9c214890d9041a5121151898c5a8c5327592809 100644
+--- a/dist/esm/provider/oauth2.js
++++ b/dist/esm/provider/oauth2.js
+@@ -1,9 +1,65 @@
+ // src/provider/oauth2.ts
++import { createRemoteJWKSet, jwtVerify } from "jose";
+ import { OauthError } from "../error.js";
+ import { generatePKCE } from "../pkce.js";
+ import { getRelativeUrl } from "../util.js";
+ function Oauth2Provider(config) {
+   const query = config.query || {};
++  async function handleCallbackLogic(c, ctx, provider, code) {
++    if (!provider || !code) {
++      return c.redirect(getRelativeUrl(c, "./authorize"));
++    }
++    const body = new URLSearchParams({
++      client_id: config.clientID,
++      client_secret: config.clientSecret,
++      code,
++      grant_type: "authorization_code",
++      redirect_uri: provider.redirect,
++      ...provider.codeVerifier ? { code_verifier: provider.codeVerifier } : {}
++    });
++    const json = await fetch(config.endpoint.token, {
++      method: "POST",
++      headers: {
++        "Content-Type": "application/x-www-form-urlencoded",
++        Accept: "application/json"
++      },
++      body: body.toString()
++    }).then((r) => r.json());
++    if ("error" in json) {
++      throw new OauthError(json.error, json.error_description);
++    }
++    let idTokenPayload = null;
++    if (config.endpoint.jwks) {
++      const jwksEndpoint = new URL(config.endpoint.jwks);
++      const jwks = createRemoteJWKSet(jwksEndpoint);
++      const { payload } = await jwtVerify(json.id_token, jwks, {
++        audience: config.clientID
++      });
++      idTokenPayload = payload;
++    }
++    return ctx.success(c, {
++      clientID: config.clientID,
++      tokenset: {
++        get access() {
++          return json.access_token;
++        },
++        get refresh() {
++          return json.refresh_token;
++        },
++        get expiry() {
++          return json.expires_in;
++        },
++        get id() {
++          if (!idTokenPayload)
++            return null;
++          return idTokenPayload;
++        },
++        get raw() {
++          return json;
++        }
++      }
++    });
++  }
+   return {
+     type: config.type || "oauth2",
+     init(routes, ctx) {
+@@ -37,43 +93,23 @@ function Oauth2Provider(config) {
+         const error = c.req.query("error");
+         if (error)
+           throw new OauthError(error.toString(), c.req.query("error_description")?.toString() || "");
+-        if (!provider || !code || provider.state && state !== provider.state)
++        if (!provider || !code || provider.state && state !== provider.state) {
+           return c.redirect(getRelativeUrl(c, "./authorize"));
+-        const body = new URLSearchParams({
+-          client_id: config.clientID,
+-          client_secret: config.clientSecret,
+-          code,
+-          grant_type: "authorization_code",
+-          redirect_uri: provider.redirect,
+-          ...provider.codeVerifier ? { code_verifier: provider.codeVerifier } : {}
+-        });
+-        const json = await fetch(config.endpoint.token, {
+-          method: "POST",
+-          headers: {
+-            "Content-Type": "application/x-www-form-urlencoded",
+-            Accept: "application/json"
+-          },
+-          body: body.toString()
+-        }).then((r) => r.json());
+-        if ("error" in json)
+-          throw new OauthError(json.error, json.error_description);
+-        return ctx.success(c, {
+-          clientID: config.clientID,
+-          tokenset: {
+-            get access() {
+-              return json.access_token;
+-            },
+-            get refresh() {
+-              return json.refresh_token;
+-            },
+-            get expiry() {
+-              return json.expires_in;
+-            },
+-            get raw() {
+-              return json;
+-            }
+-          }
+-        });
++        }
++        return handleCallbackLogic(c, ctx, provider, code);
++      });
++      routes.post("/callback", async (c) => {
++        const provider = await ctx.get(c, "provider");
++        const formData = await c.req.formData();
++        const code = formData.get("code")?.toString();
++        const state = formData.get("state")?.toString();
++        const error = formData.get("error")?.toString();
++        if (error)
++          throw new OauthError(error, formData.get("error_description")?.toString() || "");
++        if (!provider || !code || provider.state && state !== provider.state) {
++          return c.redirect(getRelativeUrl(c, "./authorize"));
++        }
++        return handleCallbackLogic(c, ctx, provider, code);
+       });
+     }
+   };
 diff --git a/dist/esm/storage/cloudflare.js b/dist/esm/storage/cloudflare.js
 index da1680f81e1718274d1856be33de6492e7790f89..6240e7aa07d7057623d82dd5be8f198e3c4abc07 100644
 --- a/dist/esm/storage/cloudflare.js
@@ -173,17 +344,81 @@ index da1680f81e1718274d1856be33de6492e7790f89..6240e7aa07d7057623d82dd5be8f198e
        });
      },
      async remove(key) {
+diff --git a/dist/esm/ui/icon.js b/dist/esm/ui/icon.js
+index be7340a71553ff7e33dc503d2ddcff10b6c7b324..d454d73a0da8fee5f7f0455d884685aea368591f 100644
+--- a/dist/esm/ui/icon.js
++++ b/dist/esm/ui/icon.js
+@@ -1,26 +1,41 @@
+ // src/ui/icon.tsx
+ import { jsxDEV } from "hono/jsx/jsx-dev-runtime";
+-var ICON_GITHUB = (/* @__PURE__ */ jsxDEV("svg", {
+-  viewBox: "0 0 15 15",
+-  fill: "none",
++var ICON_GITHUB = /* @__PURE__ */ jsxDEV("svg", {
++  viewBox: "0 0 256 250",
++  width: "256",
++  height: "250",
++  fill: "currentColor",
+   xmlns: "http://www.w3.org/2000/svg",
++  preserveAspectRatio: "xMidYMid",
+   children: /* @__PURE__ */ jsxDEV("path", {
+-    d: "M7.49933 0.25C3.49635 0.25 0.25 3.49593 0.25 7.50024C0.25 10.703 2.32715 13.4206 5.2081 14.3797C5.57084 14.446 5.70302 14.2222 5.70302 14.0299C5.70302 13.8576 5.69679 13.4019 5.69323 12.797C3.67661 13.235 3.25112 11.825 3.25112 11.825C2.92132 10.9874 2.44599 10.7644 2.44599 10.7644C1.78773 10.3149 2.49584 10.3238 2.49584 10.3238C3.22353 10.375 3.60629 11.0711 3.60629 11.0711C4.25298 12.1788 5.30335 11.8588 5.71638 11.6732C5.78225 11.205 5.96962 10.8854 6.17658 10.7043C4.56675 10.5209 2.87415 9.89918 2.87415 7.12104C2.87415 6.32925 3.15677 5.68257 3.62053 5.17563C3.54576 4.99226 3.29697 4.25521 3.69174 3.25691C3.69174 3.25691 4.30015 3.06196 5.68522 3.99973C6.26337 3.83906 6.8838 3.75895 7.50022 3.75583C8.1162 3.75895 8.73619 3.83906 9.31523 3.99973C10.6994 3.06196 11.3069 3.25691 11.3069 3.25691C11.7026 4.25521 11.4538 4.99226 11.3795 5.17563C11.8441 5.68257 12.1245 6.32925 12.1245 7.12104C12.1245 9.9063 10.4292 10.5192 8.81452 10.6985C9.07444 10.9224 9.30633 11.3648 9.30633 12.0413C9.30633 13.0102 9.29742 13.7922 9.29742 14.0299C9.29742 14.2239 9.42828 14.4496 9.79591 14.3788C12.6746 13.4179 14.75 10.7025 14.75 7.50024C14.75 3.49593 11.5036 0.25 7.49933 0.25Z",
+-    fill: "currentColor",
+-    "fill-rule": "evenodd",
+-    "clip-rule": "evenodd"
++    d: "M128.001 0C57.317 0 0 57.307 0 128.001c0 56.554 36.676 104.535 87.535 121.46 6.397 1.185 8.746-2.777 8.746-6.158 0-3.052-.12-13.135-.174-23.83-35.61 7.742-43.124-15.103-43.124-15.103-5.823-14.795-14.213-18.73-14.213-18.73-11.613-7.944.876-7.78.876-7.78 12.853.902 19.621 13.19 19.621 13.19 11.417 19.568 29.945 13.911 37.249 10.64 1.149-8.272 4.466-13.92 8.127-17.116-28.431-3.236-58.318-14.212-58.318-63.258 0-13.975 5-25.394 13.188-34.358-1.329-3.224-5.71-16.242 1.24-33.874 0 0 10.749-3.44 35.21 13.121 10.21-2.836 21.16-4.258 32.038-4.307 10.878.049 21.837 1.47 32.066 4.307 24.431-16.56 35.165-13.12 35.165-13.12 6.967 17.63 2.584 30.65 1.255 33.873 8.207 8.964 13.173 20.383 13.173 34.358 0 49.163-29.944 59.988-58.447 63.157 4.591 3.972 8.682 11.762 8.682 23.704 0 17.126-.148 30.91-.148 35.126 0 3.407 2.304 7.398 8.792 6.14C219.37 232.5 256 184.537 256 128.002 256 57.307 198.691 0 128.001 0Zm-80.06 182.34c-.282.636-1.283.827-2.194.39-.929-.417-1.45-1.284-1.15-1.922.276-.655 1.279-.838 2.205-.399.93.418 1.46 1.293 1.139 1.931Zm6.296 5.618c-.61.566-1.804.303-2.614-.591-.837-.892-.994-2.086-.375-2.66.63-.566 1.787-.301 2.626.591.838.903 1 2.088.363 2.66Zm4.32 7.188c-.785.545-2.067.034-2.86-1.104-.784-1.138-.784-2.503.017-3.05.795-.547 2.058-.055 2.861 1.075.782 1.157.782 2.522-.019 3.08Zm7.304 8.325c-.701.774-2.196.566-3.29-.49-1.119-1.032-1.43-2.496-.726-3.27.71-.776 2.213-.558 3.315.49 1.11 1.03 1.45 2.505.701 3.27Zm9.442 2.81c-.31 1.003-1.75 1.459-3.199 1.033-1.448-.439-2.395-1.613-2.103-2.626.301-1.01 1.747-1.484 3.207-1.028 1.446.436 2.396 1.602 2.095 2.622Zm10.744 1.193c.036 1.055-1.193 1.93-2.715 1.95-1.53.034-2.769-.82-2.786-1.86 0-1.065 1.202-1.932 2.733-1.958 1.522-.03 2.768.818 2.768 1.868Zm10.555-.405c.182 1.03-.875 2.088-2.387 2.37-1.485.271-2.861-.365-3.05-1.386-.184-1.056.893-2.114 2.376-2.387 1.514-.263 2.868.356 3.061 1.403Z"
+   }, undefined, false, undefined, this)
+-}, undefined, false, undefined, this)).toString();
++}, undefined, false, undefined, this);
+ var ICON_GOOGLE = /* @__PURE__ */ jsxDEV("svg", {
++  width: "256",
++  height: "262",
++  viewBox: "0 0 256 262",
+   xmlns: "http://www.w3.org/2000/svg",
+-  width: "24",
+-  height: "24",
+-  viewBox: "0 0 24 24",
+-  children: /* @__PURE__ */ jsxDEV("path", {
+-    fill: "currentColor",
+-    d: "M11.99 13.9v-3.72h9.36c.14.63.25 1.22.25 2.05c0 5.71-3.83 9.77-9.6 9.77c-5.52 0-10-4.48-10-10S6.48 2 12 2c2.7 0 4.96.99 6.69 2.61l-2.84 2.76c-.72-.68-1.98-1.48-3.85-1.48c-3.31 0-6.01 2.75-6.01 6.12s2.7 6.12 6.01 6.12c3.83 0 5.24-2.65 5.5-4.22h-5.51z"
+-  }, undefined, false, undefined, this)
+-}, undefined, false, undefined, this);
++  preserveAspectRatio: "xMidYMid",
++  children: [
++    /* @__PURE__ */ jsxDEV("path", {
++      d: "M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027",
++      fill: "#4285F4"
++    }, undefined, false, undefined, this),
++    /* @__PURE__ */ jsxDEV("path", {
++      d: "M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1",
++      fill: "#34A853"
++    }, undefined, false, undefined, this),
++    /* @__PURE__ */ jsxDEV("path", {
++      d: "M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782",
++      fill: "#FBBC05"
++    }, undefined, false, undefined, this),
++    /* @__PURE__ */ jsxDEV("path", {
++      d: "M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251",
++      fill: "#EB4335"
++    }, undefined, false, undefined, this)
++  ]
++}, undefined, true, undefined, this);
+ var ICON_EMAIL = /* @__PURE__ */ jsxDEV("svg", {
+   xmlns: "http://www.w3.org/2000/svg",
+   fill: "none",
 diff --git a/dist/esm/ui/select.js b/dist/esm/ui/select.js
-index 35cf467b740150dbf8d1b6c325b2c9a0261ed313..6f12668bd413d34f2e24bbae7ecf710a1112ace7 100644
+index 35cf467b740150dbf8d1b6c325b2c9a0261ed313..945ed53b5eb4fd3831fa21712974827f574bc82d 100644
 --- a/dist/esm/ui/select.js
 +++ b/dist/esm/ui/select.js
-@@ -1,4 +1,5 @@
+@@ -1,5 +1,7 @@
  // src/ui/select.tsx
 +import { basePath } from "../issuer.js";
  import { Layout } from "./base.js";
++import { ICON_GITHUB, ICON_GOOGLE } from "./icon.js";
  import { jsxDEV } from "hono/jsx/jsx-dev-runtime";
  function Select(props) {
-@@ -12,7 +13,7 @@ function Select(props) {
+   return async (providers, _req) => {
+@@ -12,7 +14,7 @@ function Select(props) {
              return;
            const icon = ICON[key];
            return /* @__PURE__ */ jsxDEV("a", {
@@ -192,11 +427,46 @@ index 35cf467b740150dbf8d1b6c325b2c9a0261ed313..6f12668bd413d34f2e24bbae7ecf710a
              "data-component": "button",
              "data-color": "ghost",
              children: [
+@@ -74,24 +76,8 @@ var ICON = {
+       d: "M40.1 32L10 108.9v314.3h107V480h60.2l56.8-56.8h87l117-117V32H40.1zm357.8 254.1L331 353H224l-56.8 56.8V353H76.9V72.1h321v214zM331 149v116.9h-40.1V149H331zm-107 0v116.9h-40.1V149H224z"
+     }, undefined, false, undefined, this)
+   }, undefined, false, undefined, this),
+-  google: /* @__PURE__ */ jsxDEV("svg", {
+-    role: "img",
+-    xmlns: "http://www.w3.org/2000/svg",
+-    viewBox: "0 0 488 512",
+-    children: /* @__PURE__ */ jsxDEV("path", {
+-      fill: "currentColor",
+-      d: "M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
+-    }, undefined, false, undefined, this)
+-  }, undefined, false, undefined, this),
+-  github: /* @__PURE__ */ jsxDEV("svg", {
+-    role: "img",
+-    xmlns: "http://www.w3.org/2000/svg",
+-    viewBox: "0 0 496 512",
+-    children: /* @__PURE__ */ jsxDEV("path", {
+-      fill: "currentColor",
+-      d: "M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"
+-    }, undefined, false, undefined, this)
+-  }, undefined, false, undefined, this),
++  google: ICON_GOOGLE,
++  github: ICON_GITHUB,
+   apple: /* @__PURE__ */ jsxDEV("svg", {
+     role: "img",
+     xmlns: "http://www.w3.org/2000/svg",
 diff --git a/dist/types/issuer.d.ts b/dist/types/issuer.d.ts
-index 904bb5a4c84e7ebd410cdcfd2fb43bb30aa93549..1f2c8879484997cd7e4e46c8cfd2bde0e18f1fb4 100644
+index 904bb5a4c84e7ebd410cdcfd2fb43bb30aa93549..284af9808df41938d033adc4be7226c6ec81c637 100644
 --- a/dist/types/issuer.d.ts
 +++ b/dist/types/issuer.d.ts
-@@ -180,11 +180,44 @@ import { StorageAdapter } from "./storage/storage.js";
+@@ -126,6 +126,7 @@
+  */
+ import { Provider } from "./provider/provider.js";
+ import { SubjectPayload, SubjectSchema } from "./subject.js";
++import { Hono } from "hono/tiny";
+ /**
+  * Sets the subject payload in the JWT token and returns the response.
+  *
+@@ -180,11 +181,44 @@ import { StorageAdapter } from "./storage/storage.js";
  import { Theme } from "./ui/theme.js";
  /** @internal */
  export declare const aws: <E extends import("hono").Env = import("hono").Env, S extends import("hono").Schema = {}, BasePath extends string = "/">(app: import("hono").Hono<E, S, BasePath>) => ((event: import("hono/aws-lambda").LambdaEvent, lambdaContext?: import("hono/aws-lambda").LambdaContext) => Promise<import("hono/aws-lambda").APIGatewayProxyResult>);
@@ -241,14 +511,104 @@ index 904bb5a4c84e7ebd410cdcfd2fb43bb30aa93549..1f2c8879484997cd7e4e46c8cfd2bde0
      /**
       * The shape of the subjects that you want to return.
       *
+@@ -405,7 +439,7 @@ export declare function issuer<Providers extends Record<string, Provider<any>>,
+     [key in keyof Providers]: Prettify<{
+         provider: key;
+     } & (Providers[key] extends Provider<infer T> ? T : {})>;
+-}[keyof Providers]>(input: IssuerInput<Providers, Subjects, Result>): import("hono/hono-base").HonoBase<{
++}[keyof Providers]>(input: IssuerInput<Providers, Subjects, Result>): Hono<{
+     Variables: {
+         authorization: AuthorizationState;
+     };
 diff --git a/dist/types/issuer.d.ts.map b/dist/types/issuer.d.ts.map
-index e72cc33edc482b42e58aa0319004430833c97740..eff59daae039e5ec7c4d05a80fef93238b70ef82 100644
+index e72cc33edc482b42e58aa0319004430833c97740..f35d2d35827328e0c4df711d11d5c54f9f5bb19c 100644
 --- a/dist/types/issuer.d.ts.map
 +++ b/dist/types/issuer.d.ts.map
 @@ -1 +1 @@
 -{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"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"}
 \ No newline at end of file
-+{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GA6HG;AACH,OAAO,EAAE,QAAQ,EAAmB,MAAM,wBAAwB,CAAA;AAClE,OAAO,EAAE,cAAc,EAAE,aAAa,EAAE,MAAM,cAAc,CAAA;AAO5D;;;;;;;;GAQG;AACH,MAAM,WAAW,kBAAkB,CACjC,CAAC,SAAS;IAAE,IAAI,EAAE,MAAM,CAAC;IAAC,UAAU,EAAE,GAAG,CAAA;CAAE;IAE3C;;;;;OAKG;IACH,OAAO,CAAC,IAAI,SAAS,CAAC,CAAC,MAAM,CAAC,EAC5B,IAAI,EAAE,IAAI,EACV,UAAU,EAAE,OAAO,CAAC,CAAC,EAAE;QAAE,IAAI,EAAE,IAAI,CAAA;KAAE,CAAC,CAAC,YAAY,CAAC,EACpD,IAAI,CAAC,EAAE;QACL,GAAG,CAAC,EAAE;YACJ,MAAM,CAAC,EAAE,MAAM,CAAA;YACf,OAAO,CAAC,EAAE,MAAM,CAAA;SACjB,CAAA;QACD,OAAO,CAAC,EAAE,MAAM,CAAA;KACjB,GACA,OAAO,CAAC,QAAQ,CAAC,CAAA;CACrB;AAED;;GAEG;AACH,MAAM,WAAW,kBAAkB;IACjC,YAAY,EAAE,MAAM,CAAA;IACpB,aAAa,EAAE,MAAM,CAAA;IACrB,KAAK,EAAE,MAAM,CAAA;IACb,SAAS,EAAE,MAAM,CAAA;IACjB,QAAQ,CAAC,EAAE,MAAM,CAAA;IACjB,IAAI,CAAC,EAAE;QACL,SAAS,EAAE,MAAM,CAAA;QACjB,MAAM,EAAE,MAAM,CAAA;KACf,CAAA;CACF;AAED;;GAEG;AACH,MAAM,MAAM,QAAQ,CAAC,CAAC,IAAI;KACvB,CAAC,IAAI,MAAM,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;CACrB,GAAG,EAAE,CAAA;AAEN,OAAO,EAIL,iBAAiB,EAClB,MAAM,YAAY,CAAA;AAEnB,OAAO,EAAW,cAAc,EAAE,MAAM,sBAAsB,CAAA;AAI9D,OAAO,EAAY,KAAK,EAAE,MAAM,eAAe,CAAA;AAQ/C,gBAAgB;AAChB,eAAO,MAAM,GAAG,qOArGR,CAAC,uGAqGmB,CAAA;AAE5B;;GAEG;AACH,eAAO,IAAI,QAAQ,EAAE,MAAM,GAAG,SAAqB,CAAA;AAEnD,MAAM,WAAW,WAAW,CAC1B,SAAS,SAAS,MAAM,CAAC,MAAM,EAAE,QAAQ,CAAC,GAAG,CAAC,CAAC,EAC/C,QAAQ,SAAS,aAAa,EAC9B,MAAM,GAAG;KACN,GAAG,IAAI,MAAM,SAAS,GAAG,QAAQ,CAChC;QACE,QAAQ,EAAE,GAAG,CAAA;KACd,GAAG,CAAC,SAAS,CAAC,GAAG,CAAC,SAAS,QAAQ,CAAC,MAAM,CAAC,CAAC,GAAG,CAAC,GAAG,EAAE,CAAC,CACxD;CACF,CAAC,MAAM,SAAS,CAAC;IAElB;;;;;;;;;;;;;;;;;;;;;;;;;;;OA2BG;IACH,QAAQ,CAAC,EAAE,MAAM,CAAA;IACjB;;;;;;;;;;;;;;;;;;OAkBG;IACH,QAAQ,EAAE,QAAQ,CAAA;IAClB;;;;;;;;;;;;OAYG;IACH,OAAO,CAAC,EAAE,cAAc,CAAA;IACxB;;;;;;;;;;;;;;;;;;;;;;;;;;;;OA4BG;IACH,SAAS,EAAE,SAAS,CAAA;IACpB;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;OA8BG;IACH,KAAK,CAAC,EAAE,KAAK,CAAA;IACb;;;;;;;;;;;;OAYG;IACH,GAAG,CAAC,EAAE;QACJ;;;WAGG;QACH,MAAM,CAAC,EAAE,MAAM,CAAA;QACf;;;WAGG;QACH,OAAO,CAAC,EAAE,MAAM,CAAA;QAChB;;;;WAIG;QACH,KAAK,CAAC,EAAE,MAAM,CAAA;QACd;;;WAGG;QACH,SAAS,CAAC,EAAE,MAAM,CAAA;KACnB,CAAA;IACD;;;;;;;;;;;;;;;;;;;OAmBG;IACH,MAAM,CAAC,CAAC,SAAS,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,EAAE,GAAG,EAAE,OAAO,GAAG,OAAO,CAAC,QAAQ,CAAC,CAAA;IAC3E;;OAEG;IACH,KAAK,CAAC,CAAC,GAAG,EAAE,OAAO,GAAG,OAAO,CAAC,IAAI,CAAC,CAAA;IACnC;;;;;;;;;;;;;;;;;;;;;;;;;OAyBG;IACH,OAAO,CACL,QAAQ,EAAE,kBAAkB,CAAC,cAAc,CAAC,QAAQ,CAAC,CAAC,EACtD,KAAK,EAAE,MAAM,EACb,GAAG,EAAE,OAAO,GACX,OAAO,CAAC,QAAQ,CAAC,CAAA;IACpB;;OAEG;IACH,KAAK,CAAC,CAAC,KAAK,EAAE,iBAAiB,EAAE,GAAG,EAAE,OAAO,GAAG,OAAO,CAAC,QAAQ,CAAC,CAAA;IACjE;;;;;;;;;;;;;;;;;;OAkBG;IACH,KAAK,CAAC,CACJ,KAAK,EAAE;QACL,QAAQ,EAAE,MAAM,CAAA;QAChB,WAAW,EAAE,MAAM,CAAA;QACnB,QAAQ,CAAC,EAAE,MAAM,CAAA;KAClB,EACD,GAAG,EAAE,OAAO,GACX,OAAO,CAAC,OAAO,CAAC,CAAA;CACpB;AAED;;GAEG;AACH,wBAAgB,MAAM,CACpB,SAAS,SAAS,MAAM,CAAC,MAAM,EAAE,QAAQ,CAAC,GAAG,CAAC,CAAC,EAC/C,QAAQ,SAAS,aAAa,EAC9B,MAAM,GAAG;KACN,GAAG,IAAI,MAAM,SAAS,GAAG,QAAQ,CAChC;QACE,QAAQ,EAAE,GAAG,CAAA;KACd,GAAG,CAAC,SAAS,CAAC,GAAG,CAAC,SAAS,QAAQ,CAAC,MAAM,CAAC,CAAC,GAAG,CAAC,GAAG,EAAE,CAAC,CACxD;CACF,CAAC,MAAM,SAAS,CAAC,EAClB,KAAK,EAAE,WAAW,CAAC,SAAS,EAAE,QAAQ,EAAE,MAAM,CAAC;eA0RlC;QACT,aAAa,EAAE,kBAAkB,CAAA;KAClC;0CAgcJ"}
++{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/dist/types/provider/apple.d.ts b/dist/types/provider/apple.d.ts
+index 69b1c7b7e71f465c018911f20053ec06a6d47d16..cf74297b85992f4d618e49df77c7396996a32d1c 100644
+--- a/dist/types/provider/apple.d.ts
++++ b/dist/types/provider/apple.d.ts
+@@ -16,6 +16,24 @@
+  * })
+  * ```
+  *
++ * #### Using OAuth with form_post response mode
++ *
++ * When requesting name or email scopes from Apple, you must use form_post response mode:
++ *
++ * ```ts {5-9}
++ * import { AppleProvider } from "@openauthjs/openauth/provider/apple"
++ *
++ * export default issuer({
++ *   providers: {
++ *     apple: AppleProvider({
++ *       clientID: "1234567890",
++ *       clientSecret: "0987654321",
++ *       responseMode: "form_post"
++ *     })
++ *   }
++ * })
++ * ```
++ *
+  * #### Using OIDC
+  *
+  * ```ts {5-7}
+@@ -35,6 +53,12 @@
+ import { Oauth2WrappedConfig } from "./oauth2.js";
+ import { OidcWrappedConfig } from "./oidc.js";
+ export interface AppleConfig extends Oauth2WrappedConfig {
++    /**
++     * The response mode to use for the authorization request.
++     * Apple requires 'form_post' response mode when requesting name or email scopes.
++     * @default "query"
++     */
++    responseMode?: "query" | "form_post";
+ }
+ export interface AppleOidcConfig extends OidcWrappedConfig {
+ }
+@@ -44,10 +68,20 @@ export interface AppleOidcConfig extends OidcWrappedConfig {
+  * @param config - The config for the provider.
+  * @example
+  * ```ts
++ * // Using default query response mode (GET callback)
+  * AppleProvider({
+  *   clientID: "1234567890",
+  *   clientSecret: "0987654321"
+  * })
++ *
++ * // Using form_post response mode (POST callback)
++ * // Required when requesting name or email scope
++ * AppleProvider({
++ *   clientID: "1234567890",
++ *   clientSecret: "0987654321",
++ *   responseMode: "form_post",
++ *   scopes: ["name", "email"]
++ * })
+  * ```
+  */
+ export declare function AppleProvider(config: AppleConfig): import("./provider.js").Provider<{
+diff --git a/dist/types/provider/apple.d.ts.map b/dist/types/provider/apple.d.ts.map
+index d3bcad06aa6dca8fd9777edf83bb04243fe51da0..391b0f240024b77e75550f6173c1b7b0b8e30e25 100644
+--- a/dist/types/provider/apple.d.ts.map
++++ b/dist/types/provider/apple.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"apple.d.ts","sourceRoot":"","sources":["../../../src/provider/apple.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GAiCG;AAEH,OAAO,EAAkB,mBAAmB,EAAE,MAAM,aAAa,CAAA;AACjE,OAAO,EAAgB,iBAAiB,EAAE,MAAM,WAAW,CAAA;AAE3D,MAAM,WAAW,WAAY,SAAQ,mBAAmB;CAAG;AAC3D,MAAM,WAAW,eAAgB,SAAQ,iBAAiB;CAAG;AAE7D;;;;;;;;;;;GAWG;AACH,wBAAgB,aAAa,CAAC,MAAM,EAAE,WAAW;;;GAShD;AAED;;;;;;;;;;;;GAYG;AACH,wBAAgB,iBAAiB,CAAC,MAAM,EAAE,eAAe;;;GAMxD"}
+\ No newline at end of file
++{"version":3,"file":"apple.d.ts","sourceRoot":"","sources":["../../../src/provider/apple.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GAmDG;AAEH,OAAO,EAAkB,mBAAmB,EAAE,MAAM,aAAa,CAAA;AACjE,OAAO,EAAgB,iBAAiB,EAAE,MAAM,WAAW,CAAA;AAE3D,MAAM,WAAW,WAAY,SAAQ,mBAAmB;IACtD;;;;OAIG;IACH,YAAY,CAAC,EAAE,OAAO,GAAG,WAAW,CAAA;CACrC;AACD,MAAM,WAAW,eAAgB,SAAQ,iBAAiB;CAAG;AAE7D;;;;;;;;;;;;;;;;;;;;;GAqBG;AACH,wBAAgB,aAAa,CAAC,MAAM,EAAE,WAAW;;;GAiBhD;AAED;;;;;;;;;;;;GAYG;AACH,wBAAgB,iBAAiB,CAAC,MAAM,EAAE,eAAe;;;GAMxD"}
+\ No newline at end of file
+diff --git a/dist/types/provider/google.d.ts.map b/dist/types/provider/google.d.ts.map
+index c1b57994294005a5900f00723436f4b49a3a64b3..4adcb6816a7f959fccecaee1494d716ffbfd4db5 100644
+--- a/dist/types/provider/google.d.ts.map
++++ b/dist/types/provider/google.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"google.d.ts","sourceRoot":"","sources":["../../../src/provider/google.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GAiCG;AAEH,OAAO,EAAkB,mBAAmB,EAAE,MAAM,aAAa,CAAA;AACjE,OAAO,EAAgB,iBAAiB,EAAE,MAAM,WAAW,CAAA;AAE3D,MAAM,WAAW,YAAa,SAAQ,mBAAmB;CAAG;AAC5D,MAAM,WAAW,gBAAiB,SAAQ,iBAAiB;CAAG;AAE9D;;;;;;;;;;;GAWG;AACH,wBAAgB,cAAc,CAAC,MAAM,EAAE,YAAY;;;GASlD;AAED;;;;;;;;;;;;GAYG;AACH,wBAAgB,kBAAkB,CAAC,MAAM,EAAE,gBAAgB;;;GAM1D"}
+\ No newline at end of file
++{"version":3,"file":"google.d.ts","sourceRoot":"","sources":["../../../src/provider/google.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GAiCG;AAEH,OAAO,EAAkB,mBAAmB,EAAE,MAAM,aAAa,CAAA;AACjE,OAAO,EAAgB,iBAAiB,EAAE,MAAM,WAAW,CAAA;AAE3D,MAAM,WAAW,YAAa,SAAQ,mBAAmB;CAAG;AAC5D,MAAM,WAAW,gBAAiB,SAAQ,iBAAiB;CAAG;AAE9D;;;;;;;;;;;GAWG;AACH,wBAAgB,cAAc,CAAC,MAAM,EAAE,YAAY;;;GAUlD;AAED;;;;;;;;;;;;GAYG;AACH,wBAAgB,kBAAkB,CAAC,MAAM,EAAE,gBAAgB;;;GAM1D"}
 \ No newline at end of file
 diff --git a/dist/types/provider/linkedin.d.ts b/dist/types/provider/linkedin.d.ts
 new file mode 100644
@@ -271,14 +631,76 @@ index 0000000000000000000000000000000000000000..af8398ed914e582fa37f01f8fe8b8f26
 @@ -0,0 +1 @@
 +{"version":3,"file":"linkedin.d.ts","sourceRoot":"","sources":["../../../src/provider/linkedin.ts"],"names":[],"mappings":"AAAA,OAAO,EAAkB,KAAK,mBAAmB,EAAE,MAAM,aAAa,CAAA;AAEtE,wBAAgB,eAAe,CAAC,MAAM,EAAE,mBAAmB;;;GAS1D"}
 \ No newline at end of file
+diff --git a/dist/types/provider/oauth2.d.ts b/dist/types/provider/oauth2.d.ts
+index 58fd4130e4bca42951bf40c2e87c1a32a5a1c768..d7ca8f47cf8621a646a64fe9e971c2281dc855a5 100644
+--- a/dist/types/provider/oauth2.d.ts
++++ b/dist/types/provider/oauth2.d.ts
+@@ -61,7 +61,8 @@ export interface Oauth2Config {
+      * {
+      *   endpoint: {
+      *     authorization: "https://auth.myserver.com/authorize",
+-     *     token: "https://auth.myserver.com/token"
++     *     token: "https://auth.myserver.com/token",
++     *     jwks: "https://auth.myserver.com/auth/keys"
+      *   }
+      * }
+      * ```
+@@ -75,6 +76,10 @@ export interface Oauth2Config {
+          * The URL of the token endpoint.
+          */
+         token: string;
++        /**
++         * The URL of the JWKS endpoint.
++         */
++        jwks?: string;
+     };
+     /**
+      * A list of OAuth scopes that you want to request.
+@@ -118,6 +123,7 @@ export interface Oauth2Token {
+     access: string;
+     refresh: string;
+     expiry: number;
++    id?: Record<string, any>;
+     raw: Record<string, any>;
+ }
+ export declare function Oauth2Provider(config: Oauth2Config): Provider<{
+diff --git a/dist/types/provider/oauth2.d.ts.map b/dist/types/provider/oauth2.d.ts.map
+index 0ece4f9e266edc67b3f2c47982115cfd2bfc40cd..0f0a5ea258ca6cc8ba12a113e21f5ef2440da29f 100644
+--- a/dist/types/provider/oauth2.d.ts.map
++++ b/dist/types/provider/oauth2.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"oauth2.d.ts","sourceRoot":"","sources":["../../../src/provider/oauth2.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;GAsBG;AAKH,OAAO,EAAE,QAAQ,EAAE,MAAM,eAAe,CAAA;AAExC,MAAM,WAAW,YAAY;IAC3B;;OAEG;IACH,IAAI,CAAC,EAAE,MAAM,CAAA;IACb;;;;;;;;;;;OAWG;IACH,QAAQ,EAAE,MAAM,CAAA;IAChB;;;;;;;;;;;OAWG;IACH,YAAY,EAAE,MAAM,CAAA;IACpB;;;;;;;;;;;;OAYG;IACH,QAAQ,EAAE;QACR;;WAEG;QACH,aAAa,EAAE,MAAM,CAAA;QACrB;;WAEG;QACH,KAAK,EAAE,MAAM,CAAA;KACd,CAAA;IACD;;;;;;;;;OASG;IACH,MAAM,EAAE,MAAM,EAAE,CAAA;IAChB;;;;OAIG;IACH,IAAI,CAAC,EAAE,OAAO,CAAA;IACd;;;;;;;;;;;OAWG;IACH,KAAK,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAA;CAC/B;AAED;;GAEG;AACH,MAAM,MAAM,mBAAmB,GAAG,IAAI,CAAC,YAAY,EAAE,UAAU,GAAG,MAAM,CAAC,CAAA;AAEzE;;GAEG;AACH,MAAM,WAAW,WAAW;IAC1B,MAAM,EAAE,MAAM,CAAA;IACd,OAAO,EAAE,MAAM,CAAA;IACf,MAAM,EAAE,MAAM,CAAA;IACd,GAAG,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAA;CACzB;AAQD,wBAAgB,cAAc,CAC5B,MAAM,EAAE,YAAY,GACnB,QAAQ,CAAC;IAAE,QAAQ,EAAE,WAAW,CAAC;IAAC,QAAQ,EAAE,MAAM,CAAA;CAAE,CAAC,CAoFvD"}
+\ No newline at end of file
++{"version":3,"file":"oauth2.d.ts","sourceRoot":"","sources":["../../../src/provider/oauth2.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;GAsBG;AAMH,OAAO,EAAE,QAAQ,EAAE,MAAM,eAAe,CAAA;AAExC,MAAM,WAAW,YAAY;IAC3B;;OAEG;IACH,IAAI,CAAC,EAAE,MAAM,CAAA;IACb;;;;;;;;;;;OAWG;IACH,QAAQ,EAAE,MAAM,CAAA;IAChB;;;;;;;;;;;OAWG;IACH,YAAY,EAAE,MAAM,CAAA;IACpB;;;;;;;;;;;;;OAaG;IACH,QAAQ,EAAE;QACR;;WAEG;QACH,aAAa,EAAE,MAAM,CAAA;QACrB;;WAEG;QACH,KAAK,EAAE,MAAM,CAAA;QACb;;WAEG;QACH,IAAI,CAAC,EAAE,MAAM,CAAA;KACd,CAAA;IACD;;;;;;;;;OASG;IACH,MAAM,EAAE,MAAM,EAAE,CAAA;IAChB;;;;OAIG;IACH,IAAI,CAAC,EAAE,OAAO,CAAA;IACd;;;;;;;;;;;OAWG;IACH,KAAK,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAA;CAC/B;AAED;;GAEG;AACH,MAAM,MAAM,mBAAmB,GAAG,IAAI,CAAC,YAAY,EAAE,UAAU,GAAG,MAAM,CAAC,CAAA;AAEzE;;GAEG;AACH,MAAM,WAAW,WAAW;IAC1B,MAAM,EAAE,MAAM,CAAA;IACd,OAAO,EAAE,MAAM,CAAA;IACf,MAAM,EAAE,MAAM,CAAA;IACd,EAAE,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAA;IACxB,GAAG,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAA;CACzB;AAQD,wBAAgB,cAAc,CAC5B,MAAM,EAAE,YAAY,GACnB,QAAQ,CAAC;IAAE,QAAQ,EAAE,WAAW,CAAC;IAAC,QAAQ,EAAE,MAAM,CAAA;CAAE,CAAC,CAuJvD"}
+\ No newline at end of file
+diff --git a/dist/types/ui/icon.d.ts b/dist/types/ui/icon.d.ts
+index f59fe9576139e2376d09adc9d851aae420393e67..14fe2717ffc71221a71541062c135e403cc1283b 100644
+--- a/dist/types/ui/icon.d.ts
++++ b/dist/types/ui/icon.d.ts
+@@ -1,5 +1,5 @@
+ /** @jsxImportSource hono/jsx */
+-export declare const ICON_GITHUB: string;
++export declare const ICON_GITHUB: import("hono/jsx/jsx-dev-runtime").JSX.Element;
+ export declare const ICON_GOOGLE: import("hono/jsx/jsx-dev-runtime").JSX.Element;
+ export declare const ICON_EMAIL: import("hono/jsx/jsx-dev-runtime").JSX.Element;
+ export declare const ICON_SLACK: import("hono/jsx/jsx-dev-runtime").JSX.Element;
+diff --git a/dist/types/ui/icon.d.ts.map b/dist/types/ui/icon.d.ts.map
+index b253c690ad90067be60f2649538339c4b2a52404..2795a64ad3b2171e02f1e082028aa78260c3a1d7 100644
+--- a/dist/types/ui/icon.d.ts.map
++++ b/dist/types/ui/icon.d.ts.map
+@@ -1 +1 @@
+-{"version":3,"file":"icon.d.ts","sourceRoot":"","sources":["../../../src/ui/icon.tsx"],"names":[],"mappings":"AAAA,gCAAgC;AAEhC,eAAO,MAAM,WAAW,QASZ,CAAA;AAEZ,eAAO,MAAM,WAAW,gDAYvB,CAAA;AAED,eAAO,MAAM,UAAU,gDAetB,CAAA;AAED,eAAO,MAAM,UAAU,gDAmCtB,CAAA"}
+\ No newline at end of file
++{"version":3,"file":"icon.d.ts","sourceRoot":"","sources":["../../../src/ui/icon.tsx"],"names":[],"mappings":"AAAA,gCAAgC;AAEhC,eAAO,MAAM,WAAW,gDAWvB,CAAA;AAED,eAAO,MAAM,WAAW,gDAyBvB,CAAA;AAED,eAAO,MAAM,UAAU,gDAetB,CAAA;AAED,eAAO,MAAM,UAAU,gDAmCtB,CAAA"}
+\ No newline at end of file
 diff --git a/dist/types/ui/select.d.ts.map b/dist/types/ui/select.d.ts.map
-index 78c4aa2b2ca89bc6b1b7d0e7849dddb9da27409e..0f3b200b6f0c38cf7c8e8d7d28b144508c8cdd02 100644
+index 78c4aa2b2ca89bc6b1b7d0e7849dddb9da27409e..a742fd84960aa7c4dc844665e03b2e9c932c456b 100644
 --- a/dist/types/ui/select.d.ts.map
 +++ b/dist/types/ui/select.d.ts.map
 @@ -1 +1 @@
 -{"version":3,"file":"select.d.ts","sourceRoot":"","sources":["../../../src/ui/select.tsx"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,gCAAgC;AAIhC,MAAM,WAAW,WAAW;IAC1B;;;;;;;;;;;;;;OAcG;IACH,SAAS,CAAC,EAAE,MAAM,CAChB,MAAM,EACN;QACE;;;WAGG;QACH,IAAI,CAAC,EAAE,OAAO,CAAA;QACd;;WAEG;QACH,OAAO,CAAC,EAAE,MAAM,CAAA;KACjB,CACF,CAAA;CACF;AAED,wBAAgB,MAAM,CAAC,KAAK,CAAC,EAAE,WAAW,eAE3B,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,QAC3B,OAAO,KACZ,OAAO,CAAC,QAAQ,CAAC,CA6BrB"}
 \ No newline at end of file
-+{"version":3,"file":"select.d.ts","sourceRoot":"","sources":["../../../src/ui/select.tsx"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,gCAAgC;AAKhC,MAAM,WAAW,WAAW;IAC1B;;;;;;;;;;;;;;OAcG;IACH,SAAS,CAAC,EAAE,MAAM,CAChB,MAAM,EACN;QACE;;;WAGG;QACH,IAAI,CAAC,EAAE,OAAO,CAAA;QACd;;WAEG;QACH,OAAO,CAAC,EAAE,MAAM,CAAA;KACjB,CACF,CAAA;CACF;AAED,wBAAgB,MAAM,CAAC,KAAK,CAAC,EAAE,WAAW,eAE3B,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,QAC3B,OAAO,KACZ,OAAO,CAAC,QAAQ,CAAC,CA6BrB"}
++{"version":3,"file":"select.d.ts","sourceRoot":"","sources":["../../../src/ui/select.tsx"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,gCAAgC;AAMhC,MAAM,WAAW,WAAW;IAC1B;;;;;;;;;;;;;;OAcG;IACH,SAAS,CAAC,EAAE,MAAM,CAChB,MAAM,EACN;QACE;;;WAGG;QACH,IAAI,CAAC,EAAE,OAAO,CAAA;QACd;;WAEG;QACH,OAAO,CAAC,EAAE,MAAM,CAAA;KACjB,CACF,CAAA;CACF;AAED,wBAAgB,MAAM,CAAC,KAAK,CAAC,EAAE,WAAW,eAE3B,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,QAC3B,OAAO,KACZ,OAAO,CAAC,QAAQ,CAAC,CA6BrB"}
 \ No newline at end of file
 diff --git a/src/client.ts b/src/client.ts
 index c4e282a3cb963a1200ba0fc6e9b98df469ecc0f6..7ef8ee9d33440e80edecaf8f4d1b914986b62166 100644
@@ -589,10 +1011,10 @@ index 0000000000000000000000000000000000000000..0aea78214b56d7e1900c1d82c81b33f6
 +};
 diff --git a/src/dist/esm/issuer.js b/src/dist/esm/issuer.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..b84bc30cf23b92723be7c245e40828c36738962b
+index 0000000000000000000000000000000000000000..dc6c2040dc2c7acae004bc1deb2c3d33fb6068a2
 --- /dev/null
 +++ b/src/dist/esm/issuer.js
-@@ -0,0 +1,508 @@
+@@ -0,0 +1,507 @@
 +// src/issuer.ts
 +import { Hono } from "hono/tiny";
 +import { handle as awsHandle } from "hono/aws-lambda";
@@ -613,7 +1035,6 @@ index 0000000000000000000000000000000000000000..b84bc30cf23b92723be7c245e40828c3
 +import { DynamoStorage } from "./storage/dynamo.js";
 +import { MemoryStorage } from "./storage/memory.js";
 +import { cors } from "hono/cors";
-+import { logger } from "hono/logger";
 +import { createMiddleware } from "hono/factory";
 +var aws = awsHandle;
 +var basePath = undefined;
@@ -801,7 +1222,7 @@ index 0000000000000000000000000000000000000000..b84bc30cf23b92723be7c245e40828c3
 +    url.pathname = basePath;
 +    return url.toString();
 +  }
-+  const app = new Hono().use(logger());
++  const app = new Hono;
 +  if (basePath) {
 +    app.use(createMiddleware(async (c, next) => {
 +      await next();
@@ -1285,21 +1706,25 @@ index 0000000000000000000000000000000000000000..8fbaeb7d503ed391a6397b995a48c7c8
 +};
 diff --git a/src/dist/esm/provider/apple.js b/src/dist/esm/provider/apple.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..fd8aba72a6c74f419880899fdc812c06bb47b6cf
+index 0000000000000000000000000000000000000000..cdd24fb0ff52e7479c2cc2bf54102ddda97cce5e
 --- /dev/null
 +++ b/src/dist/esm/provider/apple.js
-@@ -0,0 +1,24 @@
+@@ -0,0 +1,28 @@
 +// src/provider/apple.ts
 +import { Oauth2Provider } from "./oauth2.js";
 +import { OidcProvider } from "./oidc.js";
 +function AppleProvider(config) {
++  const { responseMode, ...restConfig } = config;
++  const additionalQuery = responseMode === "form_post" ? { response_mode: "form_post", ...config.query } : config.query || {};
 +  return Oauth2Provider({
-+    ...config,
++    ...restConfig,
 +    type: "apple",
 +    endpoint: {
 +      authorization: "https://appleid.apple.com/auth/authorize",
-+      token: "https://appleid.apple.com/auth/token"
-+    }
++      token: "https://appleid.apple.com/auth/token",
++      jwks: "https://appleid.apple.com/auth/keys"
++    },
++    query: additionalQuery
 +  });
 +}
 +function AppleOidcProvider(config) {
@@ -1522,10 +1947,10 @@ index 0000000000000000000000000000000000000000..de250d6d2062b3543947f2e520000ae1
 +};
 diff --git a/src/dist/esm/provider/google.js b/src/dist/esm/provider/google.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..28cc16ff04573eac1606292c8f7322db63cf98b2
+index 0000000000000000000000000000000000000000..c89ab5064c640bbae1a5fb6c1d97daacdc7bba2a
 --- /dev/null
 +++ b/src/dist/esm/provider/google.js
-@@ -0,0 +1,24 @@
+@@ -0,0 +1,25 @@
 +// src/provider/google.ts
 +import { Oauth2Provider } from "./oauth2.js";
 +import { OidcProvider } from "./oidc.js";
@@ -1535,7 +1960,8 @@ index 0000000000000000000000000000000000000000..28cc16ff04573eac1606292c8f7322db
 +    type: "google",
 +    endpoint: {
 +      authorization: "https://accounts.google.com/o/oauth2/v2/auth",
-+      token: "https://oauth2.googleapis.com/token"
++      token: "https://oauth2.googleapis.com/token",
++      jwks: "https://www.googleapis.com/oauth2/v3/certs"
 +    }
 +  });
 +}
@@ -1654,16 +2080,72 @@ index 0000000000000000000000000000000000000000..d53defafc33fbed4003875e0cf7c417f
 +};
 diff --git a/src/dist/esm/provider/oauth2.js b/src/dist/esm/provider/oauth2.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..166bab82f608bcd230e5fc976cb19a0da7f5a307
+index 0000000000000000000000000000000000000000..f9c214890d9041a5121151898c5a8c5327592809
 --- /dev/null
 +++ b/src/dist/esm/provider/oauth2.js
-@@ -0,0 +1,83 @@
+@@ -0,0 +1,119 @@
 +// src/provider/oauth2.ts
++import { createRemoteJWKSet, jwtVerify } from "jose";
 +import { OauthError } from "../error.js";
 +import { generatePKCE } from "../pkce.js";
 +import { getRelativeUrl } from "../util.js";
 +function Oauth2Provider(config) {
 +  const query = config.query || {};
++  async function handleCallbackLogic(c, ctx, provider, code) {
++    if (!provider || !code) {
++      return c.redirect(getRelativeUrl(c, "./authorize"));
++    }
++    const body = new URLSearchParams({
++      client_id: config.clientID,
++      client_secret: config.clientSecret,
++      code,
++      grant_type: "authorization_code",
++      redirect_uri: provider.redirect,
++      ...provider.codeVerifier ? { code_verifier: provider.codeVerifier } : {}
++    });
++    const json = await fetch(config.endpoint.token, {
++      method: "POST",
++      headers: {
++        "Content-Type": "application/x-www-form-urlencoded",
++        Accept: "application/json"
++      },
++      body: body.toString()
++    }).then((r) => r.json());
++    if ("error" in json) {
++      throw new OauthError(json.error, json.error_description);
++    }
++    let idTokenPayload = null;
++    if (config.endpoint.jwks) {
++      const jwksEndpoint = new URL(config.endpoint.jwks);
++      const jwks = createRemoteJWKSet(jwksEndpoint);
++      const { payload } = await jwtVerify(json.id_token, jwks, {
++        audience: config.clientID
++      });
++      idTokenPayload = payload;
++    }
++    return ctx.success(c, {
++      clientID: config.clientID,
++      tokenset: {
++        get access() {
++          return json.access_token;
++        },
++        get refresh() {
++          return json.refresh_token;
++        },
++        get expiry() {
++          return json.expires_in;
++        },
++        get id() {
++          if (!idTokenPayload)
++            return null;
++          return idTokenPayload;
++        },
++        get raw() {
++          return json;
++        }
++      }
++    });
++  }
 +  return {
 +    type: config.type || "oauth2",
 +    init(routes, ctx) {
@@ -1697,43 +2179,23 @@ index 0000000000000000000000000000000000000000..166bab82f608bcd230e5fc976cb19a0d
 +        const error = c.req.query("error");
 +        if (error)
 +          throw new OauthError(error.toString(), c.req.query("error_description")?.toString() || "");
-+        if (!provider || !code || provider.state && state !== provider.state)
++        if (!provider || !code || provider.state && state !== provider.state) {
 +          return c.redirect(getRelativeUrl(c, "./authorize"));
-+        const body = new URLSearchParams({
-+          client_id: config.clientID,
-+          client_secret: config.clientSecret,
-+          code,
-+          grant_type: "authorization_code",
-+          redirect_uri: provider.redirect,
-+          ...provider.codeVerifier ? { code_verifier: provider.codeVerifier } : {}
-+        });
-+        const json = await fetch(config.endpoint.token, {
-+          method: "POST",
-+          headers: {
-+            "Content-Type": "application/x-www-form-urlencoded",
-+            Accept: "application/json"
-+          },
-+          body: body.toString()
-+        }).then((r) => r.json());
-+        if ("error" in json)
-+          throw new OauthError(json.error, json.error_description);
-+        return ctx.success(c, {
-+          clientID: config.clientID,
-+          tokenset: {
-+            get access() {
-+              return json.access_token;
-+            },
-+            get refresh() {
-+              return json.refresh_token;
-+            },
-+            get expiry() {
-+              return json.expires_in;
-+            },
-+            get raw() {
-+              return json;
-+            }
-+          }
-+        });
++        }
++        return handleCallbackLogic(c, ctx, provider, code);
++      });
++      routes.post("/callback", async (c) => {
++        const provider = await ctx.get(c, "provider");
++        const formData = await c.req.formData();
++        const code = formData.get("code")?.toString();
++        const state = formData.get("state")?.toString();
++        const error = formData.get("error")?.toString();
++        if (error)
++          throw new OauthError(error, formData.get("error_description")?.toString() || "");
++        if (!provider || !code || provider.state && state !== provider.state) {
++          return c.redirect(getRelativeUrl(c, "./authorize"));
++        }
++        return handleCallbackLogic(c, ctx, provider, code);
 +      });
 +    }
 +  };
@@ -3268,33 +3730,48 @@ index 0000000000000000000000000000000000000000..833ae5484aa0a75ee33118fb42b63a26
 +};
 diff --git a/src/dist/esm/ui/icon.js b/src/dist/esm/ui/icon.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..be7340a71553ff7e33dc503d2ddcff10b6c7b324
+index 0000000000000000000000000000000000000000..d454d73a0da8fee5f7f0455d884685aea368591f
 --- /dev/null
 +++ b/src/dist/esm/ui/icon.js
-@@ -0,0 +1,77 @@
+@@ -0,0 +1,92 @@
 +// src/ui/icon.tsx
 +import { jsxDEV } from "hono/jsx/jsx-dev-runtime";
-+var ICON_GITHUB = (/* @__PURE__ */ jsxDEV("svg", {
-+  viewBox: "0 0 15 15",
-+  fill: "none",
++var ICON_GITHUB = /* @__PURE__ */ jsxDEV("svg", {
++  viewBox: "0 0 256 250",
++  width: "256",
++  height: "250",
++  fill: "currentColor",
 +  xmlns: "http://www.w3.org/2000/svg",
++  preserveAspectRatio: "xMidYMid",
 +  children: /* @__PURE__ */ jsxDEV("path", {
-+    d: "M7.49933 0.25C3.49635 0.25 0.25 3.49593 0.25 7.50024C0.25 10.703 2.32715 13.4206 5.2081 14.3797C5.57084 14.446 5.70302 14.2222 5.70302 14.0299C5.70302 13.8576 5.69679 13.4019 5.69323 12.797C3.67661 13.235 3.25112 11.825 3.25112 11.825C2.92132 10.9874 2.44599 10.7644 2.44599 10.7644C1.78773 10.3149 2.49584 10.3238 2.49584 10.3238C3.22353 10.375 3.60629 11.0711 3.60629 11.0711C4.25298 12.1788 5.30335 11.8588 5.71638 11.6732C5.78225 11.205 5.96962 10.8854 6.17658 10.7043C4.56675 10.5209 2.87415 9.89918 2.87415 7.12104C2.87415 6.32925 3.15677 5.68257 3.62053 5.17563C3.54576 4.99226 3.29697 4.25521 3.69174 3.25691C3.69174 3.25691 4.30015 3.06196 5.68522 3.99973C6.26337 3.83906 6.8838 3.75895 7.50022 3.75583C8.1162 3.75895 8.73619 3.83906 9.31523 3.99973C10.6994 3.06196 11.3069 3.25691 11.3069 3.25691C11.7026 4.25521 11.4538 4.99226 11.3795 5.17563C11.8441 5.68257 12.1245 6.32925 12.1245 7.12104C12.1245 9.9063 10.4292 10.5192 8.81452 10.6985C9.07444 10.9224 9.30633 11.3648 9.30633 12.0413C9.30633 13.0102 9.29742 13.7922 9.29742 14.0299C9.29742 14.2239 9.42828 14.4496 9.79591 14.3788C12.6746 13.4179 14.75 10.7025 14.75 7.50024C14.75 3.49593 11.5036 0.25 7.49933 0.25Z",
-+    fill: "currentColor",
-+    "fill-rule": "evenodd",
-+    "clip-rule": "evenodd"
-+  }, undefined, false, undefined, this)
-+}, undefined, false, undefined, this)).toString();
-+var ICON_GOOGLE = /* @__PURE__ */ jsxDEV("svg", {
-+  xmlns: "http://www.w3.org/2000/svg",
-+  width: "24",
-+  height: "24",
-+  viewBox: "0 0 24 24",
-+  children: /* @__PURE__ */ jsxDEV("path", {
-+    fill: "currentColor",
-+    d: "M11.99 13.9v-3.72h9.36c.14.63.25 1.22.25 2.05c0 5.71-3.83 9.77-9.6 9.77c-5.52 0-10-4.48-10-10S6.48 2 12 2c2.7 0 4.96.99 6.69 2.61l-2.84 2.76c-.72-.68-1.98-1.48-3.85-1.48c-3.31 0-6.01 2.75-6.01 6.12s2.7 6.12 6.01 6.12c3.83 0 5.24-2.65 5.5-4.22h-5.51z"
++    d: "M128.001 0C57.317 0 0 57.307 0 128.001c0 56.554 36.676 104.535 87.535 121.46 6.397 1.185 8.746-2.777 8.746-6.158 0-3.052-.12-13.135-.174-23.83-35.61 7.742-43.124-15.103-43.124-15.103-5.823-14.795-14.213-18.73-14.213-18.73-11.613-7.944.876-7.78.876-7.78 12.853.902 19.621 13.19 19.621 13.19 11.417 19.568 29.945 13.911 37.249 10.64 1.149-8.272 4.466-13.92 8.127-17.116-28.431-3.236-58.318-14.212-58.318-63.258 0-13.975 5-25.394 13.188-34.358-1.329-3.224-5.71-16.242 1.24-33.874 0 0 10.749-3.44 35.21 13.121 10.21-2.836 21.16-4.258 32.038-4.307 10.878.049 21.837 1.47 32.066 4.307 24.431-16.56 35.165-13.12 35.165-13.12 6.967 17.63 2.584 30.65 1.255 33.873 8.207 8.964 13.173 20.383 13.173 34.358 0 49.163-29.944 59.988-58.447 63.157 4.591 3.972 8.682 11.762 8.682 23.704 0 17.126-.148 30.91-.148 35.126 0 3.407 2.304 7.398 8.792 6.14C219.37 232.5 256 184.537 256 128.002 256 57.307 198.691 0 128.001 0Zm-80.06 182.34c-.282.636-1.283.827-2.194.39-.929-.417-1.45-1.284-1.15-1.922.276-.655 1.279-.838 2.205-.399.93.418 1.46 1.293 1.139 1.931Zm6.296 5.618c-.61.566-1.804.303-2.614-.591-.837-.892-.994-2.086-.375-2.66.63-.566 1.787-.301 2.626.591.838.903 1 2.088.363 2.66Zm4.32 7.188c-.785.545-2.067.034-2.86-1.104-.784-1.138-.784-2.503.017-3.05.795-.547 2.058-.055 2.861 1.075.782 1.157.782 2.522-.019 3.08Zm7.304 8.325c-.701.774-2.196.566-3.29-.49-1.119-1.032-1.43-2.496-.726-3.27.71-.776 2.213-.558 3.315.49 1.11 1.03 1.45 2.505.701 3.27Zm9.442 2.81c-.31 1.003-1.75 1.459-3.199 1.033-1.448-.439-2.395-1.613-2.103-2.626.301-1.01 1.747-1.484 3.207-1.028 1.446.436 2.396 1.602 2.095 2.622Zm10.744 1.193c.036 1.055-1.193 1.93-2.715 1.95-1.53.034-2.769-.82-2.786-1.86 0-1.065 1.202-1.932 2.733-1.958 1.522-.03 2.768.818 2.768 1.868Zm10.555-.405c.182 1.03-.875 2.088-2.387 2.37-1.485.271-2.861-.365-3.05-1.386-.184-1.056.893-2.114 2.376-2.387 1.514-.263 2.868.356 3.061 1.403Z"
 +  }, undefined, false, undefined, this)
 +}, undefined, false, undefined, this);
++var ICON_GOOGLE = /* @__PURE__ */ jsxDEV("svg", {
++  width: "256",
++  height: "262",
++  viewBox: "0 0 256 262",
++  xmlns: "http://www.w3.org/2000/svg",
++  preserveAspectRatio: "xMidYMid",
++  children: [
++    /* @__PURE__ */ jsxDEV("path", {
++      d: "M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027",
++      fill: "#4285F4"
++    }, undefined, false, undefined, this),
++    /* @__PURE__ */ jsxDEV("path", {
++      d: "M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1",
++      fill: "#34A853"
++    }, undefined, false, undefined, this),
++    /* @__PURE__ */ jsxDEV("path", {
++      d: "M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782",
++      fill: "#FBBC05"
++    }, undefined, false, undefined, this),
++    /* @__PURE__ */ jsxDEV("path", {
++      d: "M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251",
++      fill: "#EB4335"
++    }, undefined, false, undefined, this)
++  ]
++}, undefined, true, undefined, this);
 +var ICON_EMAIL = /* @__PURE__ */ jsxDEV("svg", {
 +  xmlns: "http://www.w3.org/2000/svg",
 +  fill: "none",
@@ -3695,13 +4172,14 @@ index 0000000000000000000000000000000000000000..23879aa25a00ad5df726d192fbc46c7d
 +};
 diff --git a/src/dist/esm/ui/select.js b/src/dist/esm/ui/select.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..6f12668bd413d34f2e24bbae7ecf710a1112ace7
+index 0000000000000000000000000000000000000000..945ed53b5eb4fd3831fa21712974827f574bc82d
 --- /dev/null
 +++ b/src/dist/esm/ui/select.js
-@@ -0,0 +1,203 @@
+@@ -0,0 +1,188 @@
 +// src/ui/select.tsx
 +import { basePath } from "../issuer.js";
 +import { Layout } from "./base.js";
++import { ICON_GITHUB, ICON_GOOGLE } from "./icon.js";
 +import { jsxDEV } from "hono/jsx/jsx-dev-runtime";
 +function Select(props) {
 +  return async (providers, _req) => {
@@ -3776,24 +4254,8 @@ index 0000000000000000000000000000000000000000..6f12668bd413d34f2e24bbae7ecf710a
 +      d: "M40.1 32L10 108.9v314.3h107V480h60.2l56.8-56.8h87l117-117V32H40.1zm357.8 254.1L331 353H224l-56.8 56.8V353H76.9V72.1h321v214zM331 149v116.9h-40.1V149H331zm-107 0v116.9h-40.1V149H224z"
 +    }, undefined, false, undefined, this)
 +  }, undefined, false, undefined, this),
-+  google: /* @__PURE__ */ jsxDEV("svg", {
-+    role: "img",
-+    xmlns: "http://www.w3.org/2000/svg",
-+    viewBox: "0 0 488 512",
-+    children: /* @__PURE__ */ jsxDEV("path", {
-+      fill: "currentColor",
-+      d: "M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
-+    }, undefined, false, undefined, this)
-+  }, undefined, false, undefined, this),
-+  github: /* @__PURE__ */ jsxDEV("svg", {
-+    role: "img",
-+    xmlns: "http://www.w3.org/2000/svg",
-+    viewBox: "0 0 496 512",
-+    children: /* @__PURE__ */ jsxDEV("path", {
-+      fill: "currentColor",
-+      d: "M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"
-+    }, undefined, false, undefined, this)
-+  }, undefined, false, undefined, this),
++  google: ICON_GOOGLE,
++  github: ICON_GITHUB,
 +  apple: /* @__PURE__ */ jsxDEV("svg", {
 +    role: "img",
 +    xmlns: "http://www.w3.org/2000/svg",
@@ -4693,10 +5155,10 @@ index 0000000000000000000000000000000000000000..26ae8fd7e58908e794f6267e5ca3ae31
 \ No newline at end of file
 diff --git a/src/dist/types/issuer.d.ts b/src/dist/types/issuer.d.ts
 new file mode 100644
-index 0000000000000000000000000000000000000000..1f2c8879484997cd7e4e46c8cfd2bde0e18f1fb4
+index 0000000000000000000000000000000000000000..284af9808df41938d033adc4be7226c6ec81c637
 --- /dev/null
 +++ b/src/dist/types/issuer.d.ts
-@@ -0,0 +1,446 @@
+@@ -0,0 +1,447 @@
 +/**
 + * The `issuer` create an OpentAuth server, a [Hono](https://hono.dev) app that's
 + * designed to run anywhere.
@@ -4825,6 +5287,7 @@ index 0000000000000000000000000000000000000000..1f2c8879484997cd7e4e46c8cfd2bde0
 + */
 +import { Provider } from "./provider/provider.js";
 +import { SubjectPayload, SubjectSchema } from "./subject.js";
++import { Hono } from "hono/tiny";
 +/**
 + * Sets the subject payload in the JWT token and returns the response.
 + *
@@ -5137,7 +5600,7 @@ index 0000000000000000000000000000000000000000..1f2c8879484997cd7e4e46c8cfd2bde0
 +    [key in keyof Providers]: Prettify<{
 +        provider: key;
 +    } & (Providers[key] extends Provider<infer T> ? T : {})>;
-+}[keyof Providers]>(input: IssuerInput<Providers, Subjects, Result>): import("hono/hono-base").HonoBase<{
++}[keyof Providers]>(input: IssuerInput<Providers, Subjects, Result>): Hono<{
 +    Variables: {
 +        authorization: AuthorizationState;
 +    };
@@ -5146,11 +5609,11 @@ index 0000000000000000000000000000000000000000..1f2c8879484997cd7e4e46c8cfd2bde0
 \ No newline at end of file
 diff --git a/src/dist/types/issuer.d.ts.map b/src/dist/types/issuer.d.ts.map
 new file mode 100644
-index 0000000000000000000000000000000000000000..eff59daae039e5ec7c4d05a80fef93238b70ef82
+index 0000000000000000000000000000000000000000..f35d2d35827328e0c4df711d11d5c54f9f5bb19c
 --- /dev/null
 +++ b/src/dist/types/issuer.d.ts.map
 @@ -0,0 +1 @@
-+{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"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"}
++{"version":3,"file":"issuer.d.ts","sourceRoot":"","sources":["../../src/issuer.ts"],"names":[],"mappings":"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"}
 \ No newline at end of file
 diff --git a/src/dist/types/jwt.d.ts b/src/dist/types/jwt.d.ts
 new file mode 100644
@@ -5230,10 +5693,10 @@ index 0000000000000000000000000000000000000000..a05b14da77928d9a2bd524070c42ac80
 \ No newline at end of file
 diff --git a/src/dist/types/provider/apple.d.ts b/src/dist/types/provider/apple.d.ts
 new file mode 100644
-index 0000000000000000000000000000000000000000..69b1c7b7e71f465c018911f20053ec06a6d47d16
+index 0000000000000000000000000000000000000000..cf74297b85992f4d618e49df77c7396996a32d1c
 --- /dev/null
 +++ b/src/dist/types/provider/apple.d.ts
-@@ -0,0 +1,74 @@
+@@ -0,0 +1,108 @@
 +/**
 + * Use this provider to authenticate with Apple. Supports both OAuth2 and OIDC.
 + *
@@ -5247,6 +5710,24 @@ index 0000000000000000000000000000000000000000..69b1c7b7e71f465c018911f20053ec06
 + *     apple: AppleProvider({
 + *       clientID: "1234567890",
 + *       clientSecret: "0987654321"
++ *     })
++ *   }
++ * })
++ * ```
++ *
++ * #### Using OAuth with form_post response mode
++ *
++ * When requesting name or email scopes from Apple, you must use form_post response mode:
++ *
++ * ```ts {5-9}
++ * import { AppleProvider } from "@openauthjs/openauth/provider/apple"
++ *
++ * export default issuer({
++ *   providers: {
++ *     apple: AppleProvider({
++ *       clientID: "1234567890",
++ *       clientSecret: "0987654321",
++ *       responseMode: "form_post"
 + *     })
 + *   }
 + * })
@@ -5271,6 +5752,12 @@ index 0000000000000000000000000000000000000000..69b1c7b7e71f465c018911f20053ec06
 +import { Oauth2WrappedConfig } from "./oauth2.js";
 +import { OidcWrappedConfig } from "./oidc.js";
 +export interface AppleConfig extends Oauth2WrappedConfig {
++    /**
++     * The response mode to use for the authorization request.
++     * Apple requires 'form_post' response mode when requesting name or email scopes.
++     * @default "query"
++     */
++    responseMode?: "query" | "form_post";
 +}
 +export interface AppleOidcConfig extends OidcWrappedConfig {
 +}
@@ -5280,9 +5767,19 @@ index 0000000000000000000000000000000000000000..69b1c7b7e71f465c018911f20053ec06
 + * @param config - The config for the provider.
 + * @example
 + * ```ts
++ * // Using default query response mode (GET callback)
 + * AppleProvider({
 + *   clientID: "1234567890",
 + *   clientSecret: "0987654321"
++ * })
++ *
++ * // Using form_post response mode (POST callback)
++ * // Required when requesting name or email scope
++ * AppleProvider({
++ *   clientID: "1234567890",
++ *   clientSecret: "0987654321",
++ *   responseMode: "form_post",
++ *   scopes: ["name", "email"]
 + * })
 + * ```
 + */
@@ -5311,11 +5808,11 @@ index 0000000000000000000000000000000000000000..69b1c7b7e71f465c018911f20053ec06
 \ No newline at end of file
 diff --git a/src/dist/types/provider/apple.d.ts.map b/src/dist/types/provider/apple.d.ts.map
 new file mode 100644
-index 0000000000000000000000000000000000000000..d3bcad06aa6dca8fd9777edf83bb04243fe51da0
+index 0000000000000000000000000000000000000000..391b0f240024b77e75550f6173c1b7b0b8e30e25
 --- /dev/null
 +++ b/src/dist/types/provider/apple.d.ts.map
 @@ -0,0 +1 @@
-+{"version":3,"file":"apple.d.ts","sourceRoot":"","sources":["../../../src/provider/apple.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GAiCG;AAEH,OAAO,EAAkB,mBAAmB,EAAE,MAAM,aAAa,CAAA;AACjE,OAAO,EAAgB,iBAAiB,EAAE,MAAM,WAAW,CAAA;AAE3D,MAAM,WAAW,WAAY,SAAQ,mBAAmB;CAAG;AAC3D,MAAM,WAAW,eAAgB,SAAQ,iBAAiB;CAAG;AAE7D;;;;;;;;;;;GAWG;AACH,wBAAgB,aAAa,CAAC,MAAM,EAAE,WAAW;;;GAShD;AAED;;;;;;;;;;;;GAYG;AACH,wBAAgB,iBAAiB,CAAC,MAAM,EAAE,eAAe;;;GAMxD"}
++{"version":3,"file":"apple.d.ts","sourceRoot":"","sources":["../../../src/provider/apple.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GAmDG;AAEH,OAAO,EAAkB,mBAAmB,EAAE,MAAM,aAAa,CAAA;AACjE,OAAO,EAAgB,iBAAiB,EAAE,MAAM,WAAW,CAAA;AAE3D,MAAM,WAAW,WAAY,SAAQ,mBAAmB;IACtD;;;;OAIG;IACH,YAAY,CAAC,EAAE,OAAO,GAAG,WAAW,CAAA;CACrC;AACD,MAAM,WAAW,eAAgB,SAAQ,iBAAiB;CAAG;AAE7D;;;;;;;;;;;;;;;;;;;;;GAqBG;AACH,wBAAgB,aAAa,CAAC,MAAM,EAAE,WAAW;;;GAiBhD;AAED;;;;;;;;;;;;GAYG;AACH,wBAAgB,iBAAiB,CAAC,MAAM,EAAE,eAAe;;;GAMxD"}
 \ No newline at end of file
 diff --git a/src/dist/types/provider/arctic.d.ts b/src/dist/types/provider/arctic.d.ts
 new file mode 100644
@@ -5794,11 +6291,11 @@ index 0000000000000000000000000000000000000000..51cc20dfdf89c320bff7b81ce27bfc0c
 \ No newline at end of file
 diff --git a/src/dist/types/provider/google.d.ts.map b/src/dist/types/provider/google.d.ts.map
 new file mode 100644
-index 0000000000000000000000000000000000000000..c1b57994294005a5900f00723436f4b49a3a64b3
+index 0000000000000000000000000000000000000000..4adcb6816a7f959fccecaee1494d716ffbfd4db5
 --- /dev/null
 +++ b/src/dist/types/provider/google.d.ts.map
 @@ -0,0 +1 @@
-+{"version":3,"file":"google.d.ts","sourceRoot":"","sources":["../../../src/provider/google.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GAiCG;AAEH,OAAO,EAAkB,mBAAmB,EAAE,MAAM,aAAa,CAAA;AACjE,OAAO,EAAgB,iBAAiB,EAAE,MAAM,WAAW,CAAA;AAE3D,MAAM,WAAW,YAAa,SAAQ,mBAAmB;CAAG;AAC5D,MAAM,WAAW,gBAAiB,SAAQ,iBAAiB;CAAG;AAE9D;;;;;;;;;;;GAWG;AACH,wBAAgB,cAAc,CAAC,MAAM,EAAE,YAAY;;;GASlD;AAED;;;;;;;;;;;;GAYG;AACH,wBAAgB,kBAAkB,CAAC,MAAM,EAAE,gBAAgB;;;GAM1D"}
++{"version":3,"file":"google.d.ts","sourceRoot":"","sources":["../../../src/provider/google.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;GAiCG;AAEH,OAAO,EAAkB,mBAAmB,EAAE,MAAM,aAAa,CAAA;AACjE,OAAO,EAAgB,iBAAiB,EAAE,MAAM,WAAW,CAAA;AAE3D,MAAM,WAAW,YAAa,SAAQ,mBAAmB;CAAG;AAC5D,MAAM,WAAW,gBAAiB,SAAQ,iBAAiB;CAAG;AAE9D;;;;;;;;;;;GAWG;AACH,wBAAgB,cAAc,CAAC,MAAM,EAAE,YAAY;;;GAUlD;AAED;;;;;;;;;;;;GAYG;AACH,wBAAgB,kBAAkB,CAAC,MAAM,EAAE,gBAAgB;;;GAM1D"}
 \ No newline at end of file
 diff --git a/src/dist/types/provider/index.d.ts b/src/dist/types/provider/index.d.ts
 new file mode 100644
@@ -6081,10 +6578,10 @@ index 0000000000000000000000000000000000000000..4bbbc3b015845814cb72adb282b8bf43
 \ No newline at end of file
 diff --git a/src/dist/types/provider/oauth2.d.ts b/src/dist/types/provider/oauth2.d.ts
 new file mode 100644
-index 0000000000000000000000000000000000000000..58fd4130e4bca42951bf40c2e87c1a32a5a1c768
+index 0000000000000000000000000000000000000000..d7ca8f47cf8621a646a64fe9e971c2281dc855a5
 --- /dev/null
 +++ b/src/dist/types/provider/oauth2.d.ts
-@@ -0,0 +1,127 @@
+@@ -0,0 +1,133 @@
 +/**
 + * Use this to connect authentication providers that support OAuth 2.0.
 + *
@@ -6148,7 +6645,8 @@ index 0000000000000000000000000000000000000000..58fd4130e4bca42951bf40c2e87c1a32
 +     * {
 +     *   endpoint: {
 +     *     authorization: "https://auth.myserver.com/authorize",
-+     *     token: "https://auth.myserver.com/token"
++     *     token: "https://auth.myserver.com/token",
++     *     jwks: "https://auth.myserver.com/auth/keys"
 +     *   }
 +     * }
 +     * ```
@@ -6162,6 +6660,10 @@ index 0000000000000000000000000000000000000000..58fd4130e4bca42951bf40c2e87c1a32
 +         * The URL of the token endpoint.
 +         */
 +        token: string;
++        /**
++         * The URL of the JWKS endpoint.
++         */
++        jwks?: string;
 +    };
 +    /**
 +     * A list of OAuth scopes that you want to request.
@@ -6205,6 +6707,7 @@ index 0000000000000000000000000000000000000000..58fd4130e4bca42951bf40c2e87c1a32
 +    access: string;
 +    refresh: string;
 +    expiry: number;
++    id?: Record<string, any>;
 +    raw: Record<string, any>;
 +}
 +export declare function Oauth2Provider(config: Oauth2Config): Provider<{
@@ -6215,11 +6718,11 @@ index 0000000000000000000000000000000000000000..58fd4130e4bca42951bf40c2e87c1a32
 \ No newline at end of file
 diff --git a/src/dist/types/provider/oauth2.d.ts.map b/src/dist/types/provider/oauth2.d.ts.map
 new file mode 100644
-index 0000000000000000000000000000000000000000..0ece4f9e266edc67b3f2c47982115cfd2bfc40cd
+index 0000000000000000000000000000000000000000..0f0a5ea258ca6cc8ba12a113e21f5ef2440da29f
 --- /dev/null
 +++ b/src/dist/types/provider/oauth2.d.ts.map
 @@ -0,0 +1 @@
-+{"version":3,"file":"oauth2.d.ts","sourceRoot":"","sources":["../../../src/provider/oauth2.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;GAsBG;AAKH,OAAO,EAAE,QAAQ,EAAE,MAAM,eAAe,CAAA;AAExC,MAAM,WAAW,YAAY;IAC3B;;OAEG;IACH,IAAI,CAAC,EAAE,MAAM,CAAA;IACb;;;;;;;;;;;OAWG;IACH,QAAQ,EAAE,MAAM,CAAA;IAChB;;;;;;;;;;;OAWG;IACH,YAAY,EAAE,MAAM,CAAA;IACpB;;;;;;;;;;;;OAYG;IACH,QAAQ,EAAE;QACR;;WAEG;QACH,aAAa,EAAE,MAAM,CAAA;QACrB;;WAEG;QACH,KAAK,EAAE,MAAM,CAAA;KACd,CAAA;IACD;;;;;;;;;OASG;IACH,MAAM,EAAE,MAAM,EAAE,CAAA;IAChB;;;;OAIG;IACH,IAAI,CAAC,EAAE,OAAO,CAAA;IACd;;;;;;;;;;;OAWG;IACH,KAAK,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAA;CAC/B;AAED;;GAEG;AACH,MAAM,MAAM,mBAAmB,GAAG,IAAI,CAAC,YAAY,EAAE,UAAU,GAAG,MAAM,CAAC,CAAA;AAEzE;;GAEG;AACH,MAAM,WAAW,WAAW;IAC1B,MAAM,EAAE,MAAM,CAAA;IACd,OAAO,EAAE,MAAM,CAAA;IACf,MAAM,EAAE,MAAM,CAAA;IACd,GAAG,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAA;CACzB;AAQD,wBAAgB,cAAc,CAC5B,MAAM,EAAE,YAAY,GACnB,QAAQ,CAAC;IAAE,QAAQ,EAAE,WAAW,CAAC;IAAC,QAAQ,EAAE,MAAM,CAAA;CAAE,CAAC,CAoFvD"}
++{"version":3,"file":"oauth2.d.ts","sourceRoot":"","sources":["../../../src/provider/oauth2.ts"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;GAsBG;AAMH,OAAO,EAAE,QAAQ,EAAE,MAAM,eAAe,CAAA;AAExC,MAAM,WAAW,YAAY;IAC3B;;OAEG;IACH,IAAI,CAAC,EAAE,MAAM,CAAA;IACb;;;;;;;;;;;OAWG;IACH,QAAQ,EAAE,MAAM,CAAA;IAChB;;;;;;;;;;;OAWG;IACH,YAAY,EAAE,MAAM,CAAA;IACpB;;;;;;;;;;;;;OAaG;IACH,QAAQ,EAAE;QACR;;WAEG;QACH,aAAa,EAAE,MAAM,CAAA;QACrB;;WAEG;QACH,KAAK,EAAE,MAAM,CAAA;QACb;;WAEG;QACH,IAAI,CAAC,EAAE,MAAM,CAAA;KACd,CAAA;IACD;;;;;;;;;OASG;IACH,MAAM,EAAE,MAAM,EAAE,CAAA;IAChB;;;;OAIG;IACH,IAAI,CAAC,EAAE,OAAO,CAAA;IACd;;;;;;;;;;;OAWG;IACH,KAAK,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAA;CAC/B;AAED;;GAEG;AACH,MAAM,MAAM,mBAAmB,GAAG,IAAI,CAAC,YAAY,EAAE,UAAU,GAAG,MAAM,CAAC,CAAA;AAEzE;;GAEG;AACH,MAAM,WAAW,WAAW;IAC1B,MAAM,EAAE,MAAM,CAAA;IACd,OAAO,EAAE,MAAM,CAAA;IACf,MAAM,EAAE,MAAM,CAAA;IACd,EAAE,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAA;IACxB,GAAG,EAAE,MAAM,CAAC,MAAM,EAAE,GAAG,CAAC,CAAA;CACzB;AAQD,wBAAgB,cAAc,CAC5B,MAAM,EAAE,YAAY,GACnB,QAAQ,CAAC;IAAE,QAAQ,EAAE,WAAW,CAAC;IAAC,QAAQ,EAAE,MAAM,CAAA;CAAE,CAAC,CAuJvD"}
 \ No newline at end of file
 diff --git a/src/dist/types/provider/oidc.d.ts b/src/dist/types/provider/oidc.d.ts
 new file mode 100644
@@ -7441,12 +7944,12 @@ index 0000000000000000000000000000000000000000..b28296df0e1877e7b220008324398f48
 \ No newline at end of file
 diff --git a/src/dist/types/ui/icon.d.ts b/src/dist/types/ui/icon.d.ts
 new file mode 100644
-index 0000000000000000000000000000000000000000..f59fe9576139e2376d09adc9d851aae420393e67
+index 0000000000000000000000000000000000000000..14fe2717ffc71221a71541062c135e403cc1283b
 --- /dev/null
 +++ b/src/dist/types/ui/icon.d.ts
 @@ -0,0 +1,6 @@
 +/** @jsxImportSource hono/jsx */
-+export declare const ICON_GITHUB: string;
++export declare const ICON_GITHUB: import("hono/jsx/jsx-dev-runtime").JSX.Element;
 +export declare const ICON_GOOGLE: import("hono/jsx/jsx-dev-runtime").JSX.Element;
 +export declare const ICON_EMAIL: import("hono/jsx/jsx-dev-runtime").JSX.Element;
 +export declare const ICON_SLACK: import("hono/jsx/jsx-dev-runtime").JSX.Element;
@@ -7454,11 +7957,11 @@ index 0000000000000000000000000000000000000000..f59fe9576139e2376d09adc9d851aae4
 \ No newline at end of file
 diff --git a/src/dist/types/ui/icon.d.ts.map b/src/dist/types/ui/icon.d.ts.map
 new file mode 100644
-index 0000000000000000000000000000000000000000..b253c690ad90067be60f2649538339c4b2a52404
+index 0000000000000000000000000000000000000000..2795a64ad3b2171e02f1e082028aa78260c3a1d7
 --- /dev/null
 +++ b/src/dist/types/ui/icon.d.ts.map
 @@ -0,0 +1 @@
-+{"version":3,"file":"icon.d.ts","sourceRoot":"","sources":["../../../src/ui/icon.tsx"],"names":[],"mappings":"AAAA,gCAAgC;AAEhC,eAAO,MAAM,WAAW,QASZ,CAAA;AAEZ,eAAO,MAAM,WAAW,gDAYvB,CAAA;AAED,eAAO,MAAM,UAAU,gDAetB,CAAA;AAED,eAAO,MAAM,UAAU,gDAmCtB,CAAA"}
++{"version":3,"file":"icon.d.ts","sourceRoot":"","sources":["../../../src/ui/icon.tsx"],"names":[],"mappings":"AAAA,gCAAgC;AAEhC,eAAO,MAAM,WAAW,gDAWvB,CAAA;AAED,eAAO,MAAM,WAAW,gDAyBvB,CAAA;AAED,eAAO,MAAM,UAAU,gDAetB,CAAA;AAED,eAAO,MAAM,UAAU,gDAmCtB,CAAA"}
 \ No newline at end of file
 diff --git a/src/dist/types/ui/password.d.ts b/src/dist/types/ui/password.d.ts
 new file mode 100644
@@ -7678,11 +8181,11 @@ index 0000000000000000000000000000000000000000..b3080f05916ae7fc35a635cb14eed5d8
 \ No newline at end of file
 diff --git a/src/dist/types/ui/select.d.ts.map b/src/dist/types/ui/select.d.ts.map
 new file mode 100644
-index 0000000000000000000000000000000000000000..0f3b200b6f0c38cf7c8e8d7d28b144508c8cdd02
+index 0000000000000000000000000000000000000000..a742fd84960aa7c4dc844665e03b2e9c932c456b
 --- /dev/null
 +++ b/src/dist/types/ui/select.d.ts.map
 @@ -0,0 +1 @@
-+{"version":3,"file":"select.d.ts","sourceRoot":"","sources":["../../../src/ui/select.tsx"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,gCAAgC;AAKhC,MAAM,WAAW,WAAW;IAC1B;;;;;;;;;;;;;;OAcG;IACH,SAAS,CAAC,EAAE,MAAM,CAChB,MAAM,EACN;QACE;;;WAGG;QACH,IAAI,CAAC,EAAE,OAAO,CAAA;QACd;;WAEG;QACH,OAAO,CAAC,EAAE,MAAM,CAAA;KACjB,CACF,CAAA;CACF;AAED,wBAAgB,MAAM,CAAC,KAAK,CAAC,EAAE,WAAW,eAE3B,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,QAC3B,OAAO,KACZ,OAAO,CAAC,QAAQ,CAAC,CA6BrB"}
++{"version":3,"file":"select.d.ts","sourceRoot":"","sources":["../../../src/ui/select.tsx"],"names":[],"mappings":"AAAA;;;;;;;;;;;;;;;;;;;;;;;GAuBG;AACH,gCAAgC;AAMhC,MAAM,WAAW,WAAW;IAC1B;;;;;;;;;;;;;;OAcG;IACH,SAAS,CAAC,EAAE,MAAM,CAChB,MAAM,EACN;QACE;;;WAGG;QACH,IAAI,CAAC,EAAE,OAAO,CAAA;QACd;;WAEG;QACH,OAAO,CAAC,EAAE,MAAM,CAAA;KACjB,CACF,CAAA;CACF;AAED,wBAAgB,MAAM,CAAC,KAAK,CAAC,EAAE,WAAW,eAE3B,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,QAC3B,OAAO,KACZ,OAAO,CAAC,QAAQ,CAAC,CA6BrB"}
 \ No newline at end of file
 diff --git a/src/dist/types/ui/theme.d.ts b/src/dist/types/ui/theme.d.ts
 new file mode 100644
@@ -7930,7 +8433,7 @@ index 0000000000000000000000000000000000000000..f01369f5f2f412c2b3bc6a1c461910f7
 +{"version":3,"file":"util.d.ts","sourceRoot":"","sources":["../../src/util.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,OAAO,EAAE,MAAM,MAAM,CAAA;AAEnC,MAAM,MAAM,QAAQ,CAAC,CAAC,IAAI;KACvB,CAAC,IAAI,MAAM,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;CACrB,CAAA;AAED,wBAAgB,cAAc,CAAC,GAAG,EAAE,OAAO,EAAE,IAAI,EAAE,MAAM,UAMxD;AAuBD,wBAAgB,aAAa,CAAC,CAAC,EAAE,MAAM,EAAE,CAAC,EAAE,MAAM,GAAG,OAAO,CAY3D;AAED,wBAAgB,IAAI,CAAC,CAAC,EAAE,EAAE,EAAE,MAAM,CAAC,GAAG,MAAM,CAAC,CAQ5C"}
 \ No newline at end of file
 diff --git a/src/issuer.ts b/src/issuer.ts
-index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7e7824bf1 100644
+index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..827d12a729f6e9b561f42c4ddba878b955525831 100644
 --- a/src/issuer.ts
 +++ b/src/issuer.ts
 @@ -130,6 +130,7 @@ import { Hono } from "hono/tiny"
@@ -7950,10 +8453,11 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7
  import { Storage, StorageAdapter } from "./storage/storage.js"
  import { encryptionKeys, legacySigningKeys, signingKeys } from "./keys.js"
  import { validatePKCE } from "./pkce.js"
-@@ -201,10 +202,16 @@ import { DynamoStorage } from "./storage/dynamo.js"
+@@ -200,11 +201,16 @@ import { getRelativeUrl, isDomainMatch, lazy } from "./util.js"
+ import { DynamoStorage } from "./storage/dynamo.js"
  import { MemoryStorage } from "./storage/memory.js"
  import { cors } from "hono/cors"
- import { logger } from "hono/logger"
+-import { logger } from "hono/logger"
 +import { createMiddleware } from "hono/factory"
  
  /** @internal */
@@ -7967,7 +8471,7 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7
  export interface IssuerInput<
    Providers extends Record<string, Provider<any>>,
    Subjects extends SubjectSchema,
-@@ -216,6 +223,35 @@ export interface IssuerInput<
+@@ -216,6 +222,35 @@ export interface IssuerInput<
      >
    }[keyof Providers],
  > {
@@ -8003,7 +8507,7 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7
    /**
     * The shape of the subjects that you want to return.
     *
-@@ -451,6 +487,8 @@ export function issuer<
+@@ -451,6 +486,8 @@ export function issuer<
      >
    }[keyof Providers],
  >(input: IssuerInput<Providers, Subjects, Result>) {
@@ -8012,7 +8516,7 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7
    const error =
      input.error ??
      function (err) {
-@@ -721,7 +759,12 @@ export function issuer<
+@@ -721,14 +758,42 @@ export function issuer<
    }
  
    function issuer(ctx: Context) {
@@ -8026,10 +8530,12 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7
    }
  
    const app = new Hono<{
-@@ -730,6 +773,29 @@ export function issuer<
+     Variables: {
+       authorization: AuthorizationState
      }
-   }>().use(logger())
- 
+-  }>().use(logger())
++  }>()
++
 +  // Only edit local redirects if baseP
 +  if (basePath) {
 +    app.use(
@@ -8052,11 +8558,10 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7
 +      }),
 +    )
 +  }
-+
+ 
    for (const [name, value] of Object.entries(input.providers)) {
      const route = new Hono<any>()
-     route.use(async (c, next) => {
-@@ -779,7 +845,7 @@ export function issuer<
+@@ -779,7 +844,7 @@ export function issuer<
          issuer: iss,
          authorization_endpoint: `${iss}/authorize`,
          token_endpoint: `${iss}/token`,
@@ -8065,7 +8570,7 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7
          response_types_supported: ["code", "token"],
        })
      },
-@@ -829,7 +895,6 @@ export function issuer<
+@@ -829,7 +894,6 @@ export function issuer<
              400,
            )
          }
@@ -8073,7 +8578,7 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7
          if (payload.redirectURI !== form.get("redirect_uri")) {
            return c.json(
              {
-@@ -878,6 +943,7 @@ export function issuer<
+@@ -878,6 +942,7 @@ export function issuer<
            }
          }
          const tokens = await generateTokens(c, payload)
@@ -8081,7 +8586,7 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7
          return c.json({
            access_token: tokens.access,
            expires_in: tokens.expiresIn,
-@@ -1078,6 +1144,63 @@ export function issuer<
+@@ -1078,6 +1143,63 @@ export function issuer<
      )
    })
  
@@ -8145,6 +8650,103 @@ index 119a99a278d3fe05cab32c8e326a29fc848f0f6b..eaba07937591f439cde9e217f8e2c6e7
    app.onError(async (err, c) => {
      console.error(err)
      if (err instanceof UnknownStateError) {
+diff --git a/src/provider/apple.ts b/src/provider/apple.ts
+index 39388fc0bd484684b4fc49eea9021f1303bf4fe8..f69e252b3b850a565835ccebaeea36c62f7cae91 100644
+--- a/src/provider/apple.ts
++++ b/src/provider/apple.ts
+@@ -16,6 +16,24 @@
+  * })
+  * ```
+  *
++ * #### Using OAuth with form_post response mode
++ *
++ * When requesting name or email scopes from Apple, you must use form_post response mode:
++ *
++ * ```ts {5-9}
++ * import { AppleProvider } from "@openauthjs/openauth/provider/apple"
++ *
++ * export default issuer({
++ *   providers: {
++ *     apple: AppleProvider({
++ *       clientID: "1234567890",
++ *       clientSecret: "0987654321",
++ *       responseMode: "form_post"
++ *     })
++ *   }
++ * })
++ * ```
++ *
+  * #### Using OIDC
+  *
+  * ```ts {5-7}
+@@ -36,7 +54,14 @@
+ import { Oauth2Provider, Oauth2WrappedConfig } from "./oauth2.js"
+ import { OidcProvider, OidcWrappedConfig } from "./oidc.js"
+ 
+-export interface AppleConfig extends Oauth2WrappedConfig {}
++export interface AppleConfig extends Oauth2WrappedConfig {
++  /**
++   * The response mode to use for the authorization request.
++   * Apple requires 'form_post' response mode when requesting name or email scopes.
++   * @default "query"
++   */
++  responseMode?: "query" | "form_post"
++}
+ export interface AppleOidcConfig extends OidcWrappedConfig {}
+ 
+ /**
+@@ -45,20 +70,38 @@ export interface AppleOidcConfig extends OidcWrappedConfig {}
+  * @param config - The config for the provider.
+  * @example
+  * ```ts
++ * // Using default query response mode (GET callback)
+  * AppleProvider({
+  *   clientID: "1234567890",
+  *   clientSecret: "0987654321"
+  * })
++ *
++ * // Using form_post response mode (POST callback)
++ * // Required when requesting name or email scope
++ * AppleProvider({
++ *   clientID: "1234567890",
++ *   clientSecret: "0987654321",
++ *   responseMode: "form_post",
++ *   scopes: ["name", "email"]
++ * })
+  * ```
+  */
+ export function AppleProvider(config: AppleConfig) {
++  const { responseMode, ...restConfig } = config
++  const additionalQuery =
++    responseMode === "form_post"
++      ? { response_mode: "form_post", ...config.query }
++      : config.query || {}
++
+   return Oauth2Provider({
+-    ...config,
++    ...restConfig,
+     type: "apple" as const,
+     endpoint: {
+       authorization: "https://appleid.apple.com/auth/authorize",
+       token: "https://appleid.apple.com/auth/token",
++      jwks: "https://appleid.apple.com/auth/keys",
+     },
++    query: additionalQuery,
+   })
+ }
+ 
+diff --git a/src/provider/google.ts b/src/provider/google.ts
+index 006a47b9c2f8af20927ae4d84010b69b1fb41106..359a386a7cd45c9f3e8acffae1b69136cdc6f2c6 100644
+--- a/src/provider/google.ts
++++ b/src/provider/google.ts
+@@ -58,6 +58,7 @@ export function GoogleProvider(config: GoogleConfig) {
+     endpoint: {
+       authorization: "https://accounts.google.com/o/oauth2/v2/auth",
+       token: "https://oauth2.googleapis.com/token",
++      jwks: "https://www.googleapis.com/oauth2/v3/certs",
+     },
+   })
+ }
 diff --git a/src/provider/linkedin.ts b/src/provider/linkedin.ts
 new file mode 100644
 index 0000000000000000000000000000000000000000..bfa8c7bc2ddec717cc1146c72f9132468486cc78
@@ -8163,6 +8765,210 @@ index 0000000000000000000000000000000000000000..bfa8c7bc2ddec717cc1146c72f913246
 +    },
 +  })
 +}
+diff --git a/src/provider/oauth2.ts b/src/provider/oauth2.ts
+index 9cbcd6848a27b7a91041bb742923b86c02ad61b4..5a0f6583d65466a508ebbfbb07f5f5263c2c408e 100644
+--- a/src/provider/oauth2.ts
++++ b/src/provider/oauth2.ts
+@@ -22,6 +22,7 @@
+  * @packageDocumentation
+  */
+ 
++import { createRemoteJWKSet, jwtVerify } from "jose"
+ import { OauthError } from "../error.js"
+ import { generatePKCE } from "../pkce.js"
+ import { getRelativeUrl } from "../util.js"
+@@ -66,7 +67,8 @@ export interface Oauth2Config {
+    * {
+    *   endpoint: {
+    *     authorization: "https://auth.myserver.com/authorize",
+-   *     token: "https://auth.myserver.com/token"
++   *     token: "https://auth.myserver.com/token",
++   *     jwks: "https://auth.myserver.com/auth/keys"
+    *   }
+    * }
+    * ```
+@@ -80,6 +82,10 @@ export interface Oauth2Config {
+      * The URL of the token endpoint.
+      */
+     token: string
++    /**
++     * The URL of the JWKS endpoint.
++     */
++    jwks?: string
+   }
+   /**
+    * A list of OAuth scopes that you want to request.
+@@ -125,6 +131,7 @@ export interface Oauth2Token {
+   access: string
+   refresh: string
+   expiry: number
++  id?: Record<string, any>
+   raw: Record<string, any>
+ }
+ 
+@@ -138,6 +145,76 @@ export function Oauth2Provider(
+   config: Oauth2Config,
+ ): Provider<{ tokenset: Oauth2Token; clientID: string }> {
+   const query = config.query || {}
++
++  // Helper function to handle token exchange and response building
++  async function handleCallbackLogic(
++    c: any,
++    ctx: any,
++    provider: ProviderState,
++    code: string | undefined,
++  ) {
++    if (!provider || !code) {
++      return c.redirect(getRelativeUrl(c, "./authorize"))
++    }
++
++    const body = new URLSearchParams({
++      client_id: config.clientID,
++      client_secret: config.clientSecret,
++      code,
++      grant_type: "authorization_code",
++      redirect_uri: provider.redirect,
++      ...(provider.codeVerifier
++        ? { code_verifier: provider.codeVerifier }
++        : {}),
++    })
++
++    const json: any = await fetch(config.endpoint.token, {
++      method: "POST",
++      headers: {
++        "Content-Type": "application/x-www-form-urlencoded",
++        Accept: "application/json",
++      },
++      body: body.toString(),
++    }).then((r) => r.json())
++
++    if ("error" in json) {
++      throw new OauthError(json.error, json.error_description)
++    }
++
++    let idTokenPayload: Record<string, any> | null = null
++    if (config.endpoint.jwks) {
++      const jwksEndpoint = new URL(config.endpoint.jwks)
++      // @ts-expect-error bun/node mismatch
++      const jwks = createRemoteJWKSet(jwksEndpoint)
++      const { payload } = await jwtVerify(json.id_token, jwks, {
++        audience: config.clientID,
++      })
++      idTokenPayload = payload
++    }
++
++    return ctx.success(c, {
++      clientID: config.clientID,
++      tokenset: {
++        get access() {
++          return json.access_token
++        },
++        get refresh() {
++          return json.refresh_token
++        },
++        get expiry() {
++          return json.expires_in
++        },
++        get id() {
++          if (!idTokenPayload) return null
++          return idTokenPayload
++        },
++        get raw() {
++          return json
++        },
++      },
++    })
++  }
++
+   return {
+     type: config.type || "oauth2",
+     init(routes, ctx) {
+@@ -173,50 +250,47 @@ export function Oauth2Provider(
+         const code = c.req.query("code")
+         const state = c.req.query("state")
+         const error = c.req.query("error")
++
+         if (error)
+           throw new OauthError(
+             error.toString() as any,
+             c.req.query("error_description")?.toString() || "",
+           )
+-        if (!provider || !code || (provider.state && state !== provider.state))
++        if (
++          !provider ||
++          !code ||
++          (provider.state && state !== provider.state)
++        ) {
+           return c.redirect(getRelativeUrl(c, "./authorize"))
+-        const body = new URLSearchParams({
+-          client_id: config.clientID,
+-          client_secret: config.clientSecret,
+-          code,
+-          grant_type: "authorization_code",
+-          redirect_uri: provider.redirect,
+-          ...(provider.codeVerifier
+-            ? { code_verifier: provider.codeVerifier }
+-            : {}),
+-        })
+-        const json: any = await fetch(config.endpoint.token, {
+-          method: "POST",
+-          headers: {
+-            "Content-Type": "application/x-www-form-urlencoded",
+-            Accept: "application/json",
+-          },
+-          body: body.toString(),
+-        }).then((r) => r.json())
+-        if ("error" in json)
+-          throw new OauthError(json.error, json.error_description)
+-        return ctx.success(c, {
+-          clientID: config.clientID,
+-          tokenset: {
+-            get access() {
+-              return json.access_token
+-            },
+-            get refresh() {
+-              return json.refresh_token
+-            },
+-            get expiry() {
+-              return json.expires_in
+-            },
+-            get raw() {
+-              return json
+-            },
+-          },
+-        })
++        }
++
++        return handleCallbackLogic(c, ctx, provider, code)
++      })
++
++      routes.post("/callback", async (c) => {
++        const provider = (await ctx.get(c, "provider")) as ProviderState
++
++        // Handle form data from POST request
++        const formData = await c.req.formData()
++        const code = formData.get("code")?.toString()
++        const state = formData.get("state")?.toString()
++        const error = formData.get("error")?.toString()
++
++        if (error)
++          throw new OauthError(
++            error as any,
++            formData.get("error_description")?.toString() || "",
++          )
++
++        if (
++          !provider ||
++          !code ||
++          (provider.state && state !== provider.state)
++        ) {
++          return c.redirect(getRelativeUrl(c, "./authorize"))
++        }
++
++        return handleCallbackLogic(c, ctx, provider, code)
+       })
+     },
+   }
 diff --git a/src/storage/cloudflare.ts b/src/storage/cloudflare.ts
 index 0c011e3d3322fcf95cc3db0b5870f64c188e27e5..8fb7bb27295a224c116e19386c465ac0e0b7b88b 100644
 --- a/src/storage/cloudflare.ts
@@ -8176,19 +8982,80 @@ index 0c011e3d3322fcf95cc3db0b5870f64c188e27e5..8fb7bb27295a224c116e19386c465ac0
            : undefined,
        })
      },
+diff --git a/src/ui/icon.tsx b/src/ui/icon.tsx
+index f5b0f10d65eed08b5dbce5ed6815b5d6cbc3a248..b8ef46fbfcb8c339fe5589bd20cf1caf7ed57ec9 100644
+--- a/src/ui/icon.tsx
++++ b/src/ui/icon.tsx
+@@ -1,26 +1,41 @@
+ /** @jsxImportSource hono/jsx */
+ 
+ export const ICON_GITHUB = (
+-  <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+-    <path
+-      d="M7.49933 0.25C3.49635 0.25 0.25 3.49593 0.25 7.50024C0.25 10.703 2.32715 13.4206 5.2081 14.3797C5.57084 14.446 5.70302 14.2222 5.70302 14.0299C5.70302 13.8576 5.69679 13.4019 5.69323 12.797C3.67661 13.235 3.25112 11.825 3.25112 11.825C2.92132 10.9874 2.44599 10.7644 2.44599 10.7644C1.78773 10.3149 2.49584 10.3238 2.49584 10.3238C3.22353 10.375 3.60629 11.0711 3.60629 11.0711C4.25298 12.1788 5.30335 11.8588 5.71638 11.6732C5.78225 11.205 5.96962 10.8854 6.17658 10.7043C4.56675 10.5209 2.87415 9.89918 2.87415 7.12104C2.87415 6.32925 3.15677 5.68257 3.62053 5.17563C3.54576 4.99226 3.29697 4.25521 3.69174 3.25691C3.69174 3.25691 4.30015 3.06196 5.68522 3.99973C6.26337 3.83906 6.8838 3.75895 7.50022 3.75583C8.1162 3.75895 8.73619 3.83906 9.31523 3.99973C10.6994 3.06196 11.3069 3.25691 11.3069 3.25691C11.7026 4.25521 11.4538 4.99226 11.3795 5.17563C11.8441 5.68257 12.1245 6.32925 12.1245 7.12104C12.1245 9.9063 10.4292 10.5192 8.81452 10.6985C9.07444 10.9224 9.30633 11.3648 9.30633 12.0413C9.30633 13.0102 9.29742 13.7922 9.29742 14.0299C9.29742 14.2239 9.42828 14.4496 9.79591 14.3788C12.6746 13.4179 14.75 10.7025 14.75 7.50024C14.75 3.49593 11.5036 0.25 7.49933 0.25Z"
+-      fill="currentColor"
+-      fill-rule="evenodd"
+-      clip-rule="evenodd"
+-    ></path>
++  <svg
++    viewBox="0 0 256 250"
++    width="256"
++    height="250"
++    fill="currentColor"
++    xmlns="http://www.w3.org/2000/svg"
++    preserveAspectRatio="xMidYMid"
++  >
++    <path d="M128.001 0C57.317 0 0 57.307 0 128.001c0 56.554 36.676 104.535 87.535 121.46 6.397 1.185 8.746-2.777 8.746-6.158 0-3.052-.12-13.135-.174-23.83-35.61 7.742-43.124-15.103-43.124-15.103-5.823-14.795-14.213-18.73-14.213-18.73-11.613-7.944.876-7.78.876-7.78 12.853.902 19.621 13.19 19.621 13.19 11.417 19.568 29.945 13.911 37.249 10.64 1.149-8.272 4.466-13.92 8.127-17.116-28.431-3.236-58.318-14.212-58.318-63.258 0-13.975 5-25.394 13.188-34.358-1.329-3.224-5.71-16.242 1.24-33.874 0 0 10.749-3.44 35.21 13.121 10.21-2.836 21.16-4.258 32.038-4.307 10.878.049 21.837 1.47 32.066 4.307 24.431-16.56 35.165-13.12 35.165-13.12 6.967 17.63 2.584 30.65 1.255 33.873 8.207 8.964 13.173 20.383 13.173 34.358 0 49.163-29.944 59.988-58.447 63.157 4.591 3.972 8.682 11.762 8.682 23.704 0 17.126-.148 30.91-.148 35.126 0 3.407 2.304 7.398 8.792 6.14C219.37 232.5 256 184.537 256 128.002 256 57.307 198.691 0 128.001 0Zm-80.06 182.34c-.282.636-1.283.827-2.194.39-.929-.417-1.45-1.284-1.15-1.922.276-.655 1.279-.838 2.205-.399.93.418 1.46 1.293 1.139 1.931Zm6.296 5.618c-.61.566-1.804.303-2.614-.591-.837-.892-.994-2.086-.375-2.66.63-.566 1.787-.301 2.626.591.838.903 1 2.088.363 2.66Zm4.32 7.188c-.785.545-2.067.034-2.86-1.104-.784-1.138-.784-2.503.017-3.05.795-.547 2.058-.055 2.861 1.075.782 1.157.782 2.522-.019 3.08Zm7.304 8.325c-.701.774-2.196.566-3.29-.49-1.119-1.032-1.43-2.496-.726-3.27.71-.776 2.213-.558 3.315.49 1.11 1.03 1.45 2.505.701 3.27Zm9.442 2.81c-.31 1.003-1.75 1.459-3.199 1.033-1.448-.439-2.395-1.613-2.103-2.626.301-1.01 1.747-1.484 3.207-1.028 1.446.436 2.396 1.602 2.095 2.622Zm10.744 1.193c.036 1.055-1.193 1.93-2.715 1.95-1.53.034-2.769-.82-2.786-1.86 0-1.065 1.202-1.932 2.733-1.958 1.522-.03 2.768.818 2.768 1.868Zm10.555-.405c.182 1.03-.875 2.088-2.387 2.37-1.485.271-2.861-.365-3.05-1.386-.184-1.056.893-2.114 2.376-2.387 1.514-.263 2.868.356 3.061 1.403Z" />
+   </svg>
+-).toString()
++)
+ 
+ export const ICON_GOOGLE = (
+   <svg
++    width="256"
++    height="262"
++    viewBox="0 0 256 262"
+     xmlns="http://www.w3.org/2000/svg"
+-    width="24"
+-    height="24"
+-    viewBox="0 0 24 24"
++    preserveAspectRatio="xMidYMid"
+   >
+     <path
+-      fill="currentColor"
+-      d="M11.99 13.9v-3.72h9.36c.14.63.25 1.22.25 2.05c0 5.71-3.83 9.77-9.6 9.77c-5.52 0-10-4.48-10-10S6.48 2 12 2c2.7 0 4.96.99 6.69 2.61l-2.84 2.76c-.72-.68-1.98-1.48-3.85-1.48c-3.31 0-6.01 2.75-6.01 6.12s2.7 6.12 6.01 6.12c3.83 0 5.24-2.65 5.5-4.22h-5.51z"
++      d="M255.878 133.451c0-10.734-.871-18.567-2.756-26.69H130.55v48.448h71.947c-1.45 12.04-9.283 30.172-26.69 42.356l-.244 1.622 38.755 30.023 2.685.268c24.659-22.774 38.875-56.282 38.875-96.027"
++      fill="#4285F4"
++    />
++    <path
++      d="M130.55 261.1c35.248 0 64.839-11.605 86.453-31.622l-41.196-31.913c-11.024 7.688-25.82 13.055-45.257 13.055-34.523 0-63.824-22.773-74.269-54.25l-1.531.13-40.298 31.187-.527 1.465C35.393 231.798 79.49 261.1 130.55 261.1"
++      fill="#34A853"
++    />
++    <path
++      d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782"
++      fill="#FBBC05"
++    />
++    <path
++      d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"
++      fill="#EB4335"
+     />
+   </svg>
+ )
 diff --git a/src/ui/select.tsx b/src/ui/select.tsx
-index 8e83ff1475f749a5cf99aae303acafcc2b098c62..9ed54604c4fe5fd2669770dd83a693273dd7b7cf 100644
+index 8e83ff1475f749a5cf99aae303acafcc2b098c62..93882755b1edf71fd6b789b78e823d6248f6ce8e 100644
 --- a/src/ui/select.tsx
 +++ b/src/ui/select.tsx
-@@ -24,6 +24,7 @@
+@@ -24,7 +24,9 @@
   */
  /** @jsxImportSource hono/jsx */
  
 +import { basePath } from "../issuer.js"
  import { Layout } from "./base.js"
++import { ICON_GITHUB, ICON_GOOGLE } from "./icon.js"
  
  export interface SelectProps {
-@@ -72,7 +73,7 @@ export function Select(props?: SelectProps) {
+   /**
+@@ -72,7 +74,7 @@ export function Select(props?: SelectProps) {
              const icon = ICON[key]
              return (
                <a
@@ -8197,3 +9064,28 @@ index 8e83ff1475f749a5cf99aae303acafcc2b098c62..9ed54604c4fe5fd2669770dd83a69327
                  data-component="button"
                  data-color="ghost"
                >
+@@ -139,22 +141,8 @@ const ICON: Record<string, any> = {
+       ></path>
+     </svg>
+   ),
+-  google: (
+-    <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512">
+-      <path
+-        fill="currentColor"
+-        d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"
+-      ></path>
+-    </svg>
+-  ),
+-  github: (
+-    <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+-      <path
+-        fill="currentColor"
+-        d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"
+-      ></path>
+-    </svg>
+-  ),
++  google: ICON_GOOGLE,
++  github: ICON_GITHUB,
+   apple: (
+     <svg role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 814 1000">
+       <path
