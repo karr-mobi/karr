@@ -348,7 +348,7 @@ overrides:
 
 patchedDependencies:
   '@openauthjs/openauth':
-    hash: 2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2
+    hash: 1f4f51a1f46d1e5e12d7082bf8ca5b7ec57e4d6b3f36b06f8d1fdd2ee79ce074
     path: patches/@openauthjs__openauth.patch
   unstorage:
     hash: a647269f5426b04b76019d5a621c73e1a4f9e1f7ec76d99ea644de1d628ca386
@@ -414,7 +414,7 @@ importers:
         version: '@jsr/libs__xml@7.0.0'
       '@openauthjs/openauth':
         specifier: catalog:api
-        version: 0.4.3(patch_hash=2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2)(arctic@2.3.4)(hono@4.8.5)
+        version: 0.4.3(patch_hash=1f4f51a1f46d1e5e12d7082bf8ca5b7ec57e4d6b3f36b06f8d1fdd2ee79ce074)(arctic@2.3.4)(hono@4.8.5)
       db0:
         specifier: catalog:api
         version: 0.3.2(drizzle-orm@0.43.1(postgres@3.4.7))
@@ -700,7 +700,7 @@ importers:
         version: link:../../packages/util
       '@openauthjs/openauth':
         specifier: catalog:api
-        version: 0.4.3(patch_hash=2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2)(arctic@2.3.4)(hono@4.8.5)
+        version: 0.4.3(patch_hash=1f4f51a1f46d1e5e12d7082bf8ca5b7ec57e4d6b3f36b06f8d1fdd2ee79ce074)(arctic@2.3.4)(hono@4.8.5)
       '@tailwindcss/postcss':
         specifier: catalog:ui
         version: 4.1.11
@@ -785,7 +785,7 @@ importers:
         version: link:../util
       '@openauthjs/openauth':
         specifier: catalog:api
-        version: 0.4.3(patch_hash=2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2)(arctic@2.3.4)(hono@4.8.5)
+        version: 0.4.3(patch_hash=1f4f51a1f46d1e5e12d7082bf8ca5b7ec57e4d6b3f36b06f8d1fdd2ee79ce074)(arctic@2.3.4)(hono@4.8.5)
       zod:
         specifier: catalog:utils
         version: 3.25.76
@@ -8311,7 +8311,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@openauthjs/openauth@0.4.3(patch_hash=2fb762f94779efff1b9f9271f9720fb64886d40bbb587bb2960e6c73c1df45a2)(arctic@2.3.4)(hono@4.8.5)':
+  '@openauthjs/openauth@0.4.3(patch_hash=1f4f51a1f46d1e5e12d7082bf8ca5b7ec57e4d6b3f36b06f8d1fdd2ee79ce074)(arctic@2.3.4)(hono@4.8.5)':
     dependencies:
       '@standard-schema/spec': 1.0.0-beta.3
       arctic: 2.3.4
