@@ -39,7 +39,7 @@ export function UserTrips() {
     }
 
     return (
-        <Card>
+        <Card className="mt-6">
             <CardHeader>
                 <CardTitle className="flex items-center gap-3">
                     <CarFrontIcon className="h-5 w-5" />
@@ -48,14 +48,18 @@ export function UserTrips() {
             </CardHeader>
             <CardContent className="space-y-4">
                 <div className="flex flex-row flex-wrap gap-4">
-                    {data.map((trip) => (
-                        <TripCard
-                            key={trip.id}
-                            trip={trip}
-                            variant="flat"
-                            className="cursor-pointer transition-colors hover:bg-accent/50"
-                        />
-                    ))}
+                    {data.length === 0 ? (
+                        <p>{t("no-trips-found")}</p>
+                    ) : (
+                        data.map((trip) => (
+                            <TripCard
+                                key={trip.id}
+                                trip={trip}
+                                variant="flat"
+                                className="cursor-pointer transition-colors hover:bg-accent/50"
+                            />
+                        ))
+                    )}
                 </div>
             </CardContent>
         </Card>

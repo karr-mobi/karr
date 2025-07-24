@@ -86,6 +86,7 @@
         "user-id": "User ID",
         "email": "Email",
         "my-trips": "My Trips",
+        "no-trips-found": "No trips published for now",
 
         "nickname": {
             "enter": "Enter nickname",
