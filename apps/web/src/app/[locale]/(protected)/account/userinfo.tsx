@@ -30,13 +30,10 @@ import {
 import { useTranslations } from "next-intl"
 import Loading from "@/components/Loading"
 import { client } from "@/util/apifetch"
+import AvatarUpload from "./AvatarUpload"
 import DisplayName from "./DisplayName"
 
-export default function FetchUserData({
-    avatar
-}: {
-    avatar: string | null | undefined
-}) {
+export default function FetchUserData() {
     const { data, isError, isLoading, error } = useQuery({
         queryKey: ["user"],
         queryFn: async () => {
@@ -59,15 +56,13 @@ export default function FetchUserData({
         return <p>Error loading user data</p>
     }
 
-    return <ShowUserData user={data} avatar={avatar} />
+    return <ShowUserData user={data} />
 }
 
 function ShowUserData({
-    user,
-    avatar
+    user
 }: {
     user: InferResponseType<typeof client.user.info.$get, 200>
-    avatar: string | null | undefined
 }) {
     const t = useTranslations("Account")
 
@@ -86,10 +81,13 @@ function ShowUserData({
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="flex items-center gap-4">
-                        <Avatar className="h-16 w-16">
-                            <AvatarImage src={avatar || undefined} />
-                            <AvatarFallback>{initials}</AvatarFallback>
-                        </Avatar>
+                        <div className="relative">
+                            <Avatar className="h-16 w-16">
+                                <AvatarImage src={user.avatar || undefined} />
+                                <AvatarFallback>{initials}</AvatarFallback>
+                            </Avatar>
+                            <AvatarUpload currentAvatar={user.avatar} />
+                        </div>
                         <div className="space-y-1">
                             <DisplayName
                                 firstName={user.firstName}

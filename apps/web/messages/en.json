@@ -103,6 +103,20 @@
             "notifications": "Notifications"
         },
 
+        "avatar": {
+            "change": "Change avatar",
+            "title": "Change Avatar",
+            "description": "Enter a URL for your new avatar image",
+            "url-label": "Avatar URL",
+            "url-help": "Enter a valid image URL (JPEG, PNG, GIF, etc.)",
+            "remove": "Remove Avatar",
+            "update": "Update Avatar",
+            "updating": "Updating...",
+            "update-success": "Avatar updated",
+            "update-success-description": "Your avatar has been updated successfully",
+            "update-error": "Failed to update avatar"
+        },
+
         "account-details": {
             "title": "Account Details",
             "provider": "Provider",

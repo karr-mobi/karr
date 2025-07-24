@@ -3,6 +3,7 @@ import { z } from "zod/v4"
 import {
     selectUserById,
     selectUserProfileById,
+    updateAvatar,
     updateNickname
 } from "@/lib/db/users"
 import { handleRequest, tmpResponse } from "@/lib/helpers"
@@ -10,6 +11,7 @@ import type { AppVariables, ErrorResponse } from "@/lib/types.d.ts"
 import { getUserSub } from "@/util/subject"
 
 const NicknameSchema = z.string().min(2)
+const AvatarSchema = z.url().nullable()
 
 const hono = new Hono<{ Variables: AppVariables }>()
 
@@ -91,6 +93,42 @@ const hono = new Hono<{ Variables: AppVariables }>()
         // update the user's nickname in the database
         return await handleRequest<boolean>(c, () =>
             updateNickname(subject.id, parsedNickname.data)
+        )
+    })
+
+    /**
+     * Change the logged in user's avatar
+     * @returns {Response} Data response if update was successful, ErrorResponse if not
+     */
+    .put("/avatar", async (c) => {
+        const subject = getUserSub(c)
+
+        if (!subject) {
+            return c.json(
+                {
+                    message: "User subject missing in context"
+                } satisfies ErrorResponse,
+                500
+            )
+        }
+
+        const { avatar } = await c.req.json()
+
+        const parsedAvatar = AvatarSchema.safeParse(avatar)
+
+        // check the avatar is a valid URL or null
+        if (!parsedAvatar.success) {
+            return c.json(
+                {
+                    message: "Invalid avatar URL"
+                } satisfies ErrorResponse,
+                400
+            )
+        }
+
+        // update the user's avatar in the database
+        return await handleRequest<boolean>(c, () =>
+            updateAvatar(subject.id, parsedAvatar.data)
         )
     })
 

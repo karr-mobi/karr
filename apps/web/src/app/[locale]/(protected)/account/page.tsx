@@ -27,7 +27,7 @@ export default async function AccountPage() {
                 <p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
             </div>
             <Suspense fallback={<Loading />}>
-                <UserInfo avatar={authState.avatar} />
+                <UserInfo />
             </Suspense>
             {process.env.NODE_ENV !== "production" && (
                 <details className="mt-4 ml-4 text-sm">
