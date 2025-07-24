@@ -86,6 +86,7 @@
         "user-id": "ID utilisateur",
         "email": "Email",
         "my-trips": "Mes trajets",
+        "no-trips-found": "Aucun trajet publié pour le moment",
 
         "nickname": {
             "enter": "Entrer un pseudonyme",
