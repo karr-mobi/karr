@@ -95,6 +95,16 @@
             "update-failure": "Échec de la mise à jour du pseudonyme"
         },
 
+        "bio": {
+            "placeholder": "Parlez-nous de vous...",
+            "empty": "Aucune bio pour le moment",
+            "save": "Enregistrer",
+            "cancel": "Annuler",
+            "update-success": "Bio mise à jour avec succès",
+            "update-failure": "Échec de la mise à jour de la bio",
+            "too-long": "La bio est trop longue"
+        },
+
         "preferences": {
             "title": "Préférences",
             "auto-book": "Réservation Automatique",

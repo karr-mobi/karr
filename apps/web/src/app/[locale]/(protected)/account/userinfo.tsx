@@ -20,7 +20,6 @@ import {
     CheckIcon,
     CigaretteIcon,
     MailIcon,
-    MessageSquareIcon,
     Music4Icon,
     OctagonXIcon,
     PawPrintIcon,
@@ -31,6 +30,7 @@ import { useTranslations } from "next-intl"
 import Loading from "@/components/Loading"
 import { client } from "@/util/apifetch"
 import AvatarUpload from "./AvatarUpload"
+import BioEdit from "./BioEdit"
 import DisplayName from "./DisplayName"
 
 export default function FetchUserData() {
@@ -132,12 +132,7 @@ function ShowUserData({
                             </div>
                         )}
 
-                        {user.bio && (
-                            <div className="flex items-start gap-3">
-                                <MessageSquareIcon className="mt-0.5 h-4 w-4 text-muted-foreground" />
-                                <span className="text-sm">{user.bio}</span>
-                            </div>
-                        )}
+                        <BioEdit bio={user.bio} />
                     </div>
                 </CardContent>
             </Card>

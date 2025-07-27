@@ -95,6 +95,16 @@
             "update-failure": "Failed to update nickname"
         },
 
+        "bio": {
+            "placeholder": "Tell us about yourself...",
+            "empty": "No bio yet",
+            "save": "Save",
+            "cancel": "Cancel",
+            "update-success": "Bio updated successfully",
+            "update-failure": "Failed to update bio",
+            "too-long": "Bio is too long"
+        },
+
         "preferences": {
             "title": "Preferences",
             "auto-book": "Auto Book",

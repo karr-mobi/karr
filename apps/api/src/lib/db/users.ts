@@ -74,6 +74,18 @@ export async function updateNickname(id: string, nickname: string) {
     return true
 }
 
+export async function updateBio(id: string, bio: string) {
+    logger.debug(`Updating bio for user ${id} to ${bio}`)
+    const { success, error } = await tryCatch(
+        drizzle.update(profileTable).set({ bio }).where(eq(profileTable.id, id))
+    )
+    if (!success) {
+        logger.error(`Failed to update bio for user ${id}: ${error}`)
+        return false
+    }
+    return true
+}
+
 export async function updateAvatar(id: string, avatar: string | null) {
     logger.debug(`Updating avatar for user ${id}`)
     const { success, error } = await tryCatch(
