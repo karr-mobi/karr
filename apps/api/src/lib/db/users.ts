@@ -27,6 +27,7 @@ export async function selectUserById(id: string) {
                 lastName: profileTable.lastName,
                 phone: profileTable.phone,
                 bio: profileTable.bio,
+                avatar: profileTable.avatar,
                 provider: accountsTable.provider,
                 email: accountsTable.email,
                 verified: accountsTable.verified,
@@ -68,6 +69,21 @@ export async function updateNickname(id: string, nickname: string) {
     )
     if (!success) {
         logger.error(`Failed to update nickname for user ${id}: ${error}`)
+        return false
+    }
+    return true
+}
+
+export async function updateAvatar(id: string, avatar: string | null) {
+    logger.debug(`Updating avatar for user ${id}`)
+    const { success, error } = await tryCatch(
+        drizzle
+            .update(profileTable)
+            .set({ avatar })
+            .where(eq(profileTable.id, id))
+    )
+    if (!success) {
+        logger.error(`Failed to update avatar for user ${id}: ${error}`)
         return false
     }
     return true

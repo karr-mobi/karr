@@ -28,7 +28,7 @@ export default async function AccountPage() {
                 <p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
             </div>
             <Suspense fallback={<Loading />}>
-                <UserInfo avatar={authState.avatar} />
+                <UserInfo />
             </Suspense>
             <Suspense fallback={<Loading />}>
                 <UserTrips />
