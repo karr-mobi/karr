@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { notFound, unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
+import { auth } from "@/app/auth/actions"
 import Loading from "@/components/Loading"
 import ProfileInfo from "./profileinfo"
 
@@ -20,6 +21,11 @@ export default async function ProfilePage({
     params: Promise<{ id: string; locale: string }>
 }) {
     const { id } = await params
+
+    const authState = await auth()
+    if (!authState) {
+        unauthorized()
+    }
 
     // Validate UUID format
     const uuidRegex =
