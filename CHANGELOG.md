@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.14.13
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.12...v0.14.13)
+
+### 🚀 Enhancements
+
+- **account:** Allow avatar change by providing a url + small profile page enhancement ([#177](https://github.com/karr-mobi/karr/pull/177))
+- **account:** Add bio update field ([#178](https://github.com/karr-mobi/karr/pull/178))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.12
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.11...v0.14.12)
