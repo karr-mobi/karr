@@ -4,9 +4,10 @@ import {
     selectUserById,
     selectUserProfileById,
     updateAvatar,
+    selectUserTrips,
     updateNickname
 } from "@/lib/db/users"
-import { handleRequest, tmpResponse } from "@/lib/helpers"
+import { handleRequest } from "@/lib/helpers"
 import type { AppVariables, ErrorResponse } from "@/lib/types.d.ts"
 import { getUserSub } from "@/util/subject"
 
@@ -63,8 +64,6 @@ const hono = new Hono<{ Variables: AppVariables }>()
      * @returns {Response} Data response if update was successful, ErrorResponse if not
      */
     .put("/nickname", async (c) => {
-        // TODO(@finxol): Add validation for nickname
-
         const subject = getUserSub(c)
 
         if (!subject) {
@@ -134,12 +133,40 @@ const hono = new Hono<{ Variables: AppVariables }>()
 
     /**
      * Get complete list of logged in user's trips
-     * __Not implemented yet__
-     * @returns {object} - Object containing list of trips
      */
-    .get("/trips", (c) => {
-        // TODO(@finxol): Implement this
-        return tmpResponse(c)
+    .get("/trips", async (c) => {
+        const subject = getUserSub(c)
+
+        if (!subject) {
+            return c.json(
+                {
+                    message: "User subject missing in context"
+                } satisfies ErrorResponse,
+                500
+            )
+        }
+
+        const user = await selectUserTrips(subject.id)
+
+        if (user.isErr()) {
+            return c.json(
+                {
+                    message: user.error
+                } satisfies ErrorResponse,
+                500
+            )
+        }
+
+        if (!user.value) {
+            return c.json(
+                {
+                    message: "User not found"
+                } satisfies ErrorResponse,
+                404
+            )
+        }
+
+        return c.json(user.value, 200)
     })
 
     /**

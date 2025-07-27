@@ -1,6 +1,6 @@
 {
     "name": "karr",
-    "version": "0.14.10",
+    "version": "0.14.12",
     "private": true,
     "repository": "https://github.com/finxol/karr",
     "scripts": {

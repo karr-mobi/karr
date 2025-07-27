@@ -1,20 +1,9 @@
 "use client"
 
 import { type Trip, TripSchema } from "@karr/api/db/trips"
-import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle
-} from "@karr/ui/components/card"
-import { useDisplayName } from "@karr/ui/hooks/users"
-import { useLocale } from "next-intl"
 import { useEffect, useState } from "react"
 import Loading from "@/components/Loading"
-import { Link } from "@/i18n/routing"
+import { TripCard } from "@/components/TripCard"
 
 export default function FetchTrips({ url }: { url: string }) {
     const [trips, setTrips] = useState<Trip[]>([])
@@ -81,8 +70,9 @@ export default function FetchTrips({ url }: { url: string }) {
                     const t = TripSchema.parse(trip)
                     return (
                         <TripCard
-                            key={`${trip.origin || ""}@${t.id}`}
+                            key={`${t.id}@${trip.origin || ""}`}
                             trip={t}
+                            className="md:w-lg"
                         />
                     )
                 })}
@@ -96,57 +86,14 @@ export default function FetchTrips({ url }: { url: string }) {
             {trips.map((trip: Trip) => {
                 const t = TripSchema.parse(trip)
                 return (
-                    <TripCard key={`${trip.origin || ""}@${t.id}`} trip={t} />
+                    <TripCard
+                        key={`${t.id}@${trip.origin || ""}`}
+                        trip={t}
+                        className="md:w-lg"
+                    />
                 )
             })}
             {loading && <Loading />}
         </section>
-    )
-}
-
-function TripCard({ trip }: { trip: Trip }) {
-    return (
-        <Card className="w-lg max-w-full">
-            <CardHeader>
-                <CardTitle>
-                    <div className="flex flex-row items-center justify-between gap-2">
-                        <p>
-                            <Link href={`/trips/${trip.id}`}>
-                                {trip.from} – {trip.to}
-                            </Link>
-                        </p>
-                    </div>
-                </CardTitle>
-                <CardDescription>
-                    {new Date(trip.departure).toLocaleDateString(useLocale(), {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    })}
-                </CardDescription>
-            </CardHeader>
-            <CardContent>
-                <p>{trip.price} €</p>
-            </CardContent>
-            <CardFooter>
-                <Link
-                    href={`/profile/${trip.driver}`}
-                    className="flex items-center justify-start gap-4"
-                >
-                    <Avatar>
-                        <AvatarImage src={trip.avatar || ""} />
-                        <AvatarFallback>
-                            {trip.nickname?.slice(0, 2).toUpperCase() ||
-                                `${trip.firstName?.charAt(0).toUpperCase()}${trip.lastName?.charAt(0).toUpperCase() || ""}` ||
-                                trip.driver.split("-")[0]}
-                        </AvatarFallback>
-                    </Avatar>
-
-                    <p>{useDisplayName(trip) || trip.driver.split("-")[0]}</p>
-                </Link>
-            </CardFooter>
-        </Card>
     )
 }
