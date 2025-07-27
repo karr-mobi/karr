@@ -3,8 +3,8 @@ import { z } from "zod/v4"
 import {
     selectUserById,
     selectUserProfileById,
-    updateAvatar,
     selectUserTrips,
+    updateAvatar,
     updateNickname
 } from "@/lib/db/users"
 import { handleRequest } from "@/lib/helpers"
