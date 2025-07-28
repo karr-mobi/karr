@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.14.14
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.13...v0.14.14)
+
+### 🚀 Enhancements
+
+- **metadata:** Add favicon + manifest ([#179](https://github.com/karr-mobi/karr/pull/179))
+
+### 🩹 Fixes
+
+- **profile:** Remove background gradient ([acd74d4](https://github.com/karr-mobi/karr/commit/acd74d4))
+- **avatar:** Add placeholder colour ([#180](https://github.com/karr-mobi/karr/pull/180))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.13
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.12...v0.14.13)
