@@ -1,4 +1,4 @@
-import NextImage from "next/image"
+import NextImage, { type ImageProps } from "next/image"
 
 // Pixel GIF code adapted from https://stackoverflow.com/a/33919020/266535
 const keyStr =
@@ -26,6 +26,7 @@ const rgbDataURL = (r: number, g: number, b: number) =>
  * @param alt - Alternative text for the image for accessibility
  * @param width - The width of the image in pixels
  * @param height - The height of the image in pixels
+ * @param fill - Whether the image should fill its container
  * @param placeholder - RGB color values as a tuple [r, g, b] for the blur placeholder
  * @returns A Next.js Image component with blur placeholder
  */
@@ -34,25 +35,21 @@ export function Image({
     alt,
     width,
     height,
-    placeholder,
-    className
-}: {
-    src: string
-    alt: string
-    width: number
-    height: number
-    placeholder: [number, number, number]
-    className?: string
-}) {
+    fill,
+    className,
+    priority
+}: Omit<ImageProps, "placeholder">) {
     return (
         <NextImage
             alt={alt}
             src={src}
             placeholder="blur"
-            blurDataURL={rgbDataURL(...placeholder)}
+            blurDataURL={rgbDataURL(240, 250, 240)}
             width={width}
             height={height}
+            fill={fill}
             className={className}
+            priority={priority}
         />
     )
 }

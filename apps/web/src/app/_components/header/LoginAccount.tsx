@@ -24,7 +24,6 @@ export default async function LoginAccount() {
                         width={32}
                         height={32}
                         alt="Avatar"
-                        placeholder={[255, 250, 255]}
                         className="size-10 rounded-full"
                     />
                 ) : (

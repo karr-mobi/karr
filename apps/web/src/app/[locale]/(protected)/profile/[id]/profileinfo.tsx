@@ -1,18 +1,13 @@
 "use client"
 
 import { Badge } from "@karr/ui/components/badge"
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle
-} from "@karr/ui/components/card"
+import { Card, CardContent } from "@karr/ui/components/card"
 import { Image } from "@karr/ui/components/image"
 import { Skeleton } from "@karr/ui/components/skeleton"
 import { useDisplayName, useInitials } from "@karr/ui/hooks/users"
 import { isDefinedError } from "@orpc/client"
 import { useQuery } from "@tanstack/react-query"
-import { CalendarIcon, CarIcon, UserIcon, VerifiedIcon } from "lucide-react"
+import { CalendarIcon, CarIcon, VerifiedIcon } from "lucide-react"
 import { notFound } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { orpc } from "@/lib/orpc"
@@ -102,7 +97,6 @@ export default function ProfileInfo({ userId }: { userId: string }) {
                                     fill
                                     className="object-cover"
                                     priority
-                                    placeholder={[255, 255, 255]}
                                 />
                             ) : (
                                 <div className="flex h-full w-full items-center justify-center bg-muted text-5xl md:text-4xl lg:text-5xl">
