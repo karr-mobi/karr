@@ -1,5 +1,5 @@
-import { formats } from "@/i18n/request"
-import { routing } from "@/i18n/routing"
+import type { formats } from "@/i18n/request"
+import type { routing } from "@/i18n/routing"
 
 import messages from "./messages/en.json" with { type: "json" }
 

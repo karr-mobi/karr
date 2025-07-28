@@ -139,12 +139,14 @@
         "title": "User Profile",
         "description": "View user profile information",
         "error-loading": "Error loading profile",
+        "not-found": "The profile was not found",
         "basic-info": "Basic Information",
         "name": "Name",
         "nickname": "Nickname",
         "about": "About",
         "special-status": "Special Status",
-        "trips-published": "{count, plural, =0{No trips} =1{# trip} other{# trips}} published"
+        "trips-published": "{count, plural, =0{No trips} =1{# trip} other{# trips}} published",
+        "member-since": "Joined on {date, date, long}"
     },
     "trips": {
         "title": "Trips",
