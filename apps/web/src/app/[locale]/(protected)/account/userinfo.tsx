@@ -36,7 +36,7 @@ import DisplayName from "./DisplayName"
 
 export default function FetchUserData() {
     const { data, isError, isLoading, error } = useQuery({
-        queryKey: ["user"],
+        queryKey: ["user", "data"],
         queryFn: async () => {
             const res = await client.user.info.$get()
             if (res.status !== 200) {

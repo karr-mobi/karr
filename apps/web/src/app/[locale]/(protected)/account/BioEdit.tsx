@@ -35,7 +35,7 @@ export default function BioEdit({ bio }: BioEditProps) {
             return res.json()
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["user"] })
+            queryClient.invalidateQueries({ queryKey: ["user", "data"] })
             setIsEditing(false)
             toast.success(t("bio.update-success"))
         },

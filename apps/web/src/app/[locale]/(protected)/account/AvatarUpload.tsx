@@ -48,7 +48,7 @@ export default function AvatarUpload({ currentAvatar }: AvatarUploadProps) {
             return res.json()
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["user"] })
+            queryClient.invalidateQueries({ queryKey: ["user", "data"] })
             toast.success(t("avatar.update-success"), {
                 description: t("avatar.update-success-description")
             })

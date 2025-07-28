@@ -39,7 +39,7 @@ export default function DisplayName({
             return res.json()
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["user"] })
+            queryClient.invalidateQueries({ queryKey: ["user", "data"] })
             setIsEditing(false)
             toast.success(t("nickname.update-success"))
         },
