@@ -14,7 +14,7 @@ export const apiFetch = ofetch.create({
     responseType: "json"
 })
 
-export const client = hcWithType(API_BASE || "", {
+export const client = hcWithType(new URL(API_BASE, APP_URL).toString() || "", {
     init: {
         credentials: "include"
     }
