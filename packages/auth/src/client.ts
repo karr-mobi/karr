@@ -1,4 +1,5 @@
-import { logger } from "@karr/logger"
+// biome-ignore-all lint/suspicious/noConsole: it's fine
+
 import { type Client, createClient } from "@openauthjs/openauth/client"
 
 /**
@@ -41,7 +42,7 @@ export async function getCallbackUrl(): Promise<string> {
     const callbackUrl = `${issuerUrl.replace(/\/$/, "")}${callbackPath}`
 
     if (!callbackUrl) {
-        logger.error("Failed to initialize callback URL.")
+        console.error("Failed to initialize callback URL.")
         return ""
     }
 
@@ -61,8 +62,14 @@ export async function getClient(): Promise<Client> {
         clientID,
         issuer: issuerUrl,
         fetch: (url, options) => {
-            logger.debug("fetch", url, options)
-            return fetch(url, options)
+            console.debug("fetch", url, options)
+            const res = fetch(url, options)
+            res.then(async (r) => {
+                const c = r.clone()
+                const text = await c.text()
+                console.log("auth res", text)
+            })
+            return res
         }
     })
 }

@@ -10,10 +10,10 @@ import { trimTrailingSlash } from "hono/trailing-slash"
 import { isAuthenticated } from "@/lib/auth"
 import account from "@/routes/account"
 import admin from "@/routes/admin"
-import auth from "@/routes/auth/issuer"
 import system from "@/routes/system"
 import trips from "@/routes/trips"
 import user from "@/routes/user"
+import auth from "../../web/src/app/api/v1/auth/issuer"
 import type { AppVariables } from "./lib/types"
 
 const authCheckMiddleware = createMiddleware(async (c, next) => {

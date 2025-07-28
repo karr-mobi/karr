@@ -17,6 +17,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { CameraIcon, Loader2Icon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
+import { orpc } from "@/lib/orpc"
 import { client } from "@/util/apifetch"
 
 interface AvatarUploadProps {
@@ -30,36 +31,24 @@ export default function AvatarUpload({ currentAvatar }: AvatarUploadProps) {
 
     const queryClient = useQueryClient()
 
-    const updateAvatarMutation = useMutation({
-        mutationFn: async (newAvatarUrl: string | null) => {
-            const res = await client.user.avatar.$put({
-                json: { avatar: newAvatarUrl }
-            })
-
-            if (res.status !== 200) {
-                const error = await res.json()
-                throw new Error(
-                    "message" in error
-                        ? error.message
-                        : "Failed to update avatar"
-                )
+    const updateAvatarMutation = useMutation(
+        orpc.user.updateAvatar.mutationOptions({
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: orpc.user.info.key()
+                })
+                toast.success(t("avatar.update-success"), {
+                    description: t("avatar.update-success-description")
+                })
+                setOpen(false)
+            },
+            onError: (error) => {
+                toast.error(t("avatar.update-error"), {
+                    description: error.message
+                })
             }
-
-            return res.json()
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["user", "data"] })
-            toast.success(t("avatar.update-success"), {
-                description: t("avatar.update-success-description")
-            })
-            setOpen(false)
-        },
-        onError: (error) => {
-            toast.error(t("avatar.update-error"), {
-                description: error.message
-            })
-        }
-    })
+        })
+    )
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault()

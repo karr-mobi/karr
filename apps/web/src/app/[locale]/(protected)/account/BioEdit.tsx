@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { CheckIcon, MessageSquareIcon, PencilIcon, XIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
+import { orpc } from "@/lib/orpc"
 import { client } from "@/util/apifetch"
 
 interface BioEditProps {
@@ -21,31 +22,23 @@ export default function BioEdit({ bio }: BioEditProps) {
     const [isEditing, setIsEditing] = useState(false)
     const [editValue, setEditValue] = useState(bio || "")
 
-    const mutation = useMutation({
-        mutationFn: async (newBio: string) => {
-            const res = await client.user.bio.$put({
-                json: { bio: newBio || null }
-            })
-            if (res.status !== 200) {
-                const error = await res.json()
-                throw new Error(
-                    "message" in error ? error.message : "Failed to update bio"
-                )
+    const mutation = useMutation(
+        orpc.user.updateBio.mutationOptions({
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: orpc.user.info.key()
+                })
+                setIsEditing(false)
+                toast.success(t("bio.update-success"))
+            },
+            onError: (error) => {
+                console.error("Error updating bio:", error)
+                toast.error(t("bio.update-failure"), {
+                    description: error.message
+                })
             }
-            return res.json()
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["user", "data"] })
-            setIsEditing(false)
-            toast.success(t("bio.update-success"))
-        },
-        onError: (error) => {
-            console.error("Error updating bio:", error)
-            toast.error(t("bio.update-failure"), {
-                description: error.message
-            })
-        }
-    })
+        })
+    )
 
     const handleSave = () => {
         if (editValue.length > MAX_BIO_LENGTH) {

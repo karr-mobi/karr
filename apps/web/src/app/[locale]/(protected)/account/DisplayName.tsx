@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { CheckIcon, PencilIcon, XIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
-import { client } from "@/util/apifetch"
+import { orpc } from "@/lib/orpc"
 
 interface DisplayNameProps {
     firstName: string | null
@@ -28,26 +28,21 @@ export default function DisplayName({
 
     const displayName = useDisplayName({ nickname, lastName, firstName })
 
-    const mutation = useMutation({
-        mutationFn: async (newNickname: string) => {
-            const res = await client.user.nickname.$put({
-                json: { nickname: newNickname || null }
-            })
-            if (res.status !== 200) {
-                throw new Error("Failed to update nickname")
+    const mutation = useMutation(
+        orpc.user.updateNickname.mutationOptions({
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: orpc.user.info.key()
+                })
+                setIsEditing(false)
+                toast.success(t("nickname.update-success"))
+            },
+            onError: (error) => {
+                console.error("Error updating nickname:", error)
+                toast.error(t("nickname.update-failure"))
             }
-            return res.json()
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["user", "data"] })
-            setIsEditing(false)
-            toast.success(t("nickname.update-success"))
-        },
-        onError: (error) => {
-            console.error("Error updating nickname:", error)
-            toast.error(t("nickname.update-failure"))
-        }
-    })
+        })
+    )
 
     const handleSave = () => {
         mutation.mutate(editValue)

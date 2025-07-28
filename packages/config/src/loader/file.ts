@@ -4,16 +4,17 @@ import { existsSync, readFileSync } from "node:fs"
 import { isAbsolute, join } from "node:path"
 import process from "node:process"
 import { parseJSON, parseJSON5, parseYAML } from "confbox"
+import { env, isProduction } from "std-env"
 import defaultConfig from "../default-config.json" with { type: "json" }
 import { type ConfigFile, ConfigFileSchema } from "../schema.js"
 import { handleConfigError } from "./index.js"
 
 const CONFIG_DIR =
-    process.env.CONFIG_DIR ||
-    (process.env.DOCKER === "1"
+    env.CONFIG_DIR ||
+    (env.DOCKER === "1"
         ? "/app/config"
         : join(process.cwd(), "..", "..", "config"))
-const CONFIG_FILENAME = process.env.CONFIG_FILE || "karr.config"
+const CONFIG_FILENAME = env.CONFIG_FILE || "karr.config"
 
 /**
  * Resolves a path relative to the base path
@@ -115,7 +116,7 @@ export function readConfigFromFile(): ConfigFile {
     }
 
     // In development, default to trace log level
-    if (!(process.env.NODE_ENV === "production" || process.env.DOCKER)) {
+    if (!(isProduction || env.DOCKER)) {
         defaultConfig.LOG_LEVEL = "trace"
     }
 

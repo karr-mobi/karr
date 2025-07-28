@@ -1,3 +1,5 @@
+import "server-only"
+
 import { getCallbackUrl, getClient } from "@karr/auth/client"
 import { lazy } from "@karr/util"
 

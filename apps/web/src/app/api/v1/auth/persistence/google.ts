@@ -2,13 +2,13 @@ import type { UserProperties } from "@karr/auth/subjects"
 import logger from "@karr/logger"
 import { and, eq } from "drizzle-orm"
 import { err, ok } from "neverthrow"
-import db from "@/db"
-import { accountsTable } from "@/db/schemas/accounts"
-import { profileTable } from "@/db/schemas/profile"
-import type { OAuthProfileData } from "../profile-fetchers"
-import { initUser, isTrustedProvider } from "./initUser"
+import db from "@/api/db"
+import { accountsTable } from "@/api/db/schemas/accounts"
+import { profileTable } from "@/api/db/schemas/profile"
+import type { GoogleAuthProfileData } from "../profile-fetchers"
+import { initUser, isTrustedProvider, type UserInitData } from "./initUser"
 
-export async function findOrCreateUserFromGithub(data: OAuthProfileData) {
+export async function findOrCreateUserFromGoogle(data: GoogleAuthProfileData) {
     // Check if user exists
     const user = await db
         .select()
@@ -65,20 +65,21 @@ export async function findOrCreateUserFromGithub(data: OAuthProfileData) {
             avatar: avatar,
             role: user[0].Accounts.role
         } satisfies UserProperties)
-    } else if (user.length === 0) {
+    }
+
+    if (user.length === 0) {
         // the user does not exist
 
         // if user does not exist, create it and return the new user data
-        const [firstName, ...lastName] = data.name.split(" ")
         const newUser = await initUser({
-            firstName: firstName ?? "",
-            lastName: lastName.join(" "),
+            firstName: data.firstName,
+            lastName: data.lastName,
             avatar: data.avatar,
             email: data.email,
             verified: data.emailVerified,
             provider: data.provider,
             remoteId: data.remoteId
-        })
+        } satisfies UserInitData)
 
         if (newUser.isErr()) {
             logger.error("Failed to create user", newUser.error)

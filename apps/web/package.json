@@ -35,7 +35,18 @@
         "react-dom": "catalog:web",
         "react-hook-form": "catalog:ui",
         "tailwindcss": "catalog:ui",
-        "zod": "catalog:utils"
+        "zod": "catalog:utils",
+        "@orpc/server": "catalog:api",
+        "@orpc/client": "catalog:web",
+        "@orpc/tanstack-query": "catalog:web",
+        "hono": "catalog:api",
+        "neverthrow": "catalog:utils",
+        "std-env": "catalog:utils",
+        "drizzle-orm": "catalog:api",
+        "db0": "catalog:api",
+        "drizzle-zod": "catalog:api",
+        "resend": "catalog:api",
+        "unstorage": "catalog:api"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",

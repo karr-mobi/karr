@@ -9,7 +9,7 @@ import type { Provider } from "@openauthjs/openauth/provider/provider"
 import { CodeUI } from "@openauthjs/openauth/ui/code"
 import { PasswordUI } from "@openauthjs/openauth/ui/password"
 import { isProduction } from "std-env"
-import { messages } from "@/lib/messages"
+import { messages } from "@/api/lib/messages"
 import { sendEmail } from "./mail"
 
 export type Providers = AuthProvider["name"]

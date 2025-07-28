@@ -13,8 +13,7 @@ import type { Context } from "hono"
 import { setCookie } from "hono/cookie"
 import type { Result } from "neverthrow"
 import { runtime } from "std-env"
-import { callbackUrl, client } from "@/lib/auth-client"
-import type { ErrorResponse } from "@/lib/types"
+import { callbackUrl, client } from "~/auth/client"
 import { getDriver } from "./drivers"
 import { getOrInsertUser } from "./persistence"
 import { getGithubUserData } from "./profile-fetchers/github"
@@ -124,7 +123,7 @@ app.get("/callback", async (ctx) => {
         return ctx.json(
             {
                 message: "Missing code"
-            } satisfies ErrorResponse,
+            },
             400
         )
     }
@@ -141,7 +140,7 @@ app.get("/callback", async (ctx) => {
             {
                 message: "Token exchange failed",
                 cause: String(error)
-            } satisfies ErrorResponse,
+            },
             500
         )
     }
@@ -150,7 +149,7 @@ app.get("/callback", async (ctx) => {
         logger.debug(
             `[${runtime}] AUTH CALLBACK: Error exchanging code - ${JSON.stringify(exchanged.err)}`
         )
-        return ctx.json(exchanged.err satisfies ErrorResponse, 400)
+        return ctx.json(exchanged.err, 400)
     }
 
     setTokens(ctx, exchanged.tokens)

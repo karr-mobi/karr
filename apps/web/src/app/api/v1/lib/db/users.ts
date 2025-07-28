@@ -3,12 +3,12 @@ import { tryCatch } from "@karr/util"
 import { eq, sql } from "drizzle-orm"
 import { err, ok } from "neverthrow"
 import { z } from "zod/v4-mini"
-import drizzle from "@/db"
-import { accountsTable } from "@/db/schemas/accounts"
-import { profileTable } from "@/db/schemas/profile"
-import { specialStatusTable } from "@/db/schemas/specialstatus"
-import { TripSchema, tripsTable, tripsView } from "@/db/schemas/trips"
-import { userPrefsTable } from "@/db/schemas/userprefs"
+import drizzle from "@/api/db"
+import { accountsTable } from "@/api/db/schemas/accounts"
+import { profileTable } from "@/api/db/schemas/profile"
+import { specialStatusTable } from "@/api/db/schemas/specialstatus"
+import { TripSchema, tripsTable, tripsView } from "@/api/db/schemas/trips"
+import { userPrefsTable } from "@/api/db/schemas/userprefs"
 
 /**
  * Select a user by their ID
@@ -148,10 +148,12 @@ export async function selectUserProfileById(id: string) {
                     SELECT COUNT(*)::int
                     FROM ${tripsTable}
                     WHERE ${tripsTable.driver} = ${id}
-                )`
+                )`,
+                createdAt: accountsTable.createdAt
             })
             .from(profileTable)
             .where(eq(profileTable.id, id))
+            .leftJoin(accountsTable, eq(profileTable.id, accountsTable.profile))
             .limit(1)
     )
 

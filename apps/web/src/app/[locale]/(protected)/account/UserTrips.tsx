@@ -6,32 +6,18 @@ import {
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
-import { useQuery } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { CarFrontIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
-import Loading from "@/components/Loading"
 import { TripCard } from "@/components/TripCard"
-import { client } from "@/util/apifetch"
+import { orpc } from "@/lib/orpc"
 
 export function UserTrips() {
     const t = useTranslations("Account")
 
-    const { data, isError, isLoading, error } = useQuery({
-        queryKey: ["user", "trips"],
-        queryFn: async () => {
-            const res = await client.user.trips.$get()
-            if (res.status !== 200) {
-                throw new Error("Failed to fetch user data", {
-                    cause: await res.json()
-                })
-            }
-            return res.json()
-        }
-    })
-
-    if (isLoading) {
-        return <Loading />
-    }
+    const { data, isError, error } = useSuspenseQuery(
+        orpc.user.trips.queryOptions()
+    )
 
     if (isError || !data) {
         console.error("Error loading user data", error)
