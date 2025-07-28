@@ -1,6 +1,6 @@
 import { Button } from "@karr/ui/components/button"
+import { Image } from "@karr/ui/components/image"
 import { LogInIcon, UserIcon } from "lucide-react"
-import Image from "next/image"
 import { getTranslations } from "next-intl/server"
 import { Link } from "@/i18n/routing"
 import { auth } from "~/auth/actions"
@@ -24,6 +24,7 @@ export default async function LoginAccount() {
                         width={32}
                         height={32}
                         alt="Avatar"
+                        placeholder={[255, 250, 255]}
                         className="size-10 rounded-full"
                     />
                 ) : (
