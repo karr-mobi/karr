@@ -14,6 +14,7 @@ import {
 } from "@karr/ui/components/card"
 import { Label } from "@karr/ui/components/label"
 import { Switch } from "@karr/ui/components/switch"
+import { useInitials } from "@karr/ui/hooks/users"
 import { useQuery } from "@tanstack/react-query"
 import {
     CarIcon,
@@ -66,8 +67,7 @@ function ShowUserData({
 }) {
     const t = useTranslations("Account")
 
-    const initials =
-        `${user.firstName?.[0] || ""}${user.lastName?.[0] || ""}`.toUpperCase()
+    const initials = useInitials(user)
 
     return (
         <div className="grid gap-6 md:grid-cols-2">
