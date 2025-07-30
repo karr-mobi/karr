@@ -15,7 +15,6 @@
         "@astrojs/starlight-tailwind": "catalog:docs",
         "@deno/astro-adapter": "catalog:docs",
         "@karr/ui": "workspace:*",
-        "@karr/api": "workspace:*",
         "@tailwindcss/vite": "catalog:ui",
         "astro": "catalog:docs",
         "tailwindcss": "catalog:ui",
