@@ -58,33 +58,6 @@ jobs:
     #           env:
     #               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    build-api:
-        needs: release
-        runs-on: ubuntu-latest
-        permissions:
-            contents: read
-            packages: write
-        steps:
-            - name: Git Checkout
-              uses: actions/checkout@v4
-
-            - name: Log in to the Container registry
-              uses: docker/login-action@v3
-              with:
-                  registry: https://ghcr.io
-                  username: ${{ github.actor }}
-                  password: ${{ secrets.GITHUB_TOKEN }}
-
-            - name: Build and push API Docker image
-              uses: docker/build-push-action@v5
-              with:
-                  context: .
-                  file: ./apps/api/Dockerfile
-                  push: true
-                  tags: |
-                      ghcr.io/karr-mobi/karr-api:latest
-                      ghcr.io/karr-mobi/karr-api:${{ needs.release.outputs.version }}
-
     build-web:
         needs: release
         runs-on: ubuntu-latest
