@@ -7,15 +7,10 @@ import {
     CardTitle
 } from "@karr/ui/components/card"
 import { Skeleton } from "@karr/ui/components/skeleton"
-import { useQuery } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { UsersIcon } from "lucide-react"
 import { useLocale, useTranslations } from "next-intl"
-import { client } from "@/util/apifetch"
-
-interface InstanceInfo {
-    userCount: number
-    createdAt?: string
-}
+import { orpc } from "@/lib/orpc"
 
 export function InstanceInfo() {
     const t = useTranslations("Admin")
@@ -27,18 +22,11 @@ export function InstanceInfo() {
         isLoading,
         isError,
         error
-    } = useQuery({
-        queryKey: ["admin", "instance"],
-        queryFn: async () => {
-            const res = await client.admin.instance.$get()
-            if (res.status !== 200) {
-                throw new Error("Failed to fetch instance data", {
-                    cause: await res.json()
-                })
-            }
-            return (await res.json()) as InstanceInfo
-        }
-    })
+    } = useSuspenseQuery(
+        orpc.admin.instance.queryOptions({
+            staleTime: 60 * 1000
+        })
+    )
 
     return (
         <>
@@ -65,7 +53,7 @@ export function InstanceInfo() {
                 </CardContent>
             </Card>
 
-            {instanceInfo?.createdAt && (
+            {instanceInfo?.timestamp && (
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="font-medium text-sm">
@@ -75,12 +63,12 @@ export function InstanceInfo() {
                     <CardContent>
                         <div className="font-bold text-2xl">
                             {new Date(
-                                instanceInfo.createdAt
+                                instanceInfo.timestamp
                             ).toLocaleDateString(locale)}
                         </div>
                         <p className="text-muted-foreground text-xs">
                             {new Date(
-                                instanceInfo.createdAt
+                                instanceInfo.timestamp
                             ).toLocaleTimeString(locale)}
                         </p>
                     </CardContent>

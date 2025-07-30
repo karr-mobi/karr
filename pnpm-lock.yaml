@@ -15,8 +15,11 @@ catalogs:
     '@openauthjs/openauth':
       specifier: ^0.4.3
       version: 0.4.3
+    '@orpc/contract':
+      specifier: ^1.7.5
+      version: 1.7.5
     '@orpc/server':
-      specifier: latest
+      specifier: ^1.7.5
       version: 1.7.5
     db0:
       specifier: ^0.3.2
@@ -61,6 +64,9 @@ catalogs:
     husky:
       specifier: ^9.1.7
       version: 9.1.7
+    prettier:
+      specifier: ^3.6.2
+      version: 3.6.2
     taze:
       specifier: ^19.1.0
       version: 19.1.0
@@ -319,7 +325,7 @@ catalogs:
       version: 3.25.76
   web:
     '@orpc/client':
-      specifier: latest
+      specifier: ^1.7.5
       version: 1.7.5
     '@orpc/tanstack-query':
       specifier: latest
@@ -689,9 +695,6 @@ importers:
       '@hookform/resolvers':
         specifier: catalog:ui
         version: 5.2.0(react-hook-form@7.61.1(react@19.1.0))
-      '@karr/api':
-        specifier: workspace:*
-        version: link:../api
       '@karr/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -712,6 +715,9 @@ importers:
         version: 0.4.3(patch_hash=1f4f51a1f46d1e5e12d7082bf8ca5b7ec57e4d6b3f36b06f8d1fdd2ee79ce074)(arctic@2.3.4)(hono@4.8.5)
       '@orpc/client':
         specifier: catalog:web
+        version: 1.7.5
+      '@orpc/contract':
+        specifier: catalog:api
         version: 1.7.5
       '@orpc/server':
         specifier: catalog:api
@@ -767,6 +773,12 @@ importers:
       ofetch:
         specifier: catalog:utils
         version: 1.4.1
+      postgres:
+        specifier: catalog:api
+        version: 3.4.7
+      prettier:
+        specifier: catalog:devtools
+        version: 3.6.2
       react:
         specifier: catalog:web
         version: 19.1.0
@@ -6108,6 +6120,11 @@ packages:
 
   prettier@3.5.3:
     resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
+    engines: {node: '>=14'}
+    hasBin: true
+
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -12934,6 +12951,8 @@ snapshots:
   prelude-ls@1.2.1: {}
 
   prettier@3.5.3: {}
+
+  prettier@3.6.2: {}
 
   prismjs@1.30.0: {}
 

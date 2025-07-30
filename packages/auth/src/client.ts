@@ -63,13 +63,7 @@ export async function getClient(): Promise<Client> {
         issuer: issuerUrl,
         fetch: (url, options) => {
             console.debug("fetch", url, options)
-            const res = fetch(url, options)
-            res.then(async (r) => {
-                const c = r.clone()
-                const text = await c.text()
-                console.log("auth res", text)
-            })
-            return res
+            return fetch(url, options)
         }
     })
 }

@@ -3,7 +3,6 @@
 
 "use client"
 
-import type { InferResponseType } from "@karr/api/client"
 import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 import { Badge } from "@karr/ui/components/badge"
 import { Button } from "@karr/ui/components/button"
@@ -23,7 +22,8 @@ import {
 import { Label } from "@karr/ui/components/label"
 import { Separator } from "@karr/ui/components/separator"
 import { toast } from "@karr/ui/components/sonner"
-import { useQuery } from "@tanstack/react-query"
+import { isDefinedError } from "@orpc/client"
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import {
     CalendarIcon,
     CheckIcon,
@@ -39,46 +39,41 @@ import {
     UsersIcon,
     ZapIcon
 } from "lucide-react"
+import { notFound } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
+import type { Trip } from "@/api/routes/trips"
 import { useAuth } from "@/app/auth/context"
-import Loading from "@/components/Loading"
 import { Link, redirect } from "@/i18n/routing"
-import { client } from "@/util/apifetch"
-
-const tripRoute =
-    client.trips[
-        ":id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}"
-    ]
-
-type Trip = InferResponseType<typeof tripRoute.$get, 200>["data"]
+import { orpc } from "@/lib/orpc"
 
 export default function FetchTripData({ tripId }: { tripId: string }) {
-    const { data, isError, isLoading, error } = useQuery({
-        queryKey: ["trip", tripId],
-        queryFn: async () => {
-            const res = await tripRoute.$get({
-                param: {
-                    id: tripId
+    const { data, isError, error } = useSuspenseQuery(
+        orpc.trips.get.queryOptions({
+            input: tripId,
+            throwOnError: false,
+            retry: (failureCount, error) => {
+                console.log(error)
+                if (isDefinedError(error) && error.code === "NOT_FOUND") {
+                    return false
                 }
-            })
-            if (res.status !== 200) {
-                throw new Error("Failed to fetch trip data")
+                return failureCount < 3
+            },
+            //biome-ignore lint/suspicious/noExplicitAny: intentional
+            onError: (error: any) => {
+                if (error?.code === "NOT_FOUND") {
+                    notFound()
+                }
             }
-            return res.json()
-        }
-    })
-
-    if (isLoading) {
-        return <Loading />
-    }
+        })
+    )
 
     if (isError || !data) {
         console.error("Error loading trip data", error)
         return <p>Error loading trip data</p>
     }
 
-    return <ShowTripData trip={data.data} />
+    return <ShowTripData trip={data} />
 }
 
 function ShowTripData({ trip }: { trip: Trip }) {
@@ -104,26 +99,26 @@ function ShowTripData({ trip }: { trip: Trip }) {
         })
     }
 
-    async function deleteTrip(tripId: string): Promise<undefined> {
-        const res = await client.trips[
-            ":id{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}"
-        ].$delete({
-            param: {
-                id: tripId
+    const deleteTripMutation = useMutation(
+        orpc.trips.delete.mutationOptions({
+            onSuccess: () => {
+                toast.success(tDelete("success"))
+                console.log("Trip deleted successfully")
+                redirect({ href: "/trips/search", locale })
+            },
+            onError: (error) => {
+                if (isDefinedError(error)) {
+                    if (error.code === "NOT_FOUND") {
+                        toast.error(tDelete("not-found"))
+                    } else if (error.code === "UNAUTHORIZED") {
+                        toast.error(tDelete("unauthorized"))
+                    } else {
+                        toast.error(tDelete("other-error"))
+                    }
+                }
             }
         })
-
-        if (res.status === 200) {
-            toast.success(tDelete("success"))
-            redirect({ href: "/trips/search", locale })
-        } else if (res.status === 404) {
-            toast.error(tDelete("not-found"))
-        } else if (res.status === 401) {
-            toast.error(tDelete("unauthorized"))
-        } else {
-            toast.error(tDelete("other-error"))
-        }
-    }
+    )
 
     return (
         <div className="grid gap-6">
@@ -350,7 +345,7 @@ function ShowTripData({ trip }: { trip: Trip }) {
                         <Button
                             variant="destructive"
                             onClick={() => {
-                                void deleteTrip(trip.id)
+                                void deleteTripMutation.mutate(trip.id)
                                 setDeleteDialogOpen(false)
                             }}
                         >

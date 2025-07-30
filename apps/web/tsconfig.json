@@ -8,6 +8,7 @@
         "paths": {
             "@/*": ["./*"],
             "@/api/*": ["./app/api/v1/*"],
+            "@/api/routes/*": ["./app/api/v1/[[...rest]]/routes/*"],
             "~/*": ["./app/*"]
         },
         "plugins": [

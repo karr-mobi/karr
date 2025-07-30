@@ -1,16 +1,19 @@
 import { tryCatch } from "@karr/util"
+import type { Metadata } from "next"
 import { unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { apiFetch } from "@/util/apifetch"
 import { auth } from "~/auth/actions"
 import { Form } from "./new-trip-form"
 
-export const metadata = {
+export const metadata: Metadata = {
     title: "New Trip",
     description: "Create a new trip"
 }
 
 async function getPetrolPrice(): Promise<number> {
+    return 0
+    //biome-ignore lint/correctness/noUnreachable: temporary
     const prices = await tryCatch(apiFetch("/petrol"))
 
     if (!prices.success) {

@@ -1,5 +1,14 @@
 import { RPCHandler } from "@orpc/server/fetch"
-import { router } from "./router"
+
+import adminRouter from "./routes/admin"
+import tripsRouter from "./routes/trips"
+import userRouter from "./routes/user"
+
+export const router = {
+    admin: adminRouter,
+    user: userRouter,
+    trips: tripsRouter
+}
 
 const handler = new RPCHandler(router)
 

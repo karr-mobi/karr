@@ -6,11 +6,36 @@ import { Image } from "@karr/ui/components/image"
 import { Skeleton } from "@karr/ui/components/skeleton"
 import { useDisplayName, useInitials } from "@karr/ui/hooks/users"
 import { isDefinedError } from "@orpc/client"
-import { useQuery } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { CalendarIcon, CarIcon, VerifiedIcon } from "lucide-react"
 import { notFound } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { orpc } from "@/lib/orpc"
+
+export function ProfileInfoSkeleton() {
+    return (
+        <div className="mx-auto max-w-4xl">
+            {/* Profile Header */}
+            <div className="mb-8 px-4 py-8 sm:px-6 lg:px-8">
+                <div className="flex flex-col items-center gap-6 md:flex-row md:items-start md:gap-8">
+                    <div className="relative w-full md:w-auto">
+                        <Skeleton className="mx-auto h-[80vw] max-h-80 w-[80vw] max-w-80 rounded-xl sm:h-64 sm:w-64 md:h-48 md:w-48 lg:h-64 lg:w-64" />
+                    </div>
+                    <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
+                        <div className="flex items-center justify-center gap-4">
+                            <Skeleton className="h-9 w-48 md:h-10 md:w-64" />
+                        </div>
+
+                        <Skeleton className="h-5 w-64 md:w-80" />
+
+                        {/* Basic Info Card */}
+                        <Skeleton className="h-36 w-full rounded-xl" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
 
 export default function ProfileInfo({ userId }: { userId: string }) {
     const t = useTranslations("Profile")
@@ -18,9 +43,8 @@ export default function ProfileInfo({ userId }: { userId: string }) {
     const {
         data: profile,
         isError,
-        isLoading,
         error
-    } = useQuery(
+    } = useSuspenseQuery(
         orpc.user.profile.queryOptions({
             input: userId,
             throwOnError: false,
@@ -31,6 +55,7 @@ export default function ProfileInfo({ userId }: { userId: string }) {
                 }
                 return failureCount < 3
             },
+            //biome-ignore lint/suspicious/noExplicitAny: intentional
             onError: (error: any) => {
                 if (error?.code === "NOT_FOUND") {
                     notFound()
@@ -39,32 +64,8 @@ export default function ProfileInfo({ userId }: { userId: string }) {
         })
     )
 
-    const displayName = useDisplayName(profile || {})
-
-    if (isLoading) {
-        return (
-            <div className="mx-auto max-w-4xl">
-                {/* Profile Header */}
-                <div className="mb-8 px-4 py-8 sm:px-6 lg:px-8">
-                    <div className="flex flex-col items-center gap-6 md:flex-row md:items-start md:gap-8">
-                        <div className="relative w-full md:w-auto">
-                            <Skeleton className="mx-auto h-[80vw] max-h-80 w-[80vw] max-w-80 rounded-xl sm:h-64 sm:w-64 md:h-48 md:w-48 lg:h-64 lg:w-64" />
-                        </div>
-                        <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
-                            <div className="flex items-center justify-center gap-4">
-                                <Skeleton className="h-9 w-48 md:h-10 md:w-64" />
-                            </div>
-
-                            <Skeleton className="h-5 w-64 md:w-80" />
-
-                            {/* Basic Info Card */}
-                            <Skeleton className="h-36 w-full rounded-xl" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
+    const displayName = useDisplayName(profile)
+    const initials = useInitials(profile)
 
     if (isError || !profile) {
         if (isDefinedError(error) && error.code === "NOT_FOUND") {
@@ -80,8 +81,6 @@ export default function ProfileInfo({ userId }: { userId: string }) {
             </div>
         )
     }
-
-    const initials = useInitials(profile)
 
     return (
         <div className="mx-auto max-w-4xl">

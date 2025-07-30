@@ -1,4 +1,3 @@
-import type { InferRouterInputs } from "@orpc/server"
 import { z } from "zod/v4-mini"
 import {
     selectUserById,
@@ -11,6 +10,9 @@ import {
 import { base } from "../server"
 
 const userInfo = base
+    .route({
+        method: "GET"
+    })
     .handler(async ({ context, errors }) => {
         const user = await selectUserById(context.user.id)
 
@@ -34,33 +36,43 @@ const userInfo = base
     .actionable()
     .callable()
 
-type UserInfo = InferRouterInputs<typeof userInfo>
-
 const changeNickname = base
+    .route({
+        method: "PUT"
+    })
     .input(z.string().check(z.minLength(2)))
-    .handler(async ({ context, input: nickname }) => {
+    .handler(({ context, input: nickname }) => {
         updateNickname(context.user.id, nickname)
     })
     .actionable()
     .callable()
 
 const changeBio = base
+    .route({
+        method: "PUT"
+    })
     .input(z.string().check(z.minLength(2), z.maxLength(248)))
-    .handler(async ({ context, input: bio }) => {
+    .handler(({ context, input: bio }) => {
         updateBio(context.user.id, bio)
     })
     .actionable()
     .callable()
 
 const changeAvatar = base
+    .route({
+        method: "PUT"
+    })
     .input(z.nullable(z.url()))
-    .handler(async ({ context, input: avatar }) => {
+    .handler(({ context, input: avatar }) => {
         updateAvatar(context.user.id, avatar)
     })
     .actionable()
     .callable()
 
 const getUserTrips = base
+    .route({
+        method: "GET"
+    })
     .handler(async ({ context, errors }) => {
         const user = await selectUserTrips(context.user.id)
 
@@ -89,6 +101,9 @@ const getUserTrips = base
  * @param {string} id - The user ID. Must be a valid UUID v4
  */
 const getPublicProfile = base
+    .route({
+        method: "GET"
+    })
     .input(z.uuidv4())
     .handler(async ({ errors, input }) => {
         const user = await selectUserProfileById(input)

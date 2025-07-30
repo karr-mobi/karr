@@ -13,7 +13,7 @@ const serializer = new StandardRPCJsonSerializer({
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            staleTime: 60 * 1000 // > 0 to prevent immediate refetching on mount
+            staleTime: 5 * 1000 // 1min (> 0 to prevent immediate refetching on mount)
         },
         dehydrate: {
             serializeData(data) {

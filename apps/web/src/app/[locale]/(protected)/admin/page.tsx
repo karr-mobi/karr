@@ -4,7 +4,7 @@ import {
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
-import { ServerIcon } from "lucide-react"
+import { ServerIcon, UserIcon } from "lucide-react"
 import type { Metadata } from "next"
 import { unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
@@ -13,7 +13,7 @@ import { auth } from "@/app/auth/actions"
 import Loading from "@/components/Loading"
 import { APP_VERSION, APPLICATION_NAME } from "@/util/appname"
 import { InstanceInfo } from "./components/InstanceInfo"
-import { UsersList } from "./components/UsersList"
+import { UsersList, UsersSkeleton } from "./components/UsersList"
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations("Admin")
@@ -59,7 +59,19 @@ export default async function AdminPage() {
             </div>
 
             {/* Users List */}
-            <UsersList />
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <UserIcon className="h-5 w-5" />
+                        {t("users")}
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="px-3 pt-0 pb-6 md:px-6">
+                    <Suspense fallback={<UsersSkeleton />}>
+                        <UsersList />
+                    </Suspense>
+                </CardContent>
+            </Card>
         </div>
     )
 }

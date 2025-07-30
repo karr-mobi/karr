@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url"
 import logger from "@karr/logger"
 import type { MigrationConfig } from "drizzle-orm/migrator"
 import { migrate } from "drizzle-orm/postgres-js/migrator"
-import db from "@/db"
+import db from "@/api/db"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 

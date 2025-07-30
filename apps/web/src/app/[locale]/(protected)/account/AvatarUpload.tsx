@@ -18,7 +18,6 @@ import { CameraIcon, Loader2Icon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { orpc } from "@/lib/orpc"
-import { client } from "@/util/apifetch"
 
 interface AvatarUploadProps {
     currentAvatar?: string | null

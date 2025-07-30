@@ -13,7 +13,6 @@
     },
     "dependencies": {
         "@hookform/resolvers": "catalog:ui",
-        "@karr/api": "workspace:*",
         "@karr/auth": "workspace:*",
         "@karr/config": "workspace:*",
         "@karr/logger": "workspace:*",
@@ -38,6 +37,7 @@
         "zod": "catalog:utils",
         "@orpc/server": "catalog:api",
         "@orpc/client": "catalog:web",
+        "@orpc/contract": "catalog:api",
         "@orpc/tanstack-query": "catalog:web",
         "hono": "catalog:api",
         "neverthrow": "catalog:utils",
@@ -45,8 +45,10 @@
         "drizzle-orm": "catalog:api",
         "db0": "catalog:api",
         "drizzle-zod": "catalog:api",
+        "postgres": "catalog:api",
         "resend": "catalog:api",
-        "unstorage": "catalog:api"
+        "unstorage": "catalog:api",
+        "prettier": "catalog:devtools"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",

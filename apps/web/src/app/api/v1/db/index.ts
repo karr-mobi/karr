@@ -1,5 +1,4 @@
 import { getDbConfig } from "@karr/config"
-import logger from "@karr/logger"
 import { drizzle } from "drizzle-orm/postgres-js"
 import { isCI } from "std-env"
 
@@ -24,10 +23,9 @@ const db = drizzle({ connection })
 
 if (!isCI) {
     // Test the connection
-    const res = await db.execute(
+    await db.execute(
         "SELECT * FROM information_schema.tables WHERE table_name = 'Accounts';"
     )
-    logger.debug("db connection tested", res)
 }
 
 export { db }

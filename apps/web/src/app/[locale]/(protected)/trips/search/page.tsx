@@ -4,9 +4,7 @@ import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 import Loading from "@/components/Loading"
 import { auth } from "~/auth/actions"
-
 import TripList from "./trips"
-import { url } from "./url"
 
 export const metadata: Metadata = {
     title: "Search",
@@ -25,7 +23,7 @@ export default async function Search() {
 
             <div className="w-[calc(100vw-2rem)]">
                 <Suspense fallback={<Loading />}>
-                    <TripList url={url} />
+                    <TripList />
                 </Suspense>
             </div>
         </>

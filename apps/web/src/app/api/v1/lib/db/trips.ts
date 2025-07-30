@@ -3,17 +3,17 @@ import { tryCatch } from "@karr/util"
 import { and, eq, sql } from "drizzle-orm"
 import { err, ok } from "neverthrow"
 import { z } from "zod/v4-mini"
-import drizzle from "@/db"
-import { accountsTable } from "@/db/schemas/accounts"
-import { profileTable } from "@/db/schemas/profile"
+import drizzle from "@/api/db"
+import { accountsTable } from "@/api/db/schemas/accounts"
+import { profileTable } from "@/api/db/schemas/profile"
 import {
     type NewTrip,
     NewTripSchema,
     TripSchema,
     tripsTable,
     tripsView
-} from "@/db/schemas/trips"
-import { userPrefsTable } from "@/db/schemas/userprefs"
+} from "@/api/db/schemas/trips"
+import { userPrefsTable } from "@/api/db/schemas/userprefs"
 
 export async function getTrips() {
     const trips = await tryCatch(

@@ -1,4 +1,4 @@
-import { ORPCError, os } from "@orpc/server"
+import { os } from "@orpc/server"
 import { cookies, headers } from "next/headers"
 import { z } from "zod/v4-mini"
 import { isAuthenticated } from "./lib/auth"
@@ -22,6 +22,33 @@ export const base = os
                     cause: z.string()
                 })
             )
+        },
+        UNAUTHORIZED: {
+            message: "You are not authorized to access this resource",
+            status: 401,
+            data: z.optional(
+                z.object({
+                    cause: z.string()
+                })
+            )
+        },
+        FORBIDDEN: {
+            message: "You are not allowed to access this resource",
+            status: 403,
+            data: z.optional(
+                z.object({
+                    cause: z.string()
+                })
+            )
+        },
+        BAD_REQUEST: {
+            message: "Bad request",
+            status: 400,
+            data: z.optional(
+                z.object({
+                    cause: z.string()
+                })
+            )
         }
     })
     .use(async ({ next }) =>
@@ -32,13 +59,15 @@ export const base = os
             }
         })
     )
-    .use(async ({ next, context }) => {
+    .use(async ({ next, context, errors }) => {
         const authed = await isAuthenticated(context.cookies)
 
         if (!authed) {
-            throw new ORPCError("UNAUTHORIZED", {
+            throw errors.UNAUTHORIZED({
                 message: "You are not authorized to access this resource",
-                status: 401
+                data: {
+                    cause: "Invalid access token"
+                }
             })
         }
 

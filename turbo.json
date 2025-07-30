@@ -6,6 +6,7 @@
         "WEB_URL",
         "CONFIG_DIR",
         "CONFIG_FILE",
+        "NEXT_RUNTIME",
 
         // Config file overrides
         "APP_URL",

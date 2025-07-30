@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import { permanentRedirect } from "next/navigation"
 
 export async function GET(_request: Request) {

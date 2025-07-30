@@ -14,7 +14,7 @@ import {
 import { Label } from "@karr/ui/components/label"
 import { Switch } from "@karr/ui/components/switch"
 import { useInitials } from "@karr/ui/hooks/users"
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import {
     CarIcon,
     CheckIcon,
