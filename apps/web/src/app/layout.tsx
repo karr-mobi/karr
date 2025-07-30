@@ -7,6 +7,8 @@ import { getMessages } from "next-intl/server"
 import { APPLICATION_NAME } from "@/util/appname"
 import "@/assets/globals.css"
 
+import "../lib/orpc.server"
+
 import { Footer } from "~/_components/footer"
 import { Header } from "~/_components/header"
 import { Providers } from "~/_components/Providers"

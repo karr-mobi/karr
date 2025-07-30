@@ -1,7 +1,6 @@
-//biome-ignore-all lint/style/useNamingConvention: config values are CONSTANT_CASE
+// biome-ignore-all lint/style/useNamingConvention: config values are CONSTANT_CASE
 
-import process from "node:process"
-import { isCI, isProduction } from "std-env"
+import { env, isCI, isProduction } from "std-env"
 import { z } from "zod/v4"
 import staticConfig from "./static.js"
 
@@ -211,9 +210,7 @@ export const FullConfigSchema = z
         ),
         LOG_TIMESTAMP: z.boolean(),
         LOG_LEVEL: LogLevelSchema.default(
-            process.env.NODE_ENV === "production" || process.env.DOCKER
-                ? "info"
-                : "trace"
+            isProduction || env.DOCKER ? "info" : "trace"
         ),
         ADMIN_EMAIL: z.email().optional(),
         AUTH_PROVIDERS: authProvidersSchema.min(1).max(18),

@@ -119,7 +119,8 @@
                                 "formats": [
                                     "PascalCase",
                                     "camelCase",
-                                    "snake_case"
+                                    "snake_case",
+                                    "CONSTANT_CASE"
                                 ]
                             }
                         ]

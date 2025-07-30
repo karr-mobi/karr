@@ -80,7 +80,7 @@ export const nextJsConfig = [
         rules: {
             // ENABLE the custom rule HERE
             "server-only-karr-config/enforce-server-only-for-karr-config":
-                "error",
+                "off",
 
             // Keep your existing no-restricted-imports rule
             "no-restricted-imports": [

@@ -15,6 +15,12 @@ catalogs:
     '@openauthjs/openauth':
       specifier: ^0.4.3
       version: 0.4.3
+    '@orpc/contract':
+      specifier: ^1.7.5
+      version: 1.7.5
+    '@orpc/server':
+      specifier: ^1.7.5
+      version: 1.7.5
     db0:
       specifier: ^0.3.2
       version: 0.3.2
@@ -58,6 +64,9 @@ catalogs:
     husky:
       specifier: ^9.1.7
       version: 9.1.7
+    prettier:
+      specifier: ^3.6.2
+      version: 3.6.2
     taze:
       specifier: ^19.1.0
       version: 19.1.0
@@ -315,6 +324,12 @@ catalogs:
       specifier: ^3.25.76
       version: 3.25.76
   web:
+    '@orpc/client':
+      specifier: ^1.7.5
+      version: 1.7.5
+    '@orpc/tanstack-query':
+      specifier: latest
+      version: 1.7.5
     '@tanstack/react-form':
       specifier: ^1.14.1
       version: 1.14.1
@@ -680,9 +695,6 @@ importers:
       '@hookform/resolvers':
         specifier: catalog:ui
         version: 5.2.0(react-hook-form@7.61.1(react@19.1.0))
-      '@karr/api':
-        specifier: workspace:*
-        version: link:../api
       '@karr/auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -701,6 +713,18 @@ importers:
       '@openauthjs/openauth':
         specifier: catalog:api
         version: 0.4.3(patch_hash=1f4f51a1f46d1e5e12d7082bf8ca5b7ec57e4d6b3f36b06f8d1fdd2ee79ce074)(arctic@2.3.4)(hono@4.8.5)
+      '@orpc/client':
+        specifier: catalog:web
+        version: 1.7.5
+      '@orpc/contract':
+        specifier: catalog:api
+        version: 1.7.5
+      '@orpc/server':
+        specifier: catalog:api
+        version: 1.7.5(crossws@0.3.5)
+      '@orpc/tanstack-query':
+        specifier: catalog:web
+        version: 1.7.5(@orpc/client@1.7.5)(@tanstack/query-core@5.83.0)
       '@tailwindcss/postcss':
         specifier: catalog:ui
         version: 4.1.11
@@ -716,12 +740,27 @@ importers:
       date-fns:
         specifier: catalog:ui
         version: 4.1.0
+      db0:
+        specifier: catalog:api
+        version: 0.3.2(drizzle-orm@0.43.1(postgres@3.4.7))
+      drizzle-orm:
+        specifier: catalog:api
+        version: 0.43.1(postgres@3.4.7)
+      drizzle-zod:
+        specifier: catalog:api
+        version: 0.8.2(drizzle-orm@0.43.1(postgres@3.4.7))(zod@3.25.76)
+      hono:
+        specifier: catalog:api
+        version: 4.8.5
       lucide-react:
         specifier: catalog:ui
         version: 0.507.0(react@19.1.0)
       motion:
         specifier: catalog:ui
         version: 12.23.10(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      neverthrow:
+        specifier: catalog:utils
+        version: 8.2.0
       next:
         specifier: catalog:web
         version: 15.4.1(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -734,6 +773,12 @@ importers:
       ofetch:
         specifier: catalog:utils
         version: 1.4.1
+      postgres:
+        specifier: catalog:api
+        version: 3.4.7
+      prettier:
+        specifier: catalog:devtools
+        version: 3.6.2
       react:
         specifier: catalog:web
         version: 19.1.0
@@ -743,9 +788,18 @@ importers:
       react-hook-form:
         specifier: catalog:ui
         version: 7.61.1(react@19.1.0)
+      resend:
+        specifier: catalog:api
+        version: 4.7.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      std-env:
+        specifier: catalog:utils
+        version: 3.9.0
       tailwindcss:
         specifier: catalog:ui
         version: 4.1.11
+      unstorage:
+        specifier: catalog:api
+        version: 1.16.1(patch_hash=a647269f5426b04b76019d5a621c73e1a4f9e1f7ec76d99ea644de1d628ca386)(aws4fetch@1.0.20)(db0@0.3.2(drizzle-orm@0.43.1(postgres@3.4.7)))
       zod:
         specifier: catalog:utils
         version: 3.25.76
@@ -2222,6 +2276,47 @@ packages:
       arctic: ^2.2.2
       hono: ^4.0.0
 
+  '@orpc/client@1.7.5':
+    resolution: {integrity: sha512-UA4uJAOdy2SM/c7/tQVvS4+fYiBmFn7/8NxhCV3GfY6cBnxPBf83v1jC25ZtGrfyc2RY/+7dwdpKRdQXI2Biaw==}
+
+  '@orpc/contract@1.7.5':
+    resolution: {integrity: sha512-Q2XaOJEBzxc7PZ40DIoFJgAPBn6Z8SUYE/tb4N3ynUOjsqMsexhm++cyPzsp+qDG5okO+t3cPY2H5K2YdgTNdw==}
+
+  '@orpc/server@1.7.5':
+    resolution: {integrity: sha512-Z26apO5CEfPcOH9bLPEAnUgEdS0Vawrpb6Qe9/UJsKRwRaxYJ3CoFXMQ+h7hcRH+BDFOKxlDBOLgcFrUwHsN+w==}
+    peerDependencies:
+      crossws: '>=0.3.4'
+      ws: '>=8.18.1'
+    peerDependenciesMeta:
+      crossws:
+        optional: true
+      ws:
+        optional: true
+
+  '@orpc/shared@1.7.5':
+    resolution: {integrity: sha512-kEXags36EeL0rYVVJ30OQ6lIB8YySE2A/0wYw1kdi5g/KO6xXDE2W5LRsm3SU2UljG0AqXggIL9IKaWOl/qwAw==}
+
+  '@orpc/standard-server-aws-lambda@1.7.5':
+    resolution: {integrity: sha512-GmaIVX9DeCojQiHZaUftWxi7xz2jaZYjBvT6jj/DIXat3HVIVtMHSNZ5pv0ZzRsizM4M+WlbtXojP16szRS+XA==}
+
+  '@orpc/standard-server-fetch@1.7.5':
+    resolution: {integrity: sha512-O/HWpKd3vObiTYCS+wWfQiuX+rhzL4whgEPdF4kBAXmxxxV93q1aF3ZfldYC3qsHMtEzA0mVDHyhonsajaBefA==}
+
+  '@orpc/standard-server-node@1.7.5':
+    resolution: {integrity: sha512-Xb7+i2fEWdETJHv6ZP8/8a8/kSkDmK/PnGkvKogNMR1v40h0qxJFnwF4+ZVhgQAyYXcnbWjmScdWpHqB9deuMw==}
+
+  '@orpc/standard-server-peer@1.7.5':
+    resolution: {integrity: sha512-bP//D18Qlj3Rh8Udl88KtKwVv/wGzLQ5++XlSQutMe0ENGmqUDz/sf+PtZtezk0nU5pjhBNU7L9u3cU+BN4Xcw==}
+
+  '@orpc/standard-server@1.7.5':
+    resolution: {integrity: sha512-hEFqOin/H53+WmG4M0hfeAx/E2mAEp5Gzz12ufK9nmddbrbpkT8KBKCrs6iHPnJkjvYwB7f1EItrtgmBPAYOXg==}
+
+  '@orpc/tanstack-query@1.7.5':
+    resolution: {integrity: sha512-XMG8nfRPKZgOpnH/xVB8j7TKfpqMyDpBG0Atc+bgvUOCNliGuaWG8QaMqeD1L2Qc7Z45xWoHudDK6BZwAbMAkQ==}
+    peerDependencies:
+      '@orpc/client': 1.7.5
+      '@tanstack/query-core': '>=5.80.2'
+
   '@oslojs/asn1@1.0.0':
     resolution: {integrity: sha512-zw/wn0sj0j0QKbIXfIlnEcTviaCzYOY3V5rAyjR6YtOByFtJiT574+8p9Wlach0lZH9fddD4yb9laEAIl4vXQA==}
 
@@ -3039,6 +3134,9 @@ packages:
 
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
+
+  '@standard-schema/spec@1.0.0':
+    resolution: {integrity: sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==}
 
   '@standard-schema/spec@1.0.0-beta.3':
     resolution: {integrity: sha512-0ifF3BjA1E8SY9C+nUew8RefNOIq0cDlYALPty4rhUm8Rrl6tCM8hBT4bhGhx7I7iXD0uAgt50lgo8dD73ACMw==}
@@ -5809,6 +5907,9 @@ packages:
     resolution: {integrity: sha512-cxN6aIDPz6rm8hbebcP7vrQNhvRcveZoJU72Y7vskh4oIm+BZwBECnx5nTmrlres1Qapvx27Qo1Auukpf8PKXw==}
     engines: {node: '>=18'}
 
+  openapi-types@12.1.3:
+    resolution: {integrity: sha512-N4YtSYJqghVu4iek2ZUvcN/0aqH1kRDuNqzcycDxhOUpg7GdvLa2F3DgS6yBNhInhv2r/6I0Flkn7CqL8+nIcw==}
+
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -6022,6 +6123,11 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   prismjs@1.30.0:
     resolution: {integrity: sha512-DEvV2ZF2r2/63V+tK8hQvrR2ZGn10srHbXviTlcv7Kpzw8jWiNTqbVgjO3IY8RxrrOUF8VPMQQFysYYYv0YZxw==}
     engines: {node: '>=6'}
@@ -6055,6 +6161,10 @@ packages:
 
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
+
+  radash@12.1.1:
+    resolution: {integrity: sha512-h36JMxKRqrAxVD8201FrCpyeNuUY9Y5zZwujr20fFO77tpUtGa6EZzfKw/3WaiBX95fq7+MpsuMLNdSnORAwSA==}
+    engines: {node: '>=14.18.0'}
 
   radix3@1.1.2:
     resolution: {integrity: sha512-b484I/7b8rDEdSDKckSSBA8knMpcdsXudlE/LNL639wFoHKwLbEkQFZHWEYwDC0wa0FKUcCY+GAF73Z7wxNVFA==}
@@ -8249,6 +8359,72 @@ snapshots:
       hono: 4.8.5
       jose: 5.9.6
 
+  '@orpc/client@1.7.5':
+    dependencies:
+      '@orpc/shared': 1.7.5
+      '@orpc/standard-server': 1.7.5
+      '@orpc/standard-server-fetch': 1.7.5
+      '@orpc/standard-server-peer': 1.7.5
+
+  '@orpc/contract@1.7.5':
+    dependencies:
+      '@orpc/client': 1.7.5
+      '@orpc/shared': 1.7.5
+      '@standard-schema/spec': 1.0.0
+      openapi-types: 12.1.3
+
+  '@orpc/server@1.7.5(crossws@0.3.5)':
+    dependencies:
+      '@orpc/client': 1.7.5
+      '@orpc/contract': 1.7.5
+      '@orpc/shared': 1.7.5
+      '@orpc/standard-server': 1.7.5
+      '@orpc/standard-server-aws-lambda': 1.7.5
+      '@orpc/standard-server-fetch': 1.7.5
+      '@orpc/standard-server-node': 1.7.5
+      '@orpc/standard-server-peer': 1.7.5
+      cookie: 1.0.2
+    optionalDependencies:
+      crossws: 0.3.5
+
+  '@orpc/shared@1.7.5':
+    dependencies:
+      radash: 12.1.1
+      type-fest: 4.41.0
+
+  '@orpc/standard-server-aws-lambda@1.7.5':
+    dependencies:
+      '@orpc/shared': 1.7.5
+      '@orpc/standard-server': 1.7.5
+      '@orpc/standard-server-fetch': 1.7.5
+      '@orpc/standard-server-node': 1.7.5
+
+  '@orpc/standard-server-fetch@1.7.5':
+    dependencies:
+      '@orpc/shared': 1.7.5
+      '@orpc/standard-server': 1.7.5
+
+  '@orpc/standard-server-node@1.7.5':
+    dependencies:
+      '@orpc/shared': 1.7.5
+      '@orpc/standard-server': 1.7.5
+      '@orpc/standard-server-fetch': 1.7.5
+
+  '@orpc/standard-server-peer@1.7.5':
+    dependencies:
+      '@orpc/shared': 1.7.5
+      '@orpc/standard-server': 1.7.5
+
+  '@orpc/standard-server@1.7.5':
+    dependencies:
+      '@orpc/shared': 1.7.5
+
+  '@orpc/tanstack-query@1.7.5(@orpc/client@1.7.5)(@tanstack/query-core@5.83.0)':
+    dependencies:
+      '@orpc/client': 1.7.5
+      '@orpc/shared': 1.7.5
+      '@tanstack/query-core': 5.83.0
+
   '@oslojs/asn1@1.0.0':
     dependencies:
       '@oslojs/binary': 1.0.0
@@ -9077,6 +9253,8 @@ snapshots:
       '@types/hast': 3.0.4
 
   '@shikijs/vscode-textmate@10.0.2': {}
+
+  '@standard-schema/spec@1.0.0': {}
 
   '@standard-schema/spec@1.0.0-beta.3': {}
 
@@ -12538,6 +12716,8 @@ snapshots:
       is-inside-container: 1.0.0
       is-wsl: 3.1.0
 
+  openapi-types@12.1.3: {}
+
   optionator@0.9.4:
     dependencies:
       deep-is: 0.1.4
@@ -12772,6 +12952,8 @@ snapshots:
 
   prettier@3.5.3: {}
 
+  prettier@3.6.2: {}
+
   prismjs@1.30.0: {}
 
   prompts@2.4.2:
@@ -12809,6 +12991,8 @@ snapshots:
   quansync@0.2.10: {}
 
   queue-microtask@1.2.3: {}
+
+  radash@12.1.1: {}
 
   radix3@1.1.2: {}
 

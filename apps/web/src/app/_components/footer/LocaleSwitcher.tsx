@@ -12,6 +12,7 @@ import {
 import { cn } from "@karr/ui/lib/utils"
 import { useLocale, useTranslations } from "next-intl"
 import { useCallback, useId } from "react"
+import type { Locale } from "@/../global"
 
 import { routing, usePathname, useRouter } from "@/i18n/routing"
 
@@ -40,13 +41,18 @@ function LocaleSwitcher() {
     const t = useTranslations("Footer")
 
     const allLocales = routing.locales
-    const locale = useLocale() as "en" | "fr"
+    const locale = useLocale() as Locale
     const router = useRouter()
     const pathname = usePathname()
 
     const localeIcons = {
-        en: "🇬🇧",
-        fr: "🇫🇷"
+        "en-GB": "🇬🇧",
+        "fr-FR": "🇫🇷"
+    }
+
+    const localeNames = {
+        "en-GB": "English (UK)",
+        "fr-FR": "Français (FR)"
     }
 
     const switchLocale = useCallback(() => {
@@ -63,7 +69,9 @@ function LocaleSwitcher() {
                 id={id}
                 className="cursor-pointer ps-2 [&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_[data-square]]:shrink-0"
             >
-                <SelectValue placeholder="Select locale" />
+                <SelectValue placeholder="Select locale">
+                    {localeIcons[locale]}
+                </SelectValue>
             </SelectTrigger>
             <SelectContent className="[&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2 [&_*[role=option]>span]:flex [&_*[role=option]>span]:items-center [&_*[role=option]>span]:gap-2 [&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8">
                 <SelectGroup>
@@ -77,7 +85,7 @@ function LocaleSwitcher() {
                             className="cursor-pointer hover:bg-accent"
                         >
                             <Square>{localeIcons[l]}</Square>
-                            <span className="truncate">{l}</span>
+                            <span className="truncate">{localeNames[l]}</span>
                         </SelectItem>
                     ))}
                 </SelectGroup>

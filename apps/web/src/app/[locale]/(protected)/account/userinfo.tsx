@@ -3,7 +3,6 @@
 
 "use client"
 
-import type { InferResponseType } from "@karr/api/client"
 import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 import { Badge } from "@karr/ui/components/badge"
 import {
@@ -15,7 +14,7 @@ import {
 import { Label } from "@karr/ui/components/label"
 import { Switch } from "@karr/ui/components/switch"
 import { useInitials } from "@karr/ui/hooks/users"
-import { useQuery } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import {
     CarIcon,
     CheckIcon,
@@ -28,29 +27,15 @@ import {
     UserIcon
 } from "lucide-react"
 import { useTranslations } from "next-intl"
-import Loading from "@/components/Loading"
-import { client } from "@/util/apifetch"
+import { orpc } from "@/lib/orpc"
 import AvatarUpload from "./AvatarUpload"
 import BioEdit from "./BioEdit"
 import DisplayName from "./DisplayName"
 
 export default function FetchUserData() {
-    const { data, isError, isLoading, error } = useQuery({
-        queryKey: ["user", "data"],
-        queryFn: async () => {
-            const res = await client.user.info.$get()
-            if (res.status !== 200) {
-                throw new Error("Failed to fetch user data", {
-                    cause: await res.json()
-                })
-            }
-            return res.json()
-        }
-    })
-
-    if (isLoading) {
-        return <Loading />
-    }
+    const { data, isError, error } = useSuspenseQuery(
+        orpc.user.info.queryOptions()
+    )
 
     if (isError || !data) {
         console.error("Error loading user data", error)
@@ -63,7 +48,23 @@ export default function FetchUserData() {
 function ShowUserData({
     user
 }: {
-    user: InferResponseType<typeof client.user.info.$get, 200>
+    user: {
+        id: string
+        firstName: string
+        nickname: string | null
+        lastName: string | null
+        phone: string | null
+        bio: string | null
+        avatar: string | null
+        provider: string
+        email: string
+        verified: boolean | null
+        autoBook: boolean | null
+        defaultPlaces: number | null
+        smoke: boolean | null
+        music: boolean | null
+        pets: boolean | null
+    }
 }) {
     const t = useTranslations("Account")
 

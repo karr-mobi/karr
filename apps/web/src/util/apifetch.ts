@@ -1,4 +1,3 @@
-import { hcWithType } from "@karr/api/client"
 import { ofetch } from "ofetch"
 
 //biome-ignore lint: I need
@@ -12,10 +11,4 @@ export const apiFetch = ofetch.create({
     baseURL: new URL(API_BASE, APP_URL).toString(),
     credentials: "include",
     responseType: "json"
-})
-
-export const client = hcWithType(new URL(API_BASE, APP_URL).toString() || "", {
-    init: {
-        credentials: "include"
-    }
 })

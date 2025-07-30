@@ -3,8 +3,7 @@ import { notFound, unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 import { auth } from "@/app/auth/actions"
-import Loading from "@/components/Loading"
-import ProfileInfo from "./profileinfo"
+import ProfileInfo, { ProfileInfoSkeleton } from "./profileinfo"
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations("Profile")
@@ -36,7 +35,7 @@ export default async function ProfilePage({
 
     return (
         <div className="container mx-auto py-8">
-            <Suspense fallback={<Loading />}>
+            <Suspense fallback={<ProfileInfoSkeleton />}>
                 <ProfileInfo userId={id} />
             </Suspense>
         </div>

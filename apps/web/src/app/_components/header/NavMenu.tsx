@@ -55,7 +55,7 @@ export function DesktopNavMenu() {
                 <Separator orientation="vertical" className="h-8" />
                 {menuItems.map((cat, index) => (
                     <DropdownMenu
-                        key={`desktop-menu-category-${index}-${cat.label}`}
+                        key={`desktop-menu-category-${index}-${String(cat.label)}`}
                     >
                         <DropdownMenuTrigger asChild>
                             <Button
@@ -136,7 +136,9 @@ export function MobileNavMenu() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     {menuItems.map((cat, index) => (
-                        <Fragment key={`menu-category-${index}-${cat.label}`}>
+                        <Fragment
+                            key={`menu-category-${index}-${String(cat.label)}`}
+                        >
                             <DropdownMenuLabel>
                                 {t(cat.label)}
                             </DropdownMenuLabel>

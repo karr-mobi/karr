@@ -2,7 +2,6 @@
 
 "use client"
 
-import { NewTripInputSchema } from "@karr/api/db/trips"
 import { Button } from "@karr/ui/components/button"
 import { Calendar } from "@karr/ui/components/calendar"
 import { Input, InputNumber } from "@karr/ui/components/input"
@@ -16,16 +15,17 @@ import { toast } from "@karr/ui/components/sonner"
 import { Stepper } from "@karr/ui/components/stepper"
 import { TextMorph } from "@karr/ui/components/text-morph"
 import { cn } from "@karr/ui/lib/utils"
-import { tryCatch } from "@karr/util"
 import type { AnyFieldApi } from "@tanstack/react-form"
 import { useForm } from "@tanstack/react-form"
+import { useMutation } from "@tanstack/react-query"
 import { format } from "date-fns"
 import { CalendarDaysIcon, OctagonXIcon } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useTranslations } from "next-intl"
 import { use } from "react"
+import { NewTripInputSchema } from "@/app/api/v1/db/schemas/trips"
 import { useRouter } from "@/i18n/routing"
-import { client } from "@/util/apifetch"
+import { orpc } from "@/lib/orpc"
 
 function FieldInfo({
     field,
@@ -74,6 +74,18 @@ export function Form({ petrolPrice }: { petrolPrice: Promise<number> }) {
     const t = useTranslations("trips.Create")
     const router = useRouter()
 
+    const newTripMutation = useMutation(
+        orpc.trips.add.mutationOptions({
+            onSuccess: () => {
+                router.push("/trips/search")
+                toast.success(t("added"))
+            },
+            onError: () => {
+                toast.error("Something went wrong")
+            }
+        })
+    )
+
     const form = useForm({
         defaultValues: {
             from: "",
@@ -86,20 +98,8 @@ export function Form({ petrolPrice }: { petrolPrice: Promise<number> }) {
             //@ts-expect-error: type problem but it's fine, just not infered well
             onChange: NewTripInputSchema
         },
-        onSubmit: async ({ value }) => {
-            const res = await tryCatch(
-                client.trips.add.$post({
-                    json: {
-                        ...value
-                    }
-                })
-            )
-            if (res.success && res.value.status === 200) {
-                router.push("/trips/search")
-                toast.success(t("added"))
-            } else {
-                toast.error("Something went wrong")
-            }
+        onSubmit: ({ value }) => {
+            void newTripMutation.mutate(value)
         }
     })
 
