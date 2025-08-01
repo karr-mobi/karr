@@ -3,17 +3,18 @@ import { tryCatch } from "@karr/util"
 import { and, eq, sql } from "drizzle-orm"
 import { err, ok } from "neverthrow"
 import { z } from "zod/v4-mini"
-import drizzle from "@/api/db"
-import { accountsTable } from "@/api/db/schemas/accounts"
-import { profileTable } from "@/api/db/schemas/profile"
+import drizzle from "@/db"
+import { type AccountId, accountsTable } from "@/db/schemas/accounts"
+import { profileTable } from "@/db/schemas/profile"
 import {
     type NewTrip,
+    type NewTripInput,
     NewTripSchema,
     TripSchema,
     tripsTable,
     tripsView
-} from "@/api/db/schemas/trips"
-import { userPrefsTable } from "@/api/db/schemas/userprefs"
+} from "@/db/schemas/trips"
+import { userPrefsTable } from "@/db/schemas/userprefs"
 
 export async function getTrips() {
     const trips = await tryCatch(
@@ -37,6 +38,8 @@ export async function getTrips() {
         logger.error("failed to get from trips view", trips.error)
         return err("Failed to get trips from db")
     }
+
+    logger.debug("Trips fetched successfully", trips.value)
 
     const t = z.safeParse(TripSchema.array(), trips.value)
     if (!t.success) {
@@ -75,7 +78,13 @@ export async function getTripDetails(tripId: string) {
             .from(tripsTable)
             .where(eq(tripsTable.id, tripId))
             .leftJoin(profileTable, eq(tripsTable.driver, profileTable.id))
-            .leftJoin(accountsTable, eq(profileTable.id, accountsTable.profile))
+            .leftJoin(
+                accountsTable,
+                and(
+                    eq(accountsTable.provider, profileTable.accountProvider),
+                    eq(accountsTable.remoteId, profileTable.accountRemoteId)
+                )
+            )
             .leftJoin(userPrefsTable, eq(profileTable.prefs, userPrefsTable.id))
     )
 
@@ -92,20 +101,24 @@ export async function getTripDetails(tripId: string) {
 }
 
 export async function getTrip(tripId: string) {
-    const trip = await tryCatch(
-        drizzle.select().from(tripsTable).where(eq(tripsTable.id, tripId))
+    const { success, value, error } = await tryCatch(
+        drizzle
+            .select()
+            .from(tripsTable)
+            .innerJoin(profileTable, eq(tripsTable.driver, profileTable.id))
+            .where(eq(tripsTable.id, tripId))
     )
 
-    if (!trip.success) {
-        logger.error("Error connecting to db", trip.error)
+    if (!success) {
+        logger.error("Error connecting to db", error)
         return err("Failed to query db")
     }
 
-    if (trip.value.length === 0 || !trip.value[0]) {
+    if (value.length === 0 || !value[0]) {
         return err("Trip not found")
     }
 
-    return ok(trip.value[0])
+    return ok(value[0])
 }
 
 export async function getUserTrips(userId: string) {
@@ -123,20 +136,38 @@ export async function getUserTrips(userId: string) {
     return ok(u.data)
 }
 
-export async function addTrip(trip: NewTrip) {
-    const t = NewTripSchema.safeParse(trip)
+export async function addTrip(trip: NewTripInput, account: AccountId) {
+    const [user] = await drizzle
+        .select()
+        .from(profileTable)
+        .where(
+            and(
+                eq(profileTable.accountProvider, account.provider),
+                eq(profileTable.accountRemoteId, account.remoteId)
+            )
+        )
+
+    if (!user) {
+        logger.debug("Profile not found:", account)
+        return err("Profile not found")
+    }
+
+    const t = NewTripSchema.safeParse({
+        ...trip,
+        driver: user.id
+    })
 
     if (!t.success) {
         logger.debug("Failed to parse trip:", t.error)
         return err("Failed to parse trip")
     }
 
-    const inserted = await drizzle
+    const [inserted] = await drizzle
         .insert(tripsTable)
         .values(t.data)
         .returning({ id: tripsTable.id })
 
-    if (!inserted || inserted.length === 0 || !inserted[0]) {
+    if (!inserted) {
         logger.debug("Failed to insert trip:", inserted)
         return err("Failed to insert trip")
     }
@@ -145,7 +176,7 @@ export async function addTrip(trip: NewTrip) {
         id: z.uuid()
     })
 
-    const insertedTrip = InsertedTripSchema.safeParse(inserted[0])
+    const insertedTrip = InsertedTripSchema.safeParse(inserted)
 
     if (!insertedTrip.success) {
         logger.debug("Failed to parse inserted trip:", insertedTrip.error)

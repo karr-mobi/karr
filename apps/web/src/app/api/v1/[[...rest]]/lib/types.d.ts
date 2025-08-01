@@ -1,9 +1,12 @@
 import type { Prettify } from "@karr/util"
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm"
-import type { accountsTable } from "@/api/db/schemas/accounts"
-import type { specialStatusTable } from "@/api/db/schemas/specialstatus"
-import type { userPrefsTable } from "@/api/db/schemas/userprefs"
-import type { usersTable } from "@/api/db/schemas/users"
+import type { cookies } from "next/headers"
+import type { accountsTable } from "@/db/schemas/accounts"
+import type { specialStatusTable } from "@/db/schemas/specialstatus"
+import type { userPrefsTable } from "@/db/schemas/userprefs"
+import type { usersTable } from "@/db/schemas/users"
+
+export type Cookies = Awaited<ReturnType<typeof cookies>>
 
 export type AppVariables = {
     userSubject?: UserSubject

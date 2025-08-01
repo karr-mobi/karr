@@ -1,21 +1,21 @@
 import logger from "@karr/logger"
 import { tryCatch } from "@karr/util"
-import { eq, sql } from "drizzle-orm"
+import { and, eq, sql } from "drizzle-orm"
 import { err, ok } from "neverthrow"
 import { z } from "zod/v4-mini"
-import drizzle from "@/api/db"
-import { accountsTable } from "@/api/db/schemas/accounts"
-import { profileTable } from "@/api/db/schemas/profile"
-import { specialStatusTable } from "@/api/db/schemas/specialstatus"
-import { TripSchema, tripsTable, tripsView } from "@/api/db/schemas/trips"
-import { userPrefsTable } from "@/api/db/schemas/userprefs"
+import drizzle from "@/db"
+import { type AccountId, accountsTable } from "@/db/schemas/accounts"
+import { profileTable } from "@/db/schemas/profile"
+import { specialStatusTable } from "@/db/schemas/specialstatus"
+import { TripSchema, tripsTable, tripsView } from "@/db/schemas/trips"
+import { userPrefsTable } from "@/db/schemas/userprefs"
 
 /**
  * Select a user by their ID
  * @param id The ID of the user to select. Assumes uuid v4 format.
  * @returns The user with the given ID
  */
-export async function selectUserById(id: string) {
+export async function selectUserByAccountId(id: AccountId) {
     logger.debug(`Selecting user by ID: ${id}`)
 
     const users = await tryCatch(
@@ -38,10 +38,18 @@ export async function selectUserById(id: string) {
                 pets: userPrefsTable.pets
             })
             .from(profileTable)
-            .where(eq(profileTable.id, id))
+            .where(
+                and(
+                    eq(accountsTable.provider, id.provider),
+                    eq(accountsTable.remoteId, id.remoteId)
+                )
+            )
             .innerJoin(
                 accountsTable,
-                eq(profileTable.id, accountsTable.profile)
+                and(
+                    eq(accountsTable.provider, profileTable.accountProvider),
+                    eq(accountsTable.remoteId, profileTable.accountRemoteId)
+                )
             )
             .leftJoin(userPrefsTable, eq(profileTable.prefs, userPrefsTable.id))
             .leftJoin(
@@ -59,13 +67,18 @@ export async function selectUserById(id: string) {
     return ok(users.value[0])
 }
 
-export async function updateNickname(id: string, nickname: string) {
+export async function updateNickname(id: AccountId, nickname: string) {
     logger.debug(`Updating nickname for user ${id} to ${nickname}`)
     const { success, error } = await tryCatch(
         drizzle
             .update(profileTable)
             .set({ nickname })
-            .where(eq(profileTable.id, id))
+            .where(
+                and(
+                    eq(profileTable.accountProvider, id.provider),
+                    eq(profileTable.accountRemoteId, id.remoteId)
+                )
+            )
     )
     if (!success) {
         logger.error(`Failed to update nickname for user ${id}: ${error}`)
@@ -74,10 +87,18 @@ export async function updateNickname(id: string, nickname: string) {
     return true
 }
 
-export async function updateBio(id: string, bio: string) {
+export async function updateBio(id: AccountId, bio: string) {
     logger.debug(`Updating bio for user ${id} to ${bio}`)
     const { success, error } = await tryCatch(
-        drizzle.update(profileTable).set({ bio }).where(eq(profileTable.id, id))
+        drizzle
+            .update(profileTable)
+            .set({ bio })
+            .where(
+                and(
+                    eq(profileTable.accountProvider, id.provider),
+                    eq(profileTable.accountRemoteId, id.remoteId)
+                )
+            )
     )
     if (!success) {
         logger.error(`Failed to update bio for user ${id}: ${error}`)
@@ -86,13 +107,18 @@ export async function updateBio(id: string, bio: string) {
     return true
 }
 
-export async function updateAvatar(id: string, avatar: string | null) {
+export async function updateAvatar(id: AccountId, avatar: string | null) {
     logger.debug(`Updating avatar for user ${id}`)
     const { success, error } = await tryCatch(
         drizzle
             .update(profileTable)
             .set({ avatar })
-            .where(eq(profileTable.id, id))
+            .where(
+                and(
+                    eq(profileTable.accountProvider, id.provider),
+                    eq(profileTable.accountRemoteId, id.remoteId)
+                )
+            )
     )
     if (!success) {
         logger.error(`Failed to update avatar for user ${id}: ${error}`)
@@ -101,7 +127,7 @@ export async function updateAvatar(id: string, avatar: string | null) {
     return true
 }
 
-export async function selectUserTrips(id: string) {
+export async function selectUserTrips(id: AccountId) {
     const trips = await tryCatch(
         drizzle
             .select({
@@ -117,7 +143,12 @@ export async function selectUserTrips(id: string) {
                 avatar: sql`"trips_view"."avatar"`
             })
             .from(tripsView)
-            .where(eq(tripsView.driver, id))
+            .where(
+                and(
+                    eq(sql`"trips_view"."accountProvider"`, id.provider),
+                    eq(sql`"trips_view"."accountRemoteId"`, id.remoteId)
+                )
+            )
     )
 
     if (!trips.success) {
@@ -153,7 +184,13 @@ export async function selectUserProfileById(id: string) {
             })
             .from(profileTable)
             .where(eq(profileTable.id, id))
-            .leftJoin(accountsTable, eq(profileTable.id, accountsTable.profile))
+            .leftJoin(
+                accountsTable,
+                and(
+                    eq(accountsTable.provider, profileTable.accountProvider),
+                    eq(accountsTable.remoteId, profileTable.accountRemoteId)
+                )
+            )
             .limit(1)
     )
 
