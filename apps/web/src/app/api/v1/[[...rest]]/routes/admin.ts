@@ -1,8 +1,8 @@
 import { count, desc, eq } from "drizzle-orm"
 import { z } from "zod/v4-mini"
-import db from "@/api/db"
-import { accountsTable } from "@/api/db/schemas/accounts"
-import { profileTable } from "@/api/db/schemas/profile"
+import db from "@/db"
+import { accountsTable } from "@/db/schemas/accounts"
+import { profileTable } from "@/db/schemas/profile"
 import { base } from "../server"
 
 const UsersListSchema = z.array(

@@ -23,7 +23,7 @@ import { CalendarDaysIcon, OctagonXIcon } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import { useTranslations } from "next-intl"
 import { use } from "react"
-import { NewTripInputSchema } from "@/app/api/v1/db/schemas/trips"
+import { NewTripInputSchema } from "@/db/schemas/trips"
 import { useRouter } from "@/i18n/routing"
 import { orpc } from "@/lib/orpc"
 

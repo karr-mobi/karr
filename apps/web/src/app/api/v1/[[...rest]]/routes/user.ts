@@ -1,6 +1,6 @@
 import { z } from "zod/v4-mini"
 import {
-    selectUserById,
+    selectUserByAccountId,
     selectUserProfileById,
     selectUserTrips,
     updateAvatar,
@@ -14,7 +14,7 @@ const userInfo = base
         method: "GET"
     })
     .handler(async ({ context, errors }) => {
-        const user = await selectUserById(context.user.id)
+        const user = await selectUserByAccountId(context.user)
 
         if (user.isErr()) {
             throw errors.INTERNAL_SERVER_ERROR({
@@ -42,7 +42,7 @@ const changeNickname = base
     })
     .input(z.string().check(z.minLength(2)))
     .handler(({ context, input: nickname }) => {
-        updateNickname(context.user.id, nickname)
+        updateNickname(context.user, nickname)
     })
     .actionable()
     .callable()
@@ -53,7 +53,7 @@ const changeBio = base
     })
     .input(z.string().check(z.minLength(2), z.maxLength(248)))
     .handler(({ context, input: bio }) => {
-        updateBio(context.user.id, bio)
+        updateBio(context.user, bio)
     })
     .actionable()
     .callable()
@@ -64,7 +64,7 @@ const changeAvatar = base
     })
     .input(z.nullable(z.url()))
     .handler(({ context, input: avatar }) => {
-        updateAvatar(context.user.id, avatar)
+        updateAvatar(context.user, avatar)
     })
     .actionable()
     .callable()
@@ -74,7 +74,7 @@ const getUserTrips = base
         method: "GET"
     })
     .handler(async ({ context, errors }) => {
-        const user = await selectUserTrips(context.user.id)
+        const user = await selectUserTrips(context.user)
 
         if (user.isErr()) {
             throw errors.INTERNAL_SERVER_ERROR({

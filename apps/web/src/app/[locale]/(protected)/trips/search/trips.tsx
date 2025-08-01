@@ -1,19 +1,11 @@
 "use client"
 
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { TripSchema } from "@/api/db/schemas/trips"
 import type { TripsSearch } from "@/api/routes/trips"
 import Loading from "@/components/Loading"
 import { TripCard } from "@/components/TripCard"
+import { TripSchema } from "@/db/schemas/trips"
 import { orpc } from "@/lib/orpc"
-
-function eventType(trip: TripsSearch) {
-    return {
-        isTrip: trip.event === "new-trip",
-        isFailure: trip.event === "failed",
-        isEnd: trip.event === "end"
-    }
-}
 
 function parseTrip(trip: TripsSearch) {
     const t = TripSchema.safeParse(trip.data)
@@ -43,17 +35,19 @@ export default function FetchTrips() {
             <>
                 <div>Error: {error.message}</div>
                 {trips?.map((trip) => {
-                    const { isTrip, isFailure, isEnd } = eventType(trip)
-                    if (isTrip) {
+                    if (trip.event === "new-trip") {
                         return parseTrip(trip)
                     }
-                    if (isFailure) {
+                    if (trip.event === "no-trips") {
+                        return <div key={trip.id}>No trips found</div>
+                    }
+                    if (trip.event === "failed") {
                         console.log("event failure", trip)
                         return (
                             <div key={trip.id}>Error: {String(trip.data)}</div>
                         )
                     }
-                    if (isEnd) {
+                    if (trip.event === "end") {
                         console.log("isEnd", trip)
                     }
                     return null
@@ -66,15 +60,17 @@ export default function FetchTrips() {
     return (
         <section className="flex flex-col items-center justify-start gap-4">
             {trips?.map((trip) => {
-                const { isTrip, isFailure, isEnd } = eventType(trip)
-                if (isTrip) {
+                if (trip.event === "new-trip") {
                     return parseTrip(trip)
                 }
-                if (isFailure) {
+                if (trip.event === "no-trips") {
+                    return <div key={trip.id}>No trips found</div>
+                }
+                if (trip.event === "failed") {
                     console.log("event failure", trip)
                     return <div key={trip.id}>Error: {String(trip.data)}</div>
                 }
-                if (isEnd) {
+                if (trip.event === "end") {
                     console.log("isEnd", trip)
                 }
                 return null

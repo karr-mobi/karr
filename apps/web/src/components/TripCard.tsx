@@ -11,7 +11,7 @@ import {
 import { useDisplayName, useInitials } from "@karr/ui/hooks/users"
 import { cn } from "@karr/ui/lib/utils"
 import { useLocale } from "next-intl"
-import type { Trip } from "@/api/db/schemas/trips"
+import type { Trip } from "@/db/schemas/trips"
 import { Link } from "@/i18n/routing"
 
 export function TripCard({

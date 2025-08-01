@@ -9,12 +9,14 @@
         "start": "next start",
         "check:lint": "eslint . --max-warnings 0",
         "lint": "eslint . --max-warnings 0 --fix",
-        "check:types": "tsc --noEmit"
+        "check:types": "tsc --noEmit",
+        "db:migrations-generate": "drizzle-kit generate"
     },
     "dependencies": {
         "@hookform/resolvers": "catalog:ui",
         "@karr/auth": "workspace:*",
         "@karr/config": "workspace:*",
+        "@karr/kv": "workspace:*",
         "@karr/logger": "workspace:*",
         "@karr/ui": "workspace:*",
         "@karr/util": "workspace:*",
@@ -43,12 +45,12 @@
         "neverthrow": "catalog:utils",
         "std-env": "catalog:utils",
         "drizzle-orm": "catalog:api",
-        "db0": "catalog:api",
         "drizzle-zod": "catalog:api",
+        "db0": "catalog:api",
         "postgres": "catalog:api",
         "resend": "catalog:api",
-        "unstorage": "catalog:api",
-        "prettier": "catalog:devtools"
+        "prettier": "catalog:devtools",
+        "drizzle-kit": "catalog:api"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",

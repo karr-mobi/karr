@@ -1,0 +1,46 @@
+{
+    "name": "@karr/auth-server",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "check:lint": "eslint . --max-warnings 0",
+        "lint": "eslint . --max-warnings 0 --fix",
+        "dev": "tsx --watch src/server.ts",
+        "build": "tsc --noEmit && CI=true node --experimental-strip-types ./script/bundle.ts",
+        "start": "node ./out/server.mjs",
+        "check:types": "tsc --noEmit",
+        "test": "vitest"
+    },
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "default": "./dist/index.js"
+        }
+    },
+    "dependencies": {
+        "@karr/auth": "workspace:*",
+        "@karr/config": "workspace:*",
+        "@karr/kv": "workspace:*",
+        "@karr/logger": "workspace:*",
+        "@karr/util": "workspace:*",
+        "@openauthjs/openauth": "catalog:api",
+        "hono": "catalog:api",
+        "neverthrow": "catalog:utils",
+        "ofetch": "catalog:utils",
+        "resend": "catalog:api",
+        "std-env": "catalog:utils",
+        "srvx": "catalog:api",
+        "esbuild": "catalog:utils"
+    },
+    "devDependencies": {
+        "@karr/build-plugins": "workspace:*",
+        "@karr/eslint-config": "workspace:*",
+        "@karr/tsconfig": "workspace:*",
+        "@types/node": "catalog:types",
+        "eslint": "catalog:lint",
+        "typescript": "catalog:devtools",
+        "vitest": "catalog:test",
+        "vite-tsconfig-paths": "catalog:test",
+        "tsx": "catalog:devtools"
+    }
+}

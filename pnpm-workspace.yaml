@@ -126,6 +126,7 @@ catalogs:
         husky: ^9.1.7
         prettier: ^3.6.2
         taze: ^19.1.0
+        tsdown: ^0.13.0
         turbo: ^2.5.5
         tsx: ^4.20.3
         typescript: ^5.8.3
