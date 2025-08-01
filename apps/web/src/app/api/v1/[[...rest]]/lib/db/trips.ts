@@ -7,7 +7,6 @@ import drizzle from "@/db"
 import { type AccountId, accountsTable } from "@/db/schemas/accounts"
 import { profileTable } from "@/db/schemas/profile"
 import {
-    type NewTrip,
     type NewTripInput,
     NewTripSchema,
     TripSchema,

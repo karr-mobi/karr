@@ -1,6 +1,5 @@
 import { AUTH_PROVIDERS } from "@karr/config"
 import logger from "@karr/logger"
-import { tryCatch } from "@karr/util"
 import { err, ok } from "neverthrow"
 import { db } from "@/db"
 import { accountsTable } from "@/db/schemas/accounts"
