@@ -6,7 +6,9 @@ import { accountsTable } from "@/db/schemas/accounts"
 import { profileTable } from "@/db/schemas/profile"
 import { userPrefsTable } from "@/db/schemas/userprefs"
 
-type Providers = (typeof AUTH_PROVIDERS)[number]["name"]
+type Providers =
+    | Exclude<(typeof AUTH_PROVIDERS)[number]["name"], "password" | "code">
+    | "local"
 
 export type UserInitData = {
     firstName: string
