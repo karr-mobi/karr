@@ -1,0 +1,26 @@
+{
+    "name": "@karr/build-plugins",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "check:lint": "eslint . --max-warnings 0",
+        "lint": "eslint . --max-warnings 0 --fix",
+        "dev": "tsc --watch",
+        "build": "tsc",
+        "check:types": "tsc --noEmit",
+        "test": "vitest"
+    },
+    "exports": {
+        "./node-builtins": "./src/unplugin-fix-node-builtins.ts"
+    },
+    "devDependencies": {
+        "@karr/eslint-config": "workspace:*",
+        "@karr/tsconfig": "workspace:*",
+        "@types/node": "catalog:types",
+        "eslint": "catalog:lint",
+        "typescript": "catalog:devtools",
+        "unplugin": "catalog:utils",
+        "vitest": "catalog:test",
+        "vite-tsconfig-paths": "catalog:test"
+    }
+}

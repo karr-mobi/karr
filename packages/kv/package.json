@@ -1,0 +1,44 @@
+{
+    "name": "@karr/kv",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "check:lint": "eslint . --max-warnings 0",
+        "lint": "eslint . --max-warnings 0 --fix",
+        "dev": "tsdown --watch",
+        "build": "tsdown",
+        "check:types": "tsc --noEmit",
+        "test": "vitest"
+    },
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "deno": "./dist/deno.js",
+            "bun": "./dist/bun.js",
+            "node": "./dist/node.js",
+            "default": "./dist/node.js"
+        },
+        "./types": {
+            "types": "./src/types.ts"
+        }
+    },
+    "dependencies": {
+        "unstorage": "catalog:api",
+        "db0": "catalog:api",
+        "std-env": "catalog:utils",
+        "neverthrow": "catalog:utils"
+    },
+    "devDependencies": {
+        "@karr/eslint-config": "workspace:*",
+        "@karr/build-plugins": "workspace:*",
+        "@karr/logger": "workspace:*",
+        "@karr/util": "workspace:*",
+        "@karr/tsconfig": "workspace:*",
+        "@types/node": "catalog:types",
+        "eslint": "catalog:lint",
+        "tsdown": "catalog:devtools",
+        "typescript": "catalog:devtools",
+        "vitest": "catalog:test",
+        "vite-tsconfig-paths": "catalog:test"
+    }
+}
