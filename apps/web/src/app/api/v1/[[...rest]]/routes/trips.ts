@@ -1,6 +1,5 @@
 import type { InferRouterOutputs } from "@orpc/server"
 import { z } from "zod/v4-mini"
-import { NewTripInputSchema } from "@/api/db/schemas/trips"
 import {
     addTrip,
     deleteTrip,
@@ -8,6 +7,7 @@ import {
     getTripDetails,
     getTrips
 } from "@/api/lib/db/trips"
+import { NewTripInputSchema } from "@/db/schemas/trips"
 import { base } from "../server"
 
 const searchTrips = base
@@ -28,21 +28,24 @@ const searchTrips = base
             return
         }
 
+        if (trips.value.length === 0) {
+            yield {
+                data: {
+                    failed: true,
+                    message: "No trips found"
+                },
+                event: "no-trips" as const,
+                id: crypto.randomUUID()
+            }
+            return
+        }
+
         for (const trip of trips.value) {
             yield {
                 data: trip,
                 event: "new-trip" as const,
                 id: trip.id
             }
-        }
-
-        yield {
-            data: {
-                failed: true,
-                message: "No trips found"
-            },
-            event: "failed" as const,
-            id: crypto.randomUUID()
         }
 
         yield {
@@ -68,12 +71,9 @@ const addNewTrip = base
     })
     .input(NewTripInputSchema)
     .handler(async ({ context, input: trip, errors }) => {
-        console.debug(`Adding trip: ${context.user.id}`, trip)
+        console.debug(`Adding trip: ${context.user.remoteId}`, trip)
 
-        const createdTrip = await addTrip({
-            ...trip,
-            driver: context.user.id
-        })
+        const createdTrip = await addTrip(trip, context.user)
 
         if (createdTrip.isErr()) {
             throw errors.INTERNAL_SERVER_ERROR({
@@ -133,14 +133,17 @@ const deleteTripProc = base
                   })
         }
 
-        if (trip.value.driver !== context.user.id) {
+        if (
+            trip.value.Profile.accountProvider !== context.user.provider ||
+            trip.value.Profile.accountRemoteId !== context.user.remoteId
+        ) {
             throw errors.FORBIDDEN({
                 message: "Trip does not belong to you"
             })
         }
 
-        console.debug(`Deleting trip: ${context.user.id} ${tripId}`)
-        const res = await deleteTrip(tripId, context.user.id)
+        console.debug(`Deleting trip: ${tripId}`)
+        const res = await deleteTrip(tripId, trip.value.Profile.id)
 
         if (!res) {
             throw errors.INTERNAL_SERVER_ERROR({

@@ -1,9 +1,11 @@
 import { getClient } from "@karr/auth/client"
 import { subjects } from "@karr/auth/subjects"
-import type { cookies } from "next/headers"
+import {
+    InvalidAccessTokenError,
+    InvalidRefreshTokenError
+} from "@openauthjs/openauth/error"
 import { setTokens } from "@/app/auth/actions"
-
-type Cookies = Awaited<ReturnType<typeof cookies>>
+import type { Cookies } from "./types"
 
 /**
  * Check if the user is authenticated
@@ -25,9 +27,17 @@ export async function isAuthenticated(cookies: Cookies) {
     })
 
     if (verified.err) {
-        console.log("Invalid token:", verified.err)
-        cookies.delete("access_token")
-        cookies.delete("refresh_token")
+        if (
+            verified.err instanceof InvalidAccessTokenError ||
+            verified.err instanceof InvalidRefreshTokenError
+        ) {
+            console.log("Invalid tokens")
+            cookies.delete("access_token")
+            cookies.delete("refresh_token")
+        } else {
+            console.error("Unexpected error:", verified.err)
+        }
+
         return false
     }
 
