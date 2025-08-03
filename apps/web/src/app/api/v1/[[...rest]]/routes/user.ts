@@ -36,6 +36,41 @@ const userInfo = base
     .actionable()
     .callable()
 
+const getAvatar = base
+    .route({
+        method: "GET"
+    })
+    .input(z.optional(z.uuidv4()))
+    .handler(async ({ context, errors, input }) => {
+        const user = input
+            ? await selectUserProfileById(input)
+            : await selectUserByAccountId(context.user)
+
+        if (user.isErr()) {
+            throw errors.INTERNAL_SERVER_ERROR({
+                message: "Failed to fetch user",
+                data: {
+                    cause: user.error
+                }
+            })
+        }
+
+        if (!user.value) {
+            throw errors.NOT_FOUND({
+                message: "User not found"
+            })
+        }
+
+        return {
+            avatar: user.value.avatar,
+            firstName: user.value.firstName,
+            lastName: user.value.lastName,
+            nickname: user.value.nickname
+        }
+    })
+    .actionable()
+    .callable()
+
 const changeNickname = base
     .route({
         method: "PUT"
@@ -130,6 +165,7 @@ const getPublicProfile = base
 
 export const router = {
     info: userInfo,
+    avatar: getAvatar,
     updateNickname: changeNickname,
     updateBio: changeBio,
     updateAvatar: changeAvatar,

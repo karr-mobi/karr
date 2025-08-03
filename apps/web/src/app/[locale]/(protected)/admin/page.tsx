@@ -9,8 +9,8 @@ import type { Metadata } from "next"
 import { unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
-import { auth } from "@/app/auth/actions"
 import Loading from "@/components/Loading"
+import { client } from "@/lib/orpc"
 import { APP_VERSION, APPLICATION_NAME } from "@/util/appname"
 import { InstanceInfo } from "./components/InstanceInfo"
 import { UsersList, UsersSkeleton } from "./components/UsersList"
@@ -25,10 +25,10 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AdminPage() {
-    const user = await auth()
     const t = await getTranslations("Admin")
+    const admin = client.admin.check()
 
-    if (!user || user.role !== "admin") unauthorized()
+    if (!admin) unauthorized()
 
     return (
         <div className="container mx-auto space-y-6 py-8">

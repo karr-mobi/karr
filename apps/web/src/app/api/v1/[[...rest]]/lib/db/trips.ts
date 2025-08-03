@@ -65,7 +65,9 @@ export async function getTripDetails(tripId: string) {
                     lastName: profileTable.lastName,
                     nickname: profileTable.nickname,
                     avatar: profileTable.avatar,
-                    verified: accountsTable.verified
+                    verified: accountsTable.verified,
+                    accountProvider: accountsTable.provider,
+                    accountRemoteId: accountsTable.remoteId
                 },
                 preferences: {
                     autoBook: userPrefsTable.autoBook,

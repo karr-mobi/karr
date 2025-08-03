@@ -104,9 +104,10 @@ function UserCard({ user }: { user: TUsersList[number] }) {
                         <UserIcon className="h-5 w-5" />
                     </div>
                 )}
-                {user.profileId === authState?.id && (
-                    <Badge variant="secondary">{t("you")}</Badge>
-                )}
+                {user.provider === authState?.provider &&
+                    user.remoteId === authState?.remoteId && (
+                        <Badge variant="secondary">{t("you")}</Badge>
+                    )}
                 <div>{displayName}</div>
                 {user.role === "admin" && (
                     <Badge variant="default">{user.role}</Badge>
@@ -195,7 +196,8 @@ function User({ user }: { user: TUsersList[number]; key: string }) {
                                     size="sm"
                                     onClick={() =>
                                         unblockUserMutation.mutate({
-                                            id: user.id
+                                            provider: user.provider,
+                                            remoteId: user.remoteId
                                         })
                                     }
                                     disabled={unblockUserMutation.isPending}
@@ -209,7 +211,8 @@ function User({ user }: { user: TUsersList[number]; key: string }) {
                                     size="sm"
                                     onClick={() =>
                                         blockUserMutation.mutate({
-                                            id: user.id
+                                            provider: user.provider,
+                                            remoteId: user.remoteId
                                         })
                                     }
                                     disabled={blockUserMutation.isPending}
