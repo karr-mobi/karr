@@ -63,6 +63,9 @@ WORKDIR /app
 ENV CONFIG_DIR="/app/config"
 ENV NODE_ENV=production
 
+COPY --from=installer --chown=runner:runner /app/apps/web/wait-for-it.sh /usr/local/bin/
+RUN chmod 500 /usr/local/bin/wait-for-it.sh
+
 # Don't run production as root
 RUN addgroup --system --gid 1001 runner
 RUN adduser --system --uid 1001 runner
@@ -75,4 +78,4 @@ COPY --from=builder --chown=runner:runner /app/apps/web/public ./apps/web/public
 
 USER runner
 
-CMD ["node", "apps/web/server.js"]
+CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "node", "apps/web/server.js"]
