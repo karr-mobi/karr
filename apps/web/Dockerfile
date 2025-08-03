@@ -60,15 +60,17 @@ RUN pnpm run build
 FROM base AS runner
 WORKDIR /app
 
+RUN apk add --no-cache bash
+
 ENV CONFIG_DIR="/app/config"
 ENV NODE_ENV=production
-
-COPY --from=installer --chown=runner:runner /app/apps/web/wait-for-it.sh /usr/local/bin/
-RUN chmod 500 /usr/local/bin/wait-for-it.sh
 
 # Don't run production as root
 RUN addgroup --system --gid 1001 runner
 RUN adduser --system --uid 1001 runner
+
+COPY --from=installer --chown=runner:runner /app/apps/web/wait-for-it.sh /usr/local/bin/
+RUN chmod 500 /usr/local/bin/wait-for-it.sh
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing

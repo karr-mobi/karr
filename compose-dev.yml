@@ -3,36 +3,47 @@ services:
         build:
             context: .
             dockerfile: ./apps/web/Dockerfile
+        networks:
+            - karr_network
+        secrets:
+            - db-password
         environment:
             - CONFIG_DIR=/app/config
             - PORT=3000
+            - DB_HOST=db
+            - DB_PORT=5432
+            - DB_NAME=karr
+            - DB_USER=postgres
+            - DB_PASSWORD_FILE=/run/secrets/db-password
         ports:
             - 3000:3000
         volumes:
             - ./config:/app/config
         depends_on:
-            - api
-
-    api:
-        build:
-            context: .
-            dockerfile: ./apps/api/Dockerfile
-        secrets:
-            - db-password
-        environment:
-            - CONFIG_DIR=/app/config
-            - DB_HOST=db
-            - DB_USER=postgres
-            - DB_PASSWORD_FILE=/run/secrets/db-password
-        ports:
-            - 1993:1993
-        volumes:
-            - ./config:/app/config
-        depends_on:
             - db
+
+    # api:
+    #     build:
+    #         context: .
+    #         dockerfile: ./apps/api/Dockerfile
+    #     secrets:
+    #         - db-password
+    #     environment:
+    #         - CONFIG_DIR=/app/config
+    #         - DB_HOST=db
+    #         - DB_USER=postgres
+    #         - DB_PASSWORD_FILE=/run/secrets/db-password
+    #     ports:
+    #         - 1993:1993
+    #     volumes:
+    #         - ./config:/app/config
+    #     depends_on:
+    #         - db
 
     db:
         image: postgres:17-alpine
+        networks:
+            - karr_network
         ports:
             - 5432:5432
         secrets:
@@ -51,6 +62,8 @@ services:
         build:
             context: ./apps/caddy
             dockerfile: Dockerfile
+        networks:
+            - karr_network
         restart: unless-stopped
         ports:
             - 8080:8080
@@ -73,3 +86,6 @@ volumes:
 secrets:
     db-password:
         file: ./pass.txt
+
+networks:
+    karr_network:

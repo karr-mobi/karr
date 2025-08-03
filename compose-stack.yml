@@ -3,24 +3,23 @@ services:
         image: ghcr.io/karr-mobi/karr-web:latest
         networks:
             - karr_network
+        secrets:
+            - db-password
         environment:
             - LOG_LEVEL=debug
+            - DB_USER=karr
+            - DB_HOST=db
+            - DB_PASSWORD_FILE=/run/secrets/db-password
         volumes:
             - /srv/http/karr/karr.config.yaml:/app/config/karr.config.yaml
         depends_on:
-            - api
+            - db
 
     # Needs an image for the auth server
     # api:
     #     image: ghcr.io/karr-mobi/karr-api:latest
     #     networks:
     #         - karr_network
-    #     secrets:
-    #         - db-password
-    #     environment:
-    #         - DB_USER=karr
-    #         - DB_HOST=db
-    #         - DB_PASSWORD_FILE=/run/secrets/db-password
     #     volumes:
     #         - /srv/http/karr/karr.config.yaml:/app/config/karr.config.yaml
     #         - auth_data:/app/.data/
