@@ -12,7 +12,7 @@
     },
     "exports": {
         ".": {
-            "types": "./src/index.ts",
+            "types": "./dist/node.d.ts",
             "deno": "./dist/deno.js",
             "bun": "./dist/bun.js",
             "node": "./dist/node.js",
@@ -26,7 +26,8 @@
         "unstorage": "catalog:api",
         "db0": "catalog:api",
         "std-env": "catalog:utils",
-        "neverthrow": "catalog:utils"
+        "neverthrow": "catalog:utils",
+        "@openauthjs/openauth": "catalog:api"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",

@@ -1,7 +1,9 @@
 import { logger } from "@karr/logger"
-import { err, ok } from "neverthrow"
+import type { StorageAdapter } from "@openauthjs/openauth/storage/storage"
+import { err, ok, type Result } from "neverthrow"
 import { runtime } from "std-env"
 import denoKVdriver from "unstorage/drivers/deno-kv"
+import { DenoKV } from "@/adapters/deno-kv-adapter"
 import { createStore } from "@/storage"
 import type { Store } from "@/types"
 
@@ -36,9 +38,23 @@ export function getStore(): Store {
         return driver
     }
 
-    return ok(
-        createStore({
-            driver: driver.value
-        })
-    )
+    const storage = createStore({
+        driver: driver.value
+    })
+
+    storage.watch((event, key) => {
+        logger.debug(
+            `[${runtime}] getStore: Watch event: ${event} for key: ${key}`
+        )
+    })
+
+    return ok(storage)
+}
+
+export async function getOpenAuthStorage(): Promise<
+    Result<StorageAdapter, unknown>
+> {
+    const driver = await DenoKV()
+
+    return ok(driver)
 }

@@ -890,6 +890,9 @@ importers:
 
   packages/kv:
     dependencies:
+      '@openauthjs/openauth':
+        specifier: catalog:api
+        version: 0.4.3(patch_hash=1f4f51a1f46d1e5e12d7082bf8ca5b7ec57e4d6b3f36b06f8d1fdd2ee79ce074)(arctic@2.3.4)(hono@4.8.5)
       db0:
         specifier: catalog:api
         version: 0.3.2(drizzle-orm@0.43.1(postgres@3.4.7))

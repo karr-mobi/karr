@@ -2,7 +2,7 @@ import { unpluginFixNodeBuiltins } from "@karr/build-plugins/node-builtins"
 import { defineConfig } from "tsdown"
 
 export default defineConfig({
-    entry: "./src/adapters/*.ts",
+    entry: "./src/environments/*.ts",
     format: ["esm"],
     dts: true,
     clean: true,

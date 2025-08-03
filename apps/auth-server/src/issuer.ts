@@ -1,7 +1,7 @@
 import { authBaseUrl } from "@karr/auth/client"
 import { subjects, type UserProperties } from "@karr/auth/subjects"
 import { API_BASE } from "@karr/config"
-import { getStore } from "@karr/kv"
+import { getOpenAuthStorage } from "@karr/kv"
 import { logger } from "@karr/logger"
 import { issuer } from "@openauthjs/openauth"
 import type { Theme } from "@openauthjs/openauth/ui/theme"
@@ -12,7 +12,6 @@ import { getGithubUserData } from "./profile-fetchers/github"
 import { getGoogleUserData } from "./profile-fetchers/google"
 import { providers } from "./providers"
 import type { SuccessValues } from "./sucess"
-import { UnStorage } from "./unstorage-adapter"
 
 const theme: Theme = {
     title: "Karr Auth",
@@ -35,9 +34,11 @@ const theme: Theme = {
     `
 }
 
-const store = getStore()
+const storage = await getOpenAuthStorage()
 
-if (store.isErr()) {
+logger.debug("storage", storage)
+
+if (storage.isErr()) {
     throw new Error("Failed to initialize storage")
 }
 
@@ -46,9 +47,7 @@ logger.debug("issuer config", { callbackUrl, base: authBaseUrl(API_BASE) })
 const app = issuer({
     basePath: authBaseUrl(API_BASE),
     providers,
-    storage: UnStorage({
-        store: store.value
-    }),
+    storage: storage.value,
     subjects,
     theme,
     allow(input, _req) {
