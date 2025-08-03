@@ -13,12 +13,17 @@ localhost:80 {
 		level info
 	}
 
-	handle /not/.well-known/* {
-		rewrite * /api/v1/auth{path}
+	handle /.well-known/oauth-authorization-server {
+		rewrite * /api/v1/auth/.well-known/oauth-authorization-server
 		reverse_proxy http://host.docker.internal:1993
 	}
 
-	handle /api/v2/* {
+	handle /.well-known/jwks.json {
+		rewrite * /api/v1/auth/.well-known/jwks.json
+		reverse_proxy http://host.docker.internal:1993
+	}
+
+	handle /api/v1/auth/* {
 		reverse_proxy http://host.docker.internal:1993
 	}
 

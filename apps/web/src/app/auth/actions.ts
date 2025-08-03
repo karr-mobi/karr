@@ -5,6 +5,7 @@ import { subjects } from "@karr/auth/subjects"
 import type { Tokens } from "@openauthjs/openauth/client"
 import { cookies } from "next/headers"
 import { getLocale } from "next-intl/server"
+import type { Cookies } from "@/api/lib/types"
 import { redirect } from "@/i18n/routing"
 
 export async function auth() {
@@ -59,8 +60,8 @@ export async function logout() {
     redirect({ href: "/", locale })
 }
 
-export async function setTokens(tokens: Tokens) {
-    const jar = await cookies()
+export async function setTokens(tokens: Tokens, jar?: Cookies) {
+    jar ||= await cookies()
 
     jar.set({
         name: "access_token",

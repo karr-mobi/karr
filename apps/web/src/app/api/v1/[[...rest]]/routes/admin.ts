@@ -1,14 +1,13 @@
-import { count, desc, eq } from "drizzle-orm"
+import { and, count, desc, eq } from "drizzle-orm"
 import { z } from "zod/v4-mini"
-import db from "@/api/db"
-import { accountsTable } from "@/api/db/schemas/accounts"
-import { profileTable } from "@/api/db/schemas/profile"
+import db from "@/db"
+import { accountsTable } from "@/db/schemas/accounts"
+import { profileTable } from "@/db/schemas/profile"
 import { base } from "../server"
 
 const UsersListSchema = z.array(
     z.object({
         id: z.uuidv4(),
-        profileId: z.uuidv4(),
         firstName: z.string(),
         lastName: z.string(),
         nickname: z.nullable(z.string()),
@@ -16,23 +15,51 @@ const UsersListSchema = z.array(
         role: z.enum(["admin", "user"]),
         blocked: z.nullable(z.boolean()),
         provider: z.string(),
+        remoteId: z.string(),
         createdAt: z.iso.datetime()
     })
 )
 
 export type TUsersList = z.infer<typeof UsersListSchema>
 
-const adminBase = base.use(({ next, context, errors }) => {
-    if (context.user.role !== "admin") {
+const adminBase = base.use(async ({ next, context, errors }) => {
+    const [user] = await db
+        .select()
+        .from(accountsTable)
+        .where(
+            and(
+                eq(accountsTable.provider, context.user.provider),
+                eq(accountsTable.remoteId, context.user.remoteId)
+            )
+        )
+        .limit(1)
+
+    if (!user) {
+        throw errors.FORBIDDEN({
+            message: "You are not authorized to access this resource",
+            data: {
+                cause: "User not found"
+            }
+        })
+    }
+
+    if (user.role !== "admin") {
         throw errors.FORBIDDEN({
             message: "You are do not have permission to access this resource",
             data: {
-                cause: "You must be an admin"
+                cause: "User is not admin"
             }
         })
     }
     return next()
 })
+
+const adminCheck = adminBase
+    .handler(() => {
+        return "ok"
+    })
+    .actionable()
+    .callable()
 
 const instanceInfo = adminBase
     .route({
@@ -49,9 +76,17 @@ const instanceInfo = adminBase
             .select({ count: count() })
             .from(accountsTable)
 
+        const [firstAccount] = await db
+            .select()
+            .from(accountsTable)
+            .orderBy(accountsTable.createdAt)
+            .limit(1)
+
         return {
             userCount: userCount?.count || 0,
-            timestamp: new Date().toISOString()
+            timestamp:
+                firstAccount?.createdAt.toISOString() ||
+                new Date().toISOString()
         }
     })
     .actionable()
@@ -65,11 +100,11 @@ const usersList = adminBase
     .handler(async () => {
         const usersList = await db
             .select({
-                id: accountsTable.id,
-                profileId: profileTable.id,
+                id: profileTable.id,
                 role: accountsTable.role,
                 blocked: accountsTable.blocked,
                 provider: accountsTable.provider,
+                remoteId: accountsTable.remoteId,
                 firstName: profileTable.firstName,
                 lastName: profileTable.lastName,
                 nickname: profileTable.nickname,
@@ -77,13 +112,18 @@ const usersList = adminBase
                 createdAt: accountsTable.createdAt
             })
             .from(accountsTable)
-            .innerJoin(profileTable, eq(accountsTable.profile, profileTable.id))
+            .innerJoin(
+                profileTable,
+                and(
+                    eq(accountsTable.provider, profileTable.accountProvider),
+                    eq(accountsTable.remoteId, profileTable.accountRemoteId)
+                )
+            )
             .orderBy(desc(accountsTable.createdAt))
 
         // Format the response with proper name handling
         return usersList.map((user) => ({
             id: user.id,
-            profileId: user.profileId,
             firstName: user.firstName,
             lastName: user.lastName,
             nickname: user.nickname,
@@ -91,6 +131,7 @@ const usersList = adminBase
             role: user.role,
             blocked: user.blocked,
             provider: user.provider,
+            remoteId: user.remoteId,
             createdAt: user.createdAt.toISOString()
         }))
     })
@@ -103,12 +144,16 @@ const blockUser = base
     })
     .input(
         z.object({
-            id: z.uuidv4()
+            provider: z.string(),
+            remoteId: z.string()
         })
     )
     .handler(async ({ context, input, errors }) => {
         // Prevent admin from blocking themselves
-        if (context.user.id === input.id) {
+        if (
+            context.user.provider === input.provider &&
+            context.user.remoteId === input.remoteId
+        ) {
             throw errors.BAD_REQUEST({ message: "Cannot block yourself" })
         }
 
@@ -116,7 +161,12 @@ const blockUser = base
         const [targetUser] = await db
             .select({ role: accountsTable.role })
             .from(accountsTable)
-            .where(eq(accountsTable.id, input.id))
+            .where(
+                and(
+                    eq(accountsTable.provider, input.provider),
+                    eq(accountsTable.remoteId, input.remoteId)
+                )
+            )
             .limit(1)
 
         if (!targetUser) {
@@ -131,7 +181,12 @@ const blockUser = base
         await db
             .update(accountsTable)
             .set({ blocked: true })
-            .where(eq(accountsTable.id, input.id))
+            .where(
+                and(
+                    eq(accountsTable.provider, input.provider),
+                    eq(accountsTable.remoteId, input.remoteId)
+                )
+            )
 
         return {
             success: true,
@@ -147,15 +202,21 @@ const unblockUser = base
     })
     .input(
         z.object({
-            id: z.uuidv4()
+            provider: z.string(),
+            remoteId: z.string()
         })
     )
     .handler(async ({ input, errors }) => {
         // Check if user exists
         const [targetUser] = await db
-            .select({ id: accountsTable.id })
+            .select({ role: accountsTable.role })
             .from(accountsTable)
-            .where(eq(accountsTable.id, input.id))
+            .where(
+                and(
+                    eq(accountsTable.provider, input.provider),
+                    eq(accountsTable.remoteId, input.remoteId)
+                )
+            )
             .limit(1)
 
         if (!targetUser) {
@@ -166,7 +227,12 @@ const unblockUser = base
         await db
             .update(accountsTable)
             .set({ blocked: false })
-            .where(eq(accountsTable.id, input.id))
+            .where(
+                and(
+                    eq(accountsTable.provider, input.provider),
+                    eq(accountsTable.remoteId, input.remoteId)
+                )
+            )
 
         return {
             success: true,
@@ -177,6 +243,7 @@ const unblockUser = base
     .callable()
 
 export const router = {
+    check: adminCheck,
     instance: instanceInfo,
     users: usersList,
     blockUser: blockUser,

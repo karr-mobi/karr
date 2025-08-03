@@ -1,6 +1,5 @@
 "use client"
 
-import type { UserProperties } from "@karr/auth/subjects"
 import { Badge } from "@karr/ui/components/badge"
 import {
     DropdownMenu,
@@ -19,17 +18,15 @@ import {
 import { LogOutIcon, ShieldUserIcon, UserIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useTransition } from "react"
+import { useAdmin } from "@/hooks/admin"
+import { useUser } from "@/hooks/user"
 import { Link } from "@/i18n/routing"
 import { logout } from "~/auth/actions"
 
-export function AccountDropdown({
-    children,
-    userdata
-}: {
-    children?: React.ReactNode
-    userdata: UserProperties
-}) {
+export function AccountDropdown({ children }: { children?: React.ReactNode }) {
     const t = useTranslations("auth")
+    const isAdmin = useAdmin()
+    const { data: user } = useUser()
 
     const [isPending, startTransition] = useTransition()
 
@@ -39,16 +36,14 @@ export function AccountDropdown({
 
     const showDev = false
 
-    const isAdmin = userdata.role === "admin"
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel>
-                    {userdata.nickname ||
-                        (userdata.firstName
-                            ? `${userdata.firstName} ${userdata.lastName}`
+                    {user?.nickname ||
+                        (user?.firstName
+                            ? `${user.firstName} ${user.lastName}`
                             : t("Dropdown.title"))}
                     {isAdmin && (
                         <Badge className="ms-2" variant="secondary">

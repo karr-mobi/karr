@@ -37,16 +37,17 @@ export const authBaseUrl = (apiBase: string, appUrl?: string) => {
 export async function getCallbackUrl(): Promise<string> {
     const { APP_URL, API_BASE } = await import("@karr/config")
 
-    const issuerUrl = authBaseUrl(API_BASE, APP_URL)
-
-    const callbackUrl = `${issuerUrl.replace(/\/$/, "")}${callbackPath}`
+    const callbackUrl = new URL(
+        `${API_BASE.replace(/\/$/, "")}${callbackPath}`,
+        APP_URL
+    )
 
     if (!callbackUrl) {
         console.error("Failed to initialize callback URL.")
         return ""
     }
 
-    return callbackUrl
+    return callbackUrl.toString()
 }
 
 /**
@@ -57,6 +58,8 @@ export async function getClient(): Promise<Client> {
     const { APP_URL, API_BASE } = await import("@karr/config")
 
     const issuerUrl = authBaseUrl(API_BASE, APP_URL)
+
+    console.log(`AUTH CLIENT: Issuer URL: ${issuerUrl}`)
 
     return createClient({
         clientID,

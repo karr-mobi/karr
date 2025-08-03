@@ -319,16 +319,17 @@ function ShowTripData({ trip }: { trip: Trip }) {
                 </Card>
             </div>
 
-            {user?.authState?.id === trip.driver.id && (
-                <Button
-                    variant="destructive"
-                    className="w-fit justify-self-end"
-                    onClick={() => setDeleteDialogOpen(true)}
-                >
-                    <TrashIcon />
-                    {t("delete")}
-                </Button>
-            )}
+            {user?.authState?.provider === trip.driver.accountProvider &&
+                user.authState?.remoteId === trip.driver.accountRemoteId && (
+                    <Button
+                        variant="destructive"
+                        className="w-fit justify-self-end"
+                        onClick={() => setDeleteDialogOpen(true)}
+                    >
+                        <TrashIcon />
+                        {t("delete")}
+                    </Button>
+                )}
 
             <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
                 <DialogContent>
