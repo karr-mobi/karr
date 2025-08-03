@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.2
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.1...v0.15.2)
+
+### 🩹 Fixes
+
+- **docker:** Change orders ✨ it's fixed ✨ ([2601401](https://github.com/karr-mobi/karr/commit/2601401))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.1
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.0...v0.15.1)
