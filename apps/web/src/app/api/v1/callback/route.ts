@@ -24,9 +24,9 @@ export async function GET(request: Request) {
         status = 302,
         errorDescription?: string | null
     ) {
-        const redirectUrl = new URL(`/fr/login/error`, request.url)
+        const redirectUrl = new URL(`/fr-FR/login/error`, request.url)
         redirectUrl.searchParams.set("error", error)
-        errorDescription &&
+        if (errorDescription)
             redirectUrl.searchParams.set("error_description", errorDescription)
         logger.debug(`Redirecting to ${redirectUrl.href}`)
 
@@ -46,12 +46,12 @@ export async function GET(request: Request) {
     if (error) {
         logger.debug(`[${runtime}] AUTH CALLBACK: Error in request - ${error}`)
 
-        return errorRedirect(error, 500, errorDescription)
+        return errorRedirect(error, 302, errorDescription)
     }
 
     // Redirect to error page if there code is missing
     if (!code) {
-        return errorRedirect("Missing code", 400)
+        return errorRedirect("Missing code", 302)
     }
 
     // Attempt to exchange the code for tokens
@@ -63,7 +63,7 @@ export async function GET(request: Request) {
             `[${runtime}] AUTH CALLBACK: Exception during code exchange:`,
             error
         )
-        return errorRedirect("Token exchange failed", 500)
+        return errorRedirect("Token exchange failed", 302)
     }
 
     // If the exchange was unsuccessful, redirect to error page
@@ -72,7 +72,7 @@ export async function GET(request: Request) {
             `[${runtime}] AUTH CALLBACK: Error exchanging code`,
             exchanged.err
         )
-        return errorRedirect(exchanged.err.message, 500)
+        return errorRedirect(exchanged.err.message, 302)
     }
 
     // Verify the tokens to get the user subject
@@ -83,7 +83,7 @@ export async function GET(request: Request) {
             `[${runtime}] AUTH CALLBACK: Error verifying user`,
             user.err
         )
-        return errorRedirect(user.err.message, 500)
+        return errorRedirect(user.err.message, 302)
     }
 
     // Save user to db, create if user doesn't exist
@@ -96,7 +96,7 @@ export async function GET(request: Request) {
                 `[${runtime}] AUTH CALLBACK: Account is blocked`,
                 savedUser.error
             )
-            return errorRedirect("Account is blocked", 403)
+            return errorRedirect("Account is blocked", 302)
         }
 
         // Redirect to error page for any other error
@@ -104,7 +104,7 @@ export async function GET(request: Request) {
             `[${runtime}] AUTH CALLBACK: Error saving user`,
             savedUser.error
         )
-        return errorRedirect(savedUser.error, 500)
+        return errorRedirect(savedUser.error, 302)
     }
 
     logger.debug(`[${runtime}] AUTH CALLBACK: User saved: ${savedUser.value}`)
