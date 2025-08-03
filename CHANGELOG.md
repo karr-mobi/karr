@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.1
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.0...v0.15.1)
+
+### 🩹 Fixes
+
+- **docker:** Wait for db to be ready before startup ([75087be](https://github.com/karr-mobi/karr/commit/75087be))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.0
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.15...v0.15.0)
