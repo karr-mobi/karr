@@ -4,9 +4,18 @@ import { Hono } from "hono"
 import { serve } from "srvx"
 import issuer from "./issuer"
 
-const app = new Hono().basePath("/api/v1/auth")
+const app = new Hono()
 
-app.route("/", issuer)
+app.get("/", (c) => c.text("Karr auth server"))
+
+app.get("/.well-known/oauth-authorization-server", (c) =>
+    c.redirect("/api/v1/auth/.well-known/oauth-authorization-server")
+)
+app.get("/.well-known/jwks.json", (c) =>
+    c.redirect("/api/v1/auth/.well-known/jwks.json")
+)
+
+app.route("/api/v1/auth", issuer)
 
 // Start the server
 const server = serve({
