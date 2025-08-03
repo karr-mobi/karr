@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.15.0
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.14.15...v0.15.0)
+
+### 🩹 Fixes
+
+- **auth:** ⚠️  Move auth service to separate package ([#182](https://github.com/karr-mobi/karr/pull/182))
+
+#### ⚠️ Breaking Changes
+
+- **auth:** ⚠️  Move auth service to separate package ([#182](https://github.com/karr-mobi/karr/pull/182))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.14.15
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.14.14...v0.14.15)
