@@ -24,7 +24,10 @@ export async function GET(request: Request) {
         status = 302,
         errorDescription?: string | null
     ) {
-        const redirectUrl = new URL(`/fr-FR/login/error`, request.url)
+        const redirectUrl = new URL(
+            `/fr-FR/login/error`,
+            env.NEXT_PUBLIC_APP_URL
+        )
         redirectUrl.searchParams.set("error", error)
         if (errorDescription)
             redirectUrl.searchParams.set("error_description", errorDescription)
