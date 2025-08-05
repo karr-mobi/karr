@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.4
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.3...v0.15.4)
+
+### 🩹 Fixes
+
+- **config:** Properly load config values at runtime ([#185](https://github.com/karr-mobi/karr/pull/185))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.3
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.2...v0.15.3)
