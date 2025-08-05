@@ -36,8 +36,6 @@ const theme: Theme = {
 
 const storage = await getOpenAuthStorage()
 
-logger.debug("storage", storage)
-
 if (storage.isErr()) {
     throw new Error("Failed to initialize storage")
 }
