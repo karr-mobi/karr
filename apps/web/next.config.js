@@ -1,24 +1,15 @@
-import { API_BASE, APP_URL } from "@karr/config"
 import createNextIntlPlugin from "next-intl/plugin"
 
 const withNextIntl = createNextIntlPlugin()
-
-console.log("API_BASE", API_BASE)
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     devIndicators: false,
     output: "standalone",
     /** Enables hot reloading for local packages without a build step */
-    transpilePackages: ["@karr/ui", "@karr/config"],
+    transpilePackages: ["@karr/ui"],
     outputFileTracingIncludes: {
         "/**/*.css": ["src/assets/**/*.css"]
-    },
-    env: {
-        //biome-ignore-start lint/style/useNamingConvention: it's an environment variable
-        NEXT_PUBLIC_API_BASE: API_BASE,
-        NEXT_PUBLIC_APP_URL: APP_URL
-        //biome-ignore-end lint/style/useNamingConvention: it's an environment variable
     },
 
     images: {

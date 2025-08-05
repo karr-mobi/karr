@@ -66,12 +66,12 @@ services:
             - karr_network
         restart: unless-stopped
         ports:
-            - 8080:8080
+            - 80:80
             #- "443:443"
             #- "443:443/udp"
         environment:
             - TZ=Europe/Paris
-            - SITE_ADDRESS=:8080
+            - SITE_ADDRESS=:80
             - API_PORT=1993
             - WEB_PORT=3000
             - CADDY_DISABLE_TLS=1

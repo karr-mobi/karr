@@ -1,4 +1,5 @@
 import { subjects } from "@karr/auth/subjects"
+import { APP_URL } from "@karr/config"
 import logger from "@karr/logger"
 import type {
     ExchangeError,
@@ -24,10 +25,7 @@ export async function GET(request: Request) {
         status = 302,
         errorDescription?: string | null
     ) {
-        const redirectUrl = new URL(
-            `/fr-FR/login/error`,
-            env.NEXT_PUBLIC_APP_URL
-        )
+        const redirectUrl = new URL(`/fr-FR/login/error`, APP_URL)
         redirectUrl.searchParams.set("error", error)
         if (errorDescription)
             redirectUrl.searchParams.set("error_description", errorDescription)
@@ -41,7 +39,7 @@ export async function GET(request: Request) {
     const code = url.searchParams.get("code")
     const error = url.searchParams.get("error")
     const errorDescription = url.searchParams.get("error_description")
-    const next = url.searchParams.get("next") ?? `${env.NEXT_PUBLIC_APP_URL}/`
+    const next = url.searchParams.get("next") ?? `${APP_URL}/`
 
     logger.debug(`AUTH CALLBACK: URL ${url}`)
 
