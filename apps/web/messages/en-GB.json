@@ -34,6 +34,7 @@
     "auth": {
         "Login": {
             "sign-in": "Sign in",
+            "login-with-email": "Log in with email",
             "choose-provider": "Please choose a provider to continue",
             "continue-with": "Continue with",
             "redirecting": "Redirecting...",
