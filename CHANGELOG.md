@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.15.3
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.2...v0.15.3)
+
+### 🩹 Fixes
+
+- **login:** Better handle different auth providers options ([#183](https://github.com/karr-mobi/karr/pull/183))
+- **auth:** Redirect to `APP_URL` base ([#184](https://github.com/karr-mobi/karr/pull/184))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.2
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.1...v0.15.2)
