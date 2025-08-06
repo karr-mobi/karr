@@ -1,10 +1,11 @@
-import { APP_URL, AUTH_ISSUER } from "@karr/config"
+import { ISSUER } from "@karr/auth/client"
+import { APP_URL } from "@karr/config"
 import logger from "@karr/logger"
 import { lazy } from "@karr/util"
 
 const proxyIsSeparateAuthServer = lazy((): boolean => {
     const appdomain = new URL(APP_URL).hostname
-    const authdomain = new URL(AUTH_ISSUER).hostname
+    const authdomain = new URL(ISSUER).hostname
 
     logger.info(`App domain: ${appdomain}, Auth domain: ${authdomain}`)
     logger.debug("isSeparateAuthServer", authdomain !== appdomain)

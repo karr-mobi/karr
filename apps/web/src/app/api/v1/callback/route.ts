@@ -1,3 +1,4 @@
+import { CALLBACK_URL, client } from "@karr/auth/client"
 import { subjects } from "@karr/auth/subjects"
 import { APP_URL } from "@karr/config"
 import logger from "@karr/logger"
@@ -9,7 +10,6 @@ import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import { runtime } from "std-env"
 import { setTokens } from "@/app/auth/actions"
-import { callbackUrl, client } from "@/app/auth/client"
 import { saveUser } from "./persistence"
 
 export async function GET(request: Request) {
@@ -54,7 +54,7 @@ export async function GET(request: Request) {
     // Attempt to exchange the code for tokens
     let exchanged: ExchangeSuccess | ExchangeError
     try {
-        exchanged = await client.exchange(code, callbackUrl)
+        exchanged = await client.exchange(code, CALLBACK_URL)
     } catch (error) {
         console.error(
             `[${runtime}] AUTH CALLBACK: Exception during code exchange:`,

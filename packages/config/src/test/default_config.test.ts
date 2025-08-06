@@ -25,10 +25,6 @@ describe("default config", () => {
             return iss.path.join(".")
         })
         // AUTH_ISSUER is required by FullConfigSchema but computed (not required from config file)
-        expect(missingKeys).toEqual([
-            ...requiredKeys.slice(0, 1),
-            "AUTH_ISSUER",
-            ...requiredKeys.slice(1)
-        ])
+        expect(missingKeys).toEqual(requiredKeys)
     })
 })

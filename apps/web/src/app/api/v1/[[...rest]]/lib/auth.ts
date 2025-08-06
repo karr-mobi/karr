@@ -1,4 +1,4 @@
-import { getClient } from "@karr/auth/client"
+import { client } from "@karr/auth/client"
 import { subjects } from "@karr/auth/subjects"
 import {
     InvalidAccessTokenError,
@@ -15,8 +15,6 @@ import type { Cookies } from "./types"
 export async function isAuthenticated(cookies: Cookies) {
     const accessToken = cookies.get("access_token")
     const refreshToken = cookies.get("refresh_token")
-
-    const client = await getClient()
 
     if (!accessToken) {
         return false
