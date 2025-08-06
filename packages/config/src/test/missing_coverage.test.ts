@@ -340,6 +340,7 @@ describe("API_BASE Validation", () => {
     it("should validate API_BASE starts with '/'", () => {
         const config = {
             APP_URL: "http://example.org/",
+            AUTH_ISSUER: "http://example.org/",
             API_PORT: 1993,
             API_BASE: `api/${API_VERSION}`, // Missing leading slash
             LOG_TIMESTAMP: true,
@@ -356,6 +357,7 @@ describe("API_BASE Validation", () => {
     it("should validate API_BASE does not end with '/'", () => {
         const config = {
             APP_URL: "http://example.org/",
+            AUTH_ISSUER: "http://example.org/",
             API_PORT: 1993,
             API_BASE: `/api/${API_VERSION}/`, // Has trailing slash
             LOG_TIMESTAMP: true,
@@ -435,6 +437,7 @@ describe("Edge Cases", () => {
     it("should validate APP_URL with trailing slash", () => {
         const config = {
             APP_URL: "http://example.org/", // Valid: has trailing slash
+            AUTH_ISSUER: "http://example.org/",
             API_PORT: 1993,
             API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
@@ -450,6 +453,7 @@ describe("Edge Cases", () => {
     it("should allow APP_URL without trailing slash if pathname is still '/'", () => {
         const config = {
             APP_URL: "http://example.org", // This actually has a pathname of "/" internally
+            AUTH_ISSUER: "http://example.org",
             API_PORT: 1993,
             API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
@@ -466,6 +470,7 @@ describe("Edge Cases", () => {
     it("should reject APP_URL with path", () => {
         const config = {
             APP_URL: "http://example.org/path/", // Invalid: has path
+            AUTH_ISSUER: "http://example.org/path/",
             API_PORT: 1993,
             API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,
@@ -482,6 +487,7 @@ describe("Edge Cases", () => {
     it("should validate APP_URL with localhost special case", () => {
         const config = {
             APP_URL: "http://localhost/", // Special case handled in schema
+            AUTH_ISSUER: "http://localhost/",
             API_PORT: 1993,
             API_BASE: `/api/${API_VERSION}`,
             LOG_TIMESTAMP: true,

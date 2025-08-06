@@ -79,6 +79,7 @@ describe("config module", () => {
         const tmp = {
             ...defaultConfig,
             APP_URL: "http://example.org/", // Add required APP_URL
+            AUTH_ISSUER: "http://example.org/", // Add required AUTH_ISSUER
             AUTH_PROVIDERS: [{ name: "password", trusted: false }], // Add required AUTH_PROVIDERS
             RESEND_API_KEY: "test-api-key" // Required when password provider is present
         }
@@ -136,6 +137,7 @@ describe("config module", () => {
         const customConfig = {
             ...defaultConfig,
             APP_URL: "http://localhost/", // Add required APP_URL
+            AUTH_ISSUER: "http://localhost/", // Add required AUTH_ISSUER
             API_PORT: 4000,
             LOG_LEVEL: "debug",
             AUTH_PROVIDERS: [{ name: "password", trusted: false }], // Add required AUTH_PROVIDERS
@@ -163,6 +165,7 @@ describe("config module", () => {
         const customConfig = {
             ...defaultConfig,
             APP_URL: "http://localhost/",
+            AUTH_ISSUER: "http://localhost/", // Add required AUTH_ISSUER
             API_PORT: 1337,
             LOG_LEVEL: "warn",
             AUTH_PROVIDERS: [{ name: "password", trusted: false }], // Add required AUTH_PROVIDERS
@@ -333,6 +336,7 @@ describe("config module", () => {
                 FullConfigSchema.parseAsync({
                     ...defaultConfig,
                     APP_URL: "http://localhost/", // Add required APP_URL
+                    AUTH_ISSUER: "http://localhost/", // Add required AUTH_ISSUER
                     API_PORT: 3000,
                     LOG_TIMESTAMP: true,
                     LOG_LEVEL: "info",
