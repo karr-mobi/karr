@@ -1,6 +1,6 @@
 "use server"
 
-import { getCallbackUrl, getClient } from "@karr/auth/client"
+import { CALLBACK_URL, client } from "@karr/auth/client"
 import { subjects } from "@karr/auth/subjects"
 import type { Tokens } from "@openauthjs/openauth/client"
 import { cookies } from "next/headers"
@@ -12,8 +12,6 @@ export async function auth() {
     const jar = await cookies()
     const accessToken = jar.get("access_token")
     const refreshToken = jar.get("refresh_token")
-
-    const client = await getClient()
 
     if (!accessToken) {
         return false
@@ -35,9 +33,6 @@ export async function loginWithProvider({ provider }: { provider?: string }) {
     const jar = await cookies()
     const accessToken = jar.get("access_token")
 
-    const client = await getClient()
-    const callbackUrl = await getCallbackUrl()
-
     if (accessToken) {
         const verified = await client.verify(subjects, accessToken.value, {
             refresh: jar.get("refresh_token")?.value
@@ -47,7 +42,7 @@ export async function loginWithProvider({ provider }: { provider?: string }) {
         }
     }
 
-    const { url } = await client.authorize(callbackUrl, "code", { provider })
+    const { url } = await client.authorize(CALLBACK_URL, "code", { provider })
     return { redirectTo: url, isAuthenticated: false }
 }
 

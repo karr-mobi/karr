@@ -1,13 +1,11 @@
-import { authBaseUrl } from "@karr/auth/client"
+import { CALLBACK_URL, ISSUER } from "@karr/auth/client"
 import { subjects, type UserProperties } from "@karr/auth/subjects"
-import { API_BASE } from "@karr/config"
 import { getOpenAuthStorage } from "@karr/kv"
 import { logger } from "@karr/logger"
 import { issuer } from "@openauthjs/openauth"
 import type { Theme } from "@openauthjs/openauth/ui/theme"
 import { ok, type Result } from "neverthrow"
 import { runtime } from "std-env"
-import { callbackUrl } from "./client"
 import { isSeparateAuthServer } from "./lib/config"
 import { getGithubUserData } from "./profile-fetchers/github"
 import { getGoogleUserData } from "./profile-fetchers/google"
@@ -41,9 +39,9 @@ if (storage.isErr()) {
     throw new Error("Failed to initialize storage")
 }
 
-const basePath = isSeparateAuthServer ? undefined : authBaseUrl(API_BASE)
+const basePath = isSeparateAuthServer ? undefined : new URL(ISSUER).pathname
 
-logger.debug("issuer config", { callbackUrl, base: basePath })
+logger.debug("issuer config", { CALLBACK_URL, base: basePath })
 
 const app = issuer({
     basePath,
@@ -53,7 +51,7 @@ const app = issuer({
     theme,
     allow(input, _req) {
         return Promise.resolve(
-            input.redirectURI === callbackUrl && input.clientID === "karr"
+            input.redirectURI === CALLBACK_URL && input.clientID === "karr"
         )
     },
     async success(ctx, value: SuccessValues) {
