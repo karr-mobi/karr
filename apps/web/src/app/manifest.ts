@@ -2,8 +2,10 @@ import type { MetadataRoute } from "next"
 import { headers } from "next/headers"
 import "server-only"
 
-import { APPLICATION_NAME } from "@karr/config"
-import { APPLICATION_NAME as DEFAULT_APPLICATION_NAME } from "@karr/config/static"
+import {
+    APPLICATION_NAME,
+    APPLICATION_NAME as DEFAULT_APPLICATION_NAME
+} from "@karr/config"
 
 export default function manifest(): MetadataRoute.Manifest {
     const _h = headers()
