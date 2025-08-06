@@ -5,20 +5,16 @@
     "scripts": {
         "check:lint": "eslint . --max-warnings 0",
         "lint": "eslint . --max-warnings 0 --fix",
-        "dev": "pnpm run --filter '@karr/util' build && tsc --watch",
-        "build": "tsc",
+        "dev": "pnpm run --filter '@karr/util' build && tsdown --watch",
+        "build": "tsdown",
         "check:types": "tsc --noEmit",
         "test": "vitest",
         "schema:write": "tsx src/export-schema.ts"
     },
     "exports": {
         ".": {
-            "types": "./src/config.ts",
+            "types": "./dist/config.d.ts",
             "default": "./dist/config.js"
-        },
-        "./static": {
-            "types": "./src/static.ts",
-            "default": "./dist/static.js"
         }
     },
     "dependencies": {
@@ -30,10 +26,12 @@
         "defu": "catalog:utils"
     },
     "devDependencies": {
+        "@karr/build-plugins": "workspace:*",
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
         "@types/node": "catalog:types",
         "eslint": "catalog:lint",
+        "tsdown": "catalog:devtools",
         "typescript": "catalog:devtools",
         "vite-tsconfig-paths": "catalog:test",
         "vitest": "catalog:test"
