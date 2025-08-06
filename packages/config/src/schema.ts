@@ -151,6 +151,7 @@ export type AuthProvider = z.infer<typeof authProvidersSchema>[number]
 export const ConfigFileSchema = z.object({
     APPLICATION_NAME: z.string().optional(),
     APP_URL: appUrlSchema.optional(),
+    AUTH_ISSUER: z.url().optional(),
     API_PORT: z.number().positive().optional(),
     API_BASE: apiBaseSchema.optional(),
     LOG_TIMESTAMP: z.boolean().optional(),
@@ -201,6 +202,7 @@ export type ConfigFile = z.infer<typeof ConfigFileSchema>
 export const FullConfigSchema = z
     .object({
         APP_URL: appUrlSchema,
+        AUTH_ISSUER: z.url(),
         API_PORT: z.number().positive(),
         API_BASE: apiBaseSchema.refine(
             (val) => val.endsWith(`/${staticConfig.API_VERSION}`),

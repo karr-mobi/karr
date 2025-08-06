@@ -1,22 +1,21 @@
 {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "type": "object",
     "properties": {
         "APPLICATION_NAME": {
             "type": "string"
         },
         "APP_URL": {
-            "anyOf": [
-                {
-                    "type": "string",
-                    "format": "uri"
-                },
-                {
-                    "const": "http://localhost/"
-                }
-            ]
+            "type": "string",
+            "format": "uri"
+        },
+        "AUTH_ISSUER": {
+            "type": "string",
+            "format": "uri"
         },
         "API_PORT": {
-            "type": "number"
+            "type": "number",
+            "exclusiveMinimum": 0
         },
         "API_BASE": {
             "type": "string"
@@ -25,6 +24,7 @@
             "type": "boolean"
         },
         "LOG_LEVEL": {
+            "type": "string",
             "enum": ["trace", "debug", "info", "warn", "error"]
         },
         "ADMIN_EMAIL": {
@@ -32,12 +32,7 @@
             "format": "email",
             "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
         },
-        "FEDERATION": {
-            "type": "boolean"
-        },
         "AUTH_PROVIDERS": {
-            "minItems": 1,
-            "maxItems": 18,
             "type": "array",
             "items": {
                 "anyOf": [
@@ -47,59 +42,32 @@
                             "name": {
                                 "anyOf": [
                                     {
+                                        "type": "string",
                                         "const": "password"
                                     },
                                     {
+                                        "type": "string",
                                         "const": "code"
                                     }
                                 ]
                             },
                             "trusted": {
-                                "type": "boolean",
-                                "default": false
+                                "default": false,
+                                "type": "boolean"
                             }
                         },
-                        "required": ["name"]
+                        "required": ["name"],
+                        "additionalProperties": false
                     },
                     {
                         "type": "object",
                         "properties": {
                             "name": {
+                                "type": "string",
                                 "const": "google"
                             },
                             "clientID": {
                                 "type": "string"
-                            },
-                            "query": {
-                                "type": "object",
-                                "propertyNames": {
-                                    "type": "string"
-                                },
-                                "additionalProperties": {
-                                    "type": "string"
-                                }
-                            }
-                        },
-                        "required": ["name", "clientID"]
-                    },
-                    {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "anyOf": [
-                                    {
-                                        "const": "github"
-                                    }
-                                ]
-                            },
-                            "clientID": {
-                                "type": "string"
-                            },
-                            "clientSecret": {
-                                "type": "string"
-                            },
-                            "pkce": {
-                                "type": "boolean"
                             },
                             "query": {
                                 "type": "object",
@@ -115,30 +83,48 @@
                                 "type": "boolean"
                             }
                         },
-                        "required": [
-                            "name",
-                            "clientID",
-                            "clientSecret",
-                            "trusted"
-                        ]
+                        "required": ["name", "clientID"],
+                        "additionalProperties": false
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "anyOf": [
+                                    {
+                                        "type": "string",
+                                        "const": "github"
+                                    }
+                                ]
+                            },
+                            "clientID": {
+                                "type": "string"
+                            },
+                            "clientSecret": {
+                                "type": "string"
+                            },
+                            "query": {
+                                "type": "object",
+                                "propertyNames": {
+                                    "type": "string"
+                                },
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
+                            },
+                            "trusted": {
+                                "default": false,
+                                "type": "boolean"
+                            }
+                        },
+                        "required": ["name", "clientID", "clientSecret"],
+                        "additionalProperties": false
                     }
                 ]
             }
         },
-        "FEDERATION_TARGETS": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "url": {
-                        "type": "string"
-                    }
-                },
-                "required": ["name", "url"]
-            }
+        "RESEND_API_KEY": {
+            "type": "string"
         },
         "DB_CONFIG": {
             "type": "object",
@@ -165,8 +151,8 @@
                     "type": "boolean"
                 }
             },
-            "required": []
+            "additionalProperties": false
         }
     },
-    "required": []
+    "additionalProperties": false
 }
