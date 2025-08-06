@@ -202,7 +202,7 @@ export type ConfigFile = z.infer<typeof ConfigFileSchema>
 export const FullConfigSchema = z
     .object({
         APP_URL: appUrlSchema,
-        AUTH_ISSUER: z.url(),
+        AUTH_ISSUER: z.url().optional(),
         API_PORT: z.number().positive(),
         API_BASE: apiBaseSchema.refine(
             (val) => val.endsWith(`/${staticConfig.API_VERSION}`),
