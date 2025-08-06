@@ -10,7 +10,9 @@
         "check:lint": "eslint . --max-warnings 0",
         "lint": "eslint . --max-warnings 0 --fix",
         "check:types": "tsc --noEmit",
-        "db:migrations-generate": "drizzle-kit generate"
+        "migrations:generate": "drizzle-kit generate",
+        "migrations:bundle": "node --experimental-strip-types ./scripts/bundle-migrate.ts",
+        "migrations:run": "node ./out/db/migrate.mjs"
     },
     "dependencies": {
         "@hookform/resolvers": "catalog:ui",
@@ -53,11 +55,13 @@
         "drizzle-kit": "catalog:api"
     },
     "devDependencies": {
+        "@karr/build-plugins": "workspace:*",
         "@karr/eslint-config": "workspace:*",
         "@karr/tsconfig": "workspace:*",
         "@types/node": "catalog:types",
         "@types/react": "catalog:types",
         "@types/react-dom": "catalog:types",
+        "esbuild": "catalog:utils",
         "eslint": "catalog:lint",
         "typescript": "catalog:devtools"
     }

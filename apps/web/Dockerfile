@@ -54,6 +54,9 @@ ENV CI=true
 COPY --from=installer /app/out/full/ .
 RUN pnpm run build
 
+# Bundle migrations
+RUN pnpm run --filter @karr/web migrations:bundle
+
 ####################
 ### RUNNER STAGE ###
 ####################
@@ -78,6 +81,12 @@ COPY --from=builder --chown=runner:runner /app/apps/web/.next/standalone ./
 COPY --from=builder --chown=runner:runner /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder --chown=runner:runner /app/apps/web/public ./apps/web/public
 
+COPY --from=builder --chown=runner:runner /app/apps/web/out/db/migrate.mjs ./out/db/migrate.mjs
+COPY --from=builder --chown=runner:runner /app/apps/web/migrations ./migrations
+
+COPY --from=installer --chown=runner:runner /app/apps/web/docker-entrypoint.sh /usr/local/bin/
+RUN chmod 500 /usr/local/bin/docker-entrypoint.sh
+
 USER runner
 
-CMD ["wait-for-it.sh", "db:5432", "-t", "15", "--", "node", "apps/web/server.js"]
+CMD ["docker-entrypoint.sh"]

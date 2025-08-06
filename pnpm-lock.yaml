@@ -789,6 +789,9 @@ importers:
         specifier: catalog:utils
         version: 3.25.76
     devDependencies:
+      '@karr/build-plugins':
+        specifier: workspace:*
+        version: link:../../tooling/build-plugins
       '@karr/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config
@@ -804,6 +807,9 @@ importers:
       '@types/react-dom':
         specifier: catalog:types
         version: 19.1.6(@types/react@19.1.8)
+      esbuild:
+        specifier: catalog:utils
+        version: 0.25.6
       eslint:
         specifier: catalog:lint
         version: 9.32.0(jiti@2.4.2)
