@@ -14,9 +14,9 @@ export const CALLBACK_URL = new URL(`${API_BASE}/callback`, APP_URL).href
 /**
  * The OpenAuth issuer url
  */
-export const ISSUER = (
-    AUTH_ISSUER ? new URL(AUTH_ISSUER) : new URL(`${API_BASE}/auth`, APP_URL)
-).href
+export const ISSUER = AUTH_ISSUER
+    ? new URL(AUTH_ISSUER).origin
+    : new URL(`${API_BASE}/auth`, APP_URL).href
 
 export const client = createClient({
     clientID: CLIENT_ID,
