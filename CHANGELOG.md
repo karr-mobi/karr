@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.8
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.7...v0.15.8)
+
+### 🚀 Enhancements
+
+- **db:** Run migrations before docker container startup ([#188](https://github.com/karr-mobi/karr/pull/188))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.7
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.6...v0.15.7)
