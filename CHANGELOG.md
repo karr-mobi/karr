@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.7
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.6...v0.15.7)
+
+### 🩹 Fixes
+
+- **auth:** Don't include trailing slash in issuer ([19980ef](https://github.com/karr-mobi/karr/commit/19980ef))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.6
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.5...v0.15.6)
