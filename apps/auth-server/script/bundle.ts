@@ -1,23 +1,36 @@
 //biome-ignore-all lint/style/noNonNullAssertion: it's a util file idc
 
+import { readdir, rm } from "node:fs/promises"
 import process from "node:process"
 import { unpluginFixNodeBuiltins } from "@karr/build-plugins/node-builtins"
 import { c, logger } from "@karr/logger"
 import { tryCatch } from "@karr/util"
 import { build } from "esbuild"
-import { runtime } from "std-env"
+import { runtime as detectedRuntime, env } from "std-env"
 
-logger.info("Bundling API...")
+const runtime = env.TARGET_RUNTIME || detectedRuntime
+
+// list all files in the output directory and clear the output directory
+const files = await readdir("out")
+await Promise.all(
+    files.map((file) =>
+        /\.(m?js|(d\.)?ts)$/.test(file) // match .js, .mjs, .d.ts, .d.ts
+            ? rm(`out/${file}`, { recursive: true })
+            : Promise.resolve()
+    )
+)
+
+logger.info("Output directory cleared")
+
+logger.info(`Bundling API with esbuild, using ${runtime}`)
 
 const start = Date.now()
-
-logger.info(`Building with runtime ${runtime}`)
 
 const result = await tryCatch(
     build({
         entryPoints: ["src/server.ts"],
         bundle: true,
-        minify: true,
+        minify: false,
         platform: "node",
         target: "esnext",
         format: "esm",
