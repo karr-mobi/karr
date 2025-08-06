@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.5
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.4...v0.15.5)
+
+### 🩹 Fixes
+
+- **auth:** Allow auth issuer to be run separately ([#186](https://github.com/karr-mobi/karr/pull/186))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.4
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.3...v0.15.4)
