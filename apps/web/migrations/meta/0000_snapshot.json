@@ -1,6 +1,6 @@
 {
-  "id": "37a16313-aaa9-4771-acca-ac7d2c806783",
-  "prevId": "799db3d4-9969-4b09-9294-75679a0abe12",
+  "id": "02dea23c-16ea-4549-a8c5-ac12ac0d7c56",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -8,21 +8,14 @@
       "name": "Accounts",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "uuid",
-          "primaryKey": true,
-          "notNull": true,
-          "default": "gen_random_uuid()"
+        "provider": {
+          "name": "provider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         },
         "remoteId": {
           "name": "remoteId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "provider": {
-          "name": "provider",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -47,30 +40,32 @@
           "notNull": false,
           "default": false
         },
-        "profile": {
-          "name": "profile",
-          "type": "uuid",
+        "role": {
+          "name": "role",
+          "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'user'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "Accounts_profile_Profile_id_fk": {
-          "name": "Accounts_profile_Profile_id_fk",
-          "tableFrom": "Accounts",
-          "tableTo": "Profile",
-          "columnsFrom": [
-            "profile"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "Accounts_provider_remoteId_pk": {
+          "name": "Accounts_provider_remoteId_pk",
+          "columns": [
+            "provider",
+            "remoteId"
+          ]
         }
       },
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "Accounts_provider_email_unique": {
           "name": "Accounts_provider_email_unique",
@@ -138,6 +133,18 @@
           "primaryKey": false,
           "notNull": true
         },
+        "accountProvider": {
+          "name": "accountProvider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "accountRemoteId": {
+          "name": "accountRemoteId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "specialStatus": {
           "name": "specialStatus",
           "type": "text",
@@ -169,6 +176,21 @@
           ],
           "columnsTo": [
             "title"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "profile_account_fk": {
+          "name": "profile_account_fk",
+          "tableFrom": "Profile",
+          "tableTo": "Accounts",
+          "columnsFrom": [
+            "accountProvider",
+            "accountRemoteId"
+          ],
+          "columnsTo": [
+            "provider",
+            "remoteId"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -457,9 +479,21 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "accountProvider": {
+          "name": "accountProvider",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "accountRemoteId": {
+          "name": "accountRemoteId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
         }
       },
-      "definition": "select \"Trips\".\"id\", \"Trips\".\"from\", \"Trips\".\"to\", \"Trips\".\"departure\", \"Trips\".\"price\", \"Trips\".\"driver\", \"Profile\".\"firstName\", \"Profile\".\"lastName\", \"Profile\".\"nickname\", \"Profile\".\"avatar\" from \"Trips\" left join \"Profile\" on \"Trips\".\"driver\" = \"Profile\".\"id\"",
+      "definition": "select \"Trips\".\"id\", \"Trips\".\"from\", \"Trips\".\"to\", \"Trips\".\"departure\", \"Trips\".\"price\", \"Trips\".\"driver\", \"Profile\".\"firstName\", \"Profile\".\"lastName\", \"Profile\".\"nickname\", \"Profile\".\"avatar\", \"Profile\".\"accountProvider\", \"Profile\".\"accountRemoteId\" from \"Trips\" left join \"Profile\" on \"Trips\".\"driver\" = \"Profile\".\"id\"",
       "name": "trips_view",
       "schema": "public",
       "isExisting": false,

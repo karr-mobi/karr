@@ -1,11 +1,12 @@
 CREATE TABLE "Accounts" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"remoteId" text,
 	"provider" text NOT NULL,
+	"remoteId" text NOT NULL,
 	"email" text NOT NULL,
 	"blocked" boolean DEFAULT false,
 	"verified" boolean DEFAULT false,
-	"profile" uuid NOT NULL,
+	"role" text DEFAULT 'user' NOT NULL,
+	"createdAt" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "Accounts_provider_remoteId_pk" PRIMARY KEY("provider","remoteId"),
 	CONSTRAINT "Accounts_provider_email_unique" UNIQUE("provider","email")
 );
 --> statement-breakpoint
@@ -18,6 +19,8 @@ CREATE TABLE "Profile" (
 	"bio" text,
 	"avatar" text,
 	"prefs" uuid NOT NULL,
+	"accountProvider" text NOT NULL,
+	"accountRemoteId" text NOT NULL,
 	"specialStatus" text,
 	CONSTRAINT "Profile_phone_unique" UNIQUE("phone")
 );
@@ -54,8 +57,8 @@ CREATE TABLE "UserPrefs" (
 	"pets" boolean DEFAULT false
 );
 --> statement-breakpoint
-ALTER TABLE "Accounts" ADD CONSTRAINT "Accounts_profile_Profile_id_fk" FOREIGN KEY ("profile") REFERENCES "public"."Profile"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "Profile" ADD CONSTRAINT "Profile_prefs_UserPrefs_id_fk" FOREIGN KEY ("prefs") REFERENCES "public"."UserPrefs"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "Profile" ADD CONSTRAINT "Profile_specialStatus_SpecialStatus_title_fk" FOREIGN KEY ("specialStatus") REFERENCES "public"."SpecialStatus"("title") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "Profile" ADD CONSTRAINT "profile_account_fk" FOREIGN KEY ("accountProvider","accountRemoteId") REFERENCES "public"."Accounts"("provider","remoteId") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "Trips" ADD CONSTRAINT "Trips_driver_Profile_id_fk" FOREIGN KEY ("driver") REFERENCES "public"."Profile"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-CREATE VIEW "public"."trips_view" AS (select "Trips"."id", "Trips"."from", "Trips"."to", "Trips"."departure", "Trips"."price", "Trips"."driver", "Profile"."firstName", "Profile"."lastName", "Profile"."nickname" from "Trips" left join "Profile" on "Trips"."driver" = "Profile"."id");
+CREATE VIEW "public"."trips_view" AS (select "Trips"."id", "Trips"."from", "Trips"."to", "Trips"."departure", "Trips"."price", "Trips"."driver", "Profile"."firstName", "Profile"."lastName", "Profile"."nickname", "Profile"."avatar", "Profile"."accountProvider", "Profile"."accountRemoteId" from "Trips" left join "Profile" on "Trips"."driver" = "Profile"."id");

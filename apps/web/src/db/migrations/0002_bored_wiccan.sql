@@ -1,1 +1,0 @@
-ALTER TABLE "Accounts" ADD COLUMN "role" text DEFAULT 'user';
