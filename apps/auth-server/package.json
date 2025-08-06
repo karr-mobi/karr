@@ -30,7 +30,8 @@
         "resend": "catalog:api",
         "std-env": "catalog:utils",
         "srvx": "catalog:api",
-        "esbuild": "catalog:utils"
+        "esbuild": "catalog:utils",
+        "rolldown": "catalog:devtools"
     },
     "devDependencies": {
         "@karr/build-plugins": "workspace:*",

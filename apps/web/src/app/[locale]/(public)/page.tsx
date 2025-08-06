@@ -1,4 +1,5 @@
-import { APPLICATION_NAME } from "@karr/config/static"
+import "server-only"
+import { APPLICATION_NAME } from "@karr/config"
 import Image from "next/image"
 import { useTranslations } from "next-intl"
 import { memo } from "react"

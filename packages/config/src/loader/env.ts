@@ -17,6 +17,10 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
         config.APP_URL = env.APP_URL
     }
 
+    if (env.AUTH_ISSUER) {
+        config.AUTH_ISSUER = env.AUTH_ISSUER
+    }
+
     if (env.API_PORT) {
         config.API_PORT = toInt(env.API_PORT)
     }

@@ -9,6 +9,7 @@ export default await config.value
 
 export const {
     APP_URL,
+    AUTH_ISSUER,
     API_PORT,
     API_BASE,
     LOG_TIMESTAMP,

@@ -12,10 +12,6 @@ import { setTokens } from "@/app/auth/actions"
 import { callbackUrl, client } from "@/app/auth/client"
 import { saveUser } from "./persistence"
 
-// biome-ignore lint/style/noProcessEnv: idem
-// biome-ignore lint/nursery/noProcessGlobal: can't import process from node:process
-const env = process.env
-
 export async function GET(request: Request) {
     /**
      * Convenience function to redirect to the login error page with an error message.
@@ -60,7 +56,7 @@ export async function GET(request: Request) {
     try {
         exchanged = await client.exchange(code, callbackUrl)
     } catch (error) {
-        logger.error(
+        console.error(
             `[${runtime}] AUTH CALLBACK: Exception during code exchange:`,
             error
         )
@@ -75,6 +71,8 @@ export async function GET(request: Request) {
         )
         return errorRedirect(exchanged.err.message, 302)
     }
+
+    logger.debug("Token exchange successful", exchanged.tokens)
 
     // Verify the tokens to get the user subject
     const user = await client.verify(subjects, exchanged.tokens.access)

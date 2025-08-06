@@ -8,6 +8,7 @@ import type { Theme } from "@openauthjs/openauth/ui/theme"
 import { ok, type Result } from "neverthrow"
 import { runtime } from "std-env"
 import { callbackUrl } from "./client"
+import { isSeparateAuthServer } from "./lib/config"
 import { getGithubUserData } from "./profile-fetchers/github"
 import { getGoogleUserData } from "./profile-fetchers/google"
 import { providers } from "./providers"
@@ -40,10 +41,12 @@ if (storage.isErr()) {
     throw new Error("Failed to initialize storage")
 }
 
-logger.debug("issuer config", { callbackUrl, base: authBaseUrl(API_BASE) })
+const basePath = isSeparateAuthServer ? undefined : authBaseUrl(API_BASE)
+
+logger.debug("issuer config", { callbackUrl, base: basePath })
 
 const app = issuer({
-    basePath: authBaseUrl(API_BASE),
+    basePath,
     providers,
     storage: storage.value,
     subjects,

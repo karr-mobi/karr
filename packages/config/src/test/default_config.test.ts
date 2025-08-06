@@ -24,6 +24,11 @@ describe("default config", () => {
         const missingKeys = result.error?.issues.map((iss) => {
             return iss.path.join(".")
         })
-        expect(missingKeys).toEqual(requiredKeys)
+        // AUTH_ISSUER is required by FullConfigSchema but computed (not required from config file)
+        expect(missingKeys).toEqual([
+            ...requiredKeys.slice(0, 1),
+            "AUTH_ISSUER",
+            ...requiredKeys.slice(1)
+        ])
     })
 })

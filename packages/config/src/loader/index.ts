@@ -132,6 +132,11 @@ export async function loadFullConfig(): Promise<FullConfig> {
 
     config.API_BASE += `/${API_VERSION}`
 
+    config.AUTH_ISSUER ??= new URL(
+        `${config.API_BASE}/auth`,
+        config.APP_URL
+    ).href
+
     const parsed = FullConfigSchema.safeParse(config)
 
     if (!parsed.success) {
