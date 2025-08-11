@@ -2,8 +2,12 @@ name: Deploy Auth Server to Deno Deploy
 
 on:
     push:
-        branches:
-            - main
+        paths:
+            - "apps/auth-server/**"
+            - "packages/auth/**"
+            - ".github/workflows/deploy-auth-server.yaml"
+            - "pnpm-workspace.yaml"
+    pull_request:
         paths:
             - "apps/auth-server/**"
             - "packages/auth/**"
@@ -11,12 +15,13 @@ on:
             - "pnpm-workspace.yaml"
 
 jobs:
-    deploy:
-        name: Deploy
+    build-and-deploy:
+        name: Build and Deploy
         runs-on: ubuntu-latest
         permissions:
             id-token: write # Needed for auth with Deno Deploy
             contents: read # Needed to clone the repository
+            pull-requests: write # Needed to comment on PRs
 
         steps:
             - uses: actions/checkout@v3
@@ -33,15 +38,59 @@ jobs:
                   node-version: 22
                   cache: pnpm
 
-            - name: Install dependencies
-              run: pnpm i
+            - name: Install turbo
+              run: pnpm add turbo --global
 
-            - name: Build Server
-              run: pnpm run --filter "@karr/auth-server" build
-
-            - name: Upload to Deno Deploy
-              uses: denoland/deployctl@v1
+            - name: Install Deno
+              uses: denoland/setup-deno@v1
               with:
-                  project: karr-auth
-                  entrypoint: server.mjs
-                  root: apps/auth-server/out
+                  deno-version: v2.x
+
+            - name: Prune repository
+              run: turbo prune "@karr/auth-server"
+
+            - name: Install dependencies
+              run: |
+                  cd out
+                  pnpm install
+
+            - name: Type check
+              run: |
+                  cd out
+                  pnpm --filter "@karr/auth-server" tsc --noEmit
+
+            - name: Build auth server
+              run: |
+                  cd out/apps/auth-server
+                  deno run -A script/bundle.ts
+
+            - name: Install deployctl
+              run: deno install -gArf jsr:@deno/deployctl
+
+            - name: Deploy to Deno Deploy
+              id: deploy
+              run: |
+                  cd out/apps/auth-server/out
+                  if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" ]]; then
+                    deployctl deploy --project=karr-auth --entrypoint=server.mjs --prod
+                  else
+                    OUTPUT=$(deployctl deploy --project=karr-auth --entrypoint=server.mjs 2>&1)
+                    echo "$OUTPUT"
+                    PREVIEW_URL=$(echo "$OUTPUT" | grep -oE 'https://[a-zA-Z0-9-]+\.deno\.dev' | head -1)
+                    echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Comment PR with preview URL
+              if: github.event_name == 'pull_request'
+              uses: actions/github-script@v6
+              with:
+                  script: |
+                      const preview_url = '${{ steps.deploy.outputs.preview_url }}';
+                      if (preview_url) {
+                        await github.rest.issues.createComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: context.issue.number,
+                          body: `🚀 Preview deployment ready!\n\n🔗 **Preview URL:** ${preview_url}\n\nThis deployment will be updated on every commit to this PR.`
+                        });
+                      }

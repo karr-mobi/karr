@@ -11,7 +11,11 @@ import { runtime as detectedRuntime, env } from "std-env"
 const runtime = env.TARGET_RUNTIME || detectedRuntime
 
 // list all files in the output directory and clear the output directory
-const files = await readdir("out")
+const files = await readdir("out").catch((e) => {
+    // ignore if the error is Error: ENOENT: no such file or directory, scandir 'out'
+    if (e.code !== "ENOENT") throw e
+    return []
+})
 await Promise.all(
     files.map((file) =>
         /\.(m?js|(d\.)?ts)$/.test(file) // match .js, .mjs, .d.ts, .d.ts
