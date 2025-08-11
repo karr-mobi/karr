@@ -2,12 +2,9 @@ name: Deploy Auth Server to Deno Deploy
 
 on:
     push:
-        paths:
-            - "apps/auth-server/**"
-            - "packages/auth/**"
-            - ".github/workflows/deploy-auth-server.yaml"
-            - "pnpm-workspace.yaml"
-    pull_request:
+        branches:
+            - main
+            - ci/auto-deploy-auth
         paths:
             - "apps/auth-server/**"
             - "packages/auth/**"
@@ -72,47 +69,9 @@ jobs:
             - name: Install deployctl
               run: deno install -gArf jsr:@deno/deployctl
 
-            - name: Deploy to Deno Deploy (Preview)
-              id: deploy
-              run: |
-                  cd out/apps/auth-server/out
-                  OUTPUT=$(deployctl deploy --project=karr-auth --entrypoint=server.mjs 2>&1)
-                  echo "$OUTPUT"
-
-                  # Extract deployment ID (format: Deployment complete. deployment-id)
-                  DEPLOYMENT_ID=$(echo "$OUTPUT" | grep -oE 'deployment/[a-zA-Z0-9]+' | tail -1 | cut -d'/' -f2)
-                  if [[ -z "$DEPLOYMENT_ID" ]]; then
-                    DEPLOYMENT_ID=$(echo "$OUTPUT" | grep -oE '[a-zA-Z0-9]{10,}' | tail -1)
-                  fi
-                  echo "deployment_id=$DEPLOYMENT_ID" >> $GITHUB_OUTPUT
-
-                  # Extract preview URL
-                  PREVIEW_URL=$(echo "$OUTPUT" | grep -oE 'https://[a-zA-Z0-9-]+\.deno\.dev' | head -1)
-                  echo "preview_url=$PREVIEW_URL" >> $GITHUB_OUTPUT
-
-            - name: Promote to Production
-              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-              run: |
-                  DEPLOYMENT_ID="${{ steps.deploy.outputs.deployment_id }}"
-                  if [[ -n "$DEPLOYMENT_ID" ]]; then
-                    deployctl deployments redeploy --project=karr-auth --prod "$DEPLOYMENT_ID"
-                    echo "✅ Promoted deployment $DEPLOYMENT_ID to production"
-                  else
-                    echo "⚠️ Could not find deployment ID to promote"
-                    exit 1
-                  fi
-
-            - name: Comment PR with preview URL
-              if: github.event_name == 'pull_request'
-              uses: actions/github-script@v6
+            - name: Deploy to Deno Deploy
+              uses: denoland/deployctl@v1
               with:
-                  script: |
-                      const preview_url = '${{ steps.deploy.outputs.preview_url }}';
-                      if (preview_url) {
-                        await github.rest.issues.createComment({
-                          owner: context.repo.owner,
-                          repo: context.repo.repo,
-                          issue_number: context.issue.number,
-                          body: `🚀 Preview deployment ready!\n\n🔗 **Preview URL:** ${preview_url}\n\nThis deployment will be updated on every commit to this PR.`
-                        });
-                      }
+                  project: karr-auth
+                  entrypoint: server.mjs
+                  root: out/apps/auth-server/out
