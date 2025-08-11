@@ -85,4 +85,4 @@ jobs:
               with:
                   message: |
                       Preview deployment pushed to Deno Deploy
-                      https://karr-auth--${{ github.ref_name | replace('/', '-') }}.deno.dev
+                      https://karr-auth--${{ replace(github.ref_name, '/', '-') }}.deno.dev
