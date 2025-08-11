@@ -1,9 +1,9 @@
+import { basePath, isSeparateAuthServer } from "@karr/auth/issuer-config"
 import { PRODUCTION } from "@karr/config"
 import logger from "@karr/logger"
 import { Hono } from "hono"
 import { serve } from "srvx"
 import issuer from "./issuer"
-import { isSeparateAuthServer } from "./lib/config"
 
 const app = new Hono()
 
@@ -34,7 +34,7 @@ if (!isSeparateAuthServer) {
     })
 }
 
-app.route(isSeparateAuthServer ? "/" : "/api/v1/auth", issuer)
+app.route(basePath, issuer)
 
 // Start the server
 const server = serve({
