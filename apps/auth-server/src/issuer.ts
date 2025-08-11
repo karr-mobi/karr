@@ -1,4 +1,5 @@
-import { CALLBACK_URL, ISSUER } from "@karr/auth/client"
+import { CALLBACK_URL } from "@karr/auth/client"
+import { basePath } from "@karr/auth/issuer-config"
 import { subjects, type UserProperties } from "@karr/auth/subjects"
 import { getOpenAuthStorage } from "@karr/kv"
 import { logger } from "@karr/logger"
@@ -6,7 +7,6 @@ import { issuer } from "@openauthjs/openauth"
 import type { Theme } from "@openauthjs/openauth/ui/theme"
 import { ok, type Result } from "neverthrow"
 import { runtime } from "std-env"
-import { isSeparateAuthServer } from "./lib/config"
 import { getGithubUserData } from "./profile-fetchers/github"
 import { getGoogleUserData } from "./profile-fetchers/google"
 import { providers } from "./providers"
@@ -38,8 +38,6 @@ const storage = await getOpenAuthStorage()
 if (storage.isErr()) {
     throw new Error("Failed to initialize storage")
 }
-
-const basePath = isSeparateAuthServer ? undefined : new URL(ISSUER).pathname
 
 logger.debug("issuer config", { CALLBACK_URL, base: basePath })
 
