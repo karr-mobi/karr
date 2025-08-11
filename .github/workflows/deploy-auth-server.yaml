@@ -9,14 +9,29 @@ on:
             - "packages/auth/**"
             - ".github/workflows/deploy-auth-server.yaml"
             - "pnpm-workspace.yaml"
+    pull_request:
+        paths:
+            - "apps/auth-server/**"
+            - "packages/auth/**"
+            - ".github/workflows/deploy-auth-server.yaml"
+            - "pnpm-workspace.yaml"
+
+env:
+    TURBO_TELEMETRY_DISABLED: 1
+    # You can leverage Vercel Remote Caching with Turbo to speed up your builds
+    # @link https://turborepo.org/docs/core-concepts/remote-caching#remote-caching-on-vercel-builds
+    TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+    TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    HUSKY: 0
 
 jobs:
-    deploy:
-        name: Deploy
+    build-and-deploy:
+        name: Build and Deploy
         runs-on: ubuntu-latest
         permissions:
             id-token: write # Needed for auth with Deno Deploy
             contents: read # Needed to clone the repository
+            pull-requests: write # Needed to comment on PRs
 
         steps:
             - uses: actions/checkout@v3
@@ -33,15 +48,56 @@ jobs:
                   node-version: 22
                   cache: pnpm
 
+            - name: Install turbo
+              run: pnpm add turbo --global
+
+            - name: Install Deno
+              uses: denoland/setup-deno@v1
+              with:
+                  deno-version: v2.x
+
+            - name: Prune repository
+              run: turbo prune "@karr/auth-server"
+
             - name: Install dependencies
-              run: pnpm i
+              run: |
+                  cd out
+                  pnpm install
 
-            - name: Build Server
-              run: pnpm run --filter "@karr/auth-server" build
+            - name: Build dependencies
+              run: |
+                  cd out
+                  pnpm run --filter '!@karr/auth-server' build
 
-            - name: Upload to Deno Deploy
+            - name: Type check
+              run: |
+                  cd out
+                  pnpm run check:types
+
+            - name: Build auth server
+              run: |
+                  cd out/apps/auth-server
+                  deno run -A script/bundle.ts
+
+            - name: Deploy to Deno Deploy
               uses: denoland/deployctl@v1
               with:
                   project: karr-auth
                   entrypoint: server.mjs
-                  root: apps/auth-server/out
+                  root: out/apps/auth-server/out
+
+            - name: Prepare branch name
+              if: github.event_name == 'pull_request'
+              id: branch
+              run: |
+                  BRANCH_NAME="${{ github.head_ref }}"
+                  SAFE_BRANCH_NAME="${BRANCH_NAME//\//-}"
+                  echo "safe_name=${SAFE_BRANCH_NAME}" >> $GITHUB_OUTPUT
+
+            - name: Comment PR
+              if: github.event_name == 'pull_request'
+              uses: thollander/actions-comment-pull-request@v3
+              with:
+                  message: |
+                      Preview deployment pushed to Deno Deploy
+                      https://karr-auth--${{ steps.branch.outputs.safe_name }}.deno.dev
