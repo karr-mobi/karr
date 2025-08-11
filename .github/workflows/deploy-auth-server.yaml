@@ -79,10 +79,18 @@ jobs:
                   entrypoint: server.mjs
                   root: out/apps/auth-server/out
 
+            - name: Prepare branch name
+              if: github.event_name == 'pull_request'
+              id: branch
+              run: |
+                  BRANCH_NAME="${{ github.head_ref }}"
+                  SAFE_BRANCH_NAME="${BRANCH_NAME//\//-}"
+                  echo "safe_name=${SAFE_BRANCH_NAME}" >> $GITHUB_OUTPUT
+
             - name: Comment PR
               if: github.event_name == 'pull_request'
               uses: thollander/actions-comment-pull-request@v3
               with:
                   message: |
                       Preview deployment pushed to Deno Deploy
-                      https://karr-auth--${{ replace(github.ref_name, '/', '-') }}.deno.dev
+                      https://karr-auth--${{ steps.branch.outputs.safe_name }}.deno.dev
