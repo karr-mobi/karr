@@ -1,0 +1,13 @@
+{
+    "$schema": "https://raw.githubusercontent.com/denoland/deno/refs/heads/main/cli/schemas/config-file.v1.json",
+    "tasks": {
+        "dev": "deno -A ./node_modules/next/dist/bin/next dev --turbopack",
+        "build": "deno -A ./node_modules/next/dist/bin/next build",
+        "start": "deno -A ./node_modules/next/dist/bin/next start",
+        "preview": "deno run --allow-net --allow-read --allow-env --allow-sys --allow-run .prod/apps/web/server.cjs"
+    },
+    "compilerOptions": {
+        "jsx": "react-jsx",
+        "jsxImportSource": "react"
+    }
+}
