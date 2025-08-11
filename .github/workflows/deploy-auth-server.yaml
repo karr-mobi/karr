@@ -54,10 +54,15 @@ jobs:
                   cd out
                   pnpm install
 
+            - name: Build dependencies
+              run: |
+                  cd out
+                  pnpm run --filter '!@karr/auth-server' build
+
             - name: Type check
               run: |
                   cd out
-                  pnpm --filter "@karr/auth-server" tsc --noEmit
+                  pnpm run check:types
 
             - name: Build auth server
               run: |
