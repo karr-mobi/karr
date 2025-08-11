@@ -1,0 +1,47 @@
+name: Deploy Auth Server to Deno Deploy
+
+on:
+    push:
+        branches:
+            - main
+        paths:
+            - "apps/auth-server/**"
+            - "packages/auth/**"
+            - ".github/workflows/deploy-auth-server.yaml"
+            - "pnpm-workspace.yaml"
+
+jobs:
+    deploy:
+        name: Deploy
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write # Needed for auth with Deno Deploy
+            contents: read # Needed to clone the repository
+
+        steps:
+            - uses: actions/checkout@v3
+              name: Checkout repository
+
+            - uses: pnpm/action-setup@v4
+              name: Install pnpm
+              with:
+                  run_install: false
+
+            - uses: actions/setup-node@v3
+              name: Setup Node.js
+              with:
+                  node-version: 22
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm i
+
+            - name: Build Server
+              run: pnpm run --filter "@karr/auth-server" build
+
+            - name: Upload to Deno Deploy
+              uses: denoland/deployctl@v1
+              with:
+                  project: karr-auth
+                  entrypoint: server.mjs
+                  root: apps/auth-server/out
