@@ -10,6 +10,12 @@ on:
             - "packages/auth/**"
             - ".github/workflows/deploy-auth-server.yaml"
             - "pnpm-workspace.yaml"
+    pull_request:
+        paths:
+            - "apps/auth-server/**"
+            - "packages/auth/**"
+            - ".github/workflows/deploy-auth-server.yaml"
+            - "pnpm-workspace.yaml"
 
 jobs:
     build-and-deploy:
