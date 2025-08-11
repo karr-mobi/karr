@@ -66,12 +66,17 @@ jobs:
                   cd out/apps/auth-server
                   deno run -A script/bundle.ts
 
-            - name: Install deployctl
-              run: deno install -gArf jsr:@deno/deployctl
-
             - name: Deploy to Deno Deploy
               uses: denoland/deployctl@v1
               with:
                   project: karr-auth
                   entrypoint: server.mjs
                   root: out/apps/auth-server/out
+
+            - name: Comment PR
+              if: github.event_name == 'pull_request'
+              uses: thollander/actions-comment-pull-request@v3
+              with:
+                  message: |
+                      Preview deployment pushed to Deno Deploy
+                      https://karr-auth--${{ github.ref_name | replace('/', '-') }}.deno.dev
