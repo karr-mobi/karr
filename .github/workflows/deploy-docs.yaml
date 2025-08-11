@@ -5,9 +5,10 @@ on:
         branches:
             - main
         paths:
-            - 'apps/docs/**'
-            - 'karr/api/**'
-            - '.github/workflows/deploy-docs.yaml'
+            - "apps/docs/**"
+            - "karr/api/**"
+            - ".github/workflows/deploy-docs.yaml"
+            - "pnpm-workspace.yaml"
 
 jobs:
     deploy:
