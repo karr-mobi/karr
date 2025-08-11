@@ -35,6 +35,7 @@ out/
 build
 dist
 build-meta.json
+.prod
 
 # Debug
 npm-debug.log*
