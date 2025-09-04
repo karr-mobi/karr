@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.15.11
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.10...v0.15.11)
+
+### 🩹 Fixes
+
+- **ui:** Prefs colours on trip page ([5727198](https://github.com/karr-mobi/karr/commit/5727198))
+
+### 📦 Build
+
+- Create Dockerfile (node & deno) ([#201](https://github.com/karr-mobi/karr/pull/201))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.10
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.9...v0.15.10)
