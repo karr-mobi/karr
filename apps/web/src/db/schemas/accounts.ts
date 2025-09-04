@@ -7,7 +7,7 @@ import {
     unique
 } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
-import type { z } from "zod/v4-mini"
+import type { z } from "zod/mini"
 
 export const accountsTable = pgTable(
     "Accounts",

@@ -1,6 +1,6 @@
 import type { Prettify } from "@karr/util"
 import { createSubjects } from "@openauthjs/openauth/subject"
-import { z } from "zod/v4-mini"
+import { z } from "zod/mini"
 
 const user = z.discriminatedUnion("provider", [
     // Local Auth

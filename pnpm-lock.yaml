@@ -328,8 +328,8 @@ catalogs:
       specifier: ^2.3.10
       version: 2.3.10
     zod:
-      specifier: ^3.25.76
-      version: 3.25.76
+      specifier: ^4.1.5
+      version: 4.1.5
   web:
     '@orpc/client':
       specifier: ^1.8.6
@@ -649,7 +649,7 @@ importers:
         version: 1.0.7(tailwindcss@4.1.12)
       zod:
         specifier: catalog:utils
-        version: 3.25.76
+        version: 4.1.5
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -743,7 +743,7 @@ importers:
         version: 0.43.1(postgres@3.4.7)
       drizzle-zod:
         specifier: catalog:api
-        version: 0.8.3(drizzle-orm@0.43.1(postgres@3.4.7))(zod@3.25.76)
+        version: 0.8.3(drizzle-orm@0.43.1(postgres@3.4.7))(zod@4.1.5)
       hono:
         specifier: catalog:api
         version: 4.9.6
@@ -794,7 +794,7 @@ importers:
         version: 4.1.12
       zod:
         specifier: catalog:utils
-        version: 3.25.76
+        version: 4.1.5
     devDependencies:
       '@karr/build-plugins':
         specifier: workspace:*
@@ -840,7 +840,7 @@ importers:
         version: 0.4.3(patch_hash=1f4f51a1f46d1e5e12d7082bf8ca5b7ec57e4d6b3f36b06f8d1fdd2ee79ce074)(arctic@2.3.4)(hono@4.9.6)
       zod:
         specifier: catalog:utils
-        version: 3.25.76
+        version: 4.1.5
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -883,7 +883,7 @@ importers:
         version: 2.0.0
       zod:
         specifier: catalog:utils
-        version: 3.25.76
+        version: 4.1.5
     devDependencies:
       '@karr/build-plugins':
         specifier: workspace:*
@@ -1087,7 +1087,7 @@ importers:
         version: 1.0.7(tailwindcss@4.1.12)
       zod:
         specifier: catalog:utils
-        version: 3.25.76
+        version: 4.1.5
     devDependencies:
       '@karr/eslint-config':
         specifier: workspace:*
@@ -7748,6 +7748,9 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
+  zod@4.1.5:
+    resolution: {integrity: sha512-rcUUZqlLJgBC33IT3PNMgsCq6TzLQEG/Ei/KTCU0PedSWRMAXoOUN+4t/0H+Q8bdnLPdqUYnvboJT0bn/229qg==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -8768,7 +8771,7 @@ snapshots:
       sonner: 2.0.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       tailwind-merge: 3.3.1
       tailwindcss-animate: 1.0.7(tailwindcss@4.1.12)
-      zod: 3.25.76
+      zod: 4.1.5
     transitivePeerDependencies:
       - '@babel/core'
       - '@emotion/is-prop-valid'
@@ -11084,10 +11087,10 @@ snapshots:
     optionalDependencies:
       postgres: 3.4.7
 
-  drizzle-zod@0.8.3(drizzle-orm@0.43.1(postgres@3.4.7))(zod@3.25.76):
+  drizzle-zod@0.8.3(drizzle-orm@0.43.1(postgres@3.4.7))(zod@4.1.5):
     dependencies:
       drizzle-orm: 0.43.1(postgres@3.4.7)
-      zod: 3.25.76
+      zod: 4.1.5
 
   dset@3.1.4: {}
 
@@ -15109,5 +15112,7 @@ snapshots:
       zod: 3.25.76
 
   zod@3.25.76: {}
+
+  zod@4.1.5: {}
 
   zwitch@2.0.4: {}

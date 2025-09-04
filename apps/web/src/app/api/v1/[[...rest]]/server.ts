@@ -1,6 +1,6 @@
 import { os } from "@orpc/server"
 import { cookies, headers } from "next/headers"
-import { z } from "zod/v4-mini"
+import { z } from "zod/mini"
 import { isAuthenticated } from "./lib/auth"
 
 export const base = os
