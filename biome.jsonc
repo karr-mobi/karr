@@ -30,7 +30,8 @@
             "correctness": {
                 "noUndeclaredVariables": "error",
                 "noUndeclaredDependencies": "error",
-                "useJsxKeyInIterable": "error"
+                "useJsxKeyInIterable": "error",
+                "noChildrenProp": "off"
             },
             "complexity": {
                 "noExcessiveCognitiveComplexity": {
