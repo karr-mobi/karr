@@ -9,34 +9,27 @@ _**Karr**: Car in Breton language._ Not a misspelling ;)
 
 Built with:
 
-- `@karr/api`: Hono, Drizzle, TypeScript, Postgres
-  ([Docker package](https://github.com/users/finxol/packages/container/package/karr-api))
-- `@karr/web`: Next.js
+- `@karr/auth-server` and `@karr/auth`: OpenAuth
+  ([Docker package](https://github.com/users/finxol/packages/container/package/karr-auth-server))
+- `@karr/web`: Next.js, ORPC, Drizzle, PostgreSQL
   ([Docker package](https://github.com/users/finxol/packages/container/package/karr-web))
 - `@karr/caddy`: Caddy server
   ([Docker package](https://github.com/users/finxol/packages/container/package/karr-caddy))
-- `@karr/auth`: OpenAuth
+- `@karr/docs`: Astro Starlight
+- `@karr/kv`: Unstorage, Deno KV / SQLite
 
-Documentation: [docs.karr.finxol.io](https://docs.karr.mobi/)
+Documentation: [docs.karr.mobi](https://docs.karr.mobi/)
 
 ## Roadmap
 
 - [ ] Carpool platform with recurring trips
-- [ ] Admin dashboard for instance piloting
+- [x] Basic admin dashboard for instance piloting
 - [ ] Federate instances for shared trips
 - [ ] Calculate the carbon footprint of a trip (total and per person)
 
 ## TODO
 
-- [x] Add zod validation in Hono
-      ([Hono docs](https://github.com/honojs/middleware/tree/main/packages/zod-validator))
-
-- [x] Get auth server running (using OpenAuth)
-- [x] Actually persist user info
-- [ ] Build proper auth frontend
-
 - Add tests
-
     - [x] config
     - [x] util
     - [ ] api
@@ -45,4 +38,4 @@ Documentation: [docs.karr.finxol.io](https://docs.karr.mobi/)
     - [ ] caddy
           (`SITE_ADDRESS=localhost API_PORT=1993 WEB_PORT=3000 caddy validate --config Caddyfile`)
 
-- [ ] Add documentation
+- [ ] Improve/update documentation
