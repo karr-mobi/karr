@@ -55,14 +55,15 @@ jobs:
               uses: denoland/setup-deno@v1
               with:
                   deno-version: v2.x
+
+            - name: Prune repository
+              run: turbo prune "@karr/auth-server"
+
             - name: testing stuff
               run: |
                   ls -lA
                   cat pnpm-workspace.yaml
                   cat out/pnpm-workspace.yaml
-
-            - name: Prune repository
-              run: turbo prune "@karr/auth-server"
 
             - name: Install dependencies
               run: |
