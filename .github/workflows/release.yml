@@ -131,7 +131,7 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             # Container build will fail if the Caddyfile config is invalid
-            - name: Build and push Caddy Docker image
+            - name: Build and push Auth server (node) Docker image
               uses: docker/build-push-action@v5
               with:
                   context: ./apps/caddy
@@ -159,7 +159,7 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             # Container build will fail if the Caddyfile config is invalid
-            - name: Build and push Caddy Docker image
+            - name: Build and push Auth server (deno) Docker image
               uses: docker/build-push-action@v5
               with:
                   context: ./apps/caddy
