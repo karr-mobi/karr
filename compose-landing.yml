@@ -1,0 +1,8 @@
+services:
+    landing:
+        image: ghcr.io/finxol/karr-landing:latest
+        env_file: ".env"
+        ports:
+            - "3494:3000"
+        environment:
+            - PORT=3000

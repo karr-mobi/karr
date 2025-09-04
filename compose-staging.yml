@@ -5,20 +5,10 @@ services:
         image: ghcr.io/karr-mobi/karr-web:latest
         networks:
             - karr_network_staging
-        environment:
-            - LOG_LEVEL=debug
-        volumes:
-            - /srv/http/karr-staging/karr.config.yaml:/app/config/karr.config.yaml
-        depends_on:
-            - api
-
-    api:
-        image: ghcr.io/karr-mobi/karr-api:latest
-        networks:
-            - karr_network_staging
         secrets:
             - db-password
         environment:
+            - LOG_LEVEL=debug
             - DB_USER=karr
             - DB_HOST=db
             - DB_PASSWORD_FILE=/run/secrets/db-password
@@ -27,12 +17,25 @@ services:
         depends_on:
             - db
 
+    # api:
+    #     image: ghcr.io/karr-mobi/karr-api:latest
+    #     networks:
+    #         - karr_network_staging
+    #     environment:
+
+    #     volumes:
+    #         - /srv/http/karr-staging/karr.config.yaml:/app/config/karr.config.yaml
+    #     depends_on:
+    #         - db
+
     db:
         image: postgres:17-alpine
         networks:
             - karr_network_staging
         secrets:
             - db-password
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
         environment:
             - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
             - POSTGRES_USER=karr
@@ -58,6 +61,7 @@ services:
             - caddy_config:/config
 
 volumes:
+    postgres_data:
     caddy_data:
     caddy_config:
 
