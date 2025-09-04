@@ -1,7 +1,7 @@
 import { logger } from "@karr/logger"
 import type { StorageAdapter } from "@openauthjs/openauth/storage/storage"
 import { err, ok, type Result } from "neverthrow"
-import { runtime } from "std-env"
+import { env, runtime } from "std-env"
 import denoKVdriver from "unstorage/drivers/deno-kv"
 import { DenoKV } from "../adapters/deno-kv-adapter"
 import { createStore } from "../storage"
@@ -54,7 +54,9 @@ export function getStore(): Store {
 export async function getOpenAuthStorage(): Promise<
     Result<StorageAdapter, unknown>
 > {
-    const driver = await DenoKV()
+    const driver = await DenoKV({
+        path: env.DOCKER ? "/app/.data/kv.db" : undefined
+    })
 
     return ok(driver)
 }
