@@ -17,11 +17,18 @@ import {
     useQueryClient,
     useSuspenseQuery
 } from "@tanstack/react-query"
-import { Ban, Calendar1Icon, CircleCheckIcon, UserIcon } from "lucide-react"
+import {
+    Ban,
+    Calendar1Icon,
+    CircleCheckIcon,
+    MailIcon,
+    UserIcon
+} from "lucide-react"
 import Image from "next/image"
 import { useLocale, useTranslations } from "next-intl"
 import type { TUsersList } from "@/api/routes/admin"
 import { useAuth } from "@/app/auth/context"
+import { Link } from "@/i18n/routing"
 import { orpc } from "@/lib/orpc"
 
 function useBlockMutations() {
@@ -139,21 +146,26 @@ function User({ user }: { user: TUsersList[number]; key: string }) {
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle className="flex items-center gap-4">
-                        {user.avatar ? (
-                            <Image
-                                src={user.avatar}
-                                alt={displayName}
-                                className="h-10 w-10 rounded-full"
-                                width="40"
-                                height="40"
-                            />
-                        ) : (
-                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                                <UserIcon className="h-5 w-5" />
-                            </div>
-                        )}
-                        {displayName}
+                    <DialogTitle>
+                        <Link
+                            href={`/profile/${user.id}`}
+                            className="flex items-center gap-4"
+                        >
+                            {user.avatar ? (
+                                <Image
+                                    src={user.avatar}
+                                    alt={displayName}
+                                    className="h-10 w-10 rounded-full"
+                                    width="40"
+                                    height="40"
+                                />
+                            ) : (
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                                    <UserIcon className="h-5 w-5" />
+                                </div>
+                            )}
+                            {displayName}
+                        </Link>
                     </DialogTitle>
                 </DialogHeader>
                 <div className="flex flex-col gap-4">
@@ -169,23 +181,30 @@ function User({ user }: { user: TUsersList[number]; key: string }) {
                         )}
                     </div>
 
-                    <div className="flex items-center gap-3">
-                        <UserIcon className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm capitalize">
-                            {`${user.firstName} `}
-                            {user.lastName}
-                        </span>
-                    </div>
+                    <div className="grid gap-3 md:grid-cols-2">
+                        <div className="flex items-center gap-3">
+                            <UserIcon className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm capitalize">
+                                {`${user.firstName} `}
+                                {user.lastName}
+                            </span>
+                        </div>
 
-                    <div className="flex items-center gap-3">
-                        <Calendar1Icon className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">
-                            {t("joined", {
-                                date: new Date(
-                                    user.createdAt
-                                ).toLocaleDateString(locale)
-                            })}
-                        </span>
+                        <div className="flex items-center gap-3">
+                            <MailIcon className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm">{user.email}</span>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Calendar1Icon className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm">
+                                {t("joined", {
+                                    date: new Date(
+                                        user.createdAt
+                                    ).toLocaleDateString(locale)
+                                })}
+                            </span>
+                        </div>
                     </div>
 
                     {user.role === "user" && (
