@@ -4,7 +4,7 @@
 import defu from "defu"
 import { env, isBun, isCI, isDeno, isNode, isTest } from "std-env"
 import c from "tinyrainbow"
-import type { z } from "zod/v4"
+import type { z } from "zod"
 import defaultConfig from "../default-config.json" with { type: "json" }
 import {
     type ConfigFile,

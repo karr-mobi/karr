@@ -2,10 +2,10 @@ import logger from "@karr/logger"
 import { tryCatch } from "@karr/util"
 import { and, eq, sql } from "drizzle-orm"
 import { err, ok } from "neverthrow"
-import { z } from "zod/v4-mini"
+import { z } from "zod/mini"
 import drizzle from "@/db"
 import { type AccountId, accountsTable } from "@/db/schemas/accounts"
-import { profileTable } from "@/db/schemas/profile"
+import { type EditProfile, profileTable } from "@/db/schemas/profile"
 import { specialStatusTable } from "@/db/schemas/specialstatus"
 import { TripSchema, tripsTable, tripsView } from "@/db/schemas/trips"
 import { userPrefsTable } from "@/db/schemas/userprefs"
@@ -65,6 +65,26 @@ export async function selectUserByAccountId(id: AccountId) {
     }
 
     return ok(users.value[0])
+}
+
+export async function updateProfile(id: AccountId, data: EditProfile) {
+    logger.debug(`Updating profile for user ${id} to ${data.nickname}`)
+    const { success, error } = await tryCatch(
+        drizzle
+            .update(profileTable)
+            .set(data)
+            .where(
+                and(
+                    eq(profileTable.accountProvider, id.provider),
+                    eq(profileTable.accountRemoteId, id.remoteId)
+                )
+            )
+    )
+    if (!success) {
+        logger.error(`Failed to update profile for user ${id}: ${error}`)
+        return false
+    }
+    return true
 }
 
 export async function updateNickname(id: AccountId, nickname: string) {

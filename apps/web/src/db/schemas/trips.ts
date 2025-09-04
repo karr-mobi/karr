@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm"
 import { date, integer, pgTable, pgView, text, uuid } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
-import { z } from "zod/v4"
+import { z } from "zod"
 import { profileTable } from "./profile"
 
 export const tripsTable = pgTable("Trips", {

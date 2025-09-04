@@ -1,12 +1,12 @@
-import { z } from "zod/v4-mini"
+import { z } from "zod/mini"
 import {
     selectUserByAccountId,
     selectUserProfileById,
     selectUserTrips,
     updateAvatar,
-    updateBio,
-    updateNickname
+    updateProfile
 } from "@/api/lib/db/users"
+import { EditProfileSchema } from "@/db/schemas/profile"
 import { base } from "../server"
 
 const userInfo = base
@@ -71,24 +71,13 @@ const getAvatar = base
     .actionable()
     .callable()
 
-const changeNickname = base
+const changeProfile = base
     .route({
         method: "PUT"
     })
-    .input(z.string().check(z.minLength(2)))
-    .handler(({ context, input: nickname }) => {
-        updateNickname(context.user, nickname)
-    })
-    .actionable()
-    .callable()
-
-const changeBio = base
-    .route({
-        method: "PUT"
-    })
-    .input(z.string().check(z.minLength(2), z.maxLength(248)))
-    .handler(({ context, input: bio }) => {
-        updateBio(context.user, bio)
+    .input(EditProfileSchema)
+    .handler(({ context, input }) => {
+        updateProfile(context.user, input)
     })
     .actionable()
     .callable()
@@ -166,8 +155,7 @@ const getPublicProfile = base
 export const router = {
     info: userInfo,
     avatar: getAvatar,
-    updateNickname: changeNickname,
-    updateBio: changeBio,
+    updateProfile: changeProfile,
     updateAvatar: changeAvatar,
     trips: getUserTrips,
     profile: getPublicProfile

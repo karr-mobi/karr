@@ -18,6 +18,8 @@
     },
     "dependencies": {
         "@karr/config": "workspace:*",
+        "pino": "catalog:utils",
+        "std-env": "catalog:utils",
         "tinyrainbow": "catalog:utils"
     },
     "devDependencies": {
@@ -25,6 +27,7 @@
         "@karr/tsconfig": "workspace:*",
         "@types/node": "catalog:types",
         "eslint": "catalog:lint",
+        "pino-pretty": "catalog:utils",
         "typescript": "catalog:devtools",
         "vitest": "catalog:test",
         "vite-tsconfig-paths": "catalog:test"
