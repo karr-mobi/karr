@@ -18,12 +18,12 @@ export default async function I18nLayout({
     params
 }: Readonly<{
     children: React.ReactNode
-    params: Promise<{ locale: Locale }>
+    params: Promise<{ locale: string }>
 }>) {
     const { locale } = await params
 
     // Ensure that the incoming `locale` is valid
-    if (!routing.locales.includes(locale)) {
+    if (!routing.locales.includes(locale as Locale)) {
         notFound()
     }
 
