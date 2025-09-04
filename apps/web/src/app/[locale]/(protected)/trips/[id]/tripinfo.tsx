@@ -288,8 +288,8 @@ function ShowTripData({ trip }: { trip: Trip }) {
                             <Badge
                                 variant={
                                     trip.preferences?.smoke
-                                        ? "destructive"
-                                        : "default"
+                                        ? "default"
+                                        : "secondary"
                                 }
                             >
                                 {trip.preferences?.smoke ? t("yes") : t("no")}
