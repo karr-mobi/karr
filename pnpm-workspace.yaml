@@ -1,7 +1,7 @@
 packages:
-  - apps/*
-  - packages/*
-  - tooling/*
+    - apps/*
+    - packages/*
+    - tooling/*
 
 catalogs:
   web:
@@ -135,6 +135,6 @@ catalogs:
 disallowWorkspaceCycles: true
 
 overrides:
-  next>safe-buffer: npm:@socketregistry/safe-buffer@1.0.7
+    next>safe-buffer: npm:@socketregistry/safe-buffer@1.0.7
 
 preferFrozenLockfile: true

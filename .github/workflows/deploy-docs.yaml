@@ -10,6 +10,14 @@ on:
             - ".github/workflows/deploy-docs.yaml"
             - "pnpm-workspace.yaml"
 
+env:
+    TURBO_TELEMETRY_DISABLED: 1
+    # You can leverage Vercel Remote Caching with Turbo to speed up your builds
+    # @link https://turborepo.org/docs/core-concepts/remote-caching#remote-caching-on-vercel-builds
+    TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+    TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    HUSKY: 0
+
 jobs:
     deploy:
         name: Deploy
@@ -35,9 +43,6 @@ jobs:
 
             - name: Install dependencies
               run: pnpm i
-
-            - name: Extract routes from API
-              run: pnpm run extract-routes
 
             - name: Build Astro
               run: pnpm run --filter "@karr/docs" build

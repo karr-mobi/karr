@@ -1,5 +1,5 @@
 import { and, count, desc, eq } from "drizzle-orm"
-import { z } from "zod/v4-mini"
+import { z } from "zod/mini"
 import db from "@/db"
 import { accountsTable } from "@/db/schemas/accounts"
 import { profileTable } from "@/db/schemas/profile"

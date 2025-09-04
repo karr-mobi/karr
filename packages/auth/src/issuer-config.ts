@@ -28,10 +28,10 @@ export const embedBasePath = "/api/v1/auth"
 
 export const basePath =
     isSeparateAuthServer && AUTH_ISSUER
-        ? new URL(AUTH_ISSUER).pathname
+        ? new URL(AUTH_ISSUER).pathname.replace(/\/$/, "")
         : embedBasePath
 
 /**
  * The OpenAuth issuer url
  */
-export const ISSUER = new URL(basePath, ISSUER_DOMAIN).href
+export const ISSUER = new URL(basePath, ISSUER_DOMAIN).href.replace(/\/$/, "")

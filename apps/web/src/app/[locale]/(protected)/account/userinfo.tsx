@@ -13,13 +13,14 @@ import {
 } from "@karr/ui/components/card"
 import { Label } from "@karr/ui/components/label"
 import { Switch } from "@karr/ui/components/switch"
-import { useInitials } from "@karr/ui/hooks/users"
+import { useDisplayName, useInitials } from "@karr/ui/hooks/users"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import {
     CarIcon,
     CheckIcon,
     CigaretteIcon,
     MailIcon,
+    MessageSquareIcon,
     Music4Icon,
     OctagonXIcon,
     PawPrintIcon,
@@ -28,56 +29,36 @@ import {
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { orpc } from "@/lib/orpc"
-import AvatarUpload from "./AvatarUpload"
-import BioEdit from "./BioEdit"
-import DisplayName from "./DisplayName"
+import { Edit } from "./EditProfile"
 
 export default function FetchUserData() {
-    const { data, isError, error } = useSuspenseQuery(
-        orpc.user.info.queryOptions()
-    )
+    const t = useTranslations("Account")
 
-    if (isError || !data) {
+    const {
+        data: user,
+        isError,
+        error
+    } = useSuspenseQuery(orpc.user.info.queryOptions())
+
+    const initials = useInitials(user)
+    const displayName = useDisplayName(user)
+
+    if (isError || !user) {
         console.error("Error loading user data", error)
         return <p>Error loading user data</p>
     }
-
-    return <ShowUserData user={data} />
-}
-
-function ShowUserData({
-    user
-}: {
-    user: {
-        id: string
-        firstName: string
-        nickname: string | null
-        lastName: string | null
-        phone: string | null
-        bio: string | null
-        avatar: string | null
-        provider: string
-        email: string
-        verified: boolean | null
-        autoBook: boolean | null
-        defaultPlaces: number | null
-        smoke: boolean | null
-        music: boolean | null
-        pets: boolean | null
-    }
-}) {
-    const t = useTranslations("Account")
-
-    const initials = useInitials(user)
 
     return (
         <div className="grid gap-6 md:grid-cols-2">
             {/* Profile Card */}
             <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-3">
-                        <UserIcon className="h-5 w-5" />
-                        {t("profile-info")}
+                    <CardTitle className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                            <UserIcon className="h-5 w-5" />
+                            {t("profile-info")}
+                        </div>
+                        <Edit user={user} />
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -87,14 +68,11 @@ function ShowUserData({
                                 <AvatarImage src={user.avatar || undefined} />
                                 <AvatarFallback>{initials}</AvatarFallback>
                             </Avatar>
-                            <AvatarUpload currentAvatar={user.avatar} />
                         </div>
                         <div className="space-y-1">
-                            <DisplayName
-                                firstName={user.firstName}
-                                lastName={user.lastName}
-                                nickname={user.nickname}
-                            />
+                            <h3 className="!font-normal !font-sans text-lg">
+                                {displayName}
+                            </h3>
                             <div className="flex items-center gap-2">
                                 {user.verified ? (
                                     <Badge
@@ -122,6 +100,13 @@ function ShowUserData({
 
                     <div className="space-y-3">
                         <div className="flex items-center gap-3">
+                            <UserIcon className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-sm">
+                                {user.firstName} {user.lastName}
+                            </span>
+                        </div>
+
+                        <div className="flex items-center gap-3">
                             <MailIcon className="h-4 w-4 text-muted-foreground" />
                             <span className="text-sm">{user.email}</span>
                         </div>
@@ -133,7 +118,18 @@ function ShowUserData({
                             </div>
                         )}
 
-                        <BioEdit bio={user.bio} />
+                        <div className="flex items-start justify-start gap-3">
+                            <MessageSquareIcon className="mt-2 h-4 w-4 text-muted-foreground" />
+                            <div className="flex-1">
+                                {user.bio ? (
+                                    <span className="text-sm">{user.bio}</span>
+                                ) : (
+                                    <span className="text-muted-foreground text-sm italic">
+                                        {t("bio.empty")}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </CardContent>
             </Card>

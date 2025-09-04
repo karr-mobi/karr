@@ -63,11 +63,11 @@ export default function AvatarUpload({ currentAvatar }: AvatarUploadProps) {
             <DialogTrigger asChild>
                 <Button
                     variant="outline"
-                    size="icon"
-                    className="absolute right-0 bottom-0 size-6 rounded-full bg-white"
+                    className=""
                     aria-label={t("avatar.change")}
                 >
-                    <CameraIcon className="!size-3" />
+                    <CameraIcon />
+                    {t("avatar.change")}
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">

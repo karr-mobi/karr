@@ -1,6 +1,6 @@
 {
     "name": "karr",
-    "version": "0.15.8",
+    "version": "0.15.9",
     "private": true,
     "repository": "https://github.com/finxol/karr",
     "scripts": {
@@ -38,7 +38,7 @@
         "turbo": "catalog:devtools",
         "typescript": "catalog:devtools"
     },
-    "packageManager": "pnpm@10.15.0",
+    "packageManager": "pnpm@10.15.1",
     "engines": {
         "node": ">=22",
         "pnpm": ">=10"

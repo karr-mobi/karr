@@ -3,9 +3,9 @@ import type { StorageAdapter } from "@openauthjs/openauth/storage/storage"
 import { err, ok, type Result } from "neverthrow"
 import { runtime } from "std-env"
 import denoKVdriver from "unstorage/drivers/deno-kv"
-import { DenoKV } from "@/adapters/deno-kv-adapter"
-import { createStore } from "@/storage"
-import type { Store } from "@/types"
+import { DenoKV } from "../adapters/deno-kv-adapter"
+import { createStore } from "../storage"
+import type { Store } from "../types"
 
 /**
  * Get a unstorage driver for Deno runtime

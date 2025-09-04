@@ -1,7 +1,7 @@
 // biome-ignore-all lint/style/useNamingConvention: config values are CONSTANT_CASE
 
 import { env, isCI, isProduction } from "std-env"
-import { z } from "zod/v4"
+import { z } from "zod"
 import staticConfig from "./static.js"
 
 // ====================================================================

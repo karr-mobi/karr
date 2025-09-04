@@ -134,6 +134,26 @@
             "title": "Détails du compte",
             "provider": "Fournisseur",
             "user-id": "ID utilisateur"
+        },
+
+        "editProfile": {
+            "title": "Modifier votre profil",
+            "description": "Le pseudo sera visible par les autres utilisateurs.",
+
+            "first-name": "Prénom",
+            "last-name": "Nom",
+            "nickname": "Pseudo",
+            "email": "Email",
+            "phone": "Téléphone",
+
+            "bio": {
+                "label": "Bio",
+                "placeholder": "Présentez-vous en quelques mots"
+            },
+
+            "save": "Enregistrer",
+            "cancel": "Annuler",
+            "updated": "Profil mis à jour"
         }
     },
     "Profile": {
@@ -200,6 +220,10 @@
         "delete": "Supprimer le trajet",
         "are-you-sure": "Are you sure you want to delete this trip?",
         "cancel": "Cancel"
+    },
+
+    "InputErrors": {
+        "too-short": "Valeur trop courte"
     },
 
     "Utilities": {
