@@ -1,3 +1,4 @@
+import process from "node:process"
 import { basePath, isSeparateAuthServer } from "@karr/auth/issuer-config"
 import { PRODUCTION } from "@karr/config"
 import logger from "@karr/logger"
@@ -7,30 +8,12 @@ import issuer from "./issuer"
 
 const app = new Hono()
 
-app.use(async (ctx, next) => {
-    const result = new URL(ctx.req.url)
-    result.host = ctx.req.header("x-forwarded-host") || result.host
-    result.protocol = ctx.req.header("x-forwarded-proto") || result.protocol
-    result.port = ctx.req.header("x-forwarded-port") || result.port
-    logger.log("app req url", result.toString())
-    await next()
-})
-
 if (!isSeparateAuthServer) {
     app.get("/.well-known/oauth-authorization-server", (ctx) => {
-        logger.log("app req url", ctx.req.raw)
-        return issuer.request(
-            "/.well-known/oauth-authorization-server",
-            ctx.req.raw,
-            {
-                headers: ctx.req.raw.headers
-            }
-        )
+        return issuer.fetch(ctx.req.raw)
     })
     app.get("/.well-known/jwks.json", (ctx) => {
-        return issuer.request("/.well-known/jwks.json", {
-            headers: ctx.req.raw.headers
-        })
+        return issuer.fetch(ctx.req.raw)
     })
 }
 
@@ -45,6 +28,10 @@ const server = serve({
 })
 
 await server.ready()
+
+process.addListener("SIGTERM", () => {
+    server.close()
+})
 
 logger.success(
     `Server listening on ${server.url} in ${PRODUCTION ? "production" : "dev"} mode`
