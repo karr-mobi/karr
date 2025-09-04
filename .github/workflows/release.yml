@@ -76,7 +76,7 @@ jobs:
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Build and push Web Docker image
-              uses: docker/build-push-action@v5
+              uses: docker/build-push-action@v6
               with:
                   context: .
                   file: ./apps/web/Dockerfile
@@ -104,7 +104,7 @@ jobs:
 
             # Container build will fail if the Caddyfile config is invalid
             - name: Build and push Caddy Docker image
-              uses: docker/build-push-action@v5
+              uses: docker/build-push-action@v6
               with:
                   context: ./apps/caddy
                   file: ./apps/caddy/Dockerfile
@@ -130,9 +130,8 @@ jobs:
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            # Container build will fail if the Caddyfile config is invalid
             - name: Build and push Auth server (node) Docker image
-              uses: docker/build-push-action@v5
+              uses: docker/build-push-action@v6
               with:
                   context: .
                   file: ./apps/auth-server/Dockerfile
@@ -158,9 +157,8 @@ jobs:
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
-            # Container build will fail if the Caddyfile config is invalid
             - name: Build and push Auth server (deno) Docker image
-              uses: docker/build-push-action@v5
+              uses: docker/build-push-action@v6
               with:
                   context: .
                   file: ./apps/auth-server/Dockerfile-deno
