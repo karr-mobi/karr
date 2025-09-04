@@ -4,9 +4,11 @@ import {
     selectUserProfileById,
     selectUserTrips,
     updateAvatar,
-    updateProfile
+    updateProfile,
+    updateUserPrefs
 } from "@/api/lib/db/users"
 import { EditProfileSchema } from "@/db/schemas/profile"
+import { UserPrefsSchema } from "@/db/schemas/userprefs"
 import { base } from "../server"
 
 const userInfo = base
@@ -93,6 +95,19 @@ const changeAvatar = base
     .actionable()
     .callable()
 
+const changePrefs = base
+    .route({
+        method: "PUT"
+    })
+    .input(UserPrefsSchema)
+    .handler(async ({ context, input, errors }) => {
+        const res = await updateUserPrefs(context.user, input)
+
+        if (!res) return errors.INTERNAL_SERVER_ERROR
+    })
+    .actionable()
+    .callable()
+
 const getUserTrips = base
     .route({
         method: "GET"
@@ -157,6 +172,7 @@ export const router = {
     avatar: getAvatar,
     updateProfile: changeProfile,
     updateAvatar: changeAvatar,
+    updateUserPrefs: changePrefs,
     trips: getUserTrips,
     profile: getPublicProfile
 }
