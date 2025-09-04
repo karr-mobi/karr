@@ -134,7 +134,7 @@ jobs:
             - name: Build and push Auth server (node) Docker image
               uses: docker/build-push-action@v5
               with:
-                  context: ./apps/caddy
+                  context: .
                   file: ./apps/auth-server/Dockerfile
                   push: true
                   tags: |
@@ -162,7 +162,7 @@ jobs:
             - name: Build and push Auth server (deno) Docker image
               uses: docker/build-push-action@v5
               with:
-                  context: ./apps/caddy
+                  context: .
                   file: ./apps/auth-server/Dockerfile-deno
                   push: true
                   tags: |
