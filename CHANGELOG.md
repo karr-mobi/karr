@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.15.12
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.11...v0.15.12)
+
 ## v0.15.11
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.10...v0.15.11)
