@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.15.10
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.9...v0.15.10)
+
+### 🚀 Enhancements
+
+- Make user prefs updatable and display them in profile ([#199](https://github.com/karr-mobi/karr/pull/199))
+- Add link to user profile on admin panel ([#200](https://github.com/karr-mobi/karr/pull/200))
+
+### 🤖 CI
+
+- Fix docs deploy script ([6386aad](https://github.com/karr-mobi/karr/commit/6386aad))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.9
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.8...v0.15.9)
