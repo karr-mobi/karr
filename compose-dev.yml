@@ -22,23 +22,29 @@ services:
         depends_on:
             - db
 
-    # api:
-    #     build:
-    #         context: .
-    #         dockerfile: ./apps/api/Dockerfile
-    #     secrets:
-    #         - db-password
-    #     environment:
-    #         - CONFIG_DIR=/app/config
-    #         - DB_HOST=db
-    #         - DB_USER=postgres
-    #         - DB_PASSWORD_FILE=/run/secrets/db-password
-    #     ports:
-    #         - 1993:1993
-    #     volumes:
-    #         - ./config:/app/config
-    #     depends_on:
-    #         - db
+    auth:
+        build:
+            context: .
+            dockerfile: ./apps/auth-server/Dockerfile
+        environment:
+            - CONFIG_DIR=/app/config
+        ports:
+            - 1993:1993
+        volumes:
+            - auth_data:/app/.data
+            - ./config:/app/config
+
+    auth-deno:
+        build:
+            context: .
+            dockerfile: ./apps/auth-server/Dockerfile-deno
+        environment:
+            - CONFIG_DIR=/app/config
+        ports:
+            - 1993:1993
+        volumes:
+            - auth_data:/app/.data
+            - ./config:/app/config
 
     db:
         image: postgres:17-alpine
@@ -82,6 +88,7 @@ services:
 volumes:
     caddy_data:
     caddy_config:
+    auth_data:
 
 secrets:
     db-password:
