@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { getTranslations } from "next-intl/server"
+import { en, fr } from "zod/locales"
+import { z } from "zod/mini"
 import type { Locale } from "@/../global"
 import { routing } from "@/i18n/routing"
 
@@ -24,6 +26,8 @@ export default async function I18nLayout({
     if (!routing.locales.includes(locale)) {
         notFound()
     }
+
+    z.config(locale === "en-GB" ? en() : fr())
 
     return children
 }
