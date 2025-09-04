@@ -68,7 +68,7 @@ jobs:
             - name: Install dependencies
               run: |
                   cd out
-                  pnpm install
+                  pnpm install --config.inject-workspace-packages=true
 
             - name: Build dependencies
               run: |
