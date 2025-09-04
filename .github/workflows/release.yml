@@ -138,8 +138,8 @@ jobs:
                   file: ./apps/auth-server/Dockerfile
                   push: true
                   tags: |
-                      ghcr.io/karr-mobi/karr-caddy:latest
-                      ghcr.io/karr-mobi/karr-caddy:${{ needs.release.outputs.version }}
+                      ghcr.io/karr-mobi/karr-auth-server:latest
+                      ghcr.io/karr-mobi/karr-auth-server:${{ needs.release.outputs.version }}
 
     build-auth-server-deno:
         needs: release
@@ -166,5 +166,5 @@ jobs:
                   file: ./apps/auth-server/Dockerfile-deno
                   push: true
                   tags: |
-                      ghcr.io/karr-mobi/karr-caddy:latest-deno
-                      ghcr.io/karr-mobi/karr-caddy:${{ needs.release.outputs.version }}-deno
+                      ghcr.io/karr-mobi/karr-auth-server:latest-deno
+                      ghcr.io/karr-mobi/karr-auth-server:${{ needs.release.outputs.version }}-deno
