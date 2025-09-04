@@ -1,5 +1,27 @@
 # Changelog
 
+## v0.15.9
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.8...v0.15.9)
+
+### 🚀 Enhancements
+
+- Centralise basePath computation, auth server can be on same domain again ([#191](https://github.com/karr-mobi/karr/pull/191))
+- Move profile editing to dialog box ([#197](https://github.com/karr-mobi/karr/pull/197))
+
+### 🩹 Fixes
+
+- Stop importing routes list into docs ([607ea43](https://github.com/karr-mobi/karr/commit/607ea43))
+
+### 🤖 CI
+
+- Auto deploy auth server to deno deploy ([f4b3e4a](https://github.com/karr-mobi/karr/commit/f4b3e4a))
+- Actually deploy auth server to deno deploy in pr and main ([#192](https://github.com/karr-mobi/karr/pull/192))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.8
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.7...v0.15.8)
