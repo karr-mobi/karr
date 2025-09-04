@@ -6,7 +6,7 @@
         "check:lint": "eslint . --max-warnings 0",
         "lint": "eslint . --max-warnings 0 --fix",
         "dev": "tsx --watch src/server.ts",
-        "build": "tsc --noEmit && CI=true node --experimental-strip-types ./script/bundle.ts",
+        "build": "tsc --noEmit && CI=true node ./script/bundle.ts",
         "start": "node ./out/server.mjs",
         "check:types": "tsc --noEmit",
         "test": "vitest"
