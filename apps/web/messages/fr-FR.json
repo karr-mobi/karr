@@ -165,7 +165,17 @@
         "about": "À propos",
         "special-status": "Statut spécial",
         "trips-published": "{count, plural, =0{Aucun trajet publié} =1{# trajet publié} other{# trajets publiés}}",
-        "member-since": "Rejoint le {date, date, long}"
+        "member-since": "Rejoint le {date, date, long}",
+
+        "preferences": "Préférences",
+        "auto-book": "Réservation automatique",
+        "manual-book": "Réservation manuelle",
+        "music": "Musique",
+        "no-music": "Pas de musique",
+        "smoke": "Tabac",
+        "no-smoke": "Pas de tabac",
+        "pets": "Animaux de compagnie",
+        "no-pets": "Pas d'animaux de compagnie"
     },
     "trips": {
         "title": "Trajets",

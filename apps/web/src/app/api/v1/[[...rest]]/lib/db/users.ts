@@ -8,7 +8,7 @@ import { type AccountId, accountsTable } from "@/db/schemas/accounts"
 import { type EditProfile, profileTable } from "@/db/schemas/profile"
 import { specialStatusTable } from "@/db/schemas/specialstatus"
 import { TripSchema, tripsTable, tripsView } from "@/db/schemas/trips"
-import { userPrefsTable } from "@/db/schemas/userprefs"
+import { type UserPrefs, userPrefsTable } from "@/db/schemas/userprefs"
 
 /**
  * Select a user by their ID
@@ -147,6 +147,44 @@ export async function updateAvatar(id: AccountId, avatar: string | null) {
     return true
 }
 
+export async function updateUserPrefs(id: AccountId, userPrefs: UserPrefs) {
+    logger.debug(`Updating avatar for user ${id}`)
+
+    const user = await tryCatch(
+        drizzle
+            .select({ prefs: profileTable.prefs })
+            .from(profileTable)
+            .where(
+                and(
+                    eq(profileTable.accountProvider, id.provider),
+                    eq(profileTable.accountRemoteId, id.remoteId)
+                )
+            )
+    )
+
+    if (!user.success) {
+        logger.error(`Failed to fetch user ${id}: ${user.error}`)
+        return false
+    }
+
+    if (user.value.length === 0 || !user.value[0]) {
+        logger.error(`User ${id} not found`)
+        return false
+    }
+
+    const { success, error } = await tryCatch(
+        drizzle
+            .update(userPrefsTable)
+            .set(userPrefs)
+            .where(eq(userPrefsTable.id, user.value[0].prefs))
+    )
+    if (!success) {
+        logger.error(`Failed to update avatar for user ${id}: ${error}`)
+        return false
+    }
+    return true
+}
+
 export async function selectUserTrips(id: AccountId) {
     const trips = await tryCatch(
         drizzle
@@ -195,6 +233,11 @@ export async function selectUserProfileById(id: string) {
                 avatar: profileTable.avatar,
                 bio: profileTable.bio,
                 specialStatus: profileTable.specialStatus,
+                autoBook: userPrefsTable.autoBook,
+                defaultPlaces: userPrefsTable.defaultPlaces,
+                smoke: userPrefsTable.smoke,
+                music: userPrefsTable.music,
+                pets: userPrefsTable.pets,
                 tripsCount: sql<number>`(
                     SELECT COUNT(*)::int
                     FROM ${tripsTable}
@@ -211,6 +254,7 @@ export async function selectUserProfileById(id: string) {
                     eq(accountsTable.remoteId, profileTable.accountRemoteId)
                 )
             )
+            .leftJoin(userPrefsTable, eq(userPrefsTable.id, profileTable.prefs))
             .limit(1)
     )
 

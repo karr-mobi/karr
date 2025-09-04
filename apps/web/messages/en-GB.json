@@ -156,12 +156,20 @@
         "error-loading": "Error loading profile",
         "not-found": "The profile was not found",
         "basic-info": "Basic Information",
-        "name": "Name",
-        "nickname": "Nickname",
         "about": "About",
         "special-status": "Special Status",
         "trips-published": "{count, plural, =0{No trips} =1{# trip} other{# trips}} published",
-        "member-since": "Joined on {date, date, long}"
+        "member-since": "Joined on {date, date, long}",
+
+        "preferences": "Preferences",
+        "auto-book": "Automatic booking",
+        "manual-book": "Manual booking",
+        "music": "Music",
+        "no-music": "No music",
+        "smoke": "Smoking",
+        "no-smoke": "No smoking",
+        "pets": "Pets",
+        "no-pets": "No pets"
     },
     "trips": {
         "title": "Trips",

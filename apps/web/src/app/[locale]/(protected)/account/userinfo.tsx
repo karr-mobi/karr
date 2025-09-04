@@ -11,10 +11,15 @@ import {
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
+import { InputNumber } from "@karr/ui/components/input"
 import { Label } from "@karr/ui/components/label"
 import { Switch } from "@karr/ui/components/switch"
 import { useDisplayName, useInitials } from "@karr/ui/hooks/users"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import {
+    useMutation,
+    useQueryClient,
+    useSuspenseQuery
+} from "@tanstack/react-query"
 import {
     CarIcon,
     CheckIcon,
@@ -34,11 +39,49 @@ import { Edit } from "./EditProfile"
 export default function FetchUserData() {
     const t = useTranslations("Account")
 
+    const queryClient = useQueryClient()
+
     const {
         data: user,
         isError,
         error
     } = useSuspenseQuery(orpc.user.info.queryOptions())
+
+    const prefsMutation = useMutation(
+        orpc.user.updateUserPrefs.mutationOptions({
+            onMutate: async (newPrefs) => {
+                await queryClient.cancelQueries({
+                    queryKey: orpc.user.info.queryKey()
+                })
+
+                const previousData = queryClient.getQueryData(
+                    orpc.user.info.queryKey()
+                )
+
+                queryClient.setQueryData(orpc.user.info.queryKey(), (old) => {
+                    if (!old) return old
+                    return {
+                        ...old,
+                        ...newPrefs
+                    }
+                })
+
+                return { previousData }
+            },
+            onError: (err, _newPrefs, context) => {
+                console.error(err)
+                queryClient.setQueryData(
+                    orpc.user.info.queryKey(),
+                    context?.previousData
+                )
+            },
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: orpc.user.info.queryKey()
+                })
+            }
+        })
+    )
 
     const initials = useInitials(user)
     const displayName = useDisplayName(user)
@@ -135,7 +178,7 @@ export default function FetchUserData() {
             </Card>
 
             {/* Preferences Card */}
-            <Card>
+            <Card className="self-start">
                 <CardHeader>
                     <CardTitle>{t("preferences.title")}</CardTitle>
                 </CardHeader>
@@ -153,7 +196,11 @@ export default function FetchUserData() {
                         <Switch
                             id="auto-book"
                             checked={!!user.autoBook}
-                            disabled
+                            onCheckedChange={(value) => {
+                                prefsMutation.mutate({
+                                    autoBook: value
+                                })
+                            }}
                         />
                     </div>
 
@@ -167,7 +214,15 @@ export default function FetchUserData() {
                                 {t("preferences.music")}
                             </Label>
                         </div>
-                        <Switch id="music" checked={!!user.music} disabled />
+                        <Switch
+                            id="music"
+                            checked={!!user.music}
+                            onCheckedChange={(value) => {
+                                prefsMutation.mutate({
+                                    music: value
+                                })
+                            }}
+                        />
                     </div>
 
                     <div className="flex items-center justify-between">
@@ -180,7 +235,15 @@ export default function FetchUserData() {
                                 {t("preferences.smoking")}
                             </Label>
                         </div>
-                        <Switch id="smoke" checked={!!user.smoke} disabled />
+                        <Switch
+                            id="smoke"
+                            checked={!!user.smoke}
+                            onCheckedChange={(value) => {
+                                prefsMutation.mutate({
+                                    smoke: value
+                                })
+                            }}
+                        />
                     </div>
 
                     <div className="flex items-center justify-between">
@@ -193,7 +256,15 @@ export default function FetchUserData() {
                                 {t("preferences.pets")}
                             </Label>
                         </div>
-                        <Switch id="pets" checked={!!user.pets} disabled />
+                        <Switch
+                            id="pets"
+                            checked={!!user.pets}
+                            onCheckedChange={(value) => {
+                                prefsMutation.mutate({
+                                    pets: value
+                                })
+                            }}
+                        />
                     </div>
 
                     <div className="border-t pt-2">
@@ -201,9 +272,16 @@ export default function FetchUserData() {
                             <Label className="font-medium text-sm">
                                 {t("preferences.default-places")}
                             </Label>
-                            <Badge variant="outline">
-                                {user.defaultPlaces}
-                            </Badge>
+                            <InputNumber
+                                value={user.defaultPlaces || 0}
+                                onChange={(e) => {
+                                    prefsMutation.mutate({
+                                        defaultPlaces: Number.parseInt(
+                                            e.target.value
+                                        )
+                                    })
+                                }}
+                            />
                         </div>
                     </div>
                 </CardContent>

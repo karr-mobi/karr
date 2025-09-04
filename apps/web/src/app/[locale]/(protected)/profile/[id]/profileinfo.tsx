@@ -7,10 +7,44 @@ import { Skeleton } from "@karr/ui/components/skeleton"
 import { useDisplayName, useInitials } from "@karr/ui/hooks/users"
 import { isDefinedError } from "@orpc/client"
 import { useSuspenseQuery } from "@tanstack/react-query"
-import { CalendarIcon, CarIcon, VerifiedIcon } from "lucide-react"
+import {
+    BanIcon,
+    CalendarIcon,
+    CarIcon,
+    CigaretteIcon,
+    CigaretteOffIcon,
+    HeadphoneOffIcon,
+    MusicIcon,
+    PawPrintIcon,
+    VerifiedIcon,
+    ZapIcon,
+    ZapOffIcon
+} from "lucide-react"
 import { notFound } from "next/navigation"
 import { useTranslations } from "next-intl"
 import { orpc } from "@/lib/orpc"
+
+function useProfile(userId: string) {
+    return useSuspenseQuery(
+        orpc.user.profile.queryOptions({
+            input: userId,
+            throwOnError: false,
+            retry: (failureCount, error) => {
+                console.log(error)
+                if (isDefinedError(error) && error.code === "NOT_FOUND") {
+                    return false
+                }
+                return failureCount < 3
+            },
+            //biome-ignore lint/suspicious/noExplicitAny: intentional
+            onError: (error: any) => {
+                if (error?.code === "NOT_FOUND") {
+                    notFound()
+                }
+            }
+        })
+    )
+}
 
 export function ProfileInfoSkeleton() {
     return (
@@ -40,29 +74,7 @@ export function ProfileInfoSkeleton() {
 export default function ProfileInfo({ userId }: { userId: string }) {
     const t = useTranslations("Profile")
 
-    const {
-        data: profile,
-        isError,
-        error
-    } = useSuspenseQuery(
-        orpc.user.profile.queryOptions({
-            input: userId,
-            throwOnError: false,
-            retry: (failureCount, error) => {
-                console.log(error)
-                if (isDefinedError(error) && error.code === "NOT_FOUND") {
-                    return false
-                }
-                return failureCount < 3
-            },
-            //biome-ignore lint/suspicious/noExplicitAny: intentional
-            onError: (error: any) => {
-                if (error?.code === "NOT_FOUND") {
-                    notFound()
-                }
-            }
-        })
-    )
+    const { data: profile, isError, error } = useProfile(userId)
 
     const displayName = useDisplayName(profile)
     const initials = useInitials(profile)
@@ -147,6 +159,64 @@ export default function ProfileInfo({ userId }: { userId: string }) {
                                         </div>
                                     </div>
                                 )}
+                            </CardContent>
+                        </Card>
+
+                        {/* Prefs Card */}
+                        <Card className="w-full ">
+                            <CardContent>
+                                <h6 className="mb-2 font-semibold text-lg">
+                                    {t("preferences")}
+                                </h6>
+                                <div className="grid gap-4 *:flex *:items-center *:gap-3 *:text-sm md:grid-cols-2">
+                                    {profile.autoBook ? (
+                                        <p>
+                                            <ZapIcon />
+                                            {t("auto-book")}
+                                        </p>
+                                    ) : (
+                                        <p>
+                                            <ZapOffIcon />
+                                            {t("manual-book")}
+                                        </p>
+                                    )}
+
+                                    {profile.music ? (
+                                        <p>
+                                            <MusicIcon />
+                                            {t("music")}
+                                        </p>
+                                    ) : (
+                                        <p>
+                                            <HeadphoneOffIcon />
+                                            {t("no-music")}
+                                        </p>
+                                    )}
+
+                                    {profile.smoke ? (
+                                        <p>
+                                            <CigaretteIcon />
+                                            {t("smoke")}
+                                        </p>
+                                    ) : (
+                                        <p>
+                                            <CigaretteOffIcon />
+                                            {t("no-smoke")}
+                                        </p>
+                                    )}
+
+                                    {profile.pets ? (
+                                        <p>
+                                            <PawPrintIcon />
+                                            {t("pets")}
+                                        </p>
+                                    ) : (
+                                        <p>
+                                            <BanIcon />
+                                            {t("no-pets")}
+                                        </p>
+                                    )}
+                                </div>
                             </CardContent>
                         </Card>
                     </div>
