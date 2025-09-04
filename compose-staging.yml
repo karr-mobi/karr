@@ -1,4 +1,6 @@
-name: karr-staging
+name: karr_staging
+
+# Reverse Proxy is not included, this assumes the auth server is running separately.
 
 services:
     web:
@@ -12,21 +14,11 @@ services:
             - DB_USER=karr
             - DB_HOST=db
             - DB_PASSWORD_FILE=/run/secrets/db-password
+            - PORT=3000
         volumes:
-            - /srv/http/karr-staging/karr.config.yaml:/app/config/karr.config.yaml
+            - /srv/http/karr/karr.config.yaml:/app/config/karr.config.yaml
         depends_on:
             - db
-
-    # api:
-    #     image: ghcr.io/karr-mobi/karr-api:latest
-    #     networks:
-    #         - karr_network_staging
-    #     environment:
-
-    #     volumes:
-    #         - /srv/http/karr-staging/karr.config.yaml:/app/config/karr.config.yaml
-    #     depends_on:
-    #         - db
 
     db:
         image: postgres:17-alpine
@@ -46,6 +38,18 @@ services:
             timeout: 5s
             retries: 5
 
+    auth:
+        image: ghcr.io/karr-mobi/karr-auth-server:latest-deno
+        networks:
+            - karr_network_staging
+        environment:
+            - CONFIG_DIR=/app/config
+        ports:
+            - 1993:1993
+        volumes:
+            - auth_data:/app/.data
+            - ./config:/app/config
+
     caddy:
         image: ghcr.io/karr-mobi/karr-caddy:latest
         networks:
@@ -54,7 +58,7 @@ services:
             - "3555:3555"
         environment:
             - SITE_ADDRESS=:3555
-            - API_PORT=1993
+            - AUTH_PORT=1993
             - WEB_PORT=3000
         volumes:
             - caddy_data:/data
@@ -64,6 +68,7 @@ volumes:
     postgres_data:
     caddy_data:
     caddy_config:
+    auth_data:
 
 networks:
     karr_network_staging:
