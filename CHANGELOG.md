@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.13
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.12...v0.15.13)
+
+### 🩹 Fixes
+
+- Caddyfile for embeded auth server ([#202](https://github.com/karr-mobi/karr/pull/202))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.12
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.11...v0.15.12)
