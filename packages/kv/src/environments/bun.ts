@@ -5,9 +5,9 @@ import sqlite from "db0/connectors/bun-sqlite"
 import { err, ok, type Result } from "neverthrow"
 import { runtime } from "std-env"
 import dbDriver from "unstorage/drivers/db0"
-import { UnStorage } from "@/adapters/unstorage-adapter"
-import { createStore } from "@/storage"
-import type { Store } from "@/types"
+import { UnStorage } from "../adapters/unstorage-adapter"
+import { createStore } from "../storage"
+import type { Store } from "../types"
 
 /**
  * Get a database driver for Bun runtime

@@ -5,9 +5,9 @@ import sqlite from "db0/connectors/node-sqlite"
 import { err, ok, type Result } from "neverthrow"
 import { isDeno, runtime } from "std-env"
 import dbDriver from "unstorage/drivers/db0"
-import { UnStorage } from "@/adapters/unstorage-adapter"
-import { createStore } from "@/storage"
-import type { Store } from "@/types"
+import { UnStorage } from "../adapters/unstorage-adapter"
+import { createStore } from "../storage"
+import type { Store } from "../types"
 
 function getNodeDriver() {
     try {
