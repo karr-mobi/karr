@@ -140,4 +140,3 @@ overrides:
     next>safe-buffer: npm:@socketregistry/safe-buffer@1.0.7
 
 preferFrozenLockfile: true
-injectWorkspacePackages: true

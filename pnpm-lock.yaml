@@ -3,7 +3,6 @@ lockfileVersion: '9.0'
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
-  injectWorkspacePackages: true
 
 catalogs:
   api:
@@ -698,7 +697,7 @@ importers:
         version: link:../../packages/logger
       '@karr/ui':
         specifier: workspace:*
-        version: file:packages/ui(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(babel-plugin-react-compiler@19.1.0-rc.3)(tailwindcss@4.1.12)(typescript@5.9.2)
+        version: link:../../packages/ui
       '@karr/util':
         specifier: workspace:*
         version: link:../../packages/util
@@ -761,7 +760,7 @@ importers:
         version: 15.5.2(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       next-intl:
         specifier: catalog:web
-        version: 4.3.6(next@15.5.2(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)(typescript@5.9.2)
+        version: 4.3.6(next@15.5.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)(typescript@5.9.2)
       next-themes:
         specifier: catalog:web
         version: 0.4.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -1060,7 +1059,7 @@ importers:
         version: 15.5.2(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       next-intl:
         specifier: catalog:web
-        version: 4.3.6(next@15.5.2(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)(typescript@5.9.2)
+        version: 4.3.6(next@15.5.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)(typescript@5.9.2)
       next-themes:
         specifier: catalog:web
         version: 0.4.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -2306,9 +2305,6 @@ packages:
 
   '@jsr/std__text@1.0.15':
     resolution: {integrity: sha512-mh/5brzWpe2nxxt31Zvv0mqyHW83YBI26y/0pse7ntj0jxEoxUi9OcHBO7FF/YcqMGnq2TSwqCAKvKEYA25mdQ==, tarball: https://npm.jsr.io/~/11/@jsr/std__text/1.0.15.tgz}
-
-  '@karr/ui@file:packages/ui':
-    resolution: {directory: packages/ui, type: directory}
 
   '@mdx-js/mdx@3.1.0':
     resolution: {integrity: sha512-/QxEhPAvGwbQmy1Px8F899L5Uc2KZ6JtXwlCgJmjSTBedwOZkByYcBG4GceIGPXRDsmfxhHazuS+hlOShRLeDw==}
@@ -8743,49 +8739,6 @@ snapshots:
 
   '@jsr/std__text@1.0.15': {}
 
-  '@karr/ui@file:packages/ui(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(babel-plugin-react-compiler@19.1.0-rc.3)(tailwindcss@4.1.12)(typescript@5.9.2)':
-    dependencies:
-      '@hookform/resolvers': 5.2.1(react-hook-form@7.62.0(react@19.1.1))
-      '@radix-ui/react-avatar': 1.1.10(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@radix-ui/react-dialog': 1.1.15(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@radix-ui/react-dropdown-menu': 2.1.16(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@radix-ui/react-label': 2.1.7(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@radix-ui/react-popover': 1.1.15(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@radix-ui/react-select': 2.2.6(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@radix-ui/react-separator': 1.1.7(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@radix-ui/react-slot': 1.2.3(@types/react@19.1.12)(react@19.1.1)
-      '@radix-ui/react-switch': 1.2.6(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      '@tanstack/react-form': 1.19.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      class-variance-authority: 0.7.1
-      clsx: 2.1.1
-      date-fns: 4.1.0
-      lucide-react: 0.507.0(react@19.1.1)
-      motion: 12.23.12(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      next: 15.5.2(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      next-intl: 4.3.6(next@15.5.2(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)(typescript@5.9.2)
-      next-themes: 0.4.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      react: 19.1.1
-      react-day-picker: 9.9.0(react@19.1.1)
-      react-dom: 19.1.1(react@19.1.1)
-      react-hook-form: 7.62.0(react@19.1.1)
-      sonner: 2.0.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      tailwind-merge: 3.3.1
-      tailwindcss-animate: 1.0.7(tailwindcss@4.1.12)
-      zod: 4.1.5
-    transitivePeerDependencies:
-      - '@babel/core'
-      - '@emotion/is-prop-valid'
-      - '@opentelemetry/api'
-      - '@playwright/test'
-      - '@tanstack/react-start'
-      - '@types/react'
-      - '@types/react-dom'
-      - babel-plugin-macros
-      - babel-plugin-react-compiler
-      - sass
-      - tailwindcss
-      - typescript
-
   '@mdx-js/mdx@3.1.0(acorn@8.15.0)':
     dependencies:
       '@types/estree': 1.0.7
@@ -13145,7 +13098,7 @@ snapshots:
     optionalDependencies:
       '@rollup/rollup-linux-x64-gnu': 4.40.2
 
-  next-intl@4.3.6(next@15.5.2(babel-plugin-react-compiler@19.1.0-rc.3)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)(typescript@5.9.2):
+  next-intl@4.3.6(next@15.5.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react@19.1.1)(typescript@5.9.2):
     dependencies:
       '@formatjs/intl-localematcher': 0.5.10
       negotiator: 1.0.0

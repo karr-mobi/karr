@@ -59,16 +59,10 @@ jobs:
             - name: Prune repository
               run: turbo prune "@karr/auth-server"
 
-            - name: testing stuff
-              run: |
-                  ls -lA
-                  cat pnpm-workspace.yaml
-                  cat out/pnpm-workspace.yaml
-
             - name: Install dependencies
               run: |
                   cd out
-                  pnpm install --config.inject-workspace-packages=true
+                  pnpm install
 
             - name: Build dependencies
               run: |
