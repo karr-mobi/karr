@@ -14,10 +14,8 @@ import {
     CigaretteIcon,
     CigaretteOffIcon,
     HeadphoneOffIcon,
-    Music2Icon,
     MusicIcon,
     PawPrintIcon,
-    SparkleIcon,
     VerifiedIcon,
     ZapIcon,
     ZapOffIcon

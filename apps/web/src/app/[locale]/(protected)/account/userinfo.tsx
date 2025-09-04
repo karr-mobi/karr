@@ -11,7 +11,7 @@ import {
     CardHeader,
     CardTitle
 } from "@karr/ui/components/card"
-import { Input, InputNumber } from "@karr/ui/components/input"
+import { InputNumber } from "@karr/ui/components/input"
 import { Label } from "@karr/ui/components/label"
 import { Switch } from "@karr/ui/components/switch"
 import { useDisplayName, useInitials } from "@karr/ui/hooks/users"
@@ -75,7 +75,7 @@ export default function FetchUserData() {
                     context?.previousData
                 )
             },
-            onSuccess: async () => {
+            onSuccess: () => {
                 queryClient.invalidateQueries({
                     queryKey: orpc.user.info.queryKey()
                 })
