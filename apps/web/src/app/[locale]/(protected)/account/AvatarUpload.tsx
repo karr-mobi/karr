@@ -13,8 +13,9 @@ import {
 import { Input } from "@karr/ui/components/input"
 import { Label } from "@karr/ui/components/label"
 import { toast } from "@karr/ui/components/sonner"
+import { Spinner } from "@karr/ui/components/spinner"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { CameraIcon, Loader2Icon } from "lucide-react"
+import { CameraIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
 import { orpc } from "@/lib/orpc"
@@ -33,13 +34,21 @@ export default function AvatarUpload({ currentAvatar }: AvatarUploadProps) {
     const updateAvatarMutation = useMutation(
         orpc.user.updateAvatar.mutationOptions({
             onSuccess: () => {
-                queryClient.invalidateQueries({
-                    queryKey: orpc.user.info.key()
-                })
                 toast.success(t("avatar.update-success"), {
                     description: t("avatar.update-success-description")
                 })
                 setOpen(false)
+                return Promise.all([
+                    queryClient.invalidateQueries({
+                        queryKey: orpc.user.info.key()
+                    }),
+                    queryClient.invalidateQueries({
+                        queryKey: orpc.user.avatar.key()
+                    }),
+                    queryClient.invalidateQueries({
+                        queryKey: orpc.user.trips.key()
+                    })
+                ])
             },
             onError: (error) => {
                 toast.error(t("avatar.update-error"), {
@@ -113,7 +122,7 @@ export default function AvatarUpload({ currentAvatar }: AvatarUploadProps) {
                         >
                             {updateAvatarMutation.isPending ? (
                                 <>
-                                    <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                                    <Spinner />
                                     {t("avatar.updating")}
                                 </>
                             ) : (

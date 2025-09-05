@@ -29,6 +29,8 @@ Documentation: [docs.karr.mobi](https://docs.karr.mobi/)
 
 ## TODO
 
+- [ ] Fix `AUTH_ISSUER` computation in auth-server docker container
+
 - Add tests
     - [x] config
     - [x] util
