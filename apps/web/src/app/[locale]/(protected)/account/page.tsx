@@ -23,11 +23,19 @@ export default async function AccountPage() {
 
     return (
         <div className="container mx-auto py-8">
-            <div className="mb-8">
-                <h1 className="font-bold text-3xl">{t("title")}</h1>
-                <p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
-            </div>
-            <Suspense fallback={<Loading />}>
+            <Suspense
+                fallback={
+                    <>
+                        <div className="mb-8">
+                            <h1 className="font-bold text-3xl">{t("title")}</h1>
+                            <p className="mt-2 text-muted-foreground">
+                                {t("subtitle")}
+                            </p>
+                        </div>
+                        <Loading />
+                    </>
+                }
+            >
                 <UserInfo />
             </Suspense>
             <Suspense fallback={<Loading />}>
