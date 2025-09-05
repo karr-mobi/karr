@@ -75,12 +75,18 @@
         "verify-failed": "Failed to verify user. Please try again later.",
         "joined": "Joined {date}",
 
+        "more-options": "More actions",
+
         "role": "Role",
+        "change-role": "Change {name}'s role",
         "select-role": "Select Role",
+        "admin": "Administrator",
+        "user": "User",
 
         "error-loading-instance-data": "Error Loading Instance Data",
         "failed-load-users": "Failed to load users",
-        "no-users-found": "No users found"
+        "no-users-found": "No users found",
+        "role-change-failed": "Failed to change role. Please try again later."
     },
 
     "Account": {
