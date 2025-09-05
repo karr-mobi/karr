@@ -1,7 +1,9 @@
+import logger from "@karr/logger"
+import { tryCatch } from "@karr/util"
 import { and, count, desc, eq } from "drizzle-orm"
 import { z } from "zod/mini"
 import db from "@/db"
-import { accountsTable } from "@/db/schemas/accounts"
+import { AccountIdSchema, accountsTable } from "@/db/schemas/accounts"
 import { profileTable } from "@/db/schemas/profile"
 import { base } from "../server"
 
@@ -15,6 +17,7 @@ const UsersListSchema = z.array(
         avatar: z.nullable(z.string()),
         role: z.enum(["admin", "user"]),
         blocked: z.nullable(z.boolean()),
+        verified: z.nullable(z.boolean()),
         provider: z.string(),
         remoteId: z.string(),
         createdAt: z.iso.datetime()
@@ -104,6 +107,7 @@ const usersList = adminBase
                 id: profileTable.id,
                 role: accountsTable.role,
                 blocked: accountsTable.blocked,
+                verified: accountsTable.verified,
                 provider: accountsTable.provider,
                 remoteId: accountsTable.remoteId,
                 email: accountsTable.email,
@@ -133,6 +137,7 @@ const usersList = adminBase
             avatar: user.avatar,
             role: user.role,
             blocked: user.blocked,
+            verified: user.verified,
             provider: user.provider,
             remoteId: user.remoteId,
             createdAt: user.createdAt.toISOString()
@@ -145,12 +150,7 @@ const blockUser = base
     .route({
         method: "PUT"
     })
-    .input(
-        z.object({
-            provider: z.string(),
-            remoteId: z.string()
-        })
-    )
+    .input(AccountIdSchema)
     .handler(async ({ context, input, errors }) => {
         // Prevent admin from blocking themselves
         if (
@@ -203,12 +203,7 @@ const unblockUser = base
     .route({
         method: "PUT"
     })
-    .input(
-        z.object({
-            provider: z.string(),
-            remoteId: z.string()
-        })
-    )
+    .input(AccountIdSchema)
     .handler(async ({ input, errors }) => {
         // Check if user exists
         const [targetUser] = await db
@@ -245,12 +240,65 @@ const unblockUser = base
     .actionable()
     .callable()
 
+const verifyUser = base
+    .route({
+        method: "PUT"
+    })
+    .input(AccountIdSchema)
+    .handler(async ({ input, errors }) => {
+        // Verify the user
+        const res = await tryCatch(
+            db
+                .update(accountsTable)
+                .set({ verified: true })
+                .where(
+                    and(
+                        eq(accountsTable.provider, input.provider),
+                        eq(accountsTable.remoteId, input.remoteId)
+                    )
+                )
+                .returning({
+                    id: accountsTable.remoteId
+                })
+        )
+
+        // Unknown error
+        if (!res.success) {
+            throw errors.INTERNAL_SERVER_ERROR({
+                message: "Failed to verify user"
+            })
+        }
+
+        // User not found
+        if (res.value.length === 0) {
+            throw errors.NOT_FOUND({
+                message: "User not found"
+            })
+        }
+
+        // Too many users found
+        if (res.value.length > 1) {
+            logger.error("Too many users verified", { input })
+            throw errors.INTERNAL_SERVER_ERROR({
+                message: "Too many users verified"
+            })
+        }
+
+        return {
+            success: true,
+            message: "User verified successfully"
+        }
+    })
+    .actionable()
+    .callable()
+
 export const router = {
     check: adminCheck,
     instance: instanceInfo,
     users: usersList,
     blockUser: blockUser,
-    unblockUser: unblockUser
+    unblockUser: unblockUser,
+    verifyUser
 }
 
 export default router

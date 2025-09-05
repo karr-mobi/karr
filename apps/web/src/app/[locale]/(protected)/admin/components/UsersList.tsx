@@ -11,6 +11,7 @@ import {
 } from "@karr/ui/components/dialog"
 import { Skeleton } from "@karr/ui/components/skeleton"
 import { toast } from "@karr/ui/components/sonner"
+import { Spinner } from "@karr/ui/components/spinner"
 import { useDisplayName } from "@karr/ui/hooks/users"
 import {
     useMutation,
@@ -18,6 +19,7 @@ import {
     useSuspenseQuery
 } from "@tanstack/react-query"
 import {
+    BadgeCheckIcon,
     Ban,
     Calendar1Icon,
     CircleCheckIcon,
@@ -65,6 +67,25 @@ function useBlockMutations() {
     )
 
     return { blockUserMutation, unblockUserMutation }
+}
+
+function useVerifyMutation() {
+    const queryClient = useQueryClient()
+    const t = useTranslations("Admin")
+
+    return useMutation(
+        orpc.admin.verifyUser.mutationOptions({
+            onSuccess: () => {
+                return queryClient.invalidateQueries({
+                    queryKey: orpc.admin.users.queryKey()
+                })
+            },
+            onError: (error, _ef, _context) => {
+                console.error("Failed to verify user:", error)
+                toast.error(t("verify-failed"))
+            }
+        })
+    )
 }
 
 export function UsersSkeleton() {
@@ -129,6 +150,7 @@ function UserCard({ user }: { user: TUsersList[number] }) {
 
 function User({ user }: { user: TUsersList[number]; key: string }) {
     const { blockUserMutation, unblockUserMutation } = useBlockMutations()
+    const verifyUserMutation = useVerifyMutation()
 
     const displayName = useDisplayName(user)
     const t = useTranslations("Admin")
@@ -176,6 +198,11 @@ function User({ user }: { user: TUsersList[number]; key: string }) {
                         <Badge variant="outline" className="capitalize">
                             {user.provider}
                         </Badge>
+                        {!user.verified && (
+                            <Badge variant="outline-destructive">
+                                {t("not-verified")}
+                            </Badge>
+                        )}
                         {user.blocked && (
                             <Badge variant="destructive">{t("blocked")}</Badge>
                         )}
@@ -207,9 +234,9 @@ function User({ user }: { user: TUsersList[number]; key: string }) {
                         </div>
                     </div>
 
-                    {user.role === "user" && (
-                        <div className="mt-2 flex flex-col-reverse gap-2 sm:flex-row sm:justify-start">
-                            {user.blocked ? (
+                    <div className="mt-2 flex flex-col-reverse gap-2 empty:hidden sm:flex-row sm:justify-start">
+                        {user.role === "user" &&
+                            (user.blocked ? (
                                 <Button
                                     variant="secondary"
                                     size="sm"
@@ -239,9 +266,29 @@ function User({ user }: { user: TUsersList[number]; key: string }) {
                                     <Ban className="mr-1 h-4 w-4" />
                                     {t("block")}
                                 </Button>
-                            )}
-                        </div>
-                    )}
+                            ))}
+
+                        {!user.verified && (
+                            <Button
+                                variant="default"
+                                size="sm"
+                                onClick={() =>
+                                    verifyUserMutation.mutate({
+                                        provider: user.provider,
+                                        remoteId: user.remoteId
+                                    })
+                                }
+                                disabled={verifyUserMutation.isPending}
+                            >
+                                {verifyUserMutation.isPending ? (
+                                    <Spinner />
+                                ) : (
+                                    <BadgeCheckIcon className="me-1 h-4 w-4" />
+                                )}
+                                {t("verify")}
+                            </Button>
+                        )}
+                    </div>
                 </div>
             </DialogContent>
         </Dialog>

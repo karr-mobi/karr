@@ -69,6 +69,10 @@
         "blocked": "Bloqué",
         "unblock": "Débloquer",
         "block": "Bloquer",
+        "not-verified": "Non vérifié",
+        "verified": "Vérifié",
+        "verify": "Vérifier",
+        "verify-failed": "Échec de la vérification de l'utilisateur. Veuillez réessayer plus tard.",
         "joined": "Rejoint le {date}",
 
         "error-loading-instance-data": "Erreur lors du chargement des données de l'instance",
