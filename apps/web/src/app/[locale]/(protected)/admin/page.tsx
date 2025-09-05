@@ -13,7 +13,8 @@ import Loading from "@/components/Loading"
 import { client } from "@/lib/orpc"
 import { APP_VERSION, APPLICATION_NAME } from "@/util/appname"
 import { InstanceInfo } from "./components/InstanceInfo"
-import { UsersList, UsersSkeleton } from "./components/UsersList"
+import { UsersSkeleton } from "./components/User"
+import { UsersList } from "./components/UsersList"
 
 export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations("Admin")
@@ -66,7 +67,7 @@ export default async function AdminPage() {
                         {t("users")}
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="px-3 pt-0 pb-6 md:px-6">
+                <CardContent className="pt-0 pb-6">
                     <Suspense fallback={<UsersSkeleton />}>
                         <UsersList />
                     </Suspense>

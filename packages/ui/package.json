@@ -7,6 +7,7 @@
         "./postcss-config": "./postcss-config.mjs",
         "./lib/*": "./src/lib/*.ts",
         "./components/*": "./src/components/*.tsx",
+        "./hooks": "./src/hooks/index.tsx",
         "./hooks/*": "./src/hooks/*.tsx",
         "./logos/*": "./src/logos/*.tsx"
     },
@@ -18,12 +19,16 @@
     },
     "dependencies": {
         "@hookform/resolvers": "catalog:ui",
+        "@radix-ui/react-avatar": "catalog:radix",
+        "@radix-ui/react-collapsible": "catalog:radix",
+        "@radix-ui/react-dialog": "catalog:radix",
         "@radix-ui/react-dropdown-menu": "catalog:radix",
         "@radix-ui/react-label": "catalog:radix",
         "@radix-ui/react-popover": "catalog:radix",
         "@radix-ui/react-select": "catalog:radix",
         "@radix-ui/react-separator": "catalog:radix",
         "@radix-ui/react-slot": "catalog:radix",
+        "@radix-ui/react-switch": "catalog:radix",
         "@tanstack/react-form": "catalog:web",
         "class-variance-authority": "catalog:ui",
         "clsx": "catalog:ui",
@@ -40,10 +45,8 @@
         "sonner": "catalog:ui",
         "tailwind-merge": "catalog:ui",
         "tailwindcss-animate": "catalog:ui",
-        "zod": "catalog:utils",
-        "@radix-ui/react-avatar": "catalog:radix",
-        "@radix-ui/react-switch": "catalog:radix",
-        "@radix-ui/react-dialog": "catalog:radix"
+        "vaul": "catalog:ui",
+        "zod": "catalog:utils"
     },
     "devDependencies": {
         "@karr/eslint-config": "workspace:*",

@@ -79,11 +79,7 @@ function LocaleSwitcher() {
                         {t("select-locale")}
                     </SelectLabel>
                     {allLocales.map((l) => (
-                        <SelectItem
-                            value={l}
-                            key={l}
-                            className="cursor-pointer hover:bg-accent"
-                        >
+                        <SelectItem value={l} key={l}>
                             <Square>{localeIcons[l]}</Square>
                             <span className="truncate">{localeNames[l]}</span>
                         </SelectItem>

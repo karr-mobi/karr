@@ -75,12 +75,18 @@
         "verify-failed": "Échec de la vérification de l'utilisateur. Veuillez réessayer plus tard.",
         "joined": "Rejoint le {date}",
 
+        "more-options": "Plus d'actions",
+
         "role": "Role",
+        "change-role": "Changer le rôle de {name}",
         "select-role": "Sélectionner un rôle",
+        "admin": "Administrateur",
+        "user": "Utilisateur",
 
         "error-loading-instance-data": "Erreur lors du chargement des données de l'instance",
         "failed-load-users": "Échec du chargement des utilisateurs",
-        "no-users-found": "Aucun utilisateur trouvé"
+        "no-users-found": "Aucun utilisateur trouvé",
+        "role-change-failed": "Échec de la modification du rôle. Veuillez réessayer plus tard."
     },
 
     "Account": {

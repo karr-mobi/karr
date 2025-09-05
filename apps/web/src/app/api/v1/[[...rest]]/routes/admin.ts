@@ -3,7 +3,11 @@ import { tryCatch } from "@karr/util"
 import { and, count, desc, eq } from "drizzle-orm"
 import { z } from "zod/mini"
 import db from "@/db"
-import { AccountIdSchema, accountsTable } from "@/db/schemas/accounts"
+import {
+    AccountIdSchema,
+    accountsSelectSchema,
+    accountsTable
+} from "@/db/schemas/accounts"
 import { profileTable } from "@/db/schemas/profile"
 import { base as basicBase } from "../server"
 
@@ -283,10 +287,51 @@ const verifyUser = base
                 message: "Too many users verified"
             })
         }
+    })
+    .actionable()
+    .callable()
 
-        return {
-            success: true,
-            message: "User verified successfully"
+const changeRole = base
+    .route({ method: "PUT" })
+    .input(
+        AccountIdSchema.extend({
+            role: accountsSelectSchema.shape.role
+        })
+    )
+    .handler(async ({ input, errors }) => {
+        const res = await tryCatch(
+            db
+                .update(accountsTable)
+                .set({ role: input.role })
+                .where(
+                    and(
+                        eq(accountsTable.provider, input.provider),
+                        eq(accountsTable.remoteId, input.remoteId)
+                    )
+                )
+                .returning({ role: accountsTable.role })
+        )
+
+        // Unknown error
+        if (!res.success) {
+            throw errors.INTERNAL_SERVER_ERROR({
+                message: "Failed to verify user"
+            })
+        }
+
+        // User not found
+        if (res.value.length === 0) {
+            throw errors.NOT_FOUND({
+                message: "User not found"
+            })
+        }
+
+        // Too many users found
+        if (res.value.length > 1) {
+            logger.error("Too many users role changed", { input })
+            throw errors.INTERNAL_SERVER_ERROR({
+                message: "Too many users verified"
+            })
         }
     })
     .actionable()
@@ -298,7 +343,8 @@ export const router = {
     users: usersList,
     blockUser: blockUser,
     unblockUser: unblockUser,
-    verifyUser
+    verifyUser,
+    changeRole
 }
 
 export default router
