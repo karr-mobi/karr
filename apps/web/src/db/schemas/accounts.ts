@@ -30,9 +30,11 @@ export const accountsTable = pgTable(
 
 export const accountsSelectSchema = createSelectSchema(accountsTable)
 
-export type AccountId = Pick<
-    z.infer<typeof accountsSelectSchema>,
-    "provider" | "remoteId"
->
+export const AccountIdSchema = accountsSelectSchema.pick({
+    provider: true,
+    remoteId: true
+})
+
+export type AccountId = z.infer<typeof AccountIdSchema>
 
 export const accountsInsertSchema = createInsertSchema(accountsTable)

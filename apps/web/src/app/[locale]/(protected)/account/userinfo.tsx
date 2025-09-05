@@ -47,6 +47,7 @@ export default function FetchUserData() {
         error
     } = useSuspenseQuery(orpc.user.info.queryOptions())
 
+    //TODO: implement default places limit
     const prefsMutation = useMutation(
         orpc.user.updateUserPrefs.mutationOptions({
             onMutate: async (newPrefs) => {
@@ -269,16 +270,20 @@ export default function FetchUserData() {
 
                     <div className="border-t pt-2">
                         <div className="flex items-center justify-between">
-                            <Label className="font-medium text-sm">
+                            <Label
+                                className="font-medium text-sm"
+                                htmlFor="default-places"
+                            >
                                 {t("preferences.default-places")}
                             </Label>
                             <InputNumber
+                                id="default-places"
+                                min={0}
+                                max={10}
                                 value={user.defaultPlaces || 0}
-                                onChange={(e) => {
+                                onChange={(value) => {
                                     prefsMutation.mutate({
-                                        defaultPlaces: Number.parseInt(
-                                            e.target.value
-                                        )
+                                        defaultPlaces: value
                                     })
                                 }}
                             />
