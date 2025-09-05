@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.15
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.14...v0.15.15)
+
+### 🚀 Enhancements
+
+- **admin:** Change user role ([#206](https://github.com/karr-mobi/karr/pull/206))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.14
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.13...v0.15.14)
