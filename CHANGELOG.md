@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.16
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.15...v0.15.16)
+
+### 🚀 Enhancements
+
+- **admin:** Prevent changing role of self ([96a8a0f](https://github.com/karr-mobi/karr/commit/96a8a0f))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.15
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.14...v0.15.15)
