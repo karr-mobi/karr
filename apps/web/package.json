@@ -43,7 +43,6 @@
         "@orpc/client": "catalog:web",
         "@orpc/contract": "catalog:api",
         "@orpc/tanstack-query": "catalog:web",
-        "hono": "catalog:api",
         "neverthrow": "catalog:utils",
         "std-env": "catalog:utils",
         "drizzle-orm": "catalog:api",
