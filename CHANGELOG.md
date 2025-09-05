@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.15.14
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.13...v0.15.14)
+
+### 🚀 Enhancements
+
+- **ui:** Re-render user avatar when changing it ([#203](https://github.com/karr-mobi/karr/pull/203))
+- Admins can verify users and admins ([#204](https://github.com/karr-mobi/karr/pull/204))
+- **ui:** Account page now greets the user ([#205](https://github.com/karr-mobi/karr/pull/205))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.13
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.12...v0.15.13)
