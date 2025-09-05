@@ -16,7 +16,7 @@ services:
             - DB_PASSWORD_FILE=/run/secrets/db-password
             - PORT=3000
         volumes:
-            - /srv/http/karr/karr.config.yaml:/app/config/karr.config.yaml
+            - /srv/http/karr-staging/karr.config.yaml:/app/config/karr.config.yaml
         depends_on:
             - db
 
@@ -44,11 +44,13 @@ services:
             - karr_network_staging
         environment:
             - CONFIG_DIR=/app/config
+            - APP_URL=https://staging.karr.mobi
+            - AUTH_ISSUER=https://staging.karr.mobi/api/v1/auth
         ports:
             - 1993:1993
         volumes:
             - auth_data:/app/.data
-            - ./config:/app/config
+            - /srv/http/karr-staging/karr.config.yaml:/app/config/karr.config.yaml
 
     caddy:
         image: ghcr.io/karr-mobi/karr-caddy:latest
