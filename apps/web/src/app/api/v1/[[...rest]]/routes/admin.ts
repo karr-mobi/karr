@@ -5,7 +5,7 @@ import { z } from "zod/mini"
 import db from "@/db"
 import { AccountIdSchema, accountsTable } from "@/db/schemas/accounts"
 import { profileTable } from "@/db/schemas/profile"
-import { base } from "../server"
+import { base as basicBase } from "../server"
 
 const UsersListSchema = z.array(
     z.object({
@@ -26,7 +26,7 @@ const UsersListSchema = z.array(
 
 export type TUsersList = z.infer<typeof UsersListSchema>
 
-const adminBase = base.use(async ({ next, context, errors }) => {
+const base = basicBase.use(async ({ next, context, errors }) => {
     const [user] = await db
         .select()
         .from(accountsTable)
@@ -58,14 +58,14 @@ const adminBase = base.use(async ({ next, context, errors }) => {
     return next()
 })
 
-const adminCheck = adminBase
+const adminCheck = base
     .handler(() => {
         return "ok"
     })
     .actionable()
     .callable()
 
-const instanceInfo = adminBase
+const instanceInfo = base
     .route({
         method: "GET"
     })
@@ -96,7 +96,7 @@ const instanceInfo = adminBase
     .actionable()
     .callable()
 
-const usersList = adminBase
+const usersList = base
     .route({
         method: "GET"
     })
