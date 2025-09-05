@@ -49,6 +49,7 @@ import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
 import type { TUsersList } from "@/api/routes/admin"
 import { useAuth } from "@/app/auth/context"
+import { useUser } from "@/hooks/user"
 import { Link } from "@/i18n/routing"
 import { useBlockMutations, useRoleMutation, useVerifyMutation } from "./hooks"
 
@@ -153,6 +154,8 @@ function UserDetails({ user }: { user: TUsersList[number] }) {
     const verifyUserMutation = useVerifyMutation()
     const [openOptions, setOpenOptions] = useState(false)
 
+    const { data: owner } = useUser()
+
     const t = useTranslations("Admin")
     const locale = useLocale()
 
@@ -256,19 +259,25 @@ function UserDetails({ user }: { user: TUsersList[number] }) {
                     </Button>
                 )}
             </div>
-            <Collapsible open={openOptions} onOpenChange={setOpenOptions}>
-                <CollapsibleTrigger asChild>
-                    <Button variant="ghost" className="w-full text-sm">
-                        <CircleChevronDownIcon
-                            className={`me-1 h-4 w-4 ${openOptions && "rotate-180"} transition duration-300 ease-out`}
-                        />
-                        {t("more-options")}
-                    </Button>
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pt-4">
-                    <Role />
-                </CollapsibleContent>
-            </Collapsible>
+            {user.remoteId !== owner?.remoteId &&
+                user.provider !== owner?.provider && (
+                    <Collapsible
+                        open={openOptions}
+                        onOpenChange={setOpenOptions}
+                    >
+                        <CollapsibleTrigger asChild>
+                            <Button variant="ghost" className="w-full text-sm">
+                                <CircleChevronDownIcon
+                                    className={`me-1 h-4 w-4 ${openOptions && "rotate-180"} transition duration-300 ease-out`}
+                                />
+                                {t("more-options")}
+                            </Button>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="pt-4">
+                            <Role />
+                        </CollapsibleContent>
+                    </Collapsible>
+                )}
         </div>
     )
 }

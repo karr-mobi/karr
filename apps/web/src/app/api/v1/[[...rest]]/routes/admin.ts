@@ -298,7 +298,17 @@ const changeRole = base
             role: accountsSelectSchema.shape.role
         })
     )
-    .handler(async ({ input, errors }) => {
+    .handler(async ({ context, input, errors }) => {
+        // Prevent changing role of self
+        if (
+            context.user.provider === input.provider &&
+            context.user.remoteId === input.remoteId
+        ) {
+            throw errors.FORBIDDEN({
+                message: "Cannot change role of self"
+            })
+        }
+
         const res = await tryCatch(
             db
                 .update(accountsTable)

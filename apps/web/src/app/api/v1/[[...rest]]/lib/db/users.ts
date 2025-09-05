@@ -29,6 +29,7 @@ export async function selectUserByAccountId(id: AccountId) {
                 bio: profileTable.bio,
                 avatar: profileTable.avatar,
                 provider: accountsTable.provider,
+                remoteId: accountsTable.remoteId,
                 email: accountsTable.email,
                 verified: accountsTable.verified,
                 autoBook: userPrefsTable.autoBook,
