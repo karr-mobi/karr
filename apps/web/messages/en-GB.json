@@ -81,7 +81,8 @@
     },
 
     "Account": {
-        "title": "Account",
+        "title": "Hello there!",
+        "title-named": "Hello {name}!",
         "subtitle": "Manage your account settings and preferences",
         "profile-info": "Profile Information",
         "blocked": "Account blocked",

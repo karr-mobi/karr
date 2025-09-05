@@ -81,7 +81,8 @@
     },
 
     "Account": {
-        "title": "Compte",
+        "title": "Bonjour !",
+        "title-named": "Bonjour {name} !",
         "subtitle": "Gérer vos paramètres et préférences de compte",
         "profile-info": "Profil",
         "blocked": "Compte bloqué",
