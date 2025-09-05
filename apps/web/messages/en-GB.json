@@ -71,9 +71,12 @@
         "block": "Block",
         "not-verified": "Not Verified",
         "verified": "Verified",
-        "verify": "Verify",
+        "verify": "Mark as verified",
         "verify-failed": "Failed to verify user. Please try again later.",
         "joined": "Joined {date}",
+
+        "role": "Role",
+        "select-role": "Select Role",
 
         "error-loading-instance-data": "Error Loading Instance Data",
         "failed-load-users": "Failed to load users",

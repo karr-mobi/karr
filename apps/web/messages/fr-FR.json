@@ -71,9 +71,12 @@
         "block": "Bloquer",
         "not-verified": "Non vérifié",
         "verified": "Vérifié",
-        "verify": "Vérifier",
+        "verify": "Marquer comme vérifié",
         "verify-failed": "Échec de la vérification de l'utilisateur. Veuillez réessayer plus tard.",
         "joined": "Rejoint le {date}",
+
+        "role": "Role",
+        "select-role": "Sélectionner un rôle",
 
         "error-loading-instance-data": "Erreur lors du chargement des données de l'instance",
         "failed-load-users": "Échec du chargement des utilisateurs",
