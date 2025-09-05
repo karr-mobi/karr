@@ -27,56 +27,68 @@ const InputNumber = React.forwardRef<
         "value" | "min" | "max" | "onChange"
     > & {
         value: number
-        min: number
-        max: number
+        min?: number
+        max?: number
         onChange: (value: number) => void
     }
->(({ className, value, onChange, min, max, ...props }, ref) => {
-    function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const newValue = Number.parseInt(event.target.value)
-        if (!Number.isNaN(newValue)) {
-            onChange(newValue)
+>(
+    (
+        {
+            className,
+            value,
+            onChange,
+            min = Number.MIN_VALUE,
+            max = Number.MAX_VALUE,
+            ...props
+        },
+        ref
+    ) => {
+        function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+            const newValue = Number.parseInt(event.target.value)
+            if (!Number.isNaN(newValue)) {
+                onChange(newValue)
+            }
         }
-    }
 
-    function handleIncrDecr(newValue: number) {
-        if (min <= newValue && newValue <= max) {
-            onChange(newValue)
+        function handleIncrDecr(newValue: number) {
+            if (min <= newValue && newValue <= max) {
+                onChange(newValue)
+            }
         }
-    }
 
-    return (
-        <section className="grid w-fit grid-cols-[min-content_4rem_min-content] gap-2">
-            <Button
-                type="button"
-                onClick={() => handleIncrDecr(value - 1)}
-                variant="ghost"
-                disabled={value <= min}
-            >
-                <MinusCircleIcon />
-            </Button>
-            <Input
-                type="number"
-                value={value}
-                min={min}
-                max={max}
-                inputMode="numeric"
-                className={cn("text-center", className)}
-                ref={ref}
-                onChange={handleOnChange}
-                {...props}
-            />
-            <Button
-                type="button"
-                onClick={() => handleIncrDecr(value + 1)}
-                variant="ghost"
-                disabled={value >= max}
-            >
-                <PlusCircleIcon />
-            </Button>
-        </section>
-    )
-})
+        return (
+            <section className="grid w-fit grid-cols-[min-content_4rem_min-content] gap-2">
+                <Button
+                    type="button"
+                    onClick={() => handleIncrDecr(value - 1)}
+                    variant="ghost"
+                    disabled={value <= min}
+                >
+                    <MinusCircleIcon />
+                </Button>
+                <Input
+                    type="number"
+                    value={value}
+                    min={min}
+                    max={max}
+                    inputMode="numeric"
+                    className={cn("text-center", className)}
+                    ref={ref}
+                    onChange={handleOnChange}
+                    {...props}
+                />
+                <Button
+                    type="button"
+                    onClick={() => handleIncrDecr(value + 1)}
+                    variant="ghost"
+                    disabled={value >= max}
+                >
+                    <PlusCircleIcon />
+                </Button>
+            </section>
+        )
+    }
+)
 InputNumber.displayName = "InputNumber"
 
 export { Input, InputNumber }

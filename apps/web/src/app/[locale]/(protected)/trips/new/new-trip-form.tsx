@@ -234,12 +234,11 @@ export function Form({ petrolPrice }: { petrolPrice: Promise<number> }) {
                                 <InputNumber
                                     id={field.name}
                                     name={field.name}
+                                    min={0}
                                     value={field.state.value}
                                     onBlur={field.handleBlur}
-                                    onChange={(e) => {
-                                        field.handleChange(
-                                            Number(e.target.value)
-                                        )
+                                    onChange={(value) => {
+                                        field.handleChange(value)
                                     }}
                                 />
                                 <FieldInfo
