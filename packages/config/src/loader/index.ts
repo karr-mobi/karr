@@ -132,6 +132,7 @@ export async function loadFullConfig(): Promise<FullConfig> {
 
     config.API_BASE += `/${API_VERSION}`
 
+    //TODO: this is buggy in Production docker
     config.AUTH_ISSUER ??= new URL(
         `${config.API_BASE}/auth`,
         config.APP_URL
