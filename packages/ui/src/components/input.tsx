@@ -22,18 +22,27 @@ Input.displayName = "Input"
 
 const InputNumber = React.forwardRef<
     HTMLInputElement,
-    Omit<React.ComponentProps<"input">, "value"> & {
+    Omit<
+        React.ComponentProps<"input">,
+        "value" | "min" | "max" | "onChange"
+    > & {
         value: number
-        onChange: React.ChangeEventHandler<HTMLInputElement>
+        min: number
+        max: number
+        onChange: (value: number) => void
     }
->(({ className, value, onChange, ...props }, ref) => {
-    const handleIncrDecr = (newValue: number) => {
-        const event = Object.create(
-            new Event("change", { bubbles: true })
-        ) as React.ChangeEvent<HTMLInputElement>
-        Object.defineProperty(event, "target", { value: { value: newValue } })
+>(({ className, value, onChange, min, max, ...props }, ref) => {
+    function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const newValue = Number.parseInt(event.target.value)
+        if (!Number.isNaN(newValue)) {
+            onChange(newValue)
+        }
+    }
 
-        onChange(event)
+    function handleIncrDecr(newValue: number) {
+        if (min <= newValue && newValue <= max) {
+            onChange(newValue)
+        }
     }
 
     return (
@@ -42,22 +51,26 @@ const InputNumber = React.forwardRef<
                 type="button"
                 onClick={() => handleIncrDecr(value - 1)}
                 variant="ghost"
+                disabled={value <= min}
             >
                 <MinusCircleIcon />
             </Button>
             <Input
                 type="number"
                 value={value}
+                min={min}
+                max={max}
                 inputMode="numeric"
                 className={cn("text-center", className)}
                 ref={ref}
-                onChange={onChange}
+                onChange={handleOnChange}
                 {...props}
             />
             <Button
                 type="button"
                 onClick={() => handleIncrDecr(value + 1)}
                 variant="ghost"
+                disabled={value >= max}
             >
                 <PlusCircleIcon />
             </Button>
