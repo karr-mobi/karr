@@ -2,13 +2,8 @@ name: Deploy Auth Server to Deno Deploy
 
 on:
     push:
-        branches:
-            - main
-        paths:
-            - "apps/auth-server/**"
-            - "packages/auth/**"
-            - ".github/workflows/deploy-auth-server.yaml"
-            - "pnpm-workspace.yaml"
+        tags:
+            - v*
     pull_request:
         paths:
             - "apps/auth-server/**"
