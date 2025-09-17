@@ -8,6 +8,7 @@ import type {
 } from "@openauthjs/openauth/client"
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
+import { getLocale } from "next-intl/server"
 import { runtime } from "std-env"
 import { setTokens } from "@/app/auth/actions"
 import { saveUser } from "./persistence"
@@ -16,12 +17,13 @@ export async function GET(request: Request) {
     /**
      * Convenience function to redirect to the login error page with an error message.
      */
-    function errorRedirect(
+    async function errorRedirect(
         error: string,
         status = 302,
         errorDescription?: string | null
     ) {
-        const redirectUrl = new URL(`/fr-FR/login/error`, APP_URL)
+        const locale = await getLocale()
+        const redirectUrl = new URL(`/${locale}/login/error`, APP_URL)
         redirectUrl.searchParams.set("error", error)
         if (errorDescription)
             redirectUrl.searchParams.set("error_description", errorDescription)
