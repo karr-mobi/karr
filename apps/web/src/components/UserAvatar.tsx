@@ -6,7 +6,7 @@ import { Suspense } from "react"
 import { RenderAvatar } from "./UserAvatarClient"
 
 // biome-ignore lint/suspicious/useAwait: needs to be async
-export async function UserAvatar({ userId }: { userId?: string }) {
+export async function UserAvatar({ userId }: { userId?: string | null }) {
     return (
         <Suspense
             fallback={
@@ -19,7 +19,7 @@ export async function UserAvatar({ userId }: { userId?: string }) {
                 <AvatarFallback>
                     <UserIcon className="size-10 rounded-full" />
                 </AvatarFallback>
-                <RenderAvatar userId={userId} />
+                <RenderAvatar userId={userId || undefined} />
             </Avatar>
         </Suspense>
     )

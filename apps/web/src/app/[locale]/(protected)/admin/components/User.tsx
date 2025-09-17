@@ -1,5 +1,6 @@
 "use client"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 import { Badge } from "@karr/ui/components/badge"
 import { Button } from "@karr/ui/components/button"
 import {
@@ -60,7 +61,7 @@ export function UsersSkeleton() {
                 (id) => (
                     <div
                         key={id}
-                        className="group mb-4 flex flex-wrap items-center justify-between rounded-lg border bg-card p-4 md:w-[49%]"
+                        className="group mb-4 flex flex-wrap items-center justify-between rounded-lg border border-border bg-card p-4 md:w-[49%]"
                     >
                         <div className="flex items-center gap-4">
                             <Skeleton className="h-10 w-10 rounded-full" />
@@ -85,13 +86,12 @@ function UserCard({ user }: { user: TUsersList[number] }) {
         <>
             <div className="flex w-full items-center justify-start gap-2 font-medium">
                 {user.avatar ? (
-                    <Image
-                        src={user.avatar}
-                        alt={displayName}
-                        className="me-2 h-10 w-10 rounded-full"
-                        width="40"
-                        height="40"
-                    />
+                    <Avatar>
+                        <AvatarImage src={user.avatar} alt={displayName} />
+                        <AvatarFallback>
+                            <UserIcon className="h-5 w-5" />
+                        </AvatarFallback>
+                    </Avatar>
                 ) : (
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
                         <UserIcon className="h-5 w-5" />
@@ -315,7 +315,7 @@ export function User({ user }: { user: TUsersList[number]; key: string }) {
         return (
             <Dialog key={user.id}>
                 <DialogTrigger asChild>
-                    <div className="group flex w-full cursor-pointer items-center justify-between rounded-lg border bg-card p-4 transition-colors hover:bg-accent/50 md:w-[49%]">
+                    <div className="group flex w-full cursor-pointer items-center justify-between rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent/50 md:w-[49%]">
                         <DialogTitle className="sr-only">
                             {t("open-user-details")}
                         </DialogTitle>

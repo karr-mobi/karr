@@ -12,6 +12,7 @@ export function RenderAvatar({ userId }: { userId?: string }) {
     )
 
     if (error) {
+        console.error(error)
         return
     }
 
