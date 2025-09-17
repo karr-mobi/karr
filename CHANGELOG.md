@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.15.17
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.16...v0.15.17)
+
+### 🩹 Fixes
+
+- **i18n:** Change locale names to fix switching ([40c6e7f](https://github.com/karr-mobi/karr/commit/40c6e7f))
+- **ui:** Dark theme colours ([e7e287c](https://github.com/karr-mobi/karr/commit/e7e287c))
+- **ui:** Avatar aspect ratio ([dd33dd0](https://github.com/karr-mobi/karr/commit/dd33dd0))
+
+### 🤖 CI
+
+- Deploy auth to prod only on release ([490af13](https://github.com/karr-mobi/karr/commit/490af13))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.16
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.15...v0.15.16)
