@@ -72,8 +72,6 @@ export async function GET(request: Request) {
         return errorRedirect(exchanged.err.message, 302)
     }
 
-    logger.debug("Token exchange successful", exchanged.tokens)
-
     // Verify the tokens to get the user subject
     const user = await client.verify(subjects, exchanged.tokens.access)
 

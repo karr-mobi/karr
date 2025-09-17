@@ -43,7 +43,7 @@ const base = basicBase.use(async ({ next, context, errors }) => {
         .limit(1)
 
     if (!user) {
-        throw errors.FORBIDDEN({
+        throw errors.UNAUTHORIZED({
             message: "You are not authorized to access this resource",
             data: {
                 cause: "User not found"

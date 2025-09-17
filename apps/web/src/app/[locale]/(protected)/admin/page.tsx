@@ -10,7 +10,7 @@ import { unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
 import Loading from "@/components/Loading"
-import { client } from "@/lib/orpc"
+import { adminCheck } from "@/hooks/admincheck"
 import { APP_VERSION, APPLICATION_NAME } from "@/util/appname"
 import { InstanceInfo } from "./components/InstanceInfo"
 import { UsersSkeleton } from "./components/User"
@@ -27,7 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function AdminPage() {
     const t = await getTranslations("Admin")
-    const admin = client.admin.check()
+    const admin = await adminCheck()
 
     if (!admin) unauthorized()
 

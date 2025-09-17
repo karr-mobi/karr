@@ -8,6 +8,8 @@ on:
         paths:
             - "apps/auth-server/**"
             - "packages/auth/**"
+            - "packages/kv/**"
+            - "packages/config/**"
             - ".github/workflows/deploy-auth-server.yaml"
             - "pnpm-workspace.yaml"
 
