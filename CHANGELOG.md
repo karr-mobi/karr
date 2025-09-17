@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.15.18
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.17...v0.15.18)
+
+### 🩹 Fixes
+
+- **ui:** Avatar inconsistencies ([14ef794](https://github.com/karr-mobi/karr/commit/14ef794))
+- **admin:** Admin checking on pages ([ca7a536](https://github.com/karr-mobi/karr/commit/ca7a536))
+- Push the right files ([e0a94ff](https://github.com/karr-mobi/karr/commit/e0a94ff))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.17
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.16...v0.15.17)
