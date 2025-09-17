@@ -1,10 +1,10 @@
 "use client"
 
+import { Avatar, AvatarFallback, AvatarImage } from "@karr/ui/components/avatar"
 import { Badge } from "@karr/ui/components/badge"
 import { Card, CardContent } from "@karr/ui/components/card"
-import { Image } from "@karr/ui/components/image"
 import { Skeleton } from "@karr/ui/components/skeleton"
-import { useDisplayName, useInitials } from "@karr/ui/hooks/users"
+import { useDisplayName } from "@karr/ui/hooks/users"
 import { isDefinedError } from "@orpc/client"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import {
@@ -16,6 +16,7 @@ import {
     HeadphoneOffIcon,
     MusicIcon,
     PawPrintIcon,
+    UserIcon,
     VerifiedIcon,
     ZapIcon,
     ZapOffIcon
@@ -77,7 +78,6 @@ export default function ProfileInfo({ userId }: { userId: string }) {
     const { data: profile, isError, error } = useProfile(userId)
 
     const displayName = useDisplayName(profile)
-    const initials = useInitials(profile)
 
     if (isError || !profile) {
         if (isDefinedError(error) && error.code === "NOT_FOUND") {
@@ -101,20 +101,15 @@ export default function ProfileInfo({ userId }: { userId: string }) {
                 <div className="flex flex-col items-center gap-6 md:flex-row md:items-start md:gap-8">
                     <div className="relative w-full md:w-auto">
                         <div className="relative mx-auto h-[80vw] max-h-80 w-[80vw] max-w-80 overflow-hidden rounded-xl shadow-xl ring-4 ring-background sm:h-64 sm:w-64 md:h-48 md:w-48 lg:h-64 lg:w-64">
-                            {profile.avatar ? (
-                                <Image
-                                    src={profile.avatar}
+                            <Avatar variant="square" className="size-full">
+                                <AvatarImage
+                                    src={profile.avatar || undefined}
                                     alt={displayName}
-                                    width={400}
-                                    height={400}
-                                    className="object-cover"
-                                    priority
                                 />
-                            ) : (
-                                <div className="flex h-full w-full items-center justify-center bg-muted text-5xl md:text-4xl lg:text-5xl">
-                                    {initials}
-                                </div>
-                            )}
+                                <AvatarFallback>
+                                    <UserIcon className="size-[30%]" />
+                                </AvatarFallback>
+                            </Avatar>
                         </div>
                     </div>
                     <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">

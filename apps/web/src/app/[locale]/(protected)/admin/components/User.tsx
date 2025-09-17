@@ -45,7 +45,6 @@ import {
     MailIcon,
     UserIcon
 } from "lucide-react"
-import Image from "next/image"
 import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
 import type { TUsersList } from "@/api/routes/admin"
@@ -86,7 +85,7 @@ function UserCard({ user }: { user: TUsersList[number] }) {
         <>
             <div className="flex w-full items-center justify-start gap-2 font-medium">
                 {user.avatar ? (
-                    <Avatar>
+                    <Avatar className="size-10">
                         <AvatarImage src={user.avatar} alt={displayName} />
                         <AvatarFallback>
                             <UserIcon className="h-5 w-5" />
@@ -295,16 +294,15 @@ export function User({ user }: { user: TUsersList[number]; key: string }) {
     const Title = () => (
         <Link href={`/profile/${user.id}`} className="flex items-center gap-4">
             {user.avatar ? (
-                <Image
-                    src={user.avatar}
-                    alt={displayName}
-                    className="h-10 w-10 rounded-full"
-                    width="40"
-                    height="40"
-                />
+                <Avatar className="size-10">
+                    <AvatarImage src={user.avatar} alt={displayName} />
+                    <AvatarFallback>
+                        <UserIcon className="size-5" />
+                    </AvatarFallback>
+                </Avatar>
             ) : (
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                    <UserIcon className="h-5 w-5" />
+                <div className="flex size-10 items-center justify-center rounded-full bg-muted">
+                    <UserIcon className="size-5" />
                 </div>
             )}
             {displayName}
