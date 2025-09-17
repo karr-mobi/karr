@@ -123,7 +123,11 @@ function UserDetails({ user }: { user: TUsersList[number] }) {
 
         return (
             <>
-                <Label>{t("change-role", { name: user.nickname })}</Label>
+                <Label>
+                    {t("change-role", {
+                        name: user.nickname || user.firstName
+                    })}
+                </Label>
                 <Select
                     defaultValue={role}
                     value={role}

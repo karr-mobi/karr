@@ -46,13 +46,15 @@ function LocaleSwitcher() {
     const pathname = usePathname()
 
     const localeIcons = {
-        "en-GB": "🇬🇧",
-        "fr-FR": "🇫🇷"
+        //biome-ignore format: breaks emoji
+        en: "🇬🇧",
+        //biome-ignore format: breaks emoji
+        fr: "🇫🇷"
     }
 
     const localeNames = {
-        "en-GB": "English (UK)",
-        "fr-FR": "Français (FR)"
+        en: "English (UK)",
+        fr: "Français (FR)"
     }
 
     const switchLocale = useCallback(() => {
@@ -61,6 +63,8 @@ function LocaleSwitcher() {
         const nextLocale = allLocales[nextIndex]
 
         router.push(pathname, { locale: nextLocale })
+
+        window.location.reload()
     }, [allLocales, locale, router, pathname])
 
     return (

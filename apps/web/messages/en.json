@@ -151,8 +151,14 @@
         },
 
         "editProfile": {
-            "title": "Edit your Profile",
+            "title": "Edit your profile",
             "description": "Your nickname will be visible to other users.",
+
+            "first-name": "First Name",
+            "last-name": "Last Name",
+            "nickname": "Nickname",
+            "email": "Email",
+            "phone": "Phone",
 
             "bio": {
                 "label": "Bio",
