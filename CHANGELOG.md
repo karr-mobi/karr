@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.19
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.18...v0.15.19)
+
+### 🩹 Fixes
+
+- **auth:** Properly redirect to use correct locale ([7f9978c](https://github.com/karr-mobi/karr/commit/7f9978c))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.18
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.17...v0.15.18)
