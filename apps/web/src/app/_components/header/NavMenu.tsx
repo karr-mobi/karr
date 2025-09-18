@@ -12,12 +12,13 @@ import {
 } from "@karr/ui/components/dropdown"
 import { Separator } from "@karr/ui/components/separator"
 import {
-    CarFront as IconCarFront,
-    ChevronDown as IconChevronDown,
-    CirclePlus as IconCirclePlus,
-    Menu as IconMenu,
-    Search as IconSearch,
-    type LucideIcon
+    CarFrontIcon,
+    ChevronDownIcon,
+    CirclePlusIcon,
+    type LucideIcon,
+    MenuIcon,
+    SearchIcon,
+    User2Icon
 } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { Fragment } from "react"
@@ -25,24 +26,39 @@ import type { Messages } from "@/../global"
 
 import { Link } from "@/i18n/routing"
 
-type LinkItem = { label: NavBarTranslationKey; url: string; icon?: LucideIcon }
+type LinkItem = { label: NavBarTranslationKey; href: string; icon?: LucideIcon }
 
 type NavBarTranslationKey = keyof Messages["NavBar"]
 
-type MenuItem = {
-    label: NavBarTranslationKey
-    icon?: LucideIcon
-    items: LinkItem[]
-}
+type MenuItem =
+    | {
+          type: "dropdown"
+          label: NavBarTranslationKey
+          icon?: LucideIcon
+          items: LinkItem[]
+      }
+    | {
+          type: "item"
+          label: NavBarTranslationKey
+          icon?: LucideIcon
+          href: string
+      }
 
 const menuItems: MenuItem[] = [
     {
+        type: "dropdown",
         label: "trips",
-        icon: IconCarFront,
+        icon: CarFrontIcon,
         items: [
-            { label: "search-trips", url: "/trips/search", icon: IconSearch },
-            { label: "new-trip", url: "/trips/new", icon: IconCirclePlus }
+            { label: "search-trips", href: "/trips/search", icon: SearchIcon },
+            { label: "new-trip", href: "/trips/new", icon: CirclePlusIcon }
         ]
+    },
+    {
+        type: "item",
+        label: "account",
+        icon: User2Icon,
+        href: "/account"
     }
 ]
 
@@ -53,66 +69,92 @@ export function DesktopNavMenu() {
         <div className="hidden sm:block">
             <nav className="flex items-center space-x-4">
                 <Separator orientation="vertical" className="h-8" />
-                {menuItems.map((cat, index) => (
-                    <DropdownMenu
-                        key={`desktop-menu-category-${index}-${String(cat.label)}`}
-                    >
-                        <DropdownMenuTrigger asChild>
-                            <Button
-                                variant="ghost"
-                                className="flex items-center gap-2"
+                {menuItems.map((cat, index) =>
+                    cat.type === "item" ? (
+                        <Button
+                            key={`desktop-menu-item-${index}-${String(cat.label)}`}
+                            variant="ghost"
+                            className="flex items-center gap-2"
+                            asChild
+                        >
+                            <Link
+                                href={cat.href}
+                                className="flex w-full cursor-pointer items-center justify-start gap-2"
                             >
                                 {cat.icon ? (
                                     <cat.icon
                                         size={16}
                                         strokeWidth={2}
-                                        className="opacity-60"
+                                        className="size-4 text-stone-800"
                                         aria-hidden="true"
                                     />
                                 ) : (
-                                    <IconChevronDown
-                                        size={16}
-                                        strokeWidth={2}
-                                        className="opacity-60"
-                                        aria-hidden="true"
-                                    />
+                                    <div className="w-4" />
                                 )}
                                 {t(cat.label)}
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuGroup>
-                                {cat.items.map((item) => (
-                                    <DropdownMenuItem
-                                        key={`desktop-menu-item-${item.url}`}
-                                        asChild
-                                    >
-                                        <Link
-                                            href={item.url}
-                                            className="flex w-full cursor-pointer items-center justify-start gap-2"
+                            </Link>
+                        </Button>
+                    ) : (
+                        <DropdownMenu
+                            key={`desktop-menu-category-${index}-${String(cat.label)}`}
+                        >
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    className="flex items-center gap-2"
+                                >
+                                    {cat.icon ? (
+                                        <cat.icon
+                                            size={16}
+                                            strokeWidth={2}
+                                            className="size-4 text-stone-800"
+                                            aria-hidden="true"
+                                        />
+                                    ) : (
+                                        <ChevronDownIcon
+                                            size={16}
+                                            strokeWidth={2}
+                                            className="size-4 text-stone-800"
+                                            aria-hidden="true"
+                                        />
+                                    )}
+                                    {t(cat.label)}
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuGroup>
+                                    {cat.items.map((item) => (
+                                        <DropdownMenuItem
+                                            key={`desktop-menu-item-${item.href}`}
+                                            asChild
                                         >
-                                            {item.icon ? (
-                                                <item.icon
-                                                    size={16}
-                                                    strokeWidth={2}
-                                                    className="opacity-60"
-                                                    aria-hidden="true"
-                                                />
-                                            ) : (
-                                                cat.items.filter(
-                                                    (it) => it.icon
-                                                ).length > 0 && (
-                                                    <div className="w-4" />
-                                                )
-                                            )}
-                                            {t(item.label)}
-                                        </Link>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuGroup>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                ))}
+                                            <Link
+                                                href={item.href}
+                                                className="flex w-full cursor-pointer items-center justify-start gap-2"
+                                            >
+                                                {item.icon ? (
+                                                    <item.icon
+                                                        size={16}
+                                                        strokeWidth={2}
+                                                        className="size-4 text-stone-800"
+                                                        aria-hidden="true"
+                                                    />
+                                                ) : (
+                                                    cat.items.filter(
+                                                        (it) => it.icon
+                                                    ).length > 0 && (
+                                                        <div className="w-4" />
+                                                    )
+                                                )}
+                                                {t(item.label)}
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuGroup>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )
+                )}
             </nav>
         </div>
     )
@@ -126,7 +168,7 @@ export function MobileNavMenu() {
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon">
-                        <IconMenu
+                        <MenuIcon
                             className="opacity-60"
                             size={16}
                             strokeWidth={2}
@@ -143,29 +185,54 @@ export function MobileNavMenu() {
                                 {t(cat.label)}
                             </DropdownMenuLabel>
                             <DropdownMenuGroup>
-                                {cat.items.map((item) => (
+                                {cat.type === "item" ? (
                                     <DropdownMenuItem
-                                        key={`menu-item-${item.url}`}
+                                        key={`menu-item-${cat.href}`}
                                         asChild
                                     >
                                         <Link
-                                            href={item.url}
-                                            className="flex items-center justify-start gap-2"
+                                            key={`desktop-menu-item-${index}-${String(cat.label)}`}
+                                            href={cat.href}
+                                            className="flex w-full cursor-pointer items-center justify-start gap-2"
                                         >
-                                            {item.icon ? (
-                                                <item.icon
+                                            {cat.icon ? (
+                                                <cat.icon
                                                     size={16}
                                                     strokeWidth={2}
-                                                    className="opacity-60"
+                                                    className="size-4 text-stone-800"
                                                     aria-hidden="true"
                                                 />
                                             ) : (
-                                                <div className="ms-4" />
+                                                <div className="w-4" />
                                             )}
-                                            {t(item.label)}
+                                            {t(cat.label)}
                                         </Link>
                                     </DropdownMenuItem>
-                                ))}
+                                ) : (
+                                    cat.items.map((item) => (
+                                        <DropdownMenuItem
+                                            key={`menu-item-${item.href}`}
+                                            asChild
+                                        >
+                                            <Link
+                                                href={item.href}
+                                                className="flex items-center justify-start gap-2"
+                                            >
+                                                {item.icon ? (
+                                                    <item.icon
+                                                        size={16}
+                                                        strokeWidth={2}
+                                                        className="size-4 text-stone-800"
+                                                        aria-hidden="true"
+                                                    />
+                                                ) : (
+                                                    <div className="ms-4" />
+                                                )}
+                                                {t(item.label)}
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    ))
+                                )}
                             </DropdownMenuGroup>
                             {menuItems.length > 1 &&
                                 menuItems.at(-1) !== cat && (
