@@ -4,7 +4,7 @@ import {
     InvalidAccessTokenError,
     InvalidRefreshTokenError
 } from "@openauthjs/openauth/error"
-import { setTokens } from "@/app/auth/actions"
+import { setTokens } from "@/lib/auth/actions"
 import type { Cookies } from "./types"
 
 /**

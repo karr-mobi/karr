@@ -10,7 +10,7 @@ import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 import { getLocale } from "next-intl/server"
 import { runtime } from "std-env"
-import { setTokens } from "@/app/auth/actions"
+import { setTokens } from "@/lib/auth/actions"
 import { saveUser } from "./persistence"
 
 export async function GET(request: Request) {

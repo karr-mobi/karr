@@ -54,7 +54,7 @@ ENV CI=true
 COPY --from=installer /app/out/full/ .
 RUN pnpm run build
 
-# Bundle migrations
+# Bundle migrations to run at container startup
 RUN pnpm run --filter @karr/web migrations:bundle
 
 ####################
@@ -81,6 +81,7 @@ COPY --from=builder --chown=runner:runner /app/apps/web/.next/standalone ./
 COPY --from=builder --chown=runner:runner /app/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder --chown=runner:runner /app/apps/web/public ./apps/web/public
 
+# Copy over db migrations to run on startup
 COPY --from=builder --chown=runner:runner /app/apps/web/out/db/migrate.mjs ./out/db/migrate.mjs
 COPY --from=builder --chown=runner:runner /app/apps/web/migrations ./migrations
 

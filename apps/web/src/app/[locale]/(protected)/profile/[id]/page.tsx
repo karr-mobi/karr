@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { notFound, unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
-import { auth } from "@/app/auth/actions"
+import { auth } from "@/lib/auth/actions"
 import ProfileInfo, { ProfileInfoSkeleton } from "./profileinfo"
 
 export async function generateMetadata(): Promise<Metadata> {

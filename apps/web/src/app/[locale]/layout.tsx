@@ -6,7 +6,7 @@ import { z } from "zod/mini"
 import type { Locale } from "@/../global"
 import { routing } from "@/i18n/routing"
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
     const t = await getTranslations("HomePage")
     return {
         description: t("slogan")
@@ -27,7 +27,7 @@ export default async function I18nLayout({
         notFound()
     }
 
-    z.config(locale === "en-GB" ? en() : fr())
+    z.config(locale === "en" ? en() : fr())
 
     return children
 }

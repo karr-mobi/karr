@@ -14,7 +14,7 @@ import type { SuccessValues } from "./sucess"
 
 const theme: Theme = {
     title: "Karr Auth",
-    logo: "/logo-tmp.jpg",
+    logo: "https://demo.karr.mobi/logo-tmp.jpg",
     background: {
         dark: "hsl(132 2% 10%)",
         light: "hsl(140 20% 97%)"
@@ -60,20 +60,12 @@ const app = issuer({
                 email: value.email,
                 remoteId: value.email
             })
-            // subjectData = await getOrInsertUser({
-            //     provider: value.provider,
-            //     email: value.email
-            // })
         } else if (value.provider === "code") {
             subjectData = ok({
                 provider: "local",
                 email: value.claims.email,
                 remoteId: value.claims.email
             })
-            // subjectData = await getOrInsertUser({
-            //     provider: value.provider,
-            //     email: value.claims.email
-            // })
         } else if (value.provider === "github") {
             subjectData = await getGithubUserData(value.tokenset.access)
 
@@ -82,11 +74,8 @@ const app = issuer({
                     `[${runtime}] Error getting GitHub user data: ${subjectData.error}`
                 )
             }
-
-            // subjectData = await getOrInsertUser(userData.value)
         } else if (value.provider === "google") {
             subjectData = getGoogleUserData(value.id)
-            // subjectData = await getOrInsertUser(userData.value)
         } else {
             // should never happen
             logger.debug(`[${runtime}] Unknown provider`, value)

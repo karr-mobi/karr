@@ -3,10 +3,10 @@ import Image from "next/image"
 import { memo } from "react"
 import logo from "@/assets/logo-tmp.jpg"
 import { Link } from "@/i18n/routing"
+import { auth } from "@/lib/auth/actions"
 import { APPLICATION_NAME } from "@/util/appname"
-import { auth } from "~/auth/actions"
-import LoginAccount from "./header/LoginAccount"
-import { DesktopNavMenu, MobileNavMenu } from "./header/NavMenu"
+import LoginAccount from "./LoginAccount"
+import { DesktopNavMenu, MobileNavMenu } from "./NavMenu"
 
 const MemoizedAppName = memo(
     () => <h5>{APPLICATION_NAME}</h5>,

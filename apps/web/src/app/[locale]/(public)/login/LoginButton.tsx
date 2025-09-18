@@ -4,7 +4,7 @@ import { Button } from "@karr/ui/components/button"
 import { LoaderIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState, useTransition } from "react"
-import { loginWithProvider } from "@/app/auth/actions"
+import { loginWithProvider } from "@/lib/auth/actions"
 
 export function LoginButton({
     provider,

@@ -55,9 +55,12 @@ if (!result.success) {
 
 const end = Date.now()
 const duration = end - start
-const bytes = Object.keys(result.value.metafile.outputs)
-    .map((name) => result.value.metafile.outputs[name]?.bytes)
-    .reduce((acc, size) => acc! + size!, 0)
+
+// Calculate total bundle size in bytes
+const bytes = Object.keys(result.value.metafile.outputs).reduce(
+    (acc, name) => acc + (result.value.metafile.outputs[name]?.bytes || 0),
+    0
+)
 
 logger.debug(
     `Generated ${Object.keys(result.value.metafile.outputs).length} chunks`
@@ -65,6 +68,6 @@ logger.debug(
 
 logger.success(
     `⚡ Bundled API in ${duration}ms ${c.bold(
-        `(${(bytes! / 1024).toFixed(2)} kB)`
+        `(${(bytes / 1024).toFixed(2)} kB)`
     )}`
 )

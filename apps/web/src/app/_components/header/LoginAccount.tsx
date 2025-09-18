@@ -3,7 +3,7 @@ import { LogInIcon } from "lucide-react"
 import { getTranslations } from "next-intl/server"
 import { UserAvatar } from "@/components/UserAvatar"
 import { Link } from "@/i18n/routing"
-import { auth } from "~/auth/actions"
+import { auth } from "@/lib/auth/actions"
 import { AccountDropdown } from "./AccountDropdown"
 
 export default async function LoginAccount() {

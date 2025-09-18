@@ -2,8 +2,8 @@ import { tryCatch } from "@karr/util"
 import type { Metadata } from "next"
 import { unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
+import { auth } from "@/lib/auth/actions"
 import { apiFetch } from "@/util/apifetch"
-import { auth } from "~/auth/actions"
 import { Form } from "./new-trip-form"
 
 export const metadata: Metadata = {
