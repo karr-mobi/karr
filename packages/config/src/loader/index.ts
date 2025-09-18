@@ -128,6 +128,9 @@ export async function loadFullConfig(): Promise<FullConfig> {
         if (!config.APP_URL) {
             config.APP_URL = "http://build.time/"
         }
+        if (!config.RESEND_API_KEY) {
+            config.RESEND_API_KEY = "re_123"
+        }
     }
 
     config.API_BASE += `/${API_VERSION}`
