@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import { unauthorized } from "next/navigation"
 import { getTranslations } from "next-intl/server"
 import { Suspense } from "react"
-import Loading from "@/components/Loading"
+import { Loading } from "@/components/Loading"
 import { auth } from "@/lib/auth/actions"
-import TripInfo from "./tripinfo"
+import { TripInfo } from "./tripinfo"
 
 export const metadata: Metadata = {
     title: "Trip Details",

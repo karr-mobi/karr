@@ -2,7 +2,7 @@
 
 import { useSuspenseQuery } from "@tanstack/react-query"
 import type { TripsSearch } from "@/api/routes/trips"
-import Loading from "@/components/Loading"
+import { Loading } from "@/components/Loading"
 import { TripCard } from "@/components/TripCard"
 import { TripSchema } from "@/db/schemas/trips"
 import { orpc } from "@/lib/orpc"
