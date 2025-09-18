@@ -1,5 +1,12 @@
-import { AUTH_PROVIDERS, type AuthProvider } from "@karr/config"
+import {
+    APP_URL,
+    APPLICATION_NAME,
+    AUTH_PROVIDERS,
+    type AuthProvider
+} from "@karr/config"
 import logger from "@karr/logger"
+import { sendEmail } from "@karr/mail"
+import { ConfirmationCodeTemplate } from "@karr/mail/templates/confirmation-code"
 import type { Prettify } from "@karr/util"
 import { CodeProvider } from "@openauthjs/openauth/provider/code"
 import { GithubProvider } from "@openauthjs/openauth/provider/github"
@@ -10,7 +17,6 @@ import { CodeUI } from "@openauthjs/openauth/ui/code"
 import { PasswordUI } from "@openauthjs/openauth/ui/password"
 import { isProduction } from "std-env"
 import { messages } from "@/lib/messages"
-import { sendEmail } from "./mail"
 
 export type Providers = AuthProvider["name"]
 
@@ -54,11 +60,15 @@ function getProviders() {
                     copy: messages.fr.password,
                     sendCode: async (email, code) => {
                         if (isProduction) {
-                            await sendEmail(
-                                email,
-                                `Your confirmation code is ${code}`,
-                                `Your Karr confirmation code is <b>${code}</b>.`
-                            )
+                            await sendEmail({
+                                to: email,
+                                subject: `Your confirmation code is ${code}`,
+                                template: ConfirmationCodeTemplate({
+                                    validationCode: code,
+                                    APPLICATION_NAME: APPLICATION_NAME,
+                                    APP_URL: APP_URL
+                                })
+                            })
                         } else {
                             logger.info(`Email sent to ${email} — Code ${code}`)
                         }
@@ -71,11 +81,15 @@ function getProviders() {
                     copy: messages.fr.code,
                     sendCode: async (claims, code) => {
                         if (isProduction) {
-                            await sendEmail(
-                                claims.email as string,
-                                `Your confirmation code is ${code}`,
-                                `Your Karr confirmation code is <b>${code}</b>.`
-                            )
+                            await sendEmail({
+                                to: claims.email as string,
+                                subject: `Your confirmation code is ${code}`,
+                                template: ConfirmationCodeTemplate({
+                                    validationCode: code,
+                                    APPLICATION_NAME: APPLICATION_NAME,
+                                    APP_URL: APP_URL
+                                })
+                            })
                         } else {
                             logger.info(
                                 `Email sent to ${claims.email} — Code ${code}`
