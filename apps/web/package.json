@@ -20,6 +20,7 @@
         "@karr/config": "workspace:*",
         "@karr/kv": "workspace:*",
         "@karr/logger": "workspace:*",
+        "@karr/mail": "workspace:*",
         "@karr/ui": "workspace:*",
         "@karr/util": "workspace:*",
         "@openauthjs/openauth": "catalog:api",

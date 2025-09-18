@@ -1,16 +1,15 @@
 {
-    "extends": "@karr/tsconfig/base.json",
+    "extends": "@karr/tsconfig/nextjs.json",
     "compilerOptions": {
         "outDir": "dist",
-        "rootDirs": ["src", "script"],
+        "rootDir": ".",
         "moduleResolution": "bundler",
         "module": "ESNext",
-        "baseUrl": "src/",
-        "jsx": "preserve",
+        "baseUrl": ".",
         "paths": {
             "@/*": ["./*"]
         }
     },
-    "include": ["src", "script"],
+    "include": ["src"],
     "exclude": ["node_modules", "dist"]
 }

@@ -8,8 +8,8 @@ catalogs:
     "@hono/zod-validator": ^0.5.0
     "@libs/xml": jsr:^7.0.0
     "@openauthjs/openauth": ^0.4.3
-    "@orpc/contract": ^1.8.8
-    "@orpc/server": ^1.8.8
+    "@orpc/contract": ^1.8.9
+    "@orpc/server": ^1.8.9
     db0: ^0.3.2
     drizzle-kit: ^0.31.4
     drizzle-orm: ^0.43.1
@@ -123,8 +123,8 @@ catalogs:
     unplugin: ^2.3.10
     zod: ^4.1.8
   web:
-    "@orpc/client": ^1.8.8
-    "@orpc/tanstack-query": latest
+    "@orpc/client": ^1.8.9
+    "@orpc/tanstack-query": ^1.8.9
     "@tanstack/react-form": ^1.20.0
     "@tanstack/react-query": ^5.87.4
     babel-plugin-react-compiler: ^19.1.0-rc.3
@@ -134,6 +134,10 @@ catalogs:
     posthog-js: ^1.266.0
     react: ^19.1.1
     react-dom: ^19.1.1
+  mail:
+    "@react-email/components": ^0.5.3
+    "@react-email/preview-server": ^4.2.11
+    react-email: ^4.2.11
 
 disallowWorkspaceCycles: true
 
