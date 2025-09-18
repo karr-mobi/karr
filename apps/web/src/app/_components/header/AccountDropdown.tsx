@@ -25,8 +25,8 @@ import { logout } from "@/lib/auth/actions"
 
 export function AccountDropdown({ children }: { children?: React.ReactNode }) {
     const t = useTranslations("auth")
-    const isAdmin = useAdmin()
     const { data: user } = useUser()
+    const isAdmin = useAdmin()
 
     const [isPending, startTransition] = useTransition()
 

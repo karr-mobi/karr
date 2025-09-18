@@ -1,5 +1,7 @@
 import { AUTH_PROVIDERS } from "@karr/config"
 import logger from "@karr/logger"
+import { lazy } from "@karr/util"
+import { and, count, eq } from "drizzle-orm"
 import { err, ok } from "neverthrow"
 import { db } from "@/db"
 import { accountsTable } from "@/db/schemas/accounts"
@@ -23,6 +25,12 @@ export type UserInitData = {
 export function isTrustedProvider(provider: Providers) {
     return !!AUTH_PROVIDERS.find((p) => p.name === provider)?.trusted
 }
+
+// Check if there are users on the instance
+export const isFirstUser = lazy(async (): Promise<boolean> => {
+    const [number] = await db.select({ count: count() }).from(accountsTable)
+    return number?.count === 1
+})
 
 /**
  * Initializes a new user in the database by creating user preferences, profile, and account.
@@ -76,6 +84,30 @@ export async function initUser(data: UserInitData) {
     if (!profile) {
         logger.error("Failed to create profile")
         return err("Failed to create profile")
+    }
+
+    // if user is the first of the instance, make them admin
+    if (await isFirstUser.value) {
+        logger.debug("Instance is fresh, setting user as admin")
+
+        const account = await db
+            .update(accountsTable)
+            .set({ role: "admin" })
+            .where(
+                and(
+                    eq(accountsTable.provider, data.provider),
+                    eq(accountsTable.email, data.email)
+                )
+            )
+            .returning({ id: accountsTable.role })
+
+        if (!account) {
+            logger.error("Failed to make first user admin")
+            return err("Failed to make first user admin")
+        }
+
+        // avoid re-querying the instance state
+        isFirstUser.override(Promise.resolve(false))
     }
 
     return ok()
