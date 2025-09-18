@@ -97,41 +97,6 @@ function getProviders() {
                 ...config,
                 scopes: ["openid", "profile", "email"]
             })
-            /*
-        } else if (provider.name === "oidc") {
-            const { name: _name, ...config } = provider
-            providerConfig = OidcProvider(config)
-        } else if (provider.name === "oauth2") {
-            const { name: _name, ...config } = provider
-            providerConfig = Oauth2Provider(config)
-        } else if (provider.name === "apple") {
-            const { name: _name, ...config } = provider
-            providerConfig = AppleProvider(config)
-        } else if (provider.name === "slack") {
-            const { name: _name, ...config } = provider
-            providerConfig = SlackProvider(config)
-        } else if (provider.name === "cognito") {
-            const { name: _name, ...config } = provider
-            providerConfig = CognitoProvider(config)
-        } else if (provider.name === "keycloak") {
-            const { name: _name, ...config } = provider
-            providerConfig = KeycloakProvider(config)
-        } else if (provider.name === "microsoft") {
-            const { name: _name, ...config } = provider
-            providerConfig = MicrosoftProvider(config)
-        } else if (provider.name === "yahoo") {
-            const { name: _name, ...config } = provider
-            providerConfig = YahooProvider(config)
-        } else if (provider.name === "twitch") {
-            const { name: _name, ...config } = provider
-            providerConfig = TwitchProvider(config)
-        } else if (provider.name === "facebook") {
-            const { name: _name, ...config } = provider
-            providerConfig = FacebookProvider(config)
-        } else if (provider.name === "jumpcloud") {
-            const { name: _name, ...config } = provider
-            providerConfig = JumpCloudProvider(config)
-         */
         } else {
             throw new Error(`Unknown auth provider: ${provider.name}`)
         }
