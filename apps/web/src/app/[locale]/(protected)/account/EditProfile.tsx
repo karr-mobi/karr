@@ -26,7 +26,7 @@ import { useState } from "react"
 import { type EditProfile, EditProfileSchema } from "@/db/schemas/profile"
 import { orpc } from "@/lib/orpc"
 import { FieldInfo } from "@/util/forms"
-import AvatarUpload from "./AvatarUpload"
+import AvatarUpdate from "./AvatarUpdate"
 
 function Form({
     user,
@@ -72,7 +72,7 @@ function Form({
                     <AvatarImage src={user.avatar || undefined} />
                     <AvatarFallback>{initials}</AvatarFallback>
                 </Avatar>
-                <AvatarUpload currentAvatar={user.avatar} />
+                <AvatarUpdate currentAvatar={user.avatar} />
             </div>
             <form
                 className="space-y-4"
