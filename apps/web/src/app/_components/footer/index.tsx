@@ -3,9 +3,9 @@ import { cn } from "@karr/ui/lib/utils"
 
 import { Link } from "@/i18n/routing"
 
-import { LocaleSwitcher } from "./footer/LocaleSwitcher"
-import { ThemeSwitch } from "./footer/ThemeSwitch"
-import { isProduction, version } from "./footer/version"
+import { LocaleSwitcher } from "./LocaleSwitcher"
+import { ThemeSwitch } from "./ThemeSwitch"
+import { isProduction, version } from "./version"
 
 export function Footer({
     className
