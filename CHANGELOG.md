@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.21
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.20...v0.15.21)
+
+### 🩹 Fixes
+
+- **build:** Set fake resend api key at build time ([b2e6e66](https://github.com/karr-mobi/karr/commit/b2e6e66))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.20
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.19...v0.15.20)
