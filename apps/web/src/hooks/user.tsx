@@ -1,6 +1,9 @@
 "use client"
 
+import { isDefinedError } from "@orpc/client"
 import { useQuery } from "@tanstack/react-query"
+import { useTransition } from "react"
+import { logout } from "@/lib/auth/actions"
 import { orpc } from "@/lib/orpc"
 
 export function useAvatar(userId?: string) {
@@ -12,5 +15,20 @@ export function useAvatar(userId?: string) {
 }
 
 export function useUser() {
-    return useQuery(orpc.user.info.queryOptions())
+    const userQuery = useQuery(orpc.user.info.queryOptions())
+
+    const [, startTransition] = useTransition()
+
+    if (userQuery.isError) {
+        console.error("Failed to fetch user info", userQuery.error)
+        if (
+            isDefinedError(userQuery.error) &&
+            (userQuery.error.code === "NOT_FOUND" ||
+                userQuery.error.code === "UNAUTHORIZED")
+        ) {
+            startTransition(logout)
+        }
+    }
+
+    return userQuery
 }
