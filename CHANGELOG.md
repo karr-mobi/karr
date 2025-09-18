@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.15.20
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.19...v0.15.20)
+
+### 🚀 Enhancements
+
+- **mail:** Now uses pretty email templates ([#212](https://github.com/karr-mobi/karr/pull/212))
+- **ui:** Store edit profile dialog open state in url to deep link to it from email ([2f617fb](https://github.com/karr-mobi/karr/commit/2f617fb))
+
+### 🩹 Fixes
+
+- **admin:** Make first user an admin ([#211](https://github.com/karr-mobi/karr/pull/211))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.19
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.18...v0.15.19)
