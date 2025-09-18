@@ -48,7 +48,7 @@ import { useState } from "react"
 import { Link, redirect } from "@/i18n/routing"
 import { useAuth } from "@/lib/auth/context"
 import { orpc } from "@/lib/orpc"
-import { formatDate, formatTime } from "@/util/format"
+import { useFormatDate, useFormatTime } from "@/util/format"
 
 function useTrip(tripId: string) {
     return useSuspenseQuery(
@@ -185,6 +185,9 @@ export function TripInfo({ tripId }: { tripId: string }) {
     const t = useTranslations("Trips")
     const user = useAuth()
 
+    const departureDate = useFormatDate(trip.departure)
+    const departureTime = useFormatTime(trip.departure)
+
     if (isError || !trip) {
         console.error("Error loading trip data", error)
         return <p>Error loading trip data</p>
@@ -223,15 +226,11 @@ export function TripInfo({ tripId }: { tripId: string }) {
                         <div className="flex items-center gap-3">
                             <CalendarIcon className="h-4 w-4 text-muted-foreground" />
                             <div>
-                                <div className="text-sm">
-                                    {formatDate(trip.departure)}
-                                </div>
+                                <div className="text-sm">{departureDate}</div>
                             </div>
                             <ClockIcon className="h-4 w-4 text-muted-foreground" />
                             <div>
-                                <div className="text-sm">
-                                    {formatTime(trip.departure)}
-                                </div>
+                                <div className="text-sm">{departureTime}</div>
                             </div>
                         </div>
 

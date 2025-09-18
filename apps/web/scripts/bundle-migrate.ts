@@ -58,7 +58,7 @@ const duration = end - start
 
 // Calculate total bundle size in bytes
 const bytes = Object.keys(result.value.metafile.outputs).reduce(
-    (acc, name) => acc + result.value.metafile.outputs[name]?.bytes!,
+    (acc, name) => acc + (result.value.metafile.outputs[name]?.bytes || 0),
     0
 )
 
@@ -68,6 +68,6 @@ logger.debug(
 
 logger.success(
     `⚡ Bundled API in ${duration}ms ${c.bold(
-        `(${(bytes! / 1024).toFixed(2)} kB)`
+        `(${(bytes / 1024).toFixed(2)} kB)`
     )}`
 )

@@ -1,6 +1,6 @@
 import { useLocale } from "next-intl"
 
-export function formatDate(dateString: string) {
+export function useFormatDate(dateString: string) {
     const locale = useLocale()
 
     return new Date(dateString).toLocaleDateString(locale, {
@@ -11,7 +11,7 @@ export function formatDate(dateString: string) {
     })
 }
 
-export function formatTime(dateString: string) {
+export function useFormatTime(dateString: string) {
     const locale = useLocale()
 
     return new Date(dateString).toLocaleTimeString(locale, {
