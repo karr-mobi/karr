@@ -79,12 +79,18 @@ export function toInt(value: number | string): number {
  * console.log(val2);                 // Logs { data: "some complex data" }
  * console.log("Computation count:", computationCount); // Still logs 1
  */
-export function lazy<T>(getter: () => T): { value: T } {
+export function lazy<T>(getter: () => T): {
+    value: T
+    override: (value: T) => void
+} {
     return {
         get value() {
             const value = getter()
             Object.defineProperty(this, "value", { value })
             return value
+        },
+        override(value: T) {
+            Object.defineProperty(this, "value", { value })
         }
     }
 }
