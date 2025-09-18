@@ -6,7 +6,7 @@
     "scripts": {
         "build": "turbo build",
         "start": "turbo start",
-        "dev": "turbo dev --filter='!@karr/landing' --filter='!@karr/docs'",
+        "dev": "turbo dev --filter='!@karr/landing' --filter='!@karr/docs' --concurrency 11",
         "dev:landing": "turbo dev --filter=@karr/landing",
         "dev:docs": "turbo dev --filter=@karr/docs",
         "extract-routes": "turbo extract-routes",
