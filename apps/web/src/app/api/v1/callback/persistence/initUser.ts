@@ -1,6 +1,8 @@
-import { AUTH_PROVIDERS } from "@karr/config"
+import { APP_URL, APPLICATION_NAME, AUTH_PROVIDERS } from "@karr/config"
 import logger from "@karr/logger"
-import { lazy } from "@karr/util"
+import { sendEmail } from "@karr/mail"
+import { WelcomeTemplate } from "@karr/mail/templates/welcome"
+import { lazy, tryCatch } from "@karr/util"
 import { and, count, eq } from "drizzle-orm"
 import { err, ok } from "neverthrow"
 import { db } from "@/db"
@@ -108,6 +110,23 @@ export async function initUser(data: UserInitData) {
 
         // avoid re-querying the instance state
         isFirstUser.override(Promise.resolve(false))
+    }
+
+    const email = await tryCatch(
+        sendEmail({
+            to: data.email,
+            subject: `Welcome to ${APPLICATION_NAME}!`,
+            template: WelcomeTemplate({
+                APPLICATION_NAME,
+                APP_URL,
+                name: `${data.firstName} ${data.lastName}`
+            })
+        })
+    )
+
+    if (!email.success) {
+        logger.error("Failed to send welcome email")
+        return err("Failed to send welcome email")
     }
 
     return ok()
