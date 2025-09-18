@@ -43,8 +43,8 @@ import { notFound } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
 import type { Trip } from "@/api/routes/trips"
-import { useAuth } from "@/app/auth/context"
 import { Link, redirect } from "@/i18n/routing"
+import { useAuth } from "@/lib/auth/context"
 import { orpc } from "@/lib/orpc"
 
 export default function FetchTripData({ tripId }: { tripId: string }) {

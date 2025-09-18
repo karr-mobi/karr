@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setError(null)
 
             // Import the auth function dynamically to avoid issues with server actions
-            const { auth } = await import("~/auth/actions")
+            const { auth } = await import("@/lib/auth/actions")
             const result = await auth()
 
             if (isMountedRef.current) {

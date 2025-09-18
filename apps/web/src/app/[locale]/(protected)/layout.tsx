@@ -1,4 +1,4 @@
-import { AuthProvider } from "~/auth/context"
+import { AuthProvider } from "@/lib/auth/context"
 
 export default function AuthedLayout({
     children

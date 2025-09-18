@@ -21,7 +21,7 @@ import { useTransition } from "react"
 import { useAdmin } from "@/hooks/admin"
 import { useUser } from "@/hooks/user"
 import { Link } from "@/i18n/routing"
-import { logout } from "~/auth/actions"
+import { logout } from "@/lib/auth/actions"
 
 export function AccountDropdown({ children }: { children?: React.ReactNode }) {
     const t = useTranslations("auth")

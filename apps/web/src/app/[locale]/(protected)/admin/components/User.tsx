@@ -48,9 +48,9 @@ import {
 import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
 import type { TUsersList } from "@/api/routes/admin"
-import { useAuth } from "@/app/auth/context"
 import { useUser } from "@/hooks/user"
 import { Link } from "@/i18n/routing"
+import { useAuth } from "@/lib/auth/context"
 import { useBlockMutations, useRoleMutation, useVerifyMutation } from "./hooks"
 
 export function UsersSkeleton() {
