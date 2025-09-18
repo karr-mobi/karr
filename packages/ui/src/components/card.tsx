@@ -2,25 +2,28 @@ import { cn } from "@karr/ui/lib/utils"
 import { cva, type VariantProps } from "class-variance-authority"
 import * as React from "react"
 
-const cardVariants = cva(
-    "rounded-xl border-border bg-card text-card-foreground",
-    {
-        variants: {
-            variant: {
-                default: "shadow",
-                flat: "rounded-lg border p-4"
-            },
-            size: {
-                sm: "p-4",
-                lg: "p-6"
-            }
+const cardVariants = cva("rounded-xl", {
+    variants: {
+        variant: {
+            default: "shadow",
+            flat: "rounded-lg border p-4"
         },
-        defaultVariants: {
-            variant: "default",
-            size: "lg"
+        size: {
+            xs: "px-4 py-2 text-sm",
+            sm: "p-4",
+            lg: "p-6"
+        },
+        type: {
+            default: "border-border bg-card text-card-foreground",
+            error: "border-red-500 bg-red-50 text-red-900"
         }
+    },
+    defaultVariants: {
+        variant: "default",
+        size: "lg",
+        type: "default"
     }
-)
+})
 
 export type CardVariants = VariantProps<typeof cardVariants>
 
@@ -31,10 +34,10 @@ export interface CardProps
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-    ({ className, variant, size, ...props }, ref) => (
+    ({ className, variant, size, type, ...props }, ref) => (
         <div
             ref={ref}
-            className={cn(cardVariants({ variant, size, className }))}
+            className={cn(cardVariants({ variant, size, type, className }))}
             {...props}
         />
     )
