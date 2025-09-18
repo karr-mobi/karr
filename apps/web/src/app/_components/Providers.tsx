@@ -3,6 +3,7 @@
 import { StandardRPCJsonSerializer } from "@orpc/client/standard"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ThemeProvider } from "next-themes"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 const serializer = new StandardRPCJsonSerializer({
     customJsonSerializers: [
@@ -38,7 +39,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 enableSystem
                 disableTransitionOnChange
             >
-                {children}
+                <NuqsAdapter>{children}</NuqsAdapter>
             </ThemeProvider>
         </QueryClientProvider>
     )

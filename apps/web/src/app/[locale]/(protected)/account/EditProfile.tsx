@@ -22,7 +22,7 @@ import { useForm } from "@tanstack/react-form"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { PenBoxIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
-import { useState } from "react"
+import { parseAsBoolean, useQueryState } from "nuqs"
 import { type EditProfile, EditProfileSchema } from "@/db/schemas/profile"
 import { orpc } from "@/lib/orpc"
 import { FieldInfo } from "@/util/forms"
@@ -200,7 +200,10 @@ function Form({
 
 export function Edit({ user }: { user: EditProfile }) {
     const t = useTranslations("Account.editProfile")
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useQueryState(
+        "edit",
+        parseAsBoolean.withDefault(false)
+    )
 
     const closeDialog = () => {
         setOpen(false)

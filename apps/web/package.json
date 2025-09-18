@@ -52,7 +52,8 @@
         "postgres": "catalog:api",
         "resend": "catalog:api",
         "prettier": "catalog:devtools",
-        "drizzle-kit": "catalog:api"
+        "drizzle-kit": "catalog:api",
+        "nuqs": "catalog:web"
     },
     "devDependencies": {
         "@karr/build-plugins": "workspace:*",

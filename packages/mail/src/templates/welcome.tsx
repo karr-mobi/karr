@@ -25,7 +25,10 @@ export function WelcomeTemplate({
             </Text>
             <Text>
                 To get started, you can{" "}
-                <Link href={`${APP_URL}/account`} className="underline">
+                <Link
+                    href={`${APP_URL}/account?edit=true`}
+                    className="underline"
+                >
                     adjust your profile settings
                 </Link>
                 , and start{" "}
