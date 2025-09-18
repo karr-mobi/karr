@@ -209,8 +209,13 @@
         "Delete": {
             "unauthorized": "This trip does not belong to you!",
             "not-found": "Couldn't find the trip to delete",
+            "bad-request": "Invalid request",
             "other-error": "Sorry, an unknown error occurred",
-            "success": "Trip deleted successfully"
+            "success": "Trip deleted successfully",
+            "delete": "Delete trip",
+            "are-you-sure": "Are you sure you want to delete this trip?",
+            "trip-will-be-deleted": "This trip will be permanently deleted",
+            "cancel": "Cancel"
         }
     },
     "Trips": {
@@ -240,10 +245,7 @@
         "yes": "Yes",
         "no": "No",
         "cash": "Cash",
-        "raw-trip-data": "Raw trip data",
-        "delete": "Delete trip",
-        "are-you-sure": "Are you sure you want to delete this trip?",
-        "cancel": "Cancel"
+        "raw-trip-data": "Raw trip data"
     },
 
     "InputErrors": {

@@ -14,14 +14,17 @@ import {
 } from "@karr/ui/components/card"
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogFooter,
     DialogHeader,
-    DialogTitle
+    DialogTitle,
+    DialogTrigger
 } from "@karr/ui/components/dialog"
 import { Label } from "@karr/ui/components/label"
 import { Separator } from "@karr/ui/components/separator"
 import { toast } from "@karr/ui/components/sonner"
+import { Spinner } from "@karr/ui/components/spinner"
 import { isDefinedError } from "@orpc/client"
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import {
@@ -42,13 +45,13 @@ import {
 import { notFound } from "next/navigation"
 import { useLocale, useTranslations } from "next-intl"
 import { useState } from "react"
-import type { Trip } from "@/api/routes/trips"
 import { Link, redirect } from "@/i18n/routing"
 import { useAuth } from "@/lib/auth/context"
 import { orpc } from "@/lib/orpc"
+import { formatDate, formatTime } from "@/util/format"
 
-export default function FetchTripData({ tripId }: { tripId: string }) {
-    const { data, isError, error } = useSuspenseQuery(
+function useTrip(tripId: string) {
+    return useSuspenseQuery(
         orpc.trips.get.queryOptions({
             input: tripId,
             throwOnError: false,
@@ -67,58 +70,125 @@ export default function FetchTripData({ tripId }: { tripId: string }) {
             }
         })
     )
-
-    if (isError || !data) {
-        console.error("Error loading trip data", error)
-        return <p>Error loading trip data</p>
-    }
-
-    return <ShowTripData trip={data} />
 }
 
-function ShowTripData({ trip }: { trip: Trip }) {
-    const t = useTranslations("Trips")
-    const tDelete = useTranslations("trips.Delete")
+function DeleteTrip({ tripId }: { tripId: string }) {
+    const t = useTranslations("trips.Delete")
     const locale = useLocale()
-    const user = useAuth()
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString(locale, {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        })
-    }
-
-    const formatTime = (dateString: string) => {
-        return new Date(dateString).toLocaleTimeString(locale, {
-            hour: "2-digit",
-            minute: "2-digit"
-        })
-    }
 
     const deleteTripMutation = useMutation(
         orpc.trips.delete.mutationOptions({
             onSuccess: () => {
-                toast.success(tDelete("success"))
-                console.log("Trip deleted successfully")
+                setDeleteDialogOpen(false)
+                toast.success(t("success"))
                 redirect({ href: "/trips/search", locale })
             },
             onError: (error) => {
                 if (isDefinedError(error)) {
                     if (error.code === "NOT_FOUND") {
-                        toast.error(tDelete("not-found"))
+                        toast.error(t("not-found"))
                     } else if (error.code === "UNAUTHORIZED") {
-                        toast.error(tDelete("unauthorized"))
+                        toast.error(t("unauthorized"))
                     } else {
-                        toast.error(tDelete("other-error"))
+                        toast.error(t("other-error"))
                     }
                 }
             }
         })
     )
+
+    const displayError = () => {
+        if (!deleteTripMutation.isError) return ""
+
+        if (isDefinedError(deleteTripMutation.error)) {
+            console.log(deleteTripMutation.error.code)
+            if (deleteTripMutation.error.code === "NOT_FOUND") {
+                return t("not-found")
+            } else if (deleteTripMutation.error.code === "UNAUTHORIZED") {
+                return t("unauthorized")
+            } else if (deleteTripMutation.error.code === "BAD_REQUEST") {
+                return t("bad-request")
+            } else {
+                return t("other-error")
+            }
+        } else if (
+            (deleteTripMutation.error as unknown as { code: string }).code ===
+            "BAD_REQUEST"
+        ) {
+            return t("bad-request")
+        } else {
+            return t("other-error")
+        }
+    }
+
+    return (
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+            <DialogTrigger asChild>
+                <Button
+                    variant="destructive"
+                    className="w-fit justify-self-end"
+                    onClick={() => setDeleteDialogOpen(true)}
+                >
+                    <TrashIcon />
+                    {t("delete")}
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle className="text-lg">
+                        {t("are-you-sure")}
+                    </DialogTitle>
+                </DialogHeader>
+
+                <p className="text-sm text-stone-700">
+                    {t("trip-will-be-deleted")}
+                </p>
+
+                {deleteTripMutation.isError && (
+                    <Card variant="flat" type="error" size="xs">
+                        {displayError()}
+                    </Card>
+                )}
+
+                <DialogFooter>
+                    {!deleteTripMutation.isPending && (
+                        <DialogClose asChild>
+                            <Button
+                                variant="outline"
+                                disabled={deleteTripMutation.isPending}
+                            >
+                                {t("cancel")}
+                            </Button>
+                        </DialogClose>
+                    )}
+                    <Button
+                        variant="destructive"
+                        onClick={() => deleteTripMutation.mutate(tripId)}
+                        disabled={deleteTripMutation.isPending}
+                    >
+                        {deleteTripMutation.isPending ? (
+                            <Spinner />
+                        ) : (
+                            t("delete")
+                        )}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+export function TripInfo({ tripId }: { tripId: string }) {
+    const { data: trip, isError, error } = useTrip(tripId)
+
+    const t = useTranslations("Trips")
+    const user = useAuth()
+
+    if (isError || !trip) {
+        console.error("Error loading trip data", error)
+        return <p>Error loading trip data</p>
+    }
 
     return (
         <div className="grid gap-6">
@@ -321,40 +391,8 @@ function ShowTripData({ trip }: { trip: Trip }) {
 
             {user?.authState?.provider === trip.driver.accountProvider &&
                 user.authState?.remoteId === trip.driver.accountRemoteId && (
-                    <Button
-                        variant="destructive"
-                        className="w-fit justify-self-end"
-                        onClick={() => setDeleteDialogOpen(true)}
-                    >
-                        <TrashIcon />
-                        {t("delete")}
-                    </Button>
+                    <DeleteTrip tripId={trip.id} />
                 )}
-
-            <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>{t("are-you-sure")}</DialogTitle>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <Button
-                            variant="outline"
-                            onClick={() => setDeleteDialogOpen(false)}
-                        >
-                            {t("cancel")}
-                        </Button>
-                        <Button
-                            variant="destructive"
-                            onClick={() => {
-                                void deleteTripMutation.mutate(trip.id)
-                                setDeleteDialogOpen(false)
-                            }}
-                        >
-                            {t("delete")}
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
 
             {process.env.NODE_ENV !== "production" && (
                 <details className="mt-4 ml-4 text-sm">

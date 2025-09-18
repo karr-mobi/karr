@@ -209,8 +209,13 @@
         "Delete": {
             "unauthorized": "Ce trajet ne vous appartient pas!",
             "not-found": "Trajet introuvable",
+            "bad-request": "Requête invalide",
             "other-error": "Désolé, une erreur est survenue",
-            "success": "Trajet supprimé correctement"
+            "success": "Trajet supprimé correctement",
+            "delete": "Supprimer le trajet",
+            "are-you-sure": "Êtes-vous sûr de vouloir supprimer ce trajet ?",
+            "trip-will-be-deleted": "Ce trajet sera définitivement supprimé",
+            "cancel": "Annuler"
         }
     },
     "Trips": {
@@ -240,10 +245,7 @@
         "yes": "Oui",
         "no": "Non",
         "cash": "Espèces",
-        "raw-trip-data": "Données brutes du trajet",
-        "delete": "Supprimer le trajet",
-        "are-you-sure": "Are you sure you want to delete this trip?",
-        "cancel": "Cancel"
+        "raw-trip-data": "Données brutes du trajet"
     },
 
     "InputErrors": {
