@@ -3,41 +3,31 @@ import { Heading, Link, Text } from "@react-email/components"
 import React from "react"
 import BaseTemplate from "./base"
 
-interface WelcomeTemplateProps {
-    name: string
+interface UpgradedAdminTemplateProps {
     APP_URL: string
     APPLICATION_NAME: string
     SUPPORT_EMAIL?: string | undefined
 }
 
-export function WelcomeTemplate({
-    name,
+export function UpgradedAdminTemplate({
     APP_URL,
     APPLICATION_NAME,
     SUPPORT_EMAIL
-}: WelcomeTemplateProps) {
+}: UpgradedAdminTemplateProps) {
     return (
         <BaseTemplate APPLICATION_NAME={APPLICATION_NAME} APP_URL={APP_URL}>
             <Heading className="font-normal text-4xl text-stone-800">
-                Hi {name}!
+                Congratulations!
             </Heading>
             <Text>
-                Thank you for joining {APPLICATION_NAME}. We're excited to have
-                you on board!
+                You were just upgraded to administrator of {APPLICATION_NAME}!
             </Text>
             <Text>
-                To get started, you can{" "}
-                <Link
-                    href={`${APP_URL}/account?edit=true`}
-                    className="underline"
-                >
-                    adjust your profile settings
-                </Link>
-                , and start{" "}
-                <Link href={`${APP_URL}/trips/search`} className="underline">
-                    finding trips
-                </Link>
-                !
+                You now have access to the{" "}
+                <Link href={`${APP_URL}/en/admin`} className="underline">
+                    administrator dashboard
+                </Link>{" "}
+                to manage users on this instance.
             </Text>
 
             {SUPPORT_EMAIL ? (
@@ -56,11 +46,10 @@ export function WelcomeTemplate({
     )
 }
 
-WelcomeTemplate.PreviewProps = {
-    name: "Andrew",
+UpgradedAdminTemplate.PreviewProps = {
     APP_URL: "http://localhost",
     APPLICATION_NAME: "Karr Email Preview",
     SUPPORT_EMAIL: "support@karr.mobi"
-} as WelcomeTemplateProps
+} as UpgradedAdminTemplateProps
 
-export default WelcomeTemplate
+export default UpgradedAdminTemplate

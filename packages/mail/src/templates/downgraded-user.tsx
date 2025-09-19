@@ -3,64 +3,52 @@ import { Heading, Link, Text } from "@react-email/components"
 import React from "react"
 import BaseTemplate from "./base"
 
-interface WelcomeTemplateProps {
-    name: string
+interface DowngradedUserTemplateProps {
     APP_URL: string
     APPLICATION_NAME: string
     SUPPORT_EMAIL?: string | undefined
 }
 
-export function WelcomeTemplate({
-    name,
+export function DowngradedUserTemplate({
     APP_URL,
     APPLICATION_NAME,
     SUPPORT_EMAIL
-}: WelcomeTemplateProps) {
+}: DowngradedUserTemplateProps) {
     return (
         <BaseTemplate APPLICATION_NAME={APPLICATION_NAME} APP_URL={APP_URL}>
             <Heading className="font-normal text-4xl text-stone-800">
-                Hi {name}!
+                Oh no...!
             </Heading>
             <Text>
-                Thank you for joining {APPLICATION_NAME}. We're excited to have
-                you on board!
+                You were just downgraded to a regular user of {APPLICATION_NAME}
+                !
             </Text>
             <Text>
-                To get started, you can{" "}
-                <Link
-                    href={`${APP_URL}/account?edit=true`}
-                    className="underline"
-                >
-                    adjust your profile settings
-                </Link>
-                , and start{" "}
-                <Link href={`${APP_URL}/trips/search`} className="underline">
-                    finding trips
-                </Link>
-                !
+                You no longer have access to the administrator dashboard and
+                other admin privileges, but you can still enjoy the application
+                as a regular user.
             </Text>
 
             {SUPPORT_EMAIL ? (
                 <Text>
-                    Please feel free to reach out to us at{" "}
+                    Was this unintentional? Please reach out to us at{" "}
                     <Link
                         href={`mailto:${SUPPORT_EMAIL}`}
                         className="underline"
                     >
                         {SUPPORT_EMAIL}
                     </Link>{" "}
-                    if you encounter any issues.
+                    to try to resolve the issue.
                 </Text>
             ) : undefined}
         </BaseTemplate>
     )
 }
 
-WelcomeTemplate.PreviewProps = {
-    name: "Andrew",
+DowngradedUserTemplate.PreviewProps = {
     APP_URL: "http://localhost",
     APPLICATION_NAME: "Karr Email Preview",
     SUPPORT_EMAIL: "support@karr.mobi"
-} as WelcomeTemplateProps
+} as DowngradedUserTemplateProps
 
-export default WelcomeTemplate
+export default DowngradedUserTemplate

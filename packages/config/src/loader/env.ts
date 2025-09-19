@@ -48,6 +48,10 @@ export function readConfigFromEnv(): Partial<ConfigFile> {
         config.ADMIN_EMAIL = env.ADMIN_EMAIL
     }
 
+    if (env.SUPPORT_EMAIL) {
+        config.SUPPORT_EMAIL = env.SUPPORT_EMAIL
+    }
+
     if (env.RESEND_API_KEY) {
         config.RESEND_API_KEY = env.RESEND_API_KEY
     }

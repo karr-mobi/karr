@@ -1,4 +1,9 @@
-import { APP_URL, APPLICATION_NAME, AUTH_PROVIDERS } from "@karr/config"
+import {
+    APP_URL,
+    APPLICATION_NAME,
+    AUTH_PROVIDERS,
+    SUPPORT_EMAIL
+} from "@karr/config"
 import logger from "@karr/logger"
 import { sendEmail } from "@karr/mail"
 import { WelcomeTemplate } from "@karr/mail/templates/welcome"
@@ -119,6 +124,7 @@ export async function initUser(data: UserInitData) {
             template: WelcomeTemplate({
                 APPLICATION_NAME,
                 APP_URL,
+                SUPPORT_EMAIL,
                 name: `${data.firstName} ${data.lastName}`
             })
         })
