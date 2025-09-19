@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.22
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.21...v0.15.22)
+
+### 🚀 Enhancements
+
+- **mail:** Notify user when upgraded to admin or downgraded ([#213](https://github.com/karr-mobi/karr/pull/213))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.21
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.20...v0.15.21)
