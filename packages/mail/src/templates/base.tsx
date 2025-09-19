@@ -7,14 +7,15 @@ import {
     Img,
     Link,
     pixelBasedPreset,
-    Tailwind
+    Tailwind,
+    Text
 } from "@react-email/components"
 import type { JSX } from "react"
 //biome-ignore lint/correctness/noUnusedImports: need to import react for react-email to work
 import React from "react"
 
 interface BaseTemplateProps {
-    children: JSX.Element[] | JSX.Element
+    children?: Array<JSX.Element | undefined> | JSX.Element
     APP_URL: string
     APPLICATION_NAME: string
 }
@@ -34,14 +35,25 @@ export function BaseTemplate({
                     }}
                 >
                     <Container style={container}>
-                        <Img
-                            src={`${APP_URL}/logo-tmp.jpg`}
-                            width="42"
-                            height="42"
-                            alt={APPLICATION_NAME}
-                            style={logo}
-                        />
+                        <Link href={APP_URL} className="text-stone-900">
+                            <Img
+                                src={`${APP_URL}/logo-tmp.jpg`}
+                                width="42"
+                                height="42"
+                                alt={APPLICATION_NAME}
+                                style={logo}
+                                className="inline-block align-middle"
+                            />
+                            <Text className="ms-4 inline-block align-middle text-xl">
+                                {APPLICATION_NAME}
+                            </Text>
+                        </Link>
                         {children}
+                        <Text className="text-stone-500">
+                            Best regards,
+                            <br />
+                            The {APPLICATION_NAME} Team
+                        </Text>
                         <Hr style={hr} />
                         <Link href={APP_URL} style={reportLink}>
                             {APPLICATION_NAME}
@@ -54,7 +66,6 @@ export function BaseTemplate({
 }
 
 BaseTemplate.PreviewProps = {
-    children: [],
     APP_URL: "http://localhost",
     APPLICATION_NAME: "Karr Email Preview"
 } as BaseTemplateProps
