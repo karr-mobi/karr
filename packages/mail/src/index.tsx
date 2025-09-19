@@ -1,4 +1,5 @@
 import { RESEND_API_KEY } from "@karr/config"
+import { tryCatch } from "@karr/util"
 import type { JSX } from "react"
 import { Resend } from "resend"
 
@@ -13,12 +14,14 @@ export function sendRawEmail({
     subject: string
     body: string
 }) {
-    return resend.emails.send({
-        from: "Karr <noreply@updates.karr.mobi>",
-        to,
-        subject,
-        html: `<p>${body}</p>`
-    })
+    return tryCatch(
+        resend.emails.send({
+            from: "Karr <noreply@updates.karr.mobi>",
+            to,
+            subject,
+            html: `<p>${body}</p>`
+        })
+    )
 }
 
 export function sendEmail<T extends JSX.Element>({
@@ -30,10 +33,12 @@ export function sendEmail<T extends JSX.Element>({
     subject: string
     template: T
 }) {
-    return resend.emails.send({
-        from: "Karr <noreply@updates.karr.mobi>",
-        to,
-        subject,
-        react: props.template
-    })
+    return tryCatch(
+        resend.emails.send({
+            from: "Karr <noreply@updates.karr.mobi>",
+            to,
+            subject,
+            react: props.template
+        })
+    )
 }
