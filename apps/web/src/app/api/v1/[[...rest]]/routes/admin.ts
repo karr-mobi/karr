@@ -1,4 +1,8 @@
+import { APP_URL, APPLICATION_NAME, SUPPORT_EMAIL } from "@karr/config"
 import logger from "@karr/logger"
+import { sendEmail } from "@karr/mail"
+import { DowngradedUserTemplate } from "@karr/mail/templates/downgraded-user"
+import { UpgradedAdminTemplate } from "@karr/mail/templates/upgraded-admin"
 import { tryCatch } from "@karr/util"
 import { and, count, desc, eq } from "drizzle-orm"
 import { z } from "zod/mini"
@@ -319,13 +323,16 @@ const changeRole = base
                         eq(accountsTable.remoteId, input.remoteId)
                     )
                 )
-                .returning({ role: accountsTable.role })
+                .returning({
+                    role: accountsTable.role,
+                    email: accountsTable.email
+                })
         )
 
         // Unknown error
         if (!res.success) {
             throw errors.INTERNAL_SERVER_ERROR({
-                message: "Failed to verify user"
+                message: "Failed to change user role"
             })
         }
 
@@ -340,7 +347,42 @@ const changeRole = base
         if (res.value.length > 1) {
             logger.error("Too many users role changed", { input })
             throw errors.INTERNAL_SERVER_ERROR({
-                message: "Too many users verified"
+                message: "Too many user roles changed"
+            })
+        }
+
+        // User found
+        if (!res.value[0]) {
+            logger.error("User not found", { input })
+            throw errors.NOT_FOUND({
+                message: "User not found"
+            })
+        }
+
+        const email = await sendEmail({
+            to: res.value[0].email,
+            subject:
+                input.role === "admin"
+                    ? "Upgraded to Admin"
+                    : "Downgraded to User",
+            template:
+                input.role === "admin"
+                    ? UpgradedAdminTemplate({
+                          APPLICATION_NAME,
+                          APP_URL,
+                          SUPPORT_EMAIL
+                      })
+                    : DowngradedUserTemplate({
+                          APPLICATION_NAME,
+                          APP_URL,
+                          SUPPORT_EMAIL
+                      })
+        })
+
+        if (!email.success) {
+            logger.error("Failed to send email", { error: email.error })
+            throw errors.INTERNAL_SERVER_ERROR({
+                message: "Failed to send email"
             })
         }
     })
