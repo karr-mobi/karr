@@ -1031,6 +1031,9 @@ importers:
       '@karr/config':
         specifier: workspace:*
         version: link:../config
+      '@karr/logger':
+        specifier: workspace:*
+        version: link:../logger
       '@karr/util':
         specifier: workspace:*
         version: link:../util

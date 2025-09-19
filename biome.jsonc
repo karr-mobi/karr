@@ -48,8 +48,7 @@
                 "noFloatingPromises": "on",
                 "noGlobalDirnameFilename": "on",
                 // Disabled noImportCycles - This rule significantly impacts performance (2s -> 4s)
-                // It builds a complete dependency graph which is expensive for larger projects
-                // Consider running it separately in CI or pre-commit hooks instead
+                // It builds a complete dependency graph which is expensive
                 "noImportCycles": "off",
                 "noNoninteractiveElementInteractions": "on",
                 "noProcessGlobal": "on",

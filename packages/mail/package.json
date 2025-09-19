@@ -6,7 +6,6 @@
         "check:lint": "eslint . --max-warnings 0",
         "lint": "eslint . --max-warnings 0 --fix",
         "dev": "MAIL_PREVIEW=true email dev --port 3003 --dir ./src/templates",
-        "build": "tsc",
         "check:types": "tsc --noEmit",
         "test": "vitest"
     },
@@ -20,6 +19,7 @@
     },
     "dependencies": {
         "@karr/config": "workspace:*",
+        "@karr/logger": "workspace:*",
         "@karr/util": "workspace:*",
         "@react-email/components": "catalog:mail",
         "react": "catalog:web",
