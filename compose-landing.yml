@@ -1,3 +1,5 @@
+name: karr-landing
+
 services:
     landing:
         image: ghcr.io/finxol/karr-landing:latest
