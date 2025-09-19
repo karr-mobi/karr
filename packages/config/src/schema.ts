@@ -157,6 +157,7 @@ export const ConfigFileSchema = z.object({
     LOG_TIMESTAMP: z.boolean().optional(),
     LOG_LEVEL: LogLevelSchema.optional(),
     ADMIN_EMAIL: z.email().optional(),
+    SUPPORT_EMAIL: z.email().optional(),
     AUTH_PROVIDERS: authProvidersSchema.optional(),
     RESEND_API_KEY: z.string().optional(),
     // FEDERATION: z.boolean().optional(),
@@ -215,6 +216,7 @@ export const FullConfigSchema = z
             isProduction || env.DOCKER ? "info" : "trace"
         ),
         ADMIN_EMAIL: z.email().optional(),
+        SUPPORT_EMAIL: z.email().optional(),
         AUTH_PROVIDERS: authProvidersSchema.min(1).max(18),
         RESEND_API_KEY: z.string().optional(),
         // TODO: move federation targets to settings to be editable via the UI
