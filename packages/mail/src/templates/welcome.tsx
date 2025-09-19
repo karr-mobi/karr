@@ -7,12 +7,14 @@ interface WelcomeTemplateProps {
     name: string
     APP_URL: string
     APPLICATION_NAME: string
+    SUPPORT_EMAIL?: string | undefined
 }
 
 export function WelcomeTemplate({
     name,
     APP_URL,
-    APPLICATION_NAME
+    APPLICATION_NAME,
+    SUPPORT_EMAIL
 }: WelcomeTemplateProps) {
     return (
         <BaseTemplate APPLICATION_NAME={APPLICATION_NAME} APP_URL={APP_URL}>
@@ -38,19 +40,18 @@ export function WelcomeTemplate({
                 !
             </Text>
 
-            <Text>
-                Please feel free to reach out to us at{" "}
-                <Link href="mailto:support@karr.mobi" className="underline">
-                    support@karr.mobi
-                </Link>{" "}
-                if you encounter any issues.
-            </Text>
-
-            <Text className="text-stone-500">
-                Best regards,
-                <br />
-                The {APPLICATION_NAME} Team
-            </Text>
+            {SUPPORT_EMAIL ? (
+                <Text>
+                    Please feel free to reach out to us at{" "}
+                    <Link
+                        href={`mailto:${SUPPORT_EMAIL}`}
+                        className="underline"
+                    >
+                        {SUPPORT_EMAIL}
+                    </Link>{" "}
+                    if you encounter any issues.
+                </Text>
+            ) : undefined}
         </BaseTemplate>
     )
 }
@@ -58,7 +59,8 @@ export function WelcomeTemplate({
 WelcomeTemplate.PreviewProps = {
     name: "Andrew",
     APP_URL: "http://localhost",
-    APPLICATION_NAME: "Karr Email Preview"
+    APPLICATION_NAME: "Karr Email Preview",
+    SUPPORT_EMAIL: "support@karr.mobi"
 } as WelcomeTemplateProps
 
 export default WelcomeTemplate
