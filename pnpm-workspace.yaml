@@ -14,7 +14,7 @@ catalogs:
     drizzle-kit: ^0.31.4
     drizzle-orm: ^0.43.1
     drizzle-zod: ^0.8.3
-    hono: ^4.9.7
+    hono: ^4.9.8
     postgres: ^3.4.7
     resend: ^4.8.0
     srvx: ^0.7.5
@@ -26,8 +26,8 @@ catalogs:
     globals: ^16.4.0
     husky: ^9.1.7
     prettier: ^3.6.2
-    rolldown: ^1.0.0-beta.37
-    taze: ^19.6.0
+    rolldown: ^1.0.0-beta.39
+    taze: ^19.7.0
     tsdown: ^0.13.5
     tsx: ^4.20.5
     turbo: ^2.5.6
@@ -35,26 +35,26 @@ catalogs:
   docs:
     "@astrojs/starlight": ^0.35.3
     "@astrojs/starlight-tailwind": ^4.0.1
-    "@deno/astro-adapter": ^0.3.1
-    astro: ^5.13.7
-    starlight-sidebar-topics: ^0.6.0
+    "@deno/astro-adapter": ^0.3.2
+    astro: ^5.13.10
+    starlight-sidebar-topics: ^0.6.1
   lint:
     "@biomejs/biome": 2.0.0
     "@commitlint/cli": ^19.8.1
     "@commitlint/config-conventional": ^19.8.1
-    "@eslint/js": ^9.35.0
+    "@eslint/js": ^9.36.0
     "@next/eslint-plugin-next": ^15.5.3
-    "@tanstack/eslint-plugin-query": ^5.86.0
-    "@typescript-eslint/eslint-plugin": ^8.43.0
-    "@typescript-eslint/parser": ^8.43.0
-    eslint: ^9.35.0
+    "@tanstack/eslint-plugin-query": ^5.90.1
+    "@typescript-eslint/eslint-plugin": ^8.44.0
+    "@typescript-eslint/parser": ^8.44.0
+    eslint: ^9.36.0
     eslint-config-biome: ^1.9.4
     eslint-config-prettier: ^10.1.8
     eslint-plugin-react: ^7.37.5
     eslint-plugin-react-hooks: ^5.2.0
     eslint-plugin-turbo: ^2.5.6
     lint-staged: ^15.5.2
-    typescript-eslint: ^8.43.0
+    typescript-eslint: ^8.44.0
   radix:
     "@radix-ui/react-accordion": ^1.2.12
     "@radix-ui/react-alert-dialog": ^1.1.15
@@ -87,7 +87,7 @@ catalogs:
     vite-tsconfig-paths: ^5.1.4
     vitest: ^3.2.4
   types:
-    "@types/node": ^22.18.3
+    "@types/node": ^22.18.6
     "@types/react": ^19.1.13
     "@types/react-dom": ^19.1.9
   ui:
@@ -99,9 +99,9 @@ catalogs:
     clsx: ^2.1.1
     date-fns: ^4.1.0
     lucide-react: ^0.507.0
-    motion: ^12.23.12
-    react-day-picker: ^9.10.0
-    react-hook-form: ^7.62.0
+    motion: ^12.23.18
+    react-day-picker: ^9.11.0
+    react-hook-form: ^7.63.0
     react-intersection-observer: ^9.16.0
     sonner: ^2.0.7
     tailwind-merge: ^3.3.1
@@ -112,27 +112,27 @@ catalogs:
     "@std/text": jsr:^1.0.16
     confbox: ^0.2.2
     defu: ^6.1.4
-    esbuild: ^0.25.9
+    esbuild: ^0.25.10
     neverthrow: ^8.2.0
     ofetch: ^1.4.1
-    pino: ^9.9.5
+    pino: ^9.11.0
     pino-pretty: ^13.1.1
-    sharp: ^0.34.3
+    sharp: ^0.34.4
     std-env: ^3.9.0
     tinyrainbow: ^2.0.0
     unplugin: ^2.3.10
-    zod: ^4.1.8
+    zod: ^4.1.11
   web:
     "@orpc/client": ^1.8.9
     "@orpc/tanstack-query": ^1.8.9
-    "@tanstack/react-form": ^1.20.0
-    "@tanstack/react-query": ^5.87.4
+    "@tanstack/react-form": ^1.23.0
+    "@tanstack/react-query": ^5.90.1
     babel-plugin-react-compiler: ^19.1.0-rc.3
     next: ^15.5.3
-    next-intl: ^4.3.8
+    next-intl: ^4.3.9
     next-themes: ^0.4.6
     nuqs: ^2.6.0
-    posthog-js: ^1.266.0
+    posthog-js: ^1.266.3
     react: ^19.1.1
     react-dom: ^19.1.1
   mail:
