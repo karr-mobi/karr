@@ -8,53 +8,53 @@ catalogs:
     "@hono/zod-validator": ^0.5.0
     "@libs/xml": jsr:^7.0.0
     "@openauthjs/openauth": ^0.4.3
-    "@orpc/contract": ^1.8.9
-    "@orpc/server": ^1.8.9
+    "@orpc/contract": ^1.9.2
+    "@orpc/server": ^1.9.2
     db0: ^0.3.2
-    drizzle-kit: ^0.31.4
+    drizzle-kit: ^0.31.5
     drizzle-orm: ^0.43.1
     drizzle-zod: ^0.8.3
-    hono: ^4.9.8
+    hono: ^4.9.9
     postgres: ^3.4.7
     resend: ^4.8.0
     srvx: ^0.7.5
     unstorage: ^1.17.1
   devtools:
-    "@turbo/gen": ^2.5.6
+    "@turbo/gen": ^2.5.8
     changelogen: ^0.6.2
     eslint-plugin-pnpm: ^0.3.1
     globals: ^16.4.0
     husky: ^9.1.7
     prettier: ^3.6.2
-    rolldown: ^1.0.0-beta.39
+    rolldown: ^1.0.0-beta.40
     taze: ^19.7.0
     tsdown: ^0.13.5
-    tsx: ^4.20.5
-    turbo: ^2.5.6
+    tsx: ^4.20.6
+    turbo: ^2.5.8
     typescript: ^5.9.2
   docs:
     "@astrojs/starlight": ^0.35.3
     "@astrojs/starlight-tailwind": ^4.0.1
     "@deno/astro-adapter": ^0.3.2
-    astro: ^5.13.10
+    astro: ^5.14.1
     starlight-sidebar-topics: ^0.6.1
   lint:
     "@biomejs/biome": 2.0.0
     "@commitlint/cli": ^19.8.1
     "@commitlint/config-conventional": ^19.8.1
     "@eslint/js": ^9.36.0
-    "@next/eslint-plugin-next": ^15.5.3
-    "@tanstack/eslint-plugin-query": ^5.90.1
-    "@typescript-eslint/eslint-plugin": ^8.44.0
-    "@typescript-eslint/parser": ^8.44.0
+    "@next/eslint-plugin-next": ^15.5.4
+    "@tanstack/eslint-plugin-query": ^5.91.0
+    "@typescript-eslint/eslint-plugin": ^8.44.1
+    "@typescript-eslint/parser": ^8.44.1
     eslint: ^9.36.0
     eslint-config-biome: ^1.9.4
     eslint-config-prettier: ^10.1.8
     eslint-plugin-react: ^7.37.5
     eslint-plugin-react-hooks: ^5.2.0
-    eslint-plugin-turbo: ^2.5.6
+    eslint-plugin-turbo: ^2.5.8
     lint-staged: ^15.5.2
-    typescript-eslint: ^8.44.0
+    typescript-eslint: ^8.44.1
   radix:
     "@radix-ui/react-accordion": ^1.2.12
     "@radix-ui/react-alert-dialog": ^1.1.15
@@ -88,7 +88,7 @@ catalogs:
     vitest: ^3.2.4
   types:
     "@types/node": ^22.18.6
-    "@types/react": ^19.1.13
+    "@types/react": ^19.1.15
     "@types/react-dom": ^19.1.9
   ui:
     "@hookform/resolvers": ^5.2.2
@@ -99,7 +99,7 @@ catalogs:
     clsx: ^2.1.1
     date-fns: ^4.1.0
     lucide-react: ^0.507.0
-    motion: ^12.23.18
+    motion: ^12.23.22
     react-day-picker: ^9.11.0
     react-hook-form: ^7.63.0
     react-intersection-observer: ^9.16.0
@@ -115,7 +115,7 @@ catalogs:
     esbuild: ^0.25.10
     neverthrow: ^8.2.0
     ofetch: ^1.4.1
-    pino: ^9.11.0
+    pino: ^9.12.0
     pino-pretty: ^13.1.1
     sharp: ^0.34.4
     std-env: ^3.9.0
@@ -123,22 +123,22 @@ catalogs:
     unplugin: ^2.3.10
     zod: ^4.1.11
   web:
-    "@orpc/client": ^1.8.9
-    "@orpc/tanstack-query": ^1.8.9
-    "@tanstack/react-form": ^1.23.0
-    "@tanstack/react-query": ^5.90.1
+    "@orpc/client": ^1.9.2
+    "@orpc/tanstack-query": ^1.9.2
+    "@tanstack/react-form": ^1.23.4
+    "@tanstack/react-query": ^5.90.2
     babel-plugin-react-compiler: ^19.1.0-rc.3
-    next: ^15.5.3
+    next: ^15.5.4
     next-intl: ^4.3.9
     next-themes: ^0.4.6
     nuqs: ^2.6.0
-    posthog-js: ^1.266.3
+    posthog-js: ^1.268.8
     react: ^19.1.1
     react-dom: ^19.1.1
   mail:
-    "@react-email/components": ^0.5.3
-    "@react-email/preview-server": ^4.2.11
-    react-email: ^4.2.11
+    "@react-email/components": ^0.5.5
+    "@react-email/preview-server": ^4.2.12
+    react-email: ^4.2.12
 
 disallowWorkspaceCycles: true
 
