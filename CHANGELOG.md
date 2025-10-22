@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.15.24
+
+[compare changes](https://github.com/karr-mobi/karr/compare/v0.15.23...v0.15.24)
+
+### 📦 Build
+
+- Change deno deploy task ([8f2c09e](https://github.com/karr-mobi/karr/commit/8f2c09e))
+
+### ❤️ Contributors
+
+- Colin Ozanne <git@colinozanne.fr>
+
 ## v0.15.23
 
 [compare changes](https://github.com/karr-mobi/karr/compare/v0.15.22...v0.15.23)
