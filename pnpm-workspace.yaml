@@ -14,7 +14,7 @@ catalogs:
     drizzle-kit: ^0.31.5
     drizzle-orm: ^0.43.1
     drizzle-zod: ^0.8.3
-    hono: ^4.9.12
+    hono: ^4.10.2
     postgres: ^3.4.7
     resend: ^4.8.0
     srvx: ^0.7.5
