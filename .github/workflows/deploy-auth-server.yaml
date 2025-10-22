@@ -53,6 +53,9 @@ jobs:
               with:
                   deno-version: v2.x
 
+            - name: Install deployctl
+              run: deno install -A jsr:@deno/deployctl --global
+
             - name: Prune repository
               run: turbo prune "@karr/auth-server"
 
@@ -77,11 +80,15 @@ jobs:
                   deno run -A script/bundle.ts
 
             - name: Deploy to Deno Deploy
-              uses: denoland/deployctl@v1
-              with:
-                  project: karr-auth
-                  entrypoint: server.mjs
-                  root: out/apps/auth-server/out
+              env:
+                  DENO_DEPLOY_TOKEN: ${{ secrets.DENO_DEPLOY_TOKEN }}
+              run: |
+                  cd out/apps/auth-server/out
+                  if [ "${{ github.event_name }}" = "push" ] && [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+                    deployctl deploy --project=karr-auth --prod ./server.mjs
+                  else
+                    deployctl deploy --project=karr-auth ./server.mjs
+                  fi
 
             - name: Prepare branch name
               if: github.event_name == 'pull_request'
