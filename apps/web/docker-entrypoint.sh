@@ -1,8 +1,12 @@
 #!/bin/sh
 set -e
 
+# set the DB variable to the value of the environment variable DB_HOST, or default to db
+DB=${DB_HOST:-db}
+PORT=${DB_PORT:-3000}
+
 echo "Waiting for database..."
-wait-for-it.sh db:5432 -t 15
+wait-for-it.sh $DB:$PORT -t 15
 
 echo "Running database migrations..."
 node out/db/migrate.mjs
