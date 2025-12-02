@@ -5,7 +5,7 @@ set -e
 DB=${DB_HOST:-db}
 PORT=${DB_PORT:-3000}
 
-env
+echo "DB=$DB_HOST ; PORT=$DB_PORT"
 
 echo "Waiting for database..."
 wait-for-it.sh $DB:$PORT -t 15
