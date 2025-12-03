@@ -7,8 +7,11 @@ PORT=${DB_PORT:-3000}
 
 echo "DB=$DB_HOST ; PORT=$DB_PORT"
 
-echo "Waiting for database..."
-wait-for-it.sh $DB:$PORT -t 15
+# check if env has SKIP_WAIT_DB set
+if [ -z "$SKIP_WAIT_DB" ]; then
+    echo "Waiting for database..."
+    wait-for-it.sh $DB:$PORT -t 15
+fi
 
 echo "Running database migrations..."
 node out/db/migrate.mjs
